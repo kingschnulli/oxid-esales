@@ -93,7 +93,7 @@
             <div class="tobasketFunction clear">
                 [{oxhasrights ident="SHOWARTICLEPRICE"}]
                     <label id="productPrice_[{$testid}]" class="price">
-                        <strong>[{$product->getFPrice()}] [{$currency->sign}]</strong>
+                        <strong>[{$product->getFPrice()}] [{$currency->sign}] [{ if $blShowToBasket }]*[{/if}]</strong>
                     </label>
                     [{if $product->loadAmountPriceInfo()}]
                         [{oxscript include="js/widgets/oxamountpriceselect.js" priority=10 }]

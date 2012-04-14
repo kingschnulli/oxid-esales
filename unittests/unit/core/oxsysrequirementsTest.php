@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxsysrequirementsTest.php 43627 2012-04-06 15:59:25Z linas.kukulskis $
+ * @version   SVN: $Id: oxsysrequirementsTest.php 43853 2012-04-13 11:15:22Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -39,7 +39,7 @@ class Unit_Core_oxSysRequirementsTest extends OxidTestCase
     {
         $oSysReq = new oxSysRequirements();
         $aRequiredModules = $oSysReq->getRequiredModules();
-            $sCnt = 22;
+            $sCnt = 23;
         if ( isAdmin() ) {
             $sCnt++;
         }
@@ -62,7 +62,7 @@ class Unit_Core_oxSysRequirementsTest extends OxidTestCase
         $this->assertEquals( 3, count($aSysInfo));
         $sCnt = 13;
         $this->assertEquals( $sCnt, count($aSysInfo['php_extennsions']));
-        $this->assertEquals( 7, count($aSysInfo['php_config']));
+        $this->assertEquals( 8, count($aSysInfo['php_config']));
         $sCnt = 4;
             $sCnt = 2;
         if ( isAdmin() ) {

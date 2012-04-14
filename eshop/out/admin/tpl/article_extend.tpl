@@ -221,18 +221,7 @@ function processUnitInput( oSelect, sInputId )
                   [{ oxinputhelp ident="HELP_ARTICLE_EXTEND_NONMATERIAL" }]
                 </td>
               </tr>
-                        <tr>
-                              <td class="edittext" width="120">
-                                [{ oxmultilang ident="ARTICLE_FILES_ISDOWNLOADABLE" }]
-                              </td>
-                              <td class="edittext">
-                                <input class="edittext" type="hidden" name="editval[oxarticles__oxisdownloadable]" value='0'>
-                                <input class="edittext" type="checkbox" name="editval[oxarticles__oxisdownloadable]" value='1' [{if $edit->oxarticles__oxisdownloadable->value == 1}]checked[{/if}] [{if $oxparentid }]readonly disabled[{/if}]>
-                                [{ oxinputhelp ident="HELP_ARTICLE_IS_DOWNLOADABLE" }]
-                              </td>
-                              <td></td>
-                              <td></td>
-                        </tr>
+                        
 
               <tr>
                 <td class="edittext" width="120">

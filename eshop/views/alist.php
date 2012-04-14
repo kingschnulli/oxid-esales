@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: alist.php 43015 2012-03-19 13:30:33Z mindaugas.rimgaila $
+ * @version   SVN: $Id: alist.php 43841 2012-04-13 09:36:38Z tomas $
  */
 
 /**
@@ -442,9 +442,6 @@ class aList extends oxUBase
      */
     protected function _prepareMetaDescription( $sMeta, $iLength = 1024, $blDescTag = false )
     {
-        // using language constant ..
-        $sDescription = oxLang::getInstance()->translateString( 'ALIST_META_DESCRIPTION_PREFIX' );
-
         // appending parent title
         if ( $oCategory = $this->getActCategory() ) {
             if ( ( $oParent = $oCategory->getParentCategory() ) ) {
@@ -456,7 +453,8 @@ class aList extends oxUBase
         }
 
         // and final component ..
-        if ( ( $sSuffix = $this->getConfig()->getActiveShop()->oxshops__oxstarttitle->value ) ) {
+        //changed for #2776
+        if ( ( $sSuffix = $this->getConfig()->getActiveShop()->oxshops__oxtitleprefix->value ) ) {
             $sDescription .= " {$sSuffix}";
         }
 

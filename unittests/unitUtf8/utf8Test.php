@@ -1826,7 +1826,6 @@ class UnitUtf8_utf8Test extends OxidTestCase
     public function testaListPrepareMetaDescription()
     {
         $sValue = "agentūЛитовfür\n\r\t\xc2\x95\xc2\xa0";
-        $sDescription = str_replace( ":", ' ', oxLang::getInstance()->translateString( 'INC_HEADER_YOUAREHERE' ) );
         $oActCat = new oxcategory();
         $oActCat->oxcategories__oxtitle = $this->getMock( 'oxField', array( '__get' ) );
         $oActCat->oxcategories__oxtitle->expects( $this->once() )->method( '__get')->will( $this->returnValue( $sValue ) );
@@ -1834,7 +1833,7 @@ class UnitUtf8_utf8Test extends OxidTestCase
         $oListView = $this->getMock( 'alist', array( 'getActCategory' ) );
         $oListView->expects( $this->any() )->method( 'getActCategory')->will( $this->returnValue( $oActCat ) );
 
-        $sDescription = $sDescription . " agentūЛитовfür     . " . oxConfig::getInstance()->getActiveShop()->oxshops__oxstarttitle->value;
+        $sDescription = "agentūЛитовfür     . " . oxConfig::getInstance()->getActiveShop()->oxshops__oxtitleprefix->value;
 
         $oView = new oxubase();
         $this->assertEquals( $sDescription, $oListView->UNITprepareMetaDescription( false ) );

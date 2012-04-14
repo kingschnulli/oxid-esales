@@ -152,7 +152,6 @@ $aMap = array(
 'ADD_RECOMM_ALLLISTS'                                         => 'ALL_LISTMANIA',
 'ADD_RECOMM_SELECTLIST'                                       => 'SELECT_LISTMANIA_LIST',
 'ADD_RECOMM_YOURCOMMENT'                                      => 'ADD_YOUR_COMMENTS',
-'ALIST_META_DESCRIPTION_PREFIX'                               => 'YOU_ARE_HERE_2',
 'BASKET_ARTICEL'                                              => 'PRODUCT',
 'BASKET_ARTICLENOTONSTOCK'                                    => 'MESSAGE_NOT_ON_STOCK',
 'BASKET_BASKET'                                               => 'BASKET',

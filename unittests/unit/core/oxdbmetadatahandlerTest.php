@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxdbmetadatahandlerTest.php 43652 2012-04-10 12:12:53Z rimvydas.paskevicius $
+ * @version   SVN: $Id: oxdbmetadatahandlerTest.php 43838 2012-04-13 08:35:53Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -167,14 +167,6 @@ class Unit_Core_oxDbMetaDataHandlerTest extends OxidTestCase
         $aTestSql[0] = "ALTER TABLE `oxartextends_set2` ADD FULLTEXT KEY  (`OXTAGS_20`)";
         $this->assertEquals( $aTestSql, $oDbMeta->getAddFieldIndexSql( "oxartextends", "OXTAGS", "OXTAGS_20", "oxartextends_set2" ) );
     }
-
-    /*
-     * Test if returned sql for creating new field indexes is correct - replacing multiple indexes by one
-     */
-    public function testAddFieldIndexSql_multipleIndexes()
-    {
-    }
-
 
     /*
      * Test getting current max lang base id

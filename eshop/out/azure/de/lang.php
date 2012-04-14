@@ -39,8 +39,6 @@ $sLangName  = "Deutsch";
 $aLang = array(
 'ADD_RECOMM_ADDRECOMMLINK1'                                   => "Es liegen zur Zeit keine Lieblingslisten vor. Um eine neue Lieblingsliste anzulegen, klicken Sie",
 'ADD_RECOMM_ADDRECOMMLINK2'                                   => "hier",
-'BETA_NOTE'                                                   => "Willkommen zur Betaversion 3 von OXID eShop 4.6.0. häufig gestellte Fragen und Antworten sind in der <a href='http://wiki.oxidforge.org/Development/Beta' class=\"external\">Beta-FAQ</a> gelistet.",
-'BETA_NOTE_CLOSE'                                             => "schließen",
 'DETAILS_ARTNUMBER'                                           => "ArtNr.:",
 'DETAILS_LOCATOR_PRODUCT'                                     => "ARTIKEL",
 'DETAILS_PLUSSHIPPING2'                                       => "Versandkosten.",

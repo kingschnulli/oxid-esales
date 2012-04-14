@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 43816 2012-04-12 12:36:50Z juergen.busch $
+ * @version   SVN: $Id: lang.php 43874 2012-04-13 12:30:08Z juergen.busch $
  */
 
 /*
@@ -487,12 +487,11 @@ $aLang = array(
 'ARTICLE_FILES_ISDOWNLOADABLE'                             => 'Enable download of files for this product',
 'ARTICLE_FILES_TABLE_UPLOADEDFILES'                        => 'Uploaded Files',
 'ARTICLE_FILES_TABLE_FILENAME'                             => 'File name',
-'ARTICLE_FILES_TABLE_PURCHASEDONLY'                        => 'Purchased only',
-'ARTICLE_FILES_NEW_TITLE'                                  => 'New file',
 'ARTICLE_FILES_NEW_PURCHASEDONLY'                          => 'Download is available only after purchase',
 'ARTICLE_FILES_NEW_FILE'                                   => 'Select a file for upload',
-'ARTICLE_FILES_OR_FILENAME'                                => 'or specify a file name of existing file',
 'ARTICLE_FILES_NEW_UPLOAD'                                 => 'Submit',
+'ARTICLE_FILES_ENTER_FILENAME'                             => 'Enter name of uploaded file',
+'ARTICLE_FILES_OR'                                         => 'or upload file',
 'ARTICLE_OTHER_OPTIONS'                                    => 'Other options',
 'ARTICLE_REVIEW_DELETE'                                    => 'Delete',
 'ARTICLE_REVIEW_SAVE'                                      => 'Save',
@@ -1361,7 +1360,7 @@ $aLang = array(
 'SHOP_SYSTEM_SEARCHENGINEURLS'                             => "Static URL's. Important for optimal Product search-engine recognition, but doesn't work on all web-servers.",
 'SHOP_SYSTEM_SHOWVARIANTREVIEWS'                           => 'Show Variant Ratings for "Parent" Product',
 'SHOP_SYSTEM_STOREIPS'                                     => 'Store User IP Addresses (check your local laws if legal)',
-'SHOP_SYSTEM_SHOP_LOCATION'                                => '[tr]Shop market',
+'SHOP_SYSTEM_SHOP_LOCATION'                                => 'Shop market',
 'SHOP_SYSTEM_UTILMODULE'                                   => 'Additional Utilitly Modules',
 'SHOP_SYSTEM_VARIANTSSELECTION'                            => 'Display Variants in Assignment Lists in eShop admin',
 'SHOP_SYSTEM_VARIANTPARENTBUYABLE'                         => '"Parent" Products can be purchased',
@@ -1464,6 +1463,7 @@ $aLang = array(
 'SYSREQ_OPEN_SSL'                                          => 'OpenSSL',
 'SYSREQ_SOAP'                                              => 'SOAP',
 'SYSREQ_UNICODE_SUPPORT'                                   => 'UTF-8 support',
+'SYSREQ_FILE_UPLOADS'                                      => 'File uploads are enabled in PHP',
 'SYSREQ_BUG53632'                                          => 'Possible issues on server due to PHP Bugs',
 'SYSREQ_MEMORY_LIMIT_EE'                                   => 'PHP Memory limit (min. 32MB, 60MB recommended)',
 'SYSREQ_MEMORY_LIMIT'                                      => 'PHP Memory limit (min. 14MB, 30MB recommended)',

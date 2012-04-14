@@ -30,7 +30,6 @@ $aMap = array(
 'ADD_RECOMM_ALLLISTS'                                             => 'ALL_LISTMANIA',
 'ADD_RECOMM_SELECTLIST'                                           => 'SELECT_LISTMANIA_LIST',
 'ADD_RECOMM_YOURCOMMENT'                                          => 'ADD_YOUR_COMMENTS',
-'ALIST_META_DESCRIPTION_PREFIX'                                   => 'YOU_ARE_HERE_2',
 'BOOKMARKS_GENERAL_TITLE'                                         => 'ADD_THIS_PAGE_TO',
 'BOOKMARKS_WEBNEWS_TITLE'                                         => 'ADD_THIS_PAGE_TO_WEBNEWS',
 'BOOKMARKS_YIEEHA_TITLE'                                          => 'ADD_THIS_PAGE_TO_YIEEHA',

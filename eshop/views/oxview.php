@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxview.php 41394 2012-01-16 12:58:30Z vilma $
+ * @version   SVN: $Id: oxview.php 43859 2012-04-13 11:49:56Z linas.kukulskis $
  */
 
 /**
@@ -227,7 +227,7 @@ class oxView extends oxSuperCfg
      */
     public function render()
     {
-        return $this->_sThisTemplate;
+        return $this->getTemplateName();
     }
 
     /**

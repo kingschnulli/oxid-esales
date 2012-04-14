@@ -42,7 +42,14 @@ test("testPosition", function (){
     notEqual( $('#oxDayLabel').css( 'left' ), '5px', "Label is not on input after input change place and no reload triggered" );
     $('#userChangeAddress').trigger( 'click' );
     
-    // Check if label is on input after reload triggered
-    equals( $('#oxDayLabel').css( 'top' ), '20px', "Label is in place after reload triggered" );
-    equals( $('#oxDayLabel').css( 'left' ), '5px', "Label is in place after reload triggered" );
+    // Pause the test firs as there is timout after reload.
+    stop();  
+  
+    setTimeout(function() {  
+        equals( $('#oxDayLabel').css( 'top' ), '20px', "Label is in place after reload triggered" );  
+        equals( $('#oxDayLabel').css( 'left' ), '5px', "Label is in place after reload triggered" );
+        // After the assertion has been called,  
+        // continue the test  
+        start();  
+    }, 200);
 });

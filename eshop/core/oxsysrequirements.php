@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxsysrequirements.php 43629 2012-04-06 16:26:40Z linas.kukulskis $
+ * @version   SVN: $Id: oxsysrequirements.php 43851 2012-04-13 10:34:57Z vilma $
  */
 
 /**
@@ -133,6 +133,7 @@ class oxSysRequirements
                                      "register_globals"   => "register_globals_must_be_off",
                                      "memory_limit"       => "PHP_Memory_limit_.28min._14MB.2C_30MB_recommended.29",
                                      "unicode_support"    => "UTF-8_support",
+                                     "file_uploads"       => "file_uploads_on",
                                      "mod_rewrite"        => "apache_mod_rewrite_module",
                                      "server_permissions" => "Files_.26_Folder_Permission_Setup",
                                      "zend_optimizer"     => "Zend_Optimizer",
@@ -215,7 +216,8 @@ class oxSysRequirements
                                        'ini_set',
                                        'register_globals',
                                        'memory_limit',
-                                       'unicode_support'
+                                       'unicode_support',
+                                       'file_uploads'
                                    );
 
             $aRequiredServerConfigs = array(
@@ -876,6 +878,25 @@ class oxSysRequirements
     public function checkUnicodeSupport()
     {
         return (@preg_match('/\pL/u', 'a') == 1) ? 2 : 1;
+    }
+
+    /**
+     * Checks if php_admin_flag file_uploads is ON
+     *
+     * @return integer
+     */
+    public function checkFileUploads()
+    {
+        $dUploadFile = -1;
+        $sFileUploads = @ini_get('file_uploads');
+        if ( $sFileUploads !== false ) {
+            if ( $sFileUploads && ( $sFileUploads == '1' || strtolower($sFileUploads) == 'on') ) {
+                $dUploadFile = 2;
+            } else {
+                $dUploadFile = 1;
+            }
+        }
+        return $dUploadFile;
     }
 
     /**

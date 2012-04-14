@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 43759 2012-04-11 09:15:46Z vilma $
+ * @version   SVN: $Id: lang.php 43873 2012-04-13 12:29:40Z juergen.busch $
  */
 
 $sLangName  = 'Deutsch';
@@ -490,12 +490,11 @@ $aLang = array(
 'ARTICLE_FILES_ISDOWNLOADABLE'                             => 'Download von Dateien für diesen Artikel zulassen',
 'ARTICLE_FILES_TABLE_UPLOADEDFILES'                        => 'Hochgeladene Dateien',
 'ARTICLE_FILES_TABLE_FILENAME'                             => 'Dateiname',
-'ARTICLE_FILES_TABLE_PURCHASEDONLY'                        => 'Nur gekauft',
-'ARTICLE_FILES_NEW_TITLE'                                  => 'Neue Datei hochladen',
 'ARTICLE_FILES_NEW_PURCHASEDONLY'                          => 'Download ist nur nach Bezahlung verfügbar',
 'ARTICLE_FILES_NEW_FILE'                                   => 'Neue Datei zum Hochladen auswählen',
-'ARTICLE_FILES_OR_FILENAME'                                => 'oder Namen einer vorhandenen Datei eintragen',
 'ARTICLE_FILES_NEW_UPLOAD'                                 => 'Abschicken',
+'ARTICLE_FILES_ENTER_FILENAME'                             => 'Name der hochgeladenen Datei angeben',
+'ARTICLE_FILES_OR'                                         => 'oder Datei hochladen',
 'ARTICLE_OTHER_OPTIONS'                                    => 'Weitere Optionen',
 'ARTICLE_REVIEW_DELETE'                                    => 'Löschen',
 'ARTICLE_REVIEW_SAVE'                                      => 'Speichern',
@@ -1362,7 +1361,7 @@ $aLang = array(
 'SHOP_SYSTEM_ORDERDISNOREG'                                => 'Benutzer müssen sich registrieren, um bestellen zu können',
 'SHOP_SYSTEM_OTHERCOUNTRYORDER'                            => 'Bestellungen aus dem Ausland auch dann erlauben, wenn keine Versandkosten für das Land vorhanden sind',
 'SHOP_SYSTEM_SEARCHENGINEURLS'                             => 'Suchmaschinenfeste URLs verwenden. Dies ist wichtig für Google & Co., funktioniert jedoch nicht auf jedem Webserver',
-'SHOP_SYSTEM_SHOP_LOCATION'                                => '[tr]Market des eShops',
+'SHOP_SYSTEM_SHOP_LOCATION'                                => 'Region des Shops',
 'SHOP_SYSTEM_SHOWVARIANTREVIEWS'                           => 'Varianten-Bewertungen beim "Vater"-Artikel anzeigen',
 'SHOP_SYSTEM_STOREIPS'                                     => 'IP-Adressen speichern. Die ist u.U. ein Verstoß gegen den Datenschutz.',
 'SHOP_SYSTEM_UTILMODULE'                                   => 'Zusätzliches Util-Modul',
@@ -1467,6 +1466,7 @@ $aLang = array(
 'SYSREQ_OPEN_SSL'                                          => 'OpenSSL',
 'SYSREQ_SOAP'                                              => 'SOAP',
 'SYSREQ_UNICODE_SUPPORT'                                   => 'UTF-8 Unterstützung',
+'SYSREQ_FILE_UPLOADS'                                      => 'PHP-Einstellungen erlauben Hochladen von Dateien',
 'SYSREQ_BUG53632'                                          => 'Mögliche Probleme mit Server durch PHP Bugs',
 'SYSREQ_MEMORY_LIMIT_EE'                                   => 'PHP Memory Limit (min. 32MB, 60MB empfohlen)',
 'SYSREQ_MEMORY_LIMIT'                                      => 'PHP Memory limit (min. 14MB, 30MB empfohlen)',

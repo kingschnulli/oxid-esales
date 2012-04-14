@@ -51,7 +51,13 @@
     [{/if}]
 
     [{if $product->oxarticles__oxexturl->value}]
-        <a id="product_exturl" class="details" href="http://[{ $product->oxarticles__oxexturl->value }]"><b>[>] [{ $product->oxarticles__oxurldesc->value }]</b></a>
+        <a id="product_exturl" class="details" href="http://[{ $product->oxarticles__oxexturl->value }]"><b>[>]
+        [{if $product->oxarticles__oxurldesc->value }]
+            [{$product->oxarticles__oxurldesc->value }]
+        [{else}]
+            [{$product->oxarticles__oxexturl->value }]
+        [{/if}]
+        </b></a>
         [{oxscript add="oxid.blank('product_exturl');"}]
     [{/if}]
 

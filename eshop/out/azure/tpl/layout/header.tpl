@@ -1,4 +1,3 @@
-[{include file="widget/header/betanote.tpl"}]
 <div id="header" class="clear">
   [{include file="widget/header/languages.tpl"}]
   [{include file="widget/header/currencies.tpl"}]

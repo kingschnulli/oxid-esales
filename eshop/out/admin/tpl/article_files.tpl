@@ -6,8 +6,6 @@
 [{/if}]
 [{assign var="edit" value=$oView->getArticle()}]
 
-[{oxscript include="js/libs/jquery.min.js"}]
-
 <script type="text/javascript">
 <!--
 window.onload = function ()
@@ -51,108 +49,11 @@ function _groupExp(el) {
 <table cellspacing="0" cellpadding="0" border="0" width="98%">
     [{if count( $oFiles ) > 0 }]
         <colgroup>
-            <col width="50%">
-            <col width="50%">
+            <col width="100%">
         </colgroup>
     [{/if}]
-    <tr>
-      [{if count( $oFiles ) > 0 }]
-          <td valign="top" class="edittext">
-            <form name="myedit" id="myedit" action="[{ $oViewConf->getSelfLink() }]" method="post">
-                [{$oViewConf->getHiddenSid()}]
-                  <input type="hidden" name="cl" value="article_files">
-                  <input type="hidden" name="fnc" value="">
-                  <input type="hidden" name="oxid" value="[{ $oxid }]">
-                  <input type="hidden" name="editval[article__oxid]" value="[{ $oxid }]">
-                  <input type="hidden" name="voxid" value="[{ $oxid }]">
-                  <input type="hidden" name="oxparentid" value="[{ $oxparentid }]">
-                <p><b>[{ oxmultilang ident="ARTICLE_FILES_TABLE_UPLOADEDFILES" }]</b></p>
-                [{foreach from=$oFiles item=oArticleFile}]
-
-                  [{ if $readonly || !$oArticleFile->isUploaded() }]
-                    [{assign var="readonlyRename" value="readonly disabled"}]
-                  [{else}]
-                    [{assign var="readonlyRename" value=""}]
-                  [{/if}]
-
-                    [{block name="admin_article_downloads_filelist"}]
-                    <div class="groupExp">
-                        <div>
-                            <a class="delete" href="[{$oViewConf->getSelfLink()}]&cl=article_files&amp;fileid=[{$oArticleFile->getId()}]&amp;fnc=deletefile&amp;oxid=[{$oxid}]&amp;editlanguage=[{ $editlanguage }]" onClick='return confirm("[{ oxmultilang ident="GENERAL_YOUWANTTODELETE" }]")'></a>
-                            <a href="#" onclick="_groupExp(this);return false;" class="rc"><b>[{$oArticleFile->oxfiles__oxfilename->value}]</b></a>
-                             <dl>
-                                <dt>
-                                    <input type="text" class="editinput" size="30" maxlength="[{$oArticleFile->oxfiles__oxfilename->fldmax_length}]" name="article_files[[{$oArticleFile->getId()}]][oxfiles__oxfilename]" value="[{$oArticleFile->oxfiles__oxfilename->value}]" [{ $readonlyRename }]>
-                                    [{ oxinputhelp ident="HELP_ARTICLE_FILES_TABLE_FILENAME" }]
-                                </dt>
-                                <dd>
-                                    [{ oxmultilang ident="ARTICLE_FILES_TABLE_FILENAME" }]
-                                </dd>
-                                <div class="spacer"></div>
-                            </dl>
-                             <dl>
-                                <dt>
-                                    <input class="edittext" type="hidden" name="article_files[[{$oArticleFile->getId()}]][oxfiles__oxpurchasedonly]" value='0'>
-                                    <input class="edittext" type="checkbox" name="article_files[[{$oArticleFile->getId()}]][oxfiles__oxpurchasedonly]" value='1' [{if $oArticleFile->oxfiles__oxpurchasedonly->value == 1}]checked[{/if}] [{ $readonly }]>
-                                    [{ oxinputhelp ident="HELP_ARTICLE_FILES_TABLE_PURCHASEDONLY" }]
-                                </dt>
-                                <dd>
-                                    [{ oxmultilang ident="ARTICLE_FILES_TABLE_PURCHASEDONLY" }]
-                                </dd>
-                                <div class="spacer"></div>
-                            </dl>
-                             <dl>
-                                <dt>
-                                    <input type=text class="txt" name="article_files[[{$oArticleFile->getId()}]][oxfiles__oxmaxdownloads]" value="[{$oView->getConfigOptionValue($oArticleFile->oxfiles__oxmaxdownloads->value)}]">
-                                    [{ oxinputhelp ident="HELP_ARTICLE_FILES_MAX_DOWNLOADS_COUNT" }]
-                                </dt>
-                                <dd>
-                                    [{ oxmultilang ident="GENERAL_MAX_DOWNLOADS_COUNT" }]
-                                </dd>
-                                <div class="spacer"></div>
-                            </dl>
-
-                            <dl>
-                                <dt>
-                                    <input type=text class="txt" name="article_files[[{$oArticleFile->getId()}]][oxfiles__oxlinkexptime]"  value="[{$oView->getConfigOptionValue($oArticleFile->oxfiles__oxlinkexptime->value)}]">
-                                    [{ oxinputhelp ident="HELP_ARTICLE_FILES_LINK_EXPIRATION_TIME" }]
-                                </dt>
-                                <dd>
-                                    [{ oxmultilang ident="GENERAL_LINK_EXPIRATION_TIME" }]
-                                </dd>
-                                <div class="spacer"></div>
-                            </dl>
-
-                            <dl>
-                                <dt>
-                                    <input type=text class="txt" name="article_files[[{$oArticleFile->getId()}]][oxfiles__oxdownloadexptime]"  value="[{$oView->getConfigOptionValue($oArticleFile->oxfiles__oxdownloadexptime->value)}]">
-                                    [{ oxinputhelp ident="HELP_ARTICLE_FILES_DOWNLOAD_EXPIRATION_TIME" }]
-                                </dt>
-                                <dd>
-                                    [{ oxmultilang ident="GENERAL_DOWNLOAD_EXPIRATION_TIME" }]
-                                </dd>
-                                <div class="spacer"></div>
-                            </dl>
-
-                            <dl>
-                                <dt>
-                                    <input type=text class="txt" name="article_files[[{$oArticleFile->getId()}]][oxfiles__oxmaxunregdownloads]"  value="[{$oView->getConfigOptionValue($oArticleFile->oxfiles__oxmaxunregdownloads->value)}]">
-                                    [{ oxinputhelp ident="HELP_ARTICLE_FILES_LINK_EXPIRATION_TIME_UNREGISTERED" }]
-                                </dt>
-                                <dd>
-                                    [{ oxmultilang ident="GENERAL_LINK_EXPIRATION_TIME_UNREGISTERED" }]
-                                </dd>
-                                <div class="spacer"></div>
-                            </dl>
-                         </div>
-                    </div>
-                    [{/block}]
-                [{/foreach}]
-                <input type="submit" class="saveButton" name="save" value="[{ oxmultilang ident="GENERAL_SAVE" }]" onClick="Javascript:document.myedit.fnc.value='save'">
-            </form>
-         </td>
-     [{/if}]
-     <td valign="top" class="edittext" [{if count( $oFiles ) > 0 }]align="right"[{/if}]>
+     <tr>
+        <td valign="top" class="edittext" [{if count( $oFiles ) > 0 }]align="left"[{/if}]>
           <form name="newFileUpload" id="newFileUpload" action="[{ $oViewConf->getSelfLink() }]" enctype="multipart/form-data" method="post">
           <input type="hidden" name="MAX_FILE_SIZE" value="[{$iMaxUploadFileSize}]">
           [{$oViewConf->getHiddenSid()}]
@@ -162,86 +63,58 @@ function _groupExp(el) {
           <input type="hidden" name="voxid" value="[{ $oxid }]">
           <input type="hidden" name="oxparentid" value="[{ $oxparentid }]">
           <input type="hidden" name="editval[article__oxid]" value="[{ $oxid }]">
-          <fieldset title="New file upload" style="padding-left: 5px;width:120px;">
-          <p align="left"><b>[{ oxmultilang ident="ARTICLE_FILES_NEW_TITLE" }] ([{ oxmultilang ident="GENERAL_MAX_FILE_UPLOAD"}] [{$sMaxFormattedFileSize}])</b></p>
-            <table cellspacing="0" cellpadding="0" border="0" width="120">
-              [{block name="admin_article_downloads_newform"}]
+          <fieldset title="New file upload" style="padding-left: 5px;">
+            <table cellspacing="0" cellpadding="0" border="0" width="98%">
+              [{block name="admin_article_downloads_newform"}] 
                   <tr>
-                    <td class="edittext" width="120">
-                      [{ oxmultilang ident="ARTICLE_FILES_NEW_PURCHASEDONLY" }]
+                   <td class="edittext">
+                      [{ oxmultilang ident="ARTICLE_FILES_ENTER_FILENAME" }] [{ oxinputhelp ident="HELP_ARTICLE_FILES_NEW" }] <input class="edittext" type="text" name="newfile[oxfiles__oxfilename]" class="edittext" [{$readonly}]> [{ oxmultilang ident="ARTICLE_FILES_OR" }] ([{ oxmultilang ident="GENERAL_MAX_FILE_UPLOAD"}] [{$sMaxFormattedFileSize}]) <input type="file" name="newArticleFile" class="edittext" [{$readonly}]>
                     </td>
-                    <td class="edittext">
-                      <input class="edittext" type="hidden" name="newfile[oxfiles__oxpurchasedonly]" value='0'>
-                      <input class="edittext" type="checkbox" checked name="newfile[oxfiles__oxpurchasedonly]" value='1' [{ $readonly }]>
-                    </td>
-                  </tr>
-
+                  </tr>                  
                   <tr>
-                    <td class="edittext" width="120">
-                      [{ oxmultilang ident="ARTICLE_FILES_NEW_FILE" }]
-                    </td>
-                    <td class="edittext">
-                      <input type="file" name="newArticleFile" class="edittext" [{$readonly}]>
-                    </td>
-                  </tr>
-
-                  <tr>
-                    <td class="edittext" width="120">
-                      [{ oxmultilang ident="ARTICLE_FILES_OR_FILENAME" }]
-                    </td>
-                    <td class="edittext">
-                      <input class="edittext" type="text" name="newfile[oxfiles__oxfilename]" class="edittext" [{$readonly}]>
-                    </td>
+                    <td class="edittext">[{ oxmultilang ident="ARTICLE_FILES_NEW_PURCHASEDONLY" }]
+                        <input class="edittext" type="hidden" name="newfile[oxfiles__oxpurchasedonly]" value='0'>
+                        <input class="edittext" type="checkbox" checked name="newfile[oxfiles__oxpurchasedonly]" value='1' [{ $readonly }]>
+                    </td>                    
                   </tr>
               [{/block}]
               [{block name="admin_article_downloads_newform_options"}]
               <tr>
-                <td colspan="2">
+                <td>
                     <div class="groupExp">
                         <div>
-                            <a href="#" onclick="_groupExp(this);return false;" class="rc"><b>[{ oxmultilang ident="ARTICLE_OTHER_OPTIONS" }]</b></a>
-                             <dl>
-                                <dt>
-                                    <input type=text class="txt" name="newfile[oxfiles__oxmaxdownloads]">
-                                    [{ oxinputhelp ident="HELP_ARTICLE_FILES_MAX_DOWNLOADS_COUNT" }]
-                                </dt>
-                                <dd>
-                                    [{ oxmultilang ident="GENERAL_MAX_DOWNLOADS_COUNT" }]
-                                </dd>
-                                <div class="spacer"></div>
-                            </dl>
-
-                            <dl>
-                                <dt>
-                                    <input type=text class="txt" name="newfile[oxfiles__oxlinkexptime]">
-                                    [{ oxinputhelp ident="HELP_ARTICLE_FILES_LINK_EXPIRATION_TIME" }]
-                                </dt>
-                                <dd>
-                                    [{ oxmultilang ident="GENERAL_LINK_EXPIRATION_TIME" }]
-                                </dd>
-                                <div class="spacer"></div>
-                            </dl>
-
-                            <dl>
-                                <dt>
-                                    <input type=text class="txt" name="newfile[oxfiles__oxdownloadexptime]">
-                                    [{ oxinputhelp ident="HELP_ARTICLE_FILES_DOWNLOAD_EXPIRATION_TIME" }]
-                                </dt>
-                                <dd>
-                                    [{ oxmultilang ident="GENERAL_DOWNLOAD_EXPIRATION_TIME" }]
-                                </dd>
-                                <div class="spacer"></div>
-                            </dl>
-
-                            <dl>
-                                <dt>
-                                    <input type=text class="txt" name="newfile[oxfiles__oxmaxunregdownloads]">
-                                    [{ oxinputhelp ident="HELP_ARTICLE_FILES_LINK_EXPIRATION_TIME_UNREGISTERED" }]
-                                </dt>
-                                <dd>
-                                    [{ oxmultilang ident="GENERAL_LINK_EXPIRATION_TIME_UNREGISTERED" }]
-                                </dd>
-                                <div class="spacer"></div>
+                            <a href="#" onclick="_groupExp(this);return false;" class="rc" style="line-height: 30px;"><b>[{ oxmultilang ident="ARTICLE_OTHER_OPTIONS" }]</b></a>
+                             <dl style="padding-top: 5px;">
+                                <table cellspacing="0" cellpadding="0" border="0">
+                                    <tr>
+                                        <td class="edittext">[{ oxmultilang ident="GENERAL_MAX_DOWNLOADS_COUNT" }]</td>
+                                        <td class="edittext">
+                                            <input type=text class="txt" name="newfile[oxfiles__oxmaxdownloads]">
+                                            [{ oxinputhelp ident="HELP_ARTICLE_FILES_MAX_DOWNLOADS_COUNT" }]
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="edittext">[{ oxmultilang ident="GENERAL_LINK_EXPIRATION_TIME_UNREGISTERED" }]</td>
+                                        <td class="edittext">
+                                            <input type=text class="txt" name="newfile[oxfiles__oxmaxunregdownloads]">
+                                            [{ oxinputhelp ident="HELP_ARTICLE_FILES_LINK_EXPIRATION_TIME_UNREGISTERED" }]
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="edittext">[{ oxmultilang ident="GENERAL_LINK_EXPIRATION_TIME" }]</td>
+                                        <td class="edittext">
+                                            <input type=text class="txt" name="newfile[oxfiles__oxlinkexptime]">
+                                            [{ oxinputhelp ident="HELP_ARTICLE_FILES_LINK_EXPIRATION_TIME" }]
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="edittext">[{ oxmultilang ident="GENERAL_DOWNLOAD_EXPIRATION_TIME" }]</td>
+                                        <td class="edittext">
+                                            <input type=text class="txt" name="newfile[oxfiles__oxdownloadexptime]">
+                                            [{ oxinputhelp ident="HELP_ARTICLE_FILES_DOWNLOAD_EXPIRATION_TIME" }]
+                                        </td>
+                                    </tr>
+                                </table>
                             </dl>
                          </div>
                     </div>
@@ -249,8 +122,8 @@ function _groupExp(el) {
                 </tr>
               [{/block}]
                 <tr>
-                  <td colspan="2">
-                    <input type="submit" class="edittext" value="[{ oxmultilang ident="ARTICLE_FILES_NEW_UPLOAD" }]" onclick="Javascript:document.newFileUpload.fnc.value='upload'">
+                  <td>
+                    <input type="submit" class="saveButton" value="[{ oxmultilang ident="ARTICLE_FILES_NEW_UPLOAD" }]" onclick="Javascript:document.newFileUpload.fnc.value='upload'">
                   </td>
                 </tr>
             </table>
@@ -258,6 +131,104 @@ function _groupExp(el) {
         </form>
     </td>
   </tr>
+                             
+            [{if count( $oFiles ) > 0 }]
+                <tr>
+                    <td><hr/></td>
+                </tr>
+                <tr>
+                    <td>
+                        <table cellspacing="0" cellpadding="0" border="0" width="98%">
+                            <tr>                    
+                                <td valign="top" class="edittext"> 
+                                
+                                    <form name="myedit" id="myedit" action="[{ $oViewConf->getSelfLink() }]" method="post">
+                                    [{$oViewConf->getHiddenSid()}]
+                                    <input type="hidden" name="cl" value="article_files">
+                                    <input type="hidden" name="fnc" value="">
+                                    <input type="hidden" name="oxid" value="[{ $oxid }]">
+                                    <input type="hidden" name="editval[article__oxid]" value="[{ $oxid }]">
+                                    <input type="hidden" name="voxid" value="[{ $oxid }]">
+                                    <input type="hidden" name="oxparentid" value="[{ $oxparentid }]">
+                                    <p><b>[{ oxmultilang ident="ARTICLE_FILES_TABLE_UPLOADEDFILES" }]</b></p>
+                                    <table cellspacing="0" cellpadding="0" border="0" width="98%">                              
+                                        <tr>
+                                        <td class="edittext" width="120">
+                                        [{ oxmultilang ident="ARTICLE_FILES_ISDOWNLOADABLE" }]
+                                        </td>
+                                        <td class="edittext">
+                                        <input class="edittext" type="hidden" name="editval[oxarticles__oxisdownloadable]" value='0'>
+                                        <input class="edittext" type="checkbox" name="editval[oxarticles__oxisdownloadable]" value='1' [{if $edit->oxarticles__oxisdownloadable->value == 1}]checked[{/if}] [{if $oxparentid }]readonly disabled[{/if}]>
+                                        [{ oxinputhelp ident="HELP_ARTICLE_IS_DOWNLOADABLE" }]
+                                        </td>
+                                        </tr>
+                                    </table>
+                                    [{foreach from=$oFiles item=oArticleFile}]
+                                        [{ if $readonly || !$oArticleFile->isUploaded() }]
+                                            [{assign var="readonlyRename" value="readonly disabled"}]
+                                        [{else}]
+                                            [{assign var="readonlyRename" value=""}]
+                                        [{/if}]
+
+                                        [{block name="admin_article_downloads_filelist"}]
+                                            <div class="groupExp">
+                                                <div>
+                                                    <a class="delete" href="[{$oViewConf->getSelfLink()}]&cl=article_files&amp;fileid=[{$oArticleFile->getId()}]&amp;fnc=deletefile&amp;oxid=[{$oxid}]&amp;editlanguage=[{ $editlanguage }]" onClick='return confirm("[{ oxmultilang ident="GENERAL_YOUWANTTODELETE" }]")'></a>
+                                                    <a href="#" onclick="_groupExp(this);return false;" class="rc"><b>[{$oArticleFile->oxfiles__oxfilename->value}]</b></a>
+                                                    <dl style="padding-top:5px;">
+                                                        <table cellspacing="0" cellpadding="0" border="0"> 
+                                                            <tr>
+                                                                <td class="edittext">[{ oxmultilang ident="ARTICLE_FILES_TABLE_FILENAME" }]</td>
+                                                                <td class="edittext">
+                                                                    <input type="text" class="editinput" size="40" maxlength="[{$oArticleFile->oxfiles__oxfilename->fldmax_length}]" name="article_files[[{$oArticleFile->getId()}]][oxfiles__oxfilename]" value="[{$oArticleFile->oxfiles__oxfilename->value}]" [{ $readonlyRename }]>                                                                   
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="edittext">[{ oxmultilang ident="ARTICLE_FILES_NEW_PURCHASEDONLY" }]</td>
+                                                                <td class="edittext">
+                                                                    <input class="edittext" type="hidden" name="article_files[[{$oArticleFile->getId()}]][oxfiles__oxpurchasedonly]" value='0'>
+                                                                    <input class="edittext" type="checkbox" name="article_files[[{$oArticleFile->getId()}]][oxfiles__oxpurchasedonly]" value='1' [{if $oArticleFile->oxfiles__oxpurchasedonly->value == 1}]checked[{/if}] [{ $readonly }]>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="edittext">[{ oxmultilang ident="GENERAL_MAX_DOWNLOADS_COUNT" }]</td>
+                                                                <td class="edittext">
+                                                                    <input type=text class="txt" name="article_files[[{$oArticleFile->getId()}]][oxfiles__oxmaxdownloads]" value="[{$oView->getConfigOptionValue($oArticleFile->oxfiles__oxmaxdownloads->value)}]">
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="edittext">[{ oxmultilang ident="GENERAL_LINK_EXPIRATION_TIME_UNREGISTERED" }]</td>
+                                                                <td class="edittext">
+                                                                    <input type=text class="txt" name="article_files[[{$oArticleFile->getId()}]][oxfiles__oxmaxunregdownloads]"  value="[{$oView->getConfigOptionValue($oArticleFile->oxfiles__oxmaxunregdownloads->value)}]">
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="edittext">[{ oxmultilang ident="GENERAL_LINK_EXPIRATION_TIME" }]</td>
+                                                                <td class="edittext">
+                                                                    <input type=text class="txt" name="article_files[[{$oArticleFile->getId()}]][oxfiles__oxlinkexptime]"  value="[{$oView->getConfigOptionValue($oArticleFile->oxfiles__oxlinkexptime->value)}]">
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="edittext">[{ oxmultilang ident="GENERAL_DOWNLOAD_EXPIRATION_TIME" }]</td>
+                                                                <td class="edittext">
+                                                                    <input type=text class="txt" name="article_files[[{$oArticleFile->getId()}]][oxfiles__oxdownloadexptime]"  value="[{$oView->getConfigOptionValue($oArticleFile->oxfiles__oxdownloadexptime->value)}]">
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </dl>
+                                                </div>
+                                            </div>
+                                        [{/block}]
+                                    [{/foreach}]
+                                    <input type="submit" class="saveButton" name="save" value="[{ oxmultilang ident="GENERAL_SAVE" }]" onClick="Javascript:document.myedit.fnc.value='save'">
+                                </form>
+                            </td>                    
+                        </tr>
+                    </table>
+                </td>
+            </tr> 
+        [{/if}]                                
+                   
 </table>
 [{include file="bottomnaviitem.tpl"}]
 [{include file="bottomitem.tpl"}]

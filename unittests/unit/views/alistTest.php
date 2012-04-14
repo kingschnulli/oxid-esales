@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: alistTest.php 43015 2012-03-19 13:30:33Z mindaugas.rimgaila $
+ * @version   SVN: $Id: alistTest.php 43841 2012-04-13 09:36:38Z tomas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -99,7 +99,8 @@ class Unit_Views_alistTest extends OxidTestCase
     public function testGetMetaDescription()
     {
         $sCatId  = '8a142c3e60a535f16.78077188';
-        $sPrefix = "Sie sind hier  Wohnen - Uhren. Der Onlineshop";
+
+        $sPrefix = "Wohnen - Uhren. OXID eShop 4";
 
         $oCategory = new oxCategory();
         $oCategory->load( $sCatId );
@@ -719,8 +720,9 @@ class Unit_Views_alistTest extends OxidTestCase
         $oListView = $this->getMock( "alist", array( 'getActCategory' ) );
         $oListView->expects( $this->any() )->method( 'getActCategory')->will($this->returnValue( $oCategory ) );
 
+        //expected string changed due to #2776
         $this->assertEquals(
-            'Sie sind hier  parent category - category. Der Onlineshop',
+            'parent category - category. OXID eShop 4',
             $oListView->UNITprepareMetaDescription( $aCatPath, 1024, false )
         );
     }

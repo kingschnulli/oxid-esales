@@ -537,6 +537,61 @@ class Unit_Core_oxPictureHandlerTest extends OxidTestCase
         $this->assertEquals('http://alt/image/url/master/product/nopic.jpg', $oPicHandler->getAltImageUrl('master/product/', 'nopic.jpg' ) );
     }
 
+    public function testGetAltImageUrlSslAltUrlIsSsl()
+    {
+        modConfig::getInstance()->setConfigParam('sAltImageUrl', 'http://alt/image/url');
+        modConfig::getInstance()->setConfigParam('sSSLAltImageUrl', 'https://ssl-alt/image/url');
+
+        $oCfg = $this->getMock('oxConfig', array('isSsl'));
+        $oCfg->expects($this->any())->method('isSsl')->will($this->returnValue(true));
+
+        $oPicHandler = $this->getMock('oxPictureHandler', array('getConfig'));
+        $oPicHandler->expects($this->once())->method('getConfig')->will($this->returnValue($oCfg));
+
+        $this->assertEquals('https://ssl-alt/image/url/master/product/nopic.jpg', $oPicHandler->getAltImageUrl('master/product/', 'nopic.jpg' ) );
+    }
+
+    public function testGetAltImageUrlSslAltUrlIsNotSsl()
+    {
+        modConfig::getInstance()->setConfigParam('sAltImageUrl', 'http://alt/image/url');
+        modConfig::getInstance()->setConfigParam('sSSLAltImageUrl', 'https://ssl-alt/image/url');
+
+        $oCfg = $this->getMock('oxConfig', array('isSsl'));
+        $oCfg->expects($this->any())->method('isSsl')->will($this->returnValue(false));
+
+        $oPicHandler = $this->getMock('oxPictureHandler', array('getConfig'));
+        $oPicHandler->expects($this->once())->method('getConfig')->will($this->returnValue($oCfg));
+
+        $this->assertEquals('http://alt/image/url/master/product/nopic.jpg', $oPicHandler->getAltImageUrl('master/product/', 'nopic.jpg' ) );
+    }
+
+    public function testGetAltImageUrlSslAltUrlForseSsl()
+    {
+        modConfig::getInstance()->setConfigParam('sAltImageUrl', 'http://alt/image/url');
+        modConfig::getInstance()->setConfigParam('sSSLAltImageUrl', 'https://ssl-alt/image/url');
+
+        $oCfg = $this->getMock('oxConfig', array('isSsl'));
+        $oCfg->expects($this->any())->method('isSsl')->will($this->returnValue(false));
+
+        $oPicHandler = $this->getMock('oxPictureHandler', array('getConfig'));
+        $oPicHandler->expects($this->once())->method('getConfig')->will($this->returnValue($oCfg));
+
+        $this->assertEquals('https://ssl-alt/image/url/master/product/nopic.jpg', $oPicHandler->getAltImageUrl('master/product/', 'nopic.jpg', true) );
+    }
+
+    public function testGetAltImageUrlSslAltUrlForseNoSsl()
+    {
+        modConfig::getInstance()->setConfigParam('sAltImageUrl', 'http://alt/image/url');
+        modConfig::getInstance()->setConfigParam('sSSLAltImageUrl', 'https://ssl-alt/image/url');
+
+        $oCfg = $this->getMock('oxConfig', array('isSsl'));
+        $oCfg->expects($this->any())->method('isSsl')->will($this->returnValue(true));
+
+        $oPicHandler = $this->getMock('oxPictureHandler', array('getConfig'));
+        $oPicHandler->expects($this->once())->method('getConfig')->will($this->returnValue($oCfg));
+
+        $this->assertEquals('http://alt/image/url/master/product/nopic.jpg', $oPicHandler->getAltImageUrl('master/product/', 'nopic.jpg', false) );
+    }
     /**
      * Picture url getter test
      *

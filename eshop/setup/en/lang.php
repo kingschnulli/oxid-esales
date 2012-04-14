@@ -19,7 +19,7 @@
  * @package   setup
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 43825 2012-04-12 13:44:02Z vilma $
+ * @version   SVN: $Id: lang.php 43851 2012-04-13 10:34:57Z vilma $
  */
 
 $aLang = array(
@@ -98,6 +98,7 @@ $aLang = array(
 'MOD_OPEN_SSL'                                  => 'OpenSSL',
 'MOD_SOAP'                                      => 'SOAP',
 'MOD_UNICODE_SUPPORT'                           => 'UTF-8 support',
+'MOD_FILE_UPLOADS'                              => '[tr]File uploads are enabled in PHP',
 'MOD_BUG53632'                                  => 'Possible issues on server due to PHP Bugs',
 
 'STEP_0_ERROR_TEXT'                             => 'Your system does not fit system requirements',
@@ -189,19 +190,19 @@ $aLang = array(
 'SETUP_DIR_DELETE_NOTICE'                       => "Due to security reasons remove setup directory if not yet done during installation.",
 'SETUP_CONFIG_PERMISSIONS'                      => "Due to security reasons put your config.inc.php file to read-only mode!",
 
-'SELECT_SETUP_LANG'                             => "[tr]Language for installation is",
-'SELECT_SHOP_LOCATION'                          => "[tr]Your market",
-'SELECT_PLEASE_CHOOSE'                          => "[tr]Please choose",
-'SELECT_SHOP_LOCATION_HINT'                     => "[tr]Please choose the Market place to which Shop is focused. According to it, additional eCommerce Services will be loaded from OXID server, if you allow that.",
+'SELECT_SETUP_LANG'                             => "Installation language",
+'SELECT_SHOP_LOCATION'                          => "Your market",
+'SELECT_PLEASE_CHOOSE'                          => "Please choose",
+'SELECT_SHOP_LOCATION_HINT'                     => "Please choose the market to which shop is focused. According to it, additional eCommerce Services will be loaded from OXID server, if you allow that.",
 'SELECT_DELIVERY_COUNTRY'                       => "Main delivery country",
-'SELECT_DELIVERY_COUNTRY_HINT'                  => "If needed, activate easily more delivery countries in admin",
-'SELECT_SHOP_LANG'                              => "[tr]Language for shop is",
-'SELECT_SHOP_LANG_HINT'                         => "[tr]If needed, activate easily more languages in admin.",
+'SELECT_DELIVERY_COUNTRY_HINT'                  => "If needed, activate easily more delivery countries in admin.",
+'SELECT_SHOP_LANG'                              => "Shop language",
+'SELECT_SHOP_LANG_HINT'                         => "If needed, activate easily more languages in admin.",
 'SELECT_SETUP_LANG_SUBMIT'                      => "Select",
 'USE_DYNAMIC_PAGES'                             => "To increase your business success get additional information from OXID's server. You find more information in our ",
 'PRIVACY_POLICY'                                => "privacy statements",
 
-'LOAD_DYN_CONTENT_NOTICE'                       => "<p>If checkbox &quot;more information&quot; is set, you will see an additional menu in the admin area of your OXID eShop.</p><p>In that menu you get further information about eCommerce services like Google product search.</p> <p>You can change these settings at any time.</p>",
+'LOAD_DYN_CONTENT_NOTICE'                       => "<p>If checkbox is set, you will see an additional menu in the admin area of your OXID eShop.</p><p>In that menu you get further information about eCommerce services like Google product search.</p> <p>You can change these settings at any time.</p>",
 'ERROR_SETUP_CANCELLED'                         => "Setup has been cancelled because you didn't accept the license conditions.",
 'BUTTON_START_INSTALL'                          => "Restart setup",
 

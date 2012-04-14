@@ -58,11 +58,11 @@
             });
 
             $(options.sReloadElement).click(function() {
-                self._reload( self.element, label );
+                setTimeout(function(){ self._reload( self.element, label ); }, 100);
             });
        },
        
-       _reload : function( input, label ){  
+       _reload : function( input, label ){
            var pos = input.position();
            label.css( { "left": (pos.left) + "px", "top":(pos.top) + "px" } );
        }

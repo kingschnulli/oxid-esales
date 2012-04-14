@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: help_lang.php 43817 2012-04-12 12:42:55Z juergen.busch $
+ * @version   SVN: $Id: help_lang.php 43889 2012-04-13 13:56:38Z juergen.busch $
  */
 
 /**
@@ -68,7 +68,7 @@ $aLang =  array(
 
 'HELP_SHOP_SYSTEM_INLINEIMGEMAIL'             => 'If the setting is checked, the pictures in e-mails are sent together with the e-mail. If the setting is unchecked, the pictures are downloaded by the e-mail program when the e-mail is opened.',
 
-'HELP_SHOP_SYSTEM_SHOP_LOCATION'              => '[tr]Please choose the Market place to which Shop is focused. According to it, additional eCommerce Services will be loaded from OXID server. Do not forget to enable option "Load additional Information from OXID server" in Core Settings -> Settings -> Administration',
+'HELP_SHOP_SYSTEM_SHOP_LOCATION'              => 'Please choose the market to which shop is focused. According to it, additional eCommerce Services will be loaded from OXID server. Do not forget to enable option "Load additional Information from OXID server" in Master Settings -> Core Settings -> Settings -> Administration',
 
 
 
@@ -139,7 +139,7 @@ $aLang =  array(
 
 'HELP_SHOP_CONFIG_NEWARTBYINSERT'             => 'On the front page of your eShop the newest products are shown in <span class="filename_filepath_or_italic">Just arrived!</span>.  This setting determines how the newest products are calculated: by date of creation or by date of last change in admin/last order.',
 
-'HELP_SHOP_CONFIG_LOAD_DYNAMIC_PAGES'         => 'If this setting is checked, additional information about other oxid products is shown in the menu, e.g. about OXID eFire. Which information is loaded depends on the location of your eShop.',
+'HELP_SHOP_CONFIG_LOAD_DYNAMIC_PAGES'         => 'If this setting is checked, additional information about other OXID products is shown in the menu, e.g. about OXID eFire. Which information is loaded depends on the market of your eShop.',
 
 
 'HELP_SHOP_CONFIG_DELETERATINGLOGS'           => 'If users rate a product, they cannot rate the product again. Here you can set after how many days users are allowed to rate a product again. Leave empty to disable - products can be rated only once per user.',
@@ -341,6 +341,8 @@ $aLang =  array(
 
 'HELP_ARTICLE_FILES_LINK_EXPIRATION_TIME'     => 'Specify the time in hours, the download link is valid after order. For this file you can overwrite the default setting, which was defined in Master Settings -> Core Setting -> Settings -> Downloads for all products.',
 
+'HELP_ARTICLE_FILES_NEW'                      => 'Enter the name of a via FTP transferred file or upload a new file here. Note that large files should be uploaded via FTP. File size limitation is valid only when file is uploaded via admin. This limitation depends on the PHP settings of the server and might be edited only there.',
+
 'HELP_ARTICLE_FILES_DOWNLOAD_EXPIRATION_TIME' => 'Specify the time in hours, the download link is valid after the first download. For this file you can overwrite the default setting, which was defined in Master Settings -> Core Setting -> Settings -> Downloads for all products.',
 
 'HELP_ARTICLE_PICTURES_ICON'                  => 'Icons are the smallest pictures of a product. For example, they are used in the shopping cart.<br>'.
@@ -371,7 +373,7 @@ $aLang =  array(
                                                  '<li><span class="userinput_or_code">If out of stock, offline</span>: The product is not displayed if it is sold out.</li>' .
                                                  '<li><span class="userinput_or_code">If out of stock, not orderable</span>: The product is displayed if it is sold out but it cannot be ordered.</li></ul>',
 
-'HELP_ARTICLE_IS_DOWNLOADABLE'                => 'Files of this article can be downloaded.',
+'HELP_ARTICLE_IS_DOWNLOADABLE'                => 'Files of this product can be downloaded.',
 
 'HELP_ARTICLE_STOCK_REMINDAMAOUNT'            => 'With <span class="navipath_or_inputname">Send e-mail if stock falls below value</span> you can specify that an e-mail will be sent as soon as the stock level falls below the value entered. Select the check box and then enter the level at which you want to be notified.',
 
@@ -587,7 +589,7 @@ $aLang =  array(
 'HELP_DYN_TRUSTED_ACTIVE'                     => 'Check this option to display the Trusted Shops Seal on shop.',
 'HELP_DYN_TRUSTED_TSPAYMENT'                  => 'Assign the shop offered payment types at the appropriate payment to Trusted Store.',
 
-'HELP_PROMOTIONS_BANNER_PICTUREANDLINK'       => 'Upload banner image and enter banner URL which will be used when clicking on banner. If article is assigned to banner and URL is not entered, link to assigned article will be used when clicking on banner.',
+'HELP_PROMOTIONS_BANNER_PICTUREANDLINK'       => 'Upload banner image and enter banner URL which will be used when clicking on banner. If product is assigned to banner and URL is not entered, link to assigned product will be used when clicking on banner.',
 
 'HELP_SHOP_RDFA_SUBMIT_URL'                   => 'Submits your shop URL to GR-Notify page. There the URL is saved and forwarded to Linked Open Commerce & Semantic Web search engines and endpoints.',
 'HELP_SHOP_RDFA_CONTENT_OFFERER'              => 'Select here, in which content page eShop main information is displayed, e.g. "About Us".',

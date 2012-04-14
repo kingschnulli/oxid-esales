@@ -150,27 +150,21 @@
                     [{block name="checkout_basketcontents_basketitem_unitprice"}]
                         [{* product price *}]
                         <td>
-                            [{if !$basketitem->isBundle() || !$basketitem->isDiscountArticle()}]
-                                [{if $basketitem->getFUnitPrice() }][{ $basketitem->getFUnitPrice() }]&nbsp;[{ $currency->sign}][{/if}]
-                            [{/if}]
+                            [{if $basketitem->getFUnitPrice() }][{ $basketitem->getFUnitPrice() }]&nbsp;[{ $currency->sign}][{/if}]
                         </td>
                     [{/block}]
 
                     [{block name="checkout_basketcontents_basketitem_vat"}]
                         [{* product VAT percent *}]
                         <td>
-                            [{if !$basketitem->isBundle() || !$basketitem->isDiscountArticle()}]
-                                [{ $basketitem->getVatPercent() }]%
-                            [{/if}]
+                            [{ $basketitem->getVatPercent() }]%
                         </td>
                     [{/block}]
 
                     [{block name="checkout_basketcontents_basketitem_totalprice"}]
                         [{* product quantity * price *}]
                         <td>
-                            [{if !$basketitem->isBundle() || !$basketitem->isDiscountArticle()}]
-                                [{ $basketitem->getFTotalPrice() }]&nbsp;[{ $currency->sign }]
-                            [{/if}]
+                            [{ $basketitem->getFTotalPrice() }]&nbsp;[{ $currency->sign }]
                         </td>
                     [{/block}]
                 </tr>
