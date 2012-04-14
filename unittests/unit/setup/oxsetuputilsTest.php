@@ -84,12 +84,12 @@ class Unit_Setup_oxSetupUtilsTest extends OxidTestCase
      *
      * @return null
      */
-    public function testGetBaseOutDir()
+    public function testGetBasePictureDir()
     {
         $sBaseOut = 'out/pictures';
 
         $oUtils = new oxSetupUtils();
-        $this->assertEquals( $sBaseOut, $oUtils->getBaseOutDir() );
+        $this->assertEquals( $sBaseOut, $oUtils->getBasePictureDir() );
     }
 
     /**
@@ -102,48 +102,48 @@ class Unit_Setup_oxSetupUtilsTest extends OxidTestCase
         $aParams = array( 'sShopDir' => 'sShopDir', 'sCompileDir' => 'sCompileDir' );
 
         $iAt = 0;
-        $oUtils = $this->getMock( "oxSetupUtils", array( "getBaseOutDir", "checkFileOrDirectory" ) );
-        $oUtils->expects( $this->at( $iAt++ ) )->method( "getBaseOutDir" )->will( $this->returnValue( 'sBaseOutDir' ) );
+        $oUtils = $this->getMock( "oxSetupUtils", array( "getBasePictureDir", "checkFileOrDirectory" ) );
+        $oUtils->expects( $this->at( $iAt++ ) )->method( "getBasePictureDir" )->will( $this->returnValue( 'sBasePicDir' ) );
         $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/config.inc.php' ) );
         $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/log' ) );
         $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sCompileDir' ) );
-        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBaseOutDir/promo' ) );
-        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBaseOutDir/media' ) );
-        
-        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBaseOutDir/master/product/1' ) );
-        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBaseOutDir/master/product/2' ) );
-        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBaseOutDir/master/product/3' ) );
-        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBaseOutDir/master/product/4' ) );
-        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBaseOutDir/master/product/5' ) );
-        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBaseOutDir/master/product/6' ) );
-        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBaseOutDir/master/product/7' ) );
-        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBaseOutDir/master/product/8' ) );
-        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBaseOutDir/master/product/9' ) );
-        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBaseOutDir/master/product/10' ) );
-        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBaseOutDir/master/product/11' ) );
-        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBaseOutDir/master/product/12' ) );
-        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBaseOutDir/master/product/icon' ) );
-        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBaseOutDir/master/product/thumb' ) );
-        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBaseOutDir/master/category/icon' ) );
-        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBaseOutDir/master/category/promo_icon' ) );
-        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBaseOutDir/master/category/thumb' ) );
-        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBaseOutDir/master/manufacturer/icon' ) );
-        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBaseOutDir/master/vendor/icon' ) );
-        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBaseOutDir/master/wrapping' ) );
+        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBasePicDir/promo' ) );
+        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBasePicDir/media' ) );
 
-        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBaseOutDir/generated/product/1' ) );
-        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBaseOutDir/generated/product/2' ) );
-        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBaseOutDir/generated/product/3' ) );
-        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBaseOutDir/generated/product/4' ) );
-        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBaseOutDir/generated/product/5' ) );
-        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBaseOutDir/generated/product/6' ) );
-        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBaseOutDir/generated/product/icon' ) );
-        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBaseOutDir/generated/product/thumb' ) );
-        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBaseOutDir/generated/category/icon' ) );
-        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBaseOutDir/generated/category/promo_icon' ) );
-        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBaseOutDir/generated/category/thumb' ) );
-        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBaseOutDir/generated/manufacturer/icon' ) );
-        
+        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBasePicDir/master/product/1' ) );
+        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBasePicDir/master/product/2' ) );
+        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBasePicDir/master/product/3' ) );
+        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBasePicDir/master/product/4' ) );
+        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBasePicDir/master/product/5' ) );
+        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBasePicDir/master/product/6' ) );
+        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBasePicDir/master/product/7' ) );
+        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBasePicDir/master/product/8' ) );
+        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBasePicDir/master/product/9' ) );
+        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBasePicDir/master/product/10' ) );
+        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBasePicDir/master/product/11' ) );
+        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBasePicDir/master/product/12' ) );
+        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBasePicDir/master/product/icon' ) );
+        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBasePicDir/master/product/thumb' ) );
+        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBasePicDir/master/category/icon' ) );
+        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBasePicDir/master/category/promo_icon' ) );
+        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBasePicDir/master/category/thumb' ) );
+        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBasePicDir/master/manufacturer/icon' ) );
+        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBasePicDir/master/vendor/icon' ) );
+        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBasePicDir/master/wrapping' ) );
+
+        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBasePicDir/generated/product/1' ) );
+        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBasePicDir/generated/product/2' ) );
+        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBasePicDir/generated/product/3' ) );
+        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBasePicDir/generated/product/4' ) );
+        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBasePicDir/generated/product/5' ) );
+        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBasePicDir/generated/product/6' ) );
+        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBasePicDir/generated/product/icon' ) );
+        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBasePicDir/generated/product/thumb' ) );
+        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBasePicDir/generated/category/icon' ) );
+        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBasePicDir/generated/category/promo_icon' ) );
+        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBasePicDir/generated/category/thumb' ) );
+        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBasePicDir/generated/manufacturer/icon' ) );
+
         $oUtils->checkPaths( $aParams );
     }
 
