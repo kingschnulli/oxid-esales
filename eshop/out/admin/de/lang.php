@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 43873 2012-04-13 12:29:40Z juergen.busch $
+ * @version   SVN: $Id: lang.php 43906 2012-04-15 15:48:58Z alfonsas $
  */
 
 $sLangName  = 'Deutsch';
@@ -799,6 +799,7 @@ $aLang = array(
 'DYNSCREEN_TITLE'                                          => 'marketing',
 'DYNSCREEN_LIST_SERVICE'                                   => 'Servicebereich',
 'EDITOR_PLAINTEXT_HINT'                                    => '<b>Anmerkung:</b> Wenn Sie Zeilenumbrüche unverändert übernehmen möchten (z. B. für plaintext E-Mail), dann benutzen Sie "Source" anstatt "Design".',
+'ALTERNATIVE_IMAGE_SERVER_NOTE'                            => '[tr] <b>Note:</b> Alternative image server configuration detected, files will not be uploaded to remote locations. Please take care about synchronization manually.',
 //eFire related contents will appear only for users located in Germany
 'EFIRE_USERNAME'                                           => 'OXID eFire Externer Transaktions Login',
 'EFIRE_PASSWORD'                                           => 'OXID eFire Externes Transaktions Passwort',

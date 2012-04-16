@@ -38,6 +38,10 @@ window.onload = function ()
 <input type="hidden" name="editval[oxmanufacturers__oxid]" value="[{ $oxid }]">
 <input type="hidden" name="language" value="[{ $actlang }]">
 
+[{if $oViewConf->isAltImageServerConfigured() }]
+    <div class="warning">[{ oxmultilang ident="ALTERNATIVE_IMAGE_SERVER_NOTE" }] [{ oxinputhelp ident="HELP_ALTERNATIVE_IMAGE_SERVER_NOTE" }]</div>
+[{/if}]
+
 <table border="0" width="98%">
 <tr>
     <td valign="top" class="edittext">

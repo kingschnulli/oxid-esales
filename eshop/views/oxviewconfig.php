@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxviewconfig.php 43827 2012-04-12 14:26:20Z vilma $
+ * @version   SVN: $Id: oxviewconfig.php 43904 2012-04-15 15:47:57Z alfonsas $
  */
 
 /**
@@ -364,7 +364,7 @@ class oxViewConfig extends oxSuperCfg
             // using getSelfLink() method in admin mode (#2745)
             return $this->getSelfLink();
         }
-        
+
         if ( ( $sValue = $this->getViewConfigParam( 'sslselflink' ) ) === null ) {
             $sValue = $this->getConfig()->getShopSecureHomeURL();
             $this->setViewConfigParam( 'sslselflink', $sValue );
@@ -1316,5 +1316,18 @@ class oxViewConfig extends oxSuperCfg
     }
 
 
+
+    /**
+     * Checks if alternative image server is configured.
+     *
+     * @return bool
+     */
+    public function isAltImageServerConfigured()
+    {
+        $oConfig = $this->getConfig();
+
+        return $oConfig->getConfigParam('sAltImageUrl') || $oConfig->getConfigParam('sSSLAltImageUrl') ||
+               $oConfig->getConfigParam('sAltImageDir') || $oConfig->getConfigParam('sSSLAltImageDir');
+    }
 
 }

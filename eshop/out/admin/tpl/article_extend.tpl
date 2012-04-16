@@ -221,7 +221,7 @@ function processUnitInput( oSelect, sInputId )
                   [{ oxinputhelp ident="HELP_ARTICLE_EXTEND_NONMATERIAL" }]
                 </td>
               </tr>
-                        
+
 
               <tr>
                 <td class="edittext" width="120">

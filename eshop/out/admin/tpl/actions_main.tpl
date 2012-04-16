@@ -40,6 +40,10 @@ function DeletePic( sField )
 <input type="hidden" name="starget" value="">
 <input type="hidden" name="editval[oxactions__oxlongdesc]" value="">
 
+[{if $edit->oxactions__oxtype->value == 3 && $oViewConf->isAltImageServerConfigured() }]
+     <div class="warning">[{ oxmultilang ident="ALTERNATIVE_IMAGE_SERVER_NOTE" }] [{ oxinputhelp ident="HELP_ALTERNATIVE_IMAGE_SERVER_NOTE" }]</div>
+[{/if}]
+
 <table cellspacing="0" cellpadding="0" border="0" width="98%">
 
 <tr>
@@ -169,7 +173,6 @@ function DeletePic( sField )
                 <!-- Banners picture upload and link -->
                 <tr>
                     <td class="edittext">
-
                         <table cellspacing="0" cellpadding="0" width="100%" border="0" class="listTable">
                           [{block name="admin_actions_main_product"}]
                               <colgroup>

@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxviewconfigTest.php 43687 2012-04-10 13:54:06Z rimvydas.paskevicius $
+ * @version   SVN: $Id: oxviewconfigTest.php 43905 2012-04-15 15:48:15Z alfonsas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -730,4 +730,78 @@ class Unit_Views_oxviewConfigTest extends OxidTestCase
         $this->assertEquals( "testShopUrl", $oViewConfig->getSslSelfLink() );
     }
 
+    /**
+     * Testing isAltImageServerConfigured() - nothing configured
+     */
+    public function testIsAltImageServerConfigured_none()
+    {
+        modConfig::getInstance()->setConfigParam('sAltImageUrl', '');
+        modConfig::getInstance()->setConfigParam('sAltImageDir', '');
+        modConfig::getInstance()->setConfigParam('sSSLAltImageUrl', '');
+        modConfig::getInstance()->setConfigParam('sSSLAltImageDir', '');
+
+        $oViewConfig = oxNew('oxViewConfig');
+
+        $this->assertFalse( $oViewConfig->isAltImageServerConfigured() );
+    }
+
+    /**
+     * Testing isAltImageServerConfigured() - http url configured
+     */
+    public function testIsAltImageServerConfigured_httpurl()
+    {
+        modConfig::getInstance()->setConfigParam('sAltImageUrl', 'http://img.oxid-esales.com');
+        modConfig::getInstance()->setConfigParam('sAltImageDir', '');
+        modConfig::getInstance()->setConfigParam('sSSLAltImageUrl', '');
+        modConfig::getInstance()->setConfigParam('sSSLAltImageDir', '');
+
+        $oViewConfig = oxNew('oxViewConfig');
+
+        $this->assertTrue( $oViewConfig->isAltImageServerConfigured() );
+    }
+
+    /**
+     * Testing isAltImageServerConfigured() - http dir configured
+     */
+    public function testIsAltImageServerConfigured_httpdir()
+    {
+        modConfig::getInstance()->setConfigParam('sAltImageUrl', '');
+        modConfig::getInstance()->setConfigParam('sAltImageDir', 'http://img.oxid-esales.com');
+        modConfig::getInstance()->setConfigParam('sSSLAltImageUrl', '');
+        modConfig::getInstance()->setConfigParam('sSSLAltImageDir', '');
+
+        $oViewConfig = oxNew('oxViewConfig');
+
+        $this->assertTrue( $oViewConfig->isAltImageServerConfigured() );
+    }
+
+    /**
+     * Testing isAltImageServerConfigured() - https url configured
+     */
+    public function testIsAltImageServerConfigured_httpsurl()
+    {
+        modConfig::getInstance()->setConfigParam('sAltImageUrl', '');
+        modConfig::getInstance()->setConfigParam('sAltImageDir', '');
+        modConfig::getInstance()->setConfigParam('sSSLAltImageUrl', 'https://img.oxid-esales.com');
+        modConfig::getInstance()->setConfigParam('sSSLAltImageDir', '');
+
+        $oViewConfig = oxNew('oxViewConfig');
+
+        $this->assertTrue( $oViewConfig->isAltImageServerConfigured() );
+    }
+
+    /**
+     * Testing isAltImageServerConfigured() - https dir configured
+     */
+    public function testIsAltImageServerConfigured_httpsdir()
+    {
+        modConfig::getInstance()->setConfigParam('sAltImageUrl', '');
+        modConfig::getInstance()->setConfigParam('sAltImageDir', '');
+        modConfig::getInstance()->setConfigParam('sSSLAltImageUrl', '');
+        modConfig::getInstance()->setConfigParam('sSSLAltImageDir', 'https://img.oxid-esales.com');
+
+        $oViewConfig = oxNew('oxViewConfig');
+
+        $this->assertTrue( $oViewConfig->isAltImageServerConfigured() );
+    }
 }

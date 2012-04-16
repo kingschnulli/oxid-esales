@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 43874 2012-04-13 12:30:08Z juergen.busch $
+ * @version   SVN: $Id: lang.php 43906 2012-04-15 15:48:58Z alfonsas $
  */
 
 /*
@@ -796,6 +796,7 @@ $aLang = array(
 'DYNSCREEN_TITLE'                                          => 'marketing',
 'DYNSCREEN_LIST_SERVICE'                                   => 'Service Area',
 'EDITOR_PLAINTEXT_HINT'                                    => '<b>Note:</b> If you need to preserve text line breaks (e.g. plaintext e-mails), please use tab "html CODE" instead of "Design".',
+'ALTERNATIVE_IMAGE_SERVER_NOTE'                            => '[tr] <b>Note:</b> Alternative image server configuration detected, files will not be uploaded to remote locations. Please take care about synchronization manually.',
 //eFire related contents will appear only for users located in Germany
 'EFIRE_USERNAME'                                           => 'eFire External Transaction username',
 'EFIRE_PASSWORD'                                           => 'eFire External Transaction password',

@@ -15,8 +15,7 @@
     <table cellspacing="0" cellpadding="0" border="0" width="98%">
     <tr>
         <td valign="top" class="edittext" width="50%">
-
-        [{ if $edit }]
+        [{if $edit }]
             <table width="200" border="0" cellspacing="0" cellpadding="0" nowrap>
             <tr><td class="edittext" valign="top">
             [{block name="admin_order_overview_billingaddress"}]
@@ -39,7 +38,7 @@
                 <br>
             [{/block}]
             </td>
-            [{ if $edit->oxorder__oxdelstreet->value }]
+            [{if $edit->oxorder__oxdelstreet->value }]
             <td class="edittext" valign="top">
                 [{block name="admin_order_overview_deliveryaddress"}]
                     <b>[{ oxmultilang ident="GENERAL_DELIVERYADDRESS" }]:</b><br>

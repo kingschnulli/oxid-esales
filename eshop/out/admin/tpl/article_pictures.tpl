@@ -54,6 +54,10 @@ function editThis( sID )
 <input type="hidden" name="oxparentid" value="[{ $oxparentid }]">
 <input type="hidden" name="masterPicIndex" value="">
 
+[{if $oViewConf->isAltImageServerConfigured() }]
+    <div class="warning">[{ oxmultilang ident="ALTERNATIVE_IMAGE_SERVER_NOTE" }] [{ oxinputhelp ident="HELP_ALTERNATIVE_IMAGE_SERVER_NOTE" }]</div>
+[{/if}]
+
 
 
 

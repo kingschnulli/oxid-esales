@@ -1776,7 +1776,7 @@ div.searchBox input.textbox:focus {
 }
 
 #footer .bar {color:#000; padding:10px 10px 10px 20px; border-bottom:1px solid #3799B1; height:20px;}
-#footer .bar .facebook {float: left;}
+#footer .bar .facebook {float: left; margin-right:5px;}
 #footer .bar .deliveryinfo {float: right;}
 #footer .bar .deliveryinfo a {font-size:10px; color:#515353;}
 
