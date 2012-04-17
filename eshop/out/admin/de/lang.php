@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 43906 2012-04-15 15:48:58Z alfonsas $
+ * @version   SVN: $Id: lang.php 43969 2012-04-16 15:22:52Z mindaugas.rimgaila $
  */
 
 $sLangName  = 'Deutsch';
@@ -799,7 +799,7 @@ $aLang = array(
 'DYNSCREEN_TITLE'                                          => 'marketing',
 'DYNSCREEN_LIST_SERVICE'                                   => 'Servicebereich',
 'EDITOR_PLAINTEXT_HINT'                                    => '<b>Anmerkung:</b> Wenn Sie Zeilenumbrüche unverändert übernehmen möchten (z. B. für plaintext E-Mail), dann benutzen Sie "Source" anstatt "Design".',
-'ALTERNATIVE_IMAGE_SERVER_NOTE'                            => '[tr] <b>Note:</b> Alternative image server configuration detected, files will not be uploaded to remote locations. Please take care about synchronization manually.',
+'ALTERNATIVE_IMAGE_SERVER_NOTE'                            => '<b>Hinweis:</b> Der Shop ist konfiguriert, Artikelbilder von einem externen Server zu laden. Dateien werden aber nicht zu diesem Speicherort hochgeladen. Stellen Sie bitte die manuelle Synchronisation sicher.',
 //eFire related contents will appear only for users located in Germany
 'EFIRE_USERNAME'                                           => 'OXID eFire Externer Transaktions Login',
 'EFIRE_PASSWORD'                                           => 'OXID eFire Externes Transaktions Passwort',
@@ -1267,7 +1267,7 @@ $aLang = array(
 'SHOP_CONFIG_ALLOWUNEVENAMOUNTS'                           => 'Nicht ganzzahlige Eingaben bei Artikelmengen erlauben (z.B. 1,5)',
 'SHOP_CONFIG_BIDIRECTCROSS'                                => 'Bidirektionales Crossselling aktivieren',
 'SHOP_CONFIG_CONFIRMAGB'                                   => 'Kunden müssen die AGB bestätigen, um bestellen zu können',
-'SHOP_CONFIG_SHOWORDERBUTTONONTHETOP'                      => 'Im 4ten Bestellschritt einen zusätzlichen "Kostenpflichtig Bestellen" Button oben anzeigen (Wenn die Einstellung nicht aktiv ist, wird nur der "Kostenpflichtig Bestellen" Button weiter unten angezeigt).',
+'SHOP_CONFIG_SHOWORDERBUTTONONTHETOP'                      => 'Im 4. Bestellschritt einen zusätzlichen "Kostenpflichtig bestellen" Button oben anzeigen (Wenn die Einstellung nicht aktiv ist, wird nur der "Kostenpflichtig bestellen" Button weiter unten angezeigt).',
 'SHOP_CONFIG_CALCULATEVATFORDELIVERY'                      => 'Im Warenkorb und in der Rechnung die Versandkosten als Nettobetrag und Mehrwertsteuer anstatt als Bruttobetrag anzeigen',
 'SHOP_CONFIG_CALCDELVATONTOP'                              => 'Versandkosten als Nettopreise eingeben (zuzüglich MwSt.)',
 'SHOP_CONFIG_CALCULATEVATFORWRAPPING'                      => 'Die in den Geschenkverpackungskosten enthaltene Mehrwertsteuer im Warenkorb und in der Rechnung anzeigen',
@@ -1447,7 +1447,7 @@ $aLang = array(
 'SYSREQ_MOD_REWRITE'                                       => 'Apache mod_rewrite Modul',
 'SYSREQ_ALLOW_URL_FOPEN'                                   => 'allow_url_fopen oder fsockopen auf Port 80',
 'SYSREQ_PHP4_COMPAT'                                       => 'Zend Kompatibilitätsmodus muss ausgeschaltet sein',
-'SYSREQ_PHP_VERSION'                                       => 'PHP mindestens Version 5.2.0',
+'SYSREQ_PHP_VERSION'                                       => 'PHP mindestens Version 5.2.10',
 'SYSREQ_REQUEST_URI'                                       => 'REQUEST_URI vorhanden',
 'SYSREQ_LIB_XML2'                                          => 'LIB XML2',
 'SYSREQ_PHP_XML'                                           => 'PHP XML',
@@ -1467,7 +1467,8 @@ $aLang = array(
 'SYSREQ_OPEN_SSL'                                          => 'OpenSSL',
 'SYSREQ_SOAP'                                              => 'SOAP',
 'SYSREQ_UNICODE_SUPPORT'                                   => 'UTF-8 Unterstützung',
-'SYSREQ_FILE_UPLOADS'                                      => 'PHP-Einstellungen erlauben Hochladen von Dateien',
+'SYSREQ_FILE_UPLOADS'                                      => 'Hochladen von Dateien erlaubt (file_uploads)',
+'SYSREQ_SESSION_AUTOSTART'                                 => 'session.auto_start muss ausgeschaltet sein',
 'SYSREQ_BUG53632'                                          => 'Mögliche Probleme mit Server durch PHP Bugs',
 'SYSREQ_MEMORY_LIMIT_EE'                                   => 'PHP Memory Limit (min. 32MB, 60MB empfohlen)',
 'SYSREQ_MEMORY_LIMIT'                                      => 'PHP Memory limit (min. 14MB, 30MB empfohlen)',

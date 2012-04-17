@@ -2,7 +2,6 @@
 [{oxscript add="$('div.dropDown p').oxDropDown();" }]
 [{assign var="oSelections" value=$oSelectionList->getSelections()}]
 [{if $oSelections}]
-    [{$sFieldName}]
 <div class="dropDown [{$sJsAction}]">
     <p class="selectorLabel underlined [{if $editable === false}] js-disabled[{/if}]">
         <label>[{$oSelectionList->getLabel()}]:</label>

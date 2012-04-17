@@ -95,6 +95,19 @@ function ThisDate( sID)
                                 [{ oxmultilang ident="ORDER_MAIN_PAYMENT_INFORMATION" }]
                             </td>
                         </tr>
+
+                        [{ if $edit->blIsPaid }]
+                        <tr>
+                            <td class="edittext" valign="middle">
+                            <b>[{ oxmultilang ident="ORDER_MAIN_ORDERPAID" }]</b>
+                            </td>
+                            <td class="edittext" valign="bottom">
+                            <b>[{ $edit->oxorder__oxpaid->value|oxformdate:'datetime':true }]</b>
+                            </td>
+                            <td class="edittext"></td>
+                        </tr>
+                        [{/if}]
+
                         <tr>
                             <td class="edittext">
                                 [{ oxmultilang ident="ORDER_MAIN_PAIDON" }]
@@ -182,7 +195,7 @@ function ThisDate( sID)
                                 [{ oxinputhelp ident="HELP_ORDER_MAIN_DELTYPE" }]
                             </td>
                             <td>
-                                <input type="submit" class="edittext" name="save" onclick="document.sendorder.sendmail.value=document.getElementById('sendmail').checked;document.sendorder.submit();return false;" value="&nbsp;&nbsp;[{ oxmultilang ident="GENERAL_NOWSEND" }]&nbsp;&nbsp;" [{ $readonly }]>
+                                <input type="submit" class="edittext" name="save" id="shippNowButton" onclick="document.sendorder.sendmail.value=document.getElementById('sendmail').checked;document.sendorder.submit();return false;" value="&nbsp;&nbsp;[{ oxmultilang ident="GENERAL_NOWSEND" }]&nbsp;&nbsp;" [{ $readonly }]>
                                 <input id='sendmail' class="edittext" type="checkbox" name="sendmail" value='1' [{ $readonly }]> [{ oxmultilang ident="GENERAL_SENDEMAIL" }]
                             </td>
                         </tr>
@@ -194,7 +207,7 @@ function ThisDate( sID)
                             <b>[{ $edit->oxorder__oxsenddate->value|oxformdate:'datetime':true }]</b>
                             </td>
                             <td>
-                            <input type="submit" class="edittext" name="save" value="[{ oxmultilang ident="GENERAL_SETBACKSENDTIME" }]" onclick="document.resetorder.submit();return false;" [{ $readonly }]>
+                            <input type="submit" class="edittext" name="save" id="resetShippingDateButton" value="[{ oxmultilang ident="GENERAL_SETBACKSENDTIME" }]" onclick="document.resetorder.submit();return false;" [{ $readonly }]>
                             </td>
                         </tr>
                     </table>
@@ -205,7 +218,7 @@ function ThisDate( sID)
             <td class="edittext">
             </td>
             <td class="edittext"><br>
-            <input type="submit" class="edittext" name="save" value="[{ oxmultilang ident="GENERAL_SAVE" }]" [{ $readonly }]><br><br>
+            <input type="submit" class="edittext" name="save" id="saveFormButton" value="[{ oxmultilang ident="GENERAL_SAVE" }]" [{ $readonly }]><br><br>
             </td>
         </tr>
         </table>

@@ -19,7 +19,7 @@
  * @package   setup
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 43851 2012-04-13 10:34:57Z vilma $
+ * @version   SVN: $Id: lang.php 43969 2012-04-16 15:22:52Z mindaugas.rimgaila $
  */
 
 $aLang = array(
@@ -79,7 +79,7 @@ $aLang = array(
 'MOD_SERVER_PERMISSIONS'                        => 'Dateizugriffsrechte',
 'MOD_ALLOW_URL_FOPEN'                           => 'allow_url_fopen oder fsockopen auf Port 80',
 'MOD_PHP4_COMPAT'                               => 'Zend Kompatibilitätsmodus muss ausgeschaltet sein',
-'MOD_PHP_VERSION'                               => 'PHP mindestens Version 5.2.0',
+'MOD_PHP_VERSION'                               => 'PHP mindestens Version 5.2.10',
 'MOD_REQUEST_URI'                               => 'REQUEST_URI vorhanden',
 'MOD_LIB_XML2'                                  => 'LIB XML2',
 'MOD_PHP_XML'                                   => 'DOM',
@@ -98,8 +98,9 @@ $aLang = array(
 'MOD_OPEN_SSL'                                  => 'OpenSSL',
 'MOD_SOAP'                                      => 'SOAP',
 'MOD_UNICODE_SUPPORT'                           => 'UTF-8 Unterstützung',
-'MOD_FILE_UPLOADS'                              => '[tr]File uploads are enabled in PHP',
+'MOD_FILE_UPLOADS'                              => 'Hochladen von Dateien erlaubt (file_uploads)',
 'MOD_BUG53632'                                  => 'Mögliche Probleme mit Server durch PHP Bugs',
+'MOD_SESSION_AUTOSTART'                         => 'session.auto_start muss ausgeschaltet sein',
 
 'STEP_0_ERROR_TEXT'                             => 'Ihr System erfüllt nicht alle nötigen Systemvoraussetzungen',
 'STEP_0_ERROR_URL'                              => "http://www.oxid-esales.com/de/produkte/community-edition/systemvoraussetzungen",

@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxsession.php 43750 2012-04-11 08:20:17Z linas.kukulskis $
+ * @version   SVN: $Id: oxsession.php 43969 2012-04-16 15:22:52Z mindaugas.rimgaila $
  */
 
 DEFINE('_DB_SESSION_HANDLER', getShopBasePath() . 'core/adodblite/session/adodb-session.php');
@@ -1069,7 +1069,7 @@ class oxSession extends oxSuperCfg
             }
         }
 
-        return false;
+        return ( isset( $_SERVER['REQUEST_METHOD'] ) && $_SERVER['REQUEST_METHOD'] == 'POST');
     }
 
     /**

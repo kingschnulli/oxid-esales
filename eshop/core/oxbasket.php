@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxbasket.php 43709 2012-04-11 06:31:11Z linas.kukulskis $
+ * @version   SVN: $Id: oxbasket.php 43965 2012-04-16 15:04:42Z vilma $
  */
 
 /**
@@ -2158,7 +2158,10 @@ class oxBasket extends oxSuperCfg
 
         // blShowVATForDelivery option will be used, only for displaying, but not calculation
         if ( $oConfig->getConfigParam( 'blShowVATForDelivery' ) && ( $this->getBasketUser() || $oConfig->getConfigParam( 'blCalculateDelCostIfNotLoggedIn' ) ) ) {
-            return oxLang::getInstance()->formatCurrency( $this->getCosts( 'oxdelivery' )->getNettoPrice(), $this->getBasketCurrency() );
+            $dNetPrice = $this->getCosts( 'oxdelivery' )->getNettoPrice();
+            if ( $dNetPrice > 0 ) {
+                return oxLang::getInstance()->formatCurrency( $dNetPrice, $this->getBasketCurrency() );
+            }
         }
         return false;
     }
@@ -2333,7 +2336,7 @@ class oxBasket extends oxSuperCfg
     public function getFDeliveryCosts()
     {
         $oDeliveryCost = $this->getCosts( 'oxdelivery' );
-        if ( $oDeliveryCost ) {
+        if ( $oDeliveryCost && ( $this->getBasketUser() || $this->getConfig()->getConfigParam( 'blCalculateDelCostIfNotLoggedIn' ) ) ) {
             return oxLang::getInstance()->formatCurrency( $oDeliveryCost->getBruttoPrice(), $this->getBasketCurrency() );
         }
         return false;

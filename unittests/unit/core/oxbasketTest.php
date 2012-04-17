@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxbasketTest.php 43166 2012-03-26 08:50:28Z vilma $
+ * @version   SVN: $Id: oxbasketTest.php 43965 2012-04-16 15:04:42Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -3926,7 +3926,7 @@ class Unit_Core_oxbasketTest extends OxidTestCase
         $oBasket = $this->getProxyClass( "oxBasket" );
         $oBasket->setNonPublicVar('_aCosts', array ( "oxdelivery" => $oPrice ) );
         $oBasket->setNonPublicVar('_oUser', false );
-        $this->assertEquals( "0,00", $oBasket->getDelCostNet() );
+        $this->assertFalse( $oBasket->getDelCostNet() );
     }
 
     /**
@@ -4197,6 +4197,7 @@ class Unit_Core_oxbasketTest extends OxidTestCase
      */
     public function testGetFDeliveryCosts()
     {
+        modConfig::getInstance()->setConfigParam( 'blCalculateDelCostIfNotLoggedIn', true );
         $oPrice = $this->getMock( 'oxprice', array( 'getBruttoPrice' ) );
         $oPrice->expects( $this->any() )->method( 'getBruttoPrice' )->will( $this->returnValue( 11.588 ) );
         $oBasket = $this->getProxyClass( "oxBasket" );
@@ -4211,6 +4212,7 @@ class Unit_Core_oxbasketTest extends OxidTestCase
      */
     public function testGetFDeliveryCostsSetToZero()
     {
+        modConfig::getInstance()->setConfigParam( 'blCalculateDelCostIfNotLoggedIn', true );
         $oPrice = $this->getMock( 'oxprice', array( 'getBruttoPrice' ) );
         $oPrice->expects( $this->any() )->method( 'getBruttoPrice' )->will( $this->returnValue( 0 ) );
         $oBasket = $this->getProxyClass( "oxBasket" );

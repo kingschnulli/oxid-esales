@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: help_lang.php 43906 2012-04-15 15:48:58Z alfonsas $
+ * @version   SVN: $Id: help_lang.php 43952 2012-04-16 11:41:28Z juergen.busch $
  */
 
 /**
@@ -591,7 +591,7 @@ $aLang =  array(
 
 'HELP_PROMOTIONS_BANNER_PICTUREANDLINK'       => 'Upload banner image and enter banner URL which will be used when clicking on banner. If product is assigned to banner and URL is not entered, link to assigned product will be used when clicking on banner.',
 
-'HELP_ALTERNATIVE_IMAGE_SERVER_NOTE'          => '[tr] Alternative URL to remote image server can be specified in configuration file config.inc.php by setting <i>sAltImageUrl</i> and <i>sSSLAltImageUrl</i>.<br> After configuration all picture URL getter function will use alternative servers instead of local one, but uploaded files will be placed only locally, so in this case synchronization to external servers has to be done manually on with custom scrips.',
+'HELP_ALTERNATIVE_IMAGE_SERVER_NOTE'          => 'Alternative URL to remote image server can be specified in configuration file config.inc.php by setting <i>sAltImageUrl</i> and <i>sSSLAltImageUrl</i>.<br> Thus all product pictures will be loaded from this alternative server instead of the local one. However, uploaded files will be stored locally. In this case synchronization to external server has to be done manually or with custom scripts.',
 
 'HELP_SHOP_RDFA_SUBMIT_URL'                   => 'Submits your shop URL to GR-Notify page. There the URL is saved and forwarded to Linked Open Commerce & Semantic Web search engines and endpoints.',
 'HELP_SHOP_RDFA_CONTENT_OFFERER'              => 'Select here, in which content page eShop main information is displayed, e.g. "About Us".',

@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxsysrequirements.php 43851 2012-04-13 10:34:57Z vilma $
+ * @version   SVN: $Id: oxsysrequirements.php 43973 2012-04-16 15:50:26Z mindaugas.rimgaila $
  */
 
 /**
@@ -114,7 +114,7 @@ class oxSysRequirements
      *
      * @var array
      */
-    protected $_aInfoMap    = array( "php_version"        => "PHP_version_at_least_5.2.0",
+    protected $_aInfoMap    = array( "php_version"        => "PHP_version_at_least_5.2.10",
                                      "lib_xml2"           => "LIB_XML2",
                                      "php_xml"            => "DOM",
                                      "open_ssl"           => "OpenSSL",
@@ -138,6 +138,7 @@ class oxSysRequirements
                                      "server_permissions" => "Files_.26_Folder_Permission_Setup",
                                      "zend_optimizer"     => "Zend_Optimizer",
                                      "bug53632"           => "Not_recommended_PHP_versions",
+                                     "session_autostart"  => "session.auto_start_must_be_off",
                                      // "zend_platform_or_server"
                                       );
 
@@ -217,7 +218,8 @@ class oxSysRequirements
                                        'register_globals',
                                        'memory_limit',
                                        'unicode_support',
-                                       'file_uploads'
+                                       'file_uploads',
+                                       'session_autostart',
                                    );
 
             $aRequiredServerConfigs = array(
@@ -558,15 +560,18 @@ class oxSysRequirements
     }
 
     /**
-     * Checks PHP version. PHP 5.2.0 or higher.
-     * Due to performance matters, PHP 5.2.6 recommended.
+     * Checks PHP version.
+     * < PHP 5.2.0 - red.
+     * PHP 5.2.0-5.2.9 - yellow.
+     * PHP 5.2.10 or higher - green.
      *
      * @return integer
      */
     public function checkPhpVersion()
     {
-        $iModStat = ( version_compare( PHP_VERSION, '5.1', '>' ) ) ? 1 : 0;
-        $iModStat = ( $iModStat == 0 ) ? $iModStat : ( version_compare( PHP_VERSION, '5.2', '>=' ) ? 2 : 1 );
+        $iModStat = ( version_compare( PHP_VERSION, '5.2', '<' ) ) ? 0 : false;
+        $iModStat = ( $iModStat !== false ) ? $iModStat : ( (version_compare( PHP_VERSION, '5.2.0', '>=' ) && version_compare( PHP_VERSION, '5.2.10', '<' )) ? 1 : false );
+        $iModStat = ( $iModStat !== false ) ? $iModStat : ( version_compare( PHP_VERSION, '5.2.10', '>=' ) ? 2 : 1 );
         return $iModStat;
     }
 
@@ -1076,5 +1081,16 @@ class oxSysRequirements
         }
 
         return $aRet;
+    }
+
+    /**
+     * Check if correct AutoStart setting.
+     *
+     * @return bool
+     */
+    public function checkSessionAutostart()
+    {
+        $sStatus = ( strtolower( (string) @ini_get( 'session.auto_start' ) ) );
+        return in_array( $sStatus, array( 'on', '1' ) ) ? 0 : 2;
     }
 }

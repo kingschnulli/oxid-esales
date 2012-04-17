@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 43906 2012-04-15 15:48:58Z alfonsas $
+ * @version   SVN: $Id: lang.php 43969 2012-04-16 15:22:52Z mindaugas.rimgaila $
  */
 
 /*
@@ -796,7 +796,7 @@ $aLang = array(
 'DYNSCREEN_TITLE'                                          => 'marketing',
 'DYNSCREEN_LIST_SERVICE'                                   => 'Service Area',
 'EDITOR_PLAINTEXT_HINT'                                    => '<b>Note:</b> If you need to preserve text line breaks (e.g. plaintext e-mails), please use tab "html CODE" instead of "Design".',
-'ALTERNATIVE_IMAGE_SERVER_NOTE'                            => '[tr] <b>Note:</b> Alternative image server configuration detected, files will not be uploaded to remote locations. Please take care about synchronization manually.',
+'ALTERNATIVE_IMAGE_SERVER_NOTE'                            => '<b>Note:</b> Alternative image server configuration detected, files will not be uploaded to remote location. Please take care about synchronization manually.',
 //eFire related contents will appear only for users located in Germany
 'EFIRE_USERNAME'                                           => 'eFire External Transaction username',
 'EFIRE_PASSWORD'                                           => 'eFire External Transaction password',
@@ -1444,7 +1444,7 @@ $aLang = array(
 'SYSREQ_MOD_REWRITE'                                       => 'Apache mod_rewrite module',
 'SYSREQ_ALLOW_URL_FOPEN'                                   => 'allow_url_fopen or fsockopen to port 80',
 'SYSREQ_PHP4_COMPAT'                                       => 'Zend compatibility mode must be off',
-'SYSREQ_PHP_VERSION'                                       => 'PHP version at least 5.2.0',
+'SYSREQ_PHP_VERSION'                                       => 'PHP version at least 5.2.10',
 'SYSREQ_REQUEST_URI'                                       => 'REQUEST_URI set',
 'SYSREQ_LIB_XML2'                                          => 'LIB XML2',
 'SYSREQ_PHP_XML'                                           => 'PHP XML',
@@ -1464,7 +1464,8 @@ $aLang = array(
 'SYSREQ_OPEN_SSL'                                          => 'OpenSSL',
 'SYSREQ_SOAP'                                              => 'SOAP',
 'SYSREQ_UNICODE_SUPPORT'                                   => 'UTF-8 support',
-'SYSREQ_FILE_UPLOADS'                                      => 'File uploads are enabled in PHP',
+'SYSREQ_FILE_UPLOADS'                                      => 'File uploads are enabled (file_uploads)',
+'SYSREQ_SESSION_AUTOSTART'                                 => 'session.auto_start must be off',
 'SYSREQ_BUG53632'                                          => 'Possible issues on server due to PHP Bugs',
 'SYSREQ_MEMORY_LIMIT_EE'                                   => 'PHP Memory limit (min. 32MB, 60MB recommended)',
 'SYSREQ_MEMORY_LIMIT'                                      => 'PHP Memory limit (min. 14MB, 30MB recommended)',
