@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   admin
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: dynexportbase.php 35975 2011-06-07 06:45:11Z vilma $
+ * @version   SVN: $Id: dynexportbase.php 43957 2012-04-16 13:20:52Z tomas $
  */
 
 /**
@@ -244,8 +244,6 @@ class DynExportBase extends oxAdminDetails
     {
         $blContinue = true;
         $iExportedItems = 0;
-
-
 
         $this->fpFile = @fopen( $this->_sFilePath, "a");
         if ( !isset( $this->fpFile) || !$this->fpFile) {
@@ -756,6 +754,9 @@ class DynExportBase extends oxAdminDetails
         // reset it from session
         oxSession::deleteVar("iExportLanguage" );
         oxSession::setVar( "iExportLanguage", oxConfig::getParameter( "iExportLanguage" ) );
+
+        //setting the custom header
+        oxSession::setVar("sExportCustomHeader", oxConfig::getParameter( "sExportCustomHeader" ));
     }
 
     /**

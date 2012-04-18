@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 43815 2012-04-12 12:35:55Z juergen.busch $
+ * @version   SVN: $Id: lang.php 43982 2012-04-16 17:18:33Z tomas $
  */
 
 /*
@@ -213,6 +213,7 @@ $aLang = array(
 'GENERAL_EXPORTSTATUSNEW'                                  => 'new',
 'GENERAL_EXPORTSTATUSUSED'                                 => 'used',
 'GENERAL_EXPORTLANGUAGE'                                   => 'Export for language',
+'GENERAL_EXPORTCUSTOMHEADER'                               => '[tr] Custom export header',
 'GENERAL_EXTERNALSTOCK'                                    => 'External Storehouse',
 'GENERAL_EXTRAINFO'                                        => 'Additional Info',
 'GENERAL_FAX'                                              => 'Fax',

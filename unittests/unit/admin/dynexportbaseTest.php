@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: dynexportbaseTest.php 29921 2010-09-21 12:18:02Z sarunas $
+ * @version   SVN: $Id: dynexportbaseTest.php 43957 2012-04-16 13:20:52Z tomas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -562,6 +562,8 @@ class Unit_Admin_DynExportBaseTest extends OxidTestCase
         modConfig::setParameter( "sExportMinPrice", "123;" );
         modConfig::setParameter( "sExportCampaign", "123;" );
         modConfig::setParameter( "blAppendCatToCampaign", "123" );
+        //#3611
+        modConfig::setParameter( "sExportCustomHeader", "testHeader" );
 
         $oView = new DynExportBase();
         $oView->UNITsetSessionParams();
@@ -570,6 +572,8 @@ class Unit_Admin_DynExportBaseTest extends OxidTestCase
         $this->assertEquals( "123", oxSession::getVar( "sExportMinPrice" ) );
         $this->assertEquals( "123", oxSession::getVar( "sExportCampaign" ) );
         $this->assertEquals( "123", oxSession::getVar( "blAppendCatToCampaign" ) );
+        //#3611
+        $this->assertEquals( "testHeader", oxSession::getVar( "sExportCustomHeader" ) );
     }
 
     /**
