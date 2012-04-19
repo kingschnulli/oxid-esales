@@ -19,7 +19,7 @@
  * @package   smarty_plugins
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: function.oxscript.php 43901 2012-04-14 17:45:06Z alfonsas $
+ * @version   SVN: $Id: function.oxscript.php 44014 2012-04-18 09:05:12Z vilma $
  */
 
 /**
@@ -68,7 +68,7 @@ function smarty_function_oxscript($params, &$smarty)
         if (!preg_match('#^https?://#', $sScript)) {
             // Separate query part #3305.
             $aScript = explode('?', $sScript);
-            $sScript = $myConfig->getResourceUrl($aScript[0]);
+            $sScript = $myConfig->getResourceUrl($aScript[0], $myConfig->isAdmin());
 
             // Append query part if still needed #3305.
             if ($sScript && count($aScript) > 1) {

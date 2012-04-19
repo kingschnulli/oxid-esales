@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: shoplicenseTest.php 33190 2011-02-10 15:56:27Z arvydas.vapsva $
+ * @version   SVN: $Id: shoplicenseTest.php 44035 2012-04-18 12:38:44Z tomas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -30,6 +30,27 @@ require_once realpath( "." ).'/unit/test_config.inc.php';
  */
 class Unit_Admin_ShopLicenseTest extends OxidTestCase
 {
+
+    /**
+     * Sets malladmin parameter
+     *
+     * @return null|void
+     */
+    public function setUp()
+    {
+        modSession::getInstance()->setVar("malladmin", true);
+        return parent::setUp();
+    }
+
+    /**
+     * Unsets malladmin parameter
+     */
+    public function tearDown()
+    {
+        modSession::getInstance()->setVar("malladmin", null);
+        return parent::tearDown();
+    }
+
 
     /**
      * Shop_License::Render() test case
@@ -87,5 +108,59 @@ class Unit_Admin_ShopLicenseTest extends OxidTestCase
         $this->assertEquals( "-1", $aViewData['oxid'] );
     }
 
+
+
+    /**
+     * Testting Shop_License::_canUpdate();
+     */
+    public function testCanUpdate()
+    {
+        $oSubj = $this->getProxyClass("Shop_License");
+
+        modSession::getInstance()->setVar("malladmin", true);
+
+        $oConfig = $this->getMock( "oxconfig", array( "isDemoShop", "getConfigParam", "setConfigParam", "saveShopConfVar", "getBaseShopId" ) );
+        $oConfig->expects( $this->any() )->method( 'isDemoShop' )->will( $this->returnValue( false ) );
+        $oView = $this->getMock( "Shop_License", array( "getConfig" ), array(), '', false );
+        $oView->expects( $this->any() )->method( 'getConfig' )->will( $this->returnValue( $oConfig ) );
+
+        $this->assertTrue($oSubj->UNITcanUpdate());
+    }
+
+
+    /**
+     * Testting Shop_License::_canUpdate(); for malladmin
+     */
+    public function testCanUpdateForNonMallAdmin()
+    {
+        $oSubj = $this->getProxyClass("Shop_License");
+
+        modSession::getInstance()->setVar("malladmin", false);
+
+        $oConfig = $this->getMock( "oxconfig", array( "isDemoShop", "getConfigParam", "setConfigParam", "saveShopConfVar", "getBaseShopId" ) );
+        $oConfig->expects( $this->any() )->method( 'isDemoShop' )->will( $this->returnValue( false ) );
+        $oView = $this->getMock( "Shop_License", array( "getConfig" ), array(), '', false );
+        $oView->expects( $this->any() )->method( 'getConfig' )->will( $this->returnValue( $oConfig ) );
+
+        $this->assertFalse($oSubj->UNITcanUpdate());
+    }
+
+
+    /**
+     * Testting Shop_License::_canUpdate(); for demo shops (#3870)
+     */
+    public function testCanUpdateForDemoVersion()
+    {
+        $oSubj = $this->getProxyClass("Shop_License");
+
+        modSession::getInstance()->setVar("malladmin", true);
+
+        $oConfig = $this->getMock( "oxconfig", array( "isDemoShop") );
+        $oConfig->expects( $this->any() )->method( 'isDemoShop' )->will( $this->returnValue( true ) );
+        $oView = $this->getMock( "Shop_License", array( "getConfig" ), array(), '', false );
+        $oView->expects( $this->any() )->method( 'getConfig' )->will( $this->returnValue( $oConfig ) );
+
+        $this->assertFalse($oView->UNITcanUpdate());
+    }
 
 }

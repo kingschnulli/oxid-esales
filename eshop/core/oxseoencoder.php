@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxseoencoder.php 43254 2012-03-28 12:38:14Z linas.kukulskis $
+ * @version   SVN: $Id: oxseoencoder.php 44046 2012-04-18 15:40:36Z linas.kukulskis $
  */
 
 /**
@@ -453,6 +453,10 @@ class oxSeoEncoder extends oxSuperCfg
      */
     protected function _loadFromCache( $sCacheIdent, $sType, $iLang = null, $iShopId = null, $sParams = null )
     {
+        if ( !$this->getConfig()->getConfigParam( 'blEnableSeoCache' ) ) {
+            return false;
+        }
+
         startProfile( "seoencoder_loadFromCache" );
 
         $sCacheKey = $this->_getCacheKey( $sType, $iLang, $iShopId, $sParams );
@@ -484,6 +488,10 @@ class oxSeoEncoder extends oxSuperCfg
      */
     protected function _saveInCache( $sCacheIdent, $sCache, $sType, $iLang = null, $iShopId = null, $sParams = null )
     {
+        if ( !$this->getConfig()->getConfigParam( 'blEnableSeoCache' ) ) {
+            return false;
+        }
+
         startProfile( "seoencoder_saveInCache" );
 
         $blSaved = false;

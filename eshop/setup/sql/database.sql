@@ -537,6 +537,7 @@ INSERT INTO `oxconfig` VALUES('99065ff58e9d2c1b2e362e54c0bb54f3', 'oxbaseshop', 
 INSERT INTO `oxconfig` VALUES('rgk2a8c9cf8c9d23b3a7c8e9c090baf1', 'oxbaseshop', '', 'sTheme', 'str', 0x4db70f6d1a);
 INSERT INTO `oxconfig` VALUES('8563fba1c39367724.92308656123456', 'oxbaseshop', '', 'blShowTags', 'bool', 0x07);
 INSERT INTO `oxconfig` VALUES('mhjf24905a5b49c8d60aa31087b9797f', 'oxbaseshop', '', 'blShowRememberMe', 'bool', 0x07);
+INSERT INTO `oxconfig` VALUES('mhjf24905a5b49c8d60aa31087b97971', 'oxbaseshop', '', 'blEnableSeoCache', 'bool', 0x07);
 
 -- default unconfigurable values to fallback if theme does not provide alternatives
 INSERT INTO `oxconfig` VALUES('8563fba1baec57c19.08644217', 'oxbaseshop', '', 'sThumbnailsize', 'str', 0x07c4b144c7b838);

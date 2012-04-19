@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 43982 2012-04-16 17:18:33Z tomas $
+ * @version   SVN: $Id: lang.php 44045 2012-04-18 14:58:49Z linas.kukulskis $
  */
 
 /*
@@ -1746,6 +1746,8 @@ $aLang = array(
 'PROMOTIONS_ARTICLE_ASSIGNEDARTICLE'                       => 'Assigned Product:',
 'PROMOTIONS_ARTICLE_ALLITEMS'                              => 'All available Products',
 'SHOP_SYSTEM_SHOWREMEMBERME'                               => 'Show "Remember me" option in login box',
+
+'SHOP_PERF_SEO_CACHE'                                      => '[Tr] Enable SEO cache',
 
 );
 

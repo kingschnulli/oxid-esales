@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 43981 2012-04-16 17:14:58Z tomas $
+ * @version   SVN: $Id: lang.php 44045 2012-04-18 14:58:49Z linas.kukulskis $
  */
 
 $sLangName  = 'Deutsch';
@@ -1743,6 +1743,8 @@ $aLang = array(
 'PROMOTIONS_ARTICLE_ASSIGNEDARTICLE'                       => 'Zugeordnetes Produkt:',
 'PROMOTIONS_ARTICLE_ALLITEMS'                              => 'Alle verfügbaren Produkte',
 'SHOP_SYSTEM_SHOWREMEMBERME'                               => 'Option "Passwort merken" beim Login anzeigen',
+
+'SHOP_PERF_SEO_CACHE'                                      => '[Tr] Enable SEO cache',
 
 );
 

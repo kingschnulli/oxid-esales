@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: help_lang.php 43818 2012-04-12 12:45:29Z juergen.busch $
+ * @version   SVN: $Id: help_lang.php 44045 2012-04-18 14:58:49Z linas.kukulskis $
  */
 
 /**
@@ -563,6 +563,7 @@ $aLang =  array(
 'HELP_DYN_TRUSTED_TSPAYMENT'                  => 'Assign the shop offered payment types at the appropriate payment to Trusted Store.',
 
 'HELP_PROMOTIONS_BANNER_PICTUREANDLINK'       => 'Upload banner image and enter banner URL which will be used when clicking on banner. If article is assigned to banner and URL is not entered, link to assigned article will be used when clicking on banner.',
+'HELP_SHOP_PERF_SEO_CACHE'                    => '[tr] Enables SEO cache, which increace performance, but need a lot of space in /tmp direcctory',
 
 
 );
