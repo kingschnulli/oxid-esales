@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxnewsletterTest.php 43481 2012-04-04 06:39:42Z vaidas.matulevicius $
+ * @version   SVN: $Id: oxnewsletterTest.php 44061 2012-04-19 07:52:54Z vaidas.matulevicius $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -351,11 +351,6 @@ class Unit_Core_oxnewsletterTest extends OxidTestCase
         $oTestNews->UNITsetUser( 'oxdefaultadmin' );
         $blMailWasSent = $oTestNews->send();
         $this->assertTrue( $blMailWasSent );
-
-        $oDB = oxDb::getDb();
-        $sSQL .= 'select oxemailfailed from oxnewssubscribed where oxuserid = "oxdefaultadmin" ';
-        $sFailed = $oDB->getOne( $sSQL );
-        $this->assertEquals( '0', $sFailed );
     }	
 	
     /*
@@ -391,11 +386,6 @@ class Unit_Core_oxnewsletterTest extends OxidTestCase
         $oTestNews->UNITsetUser( 'oxdefaultadmin' );
         $blMailWasSent = $oTestNews->send();
         $this->assertFalse( $blMailWasSent );
-
-        $oDB = oxDb::getDb();
-        $sSQL .= 'select oxemailfailed from oxnewssubscribed where oxuserid = "oxdefaultadmin" ';
-        $sFailed = $oDB->getOne( $sSQL );
-        $this->assertEquals( '1', $sFailed );
     }
 
     /**

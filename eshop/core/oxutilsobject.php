@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutilsobject.php 43757 2012-04-11 09:03:01Z linas.kukulskis $
+ * @version   SVN: $Id: oxutilsobject.php 44121 2012-04-20 12:35:00Z vilma $
  */
 
 /**
@@ -368,6 +368,7 @@ class oxUtilsObject extends oxSuperCfg
     {
         $myConfig = $this->getConfig();
         $sParent = $sBaseModule;
+        $sClassName = $sBaseModule;
 
         //building middle classes if needed
         foreach ($aClassChain as $sModule) {
@@ -404,14 +405,14 @@ class oxUtilsObject extends oxSuperCfg
                     $oEx = oxNew( "oxSystemComponentException" );
                     $oEx->setMessage('EXCEPTION_SYSTEMCOMPONENT_CLASSNOTFOUND');
                     $oEx->setComponent($sModule);
+                    continue;
                 }
             }
-
             $sParent = $sModule;
+            $sClassName = $sModule;
         }
 
         //returning the last module from the chain
-        $sClassName = end($aClassChain);
         return $sClassName;
     }
 }

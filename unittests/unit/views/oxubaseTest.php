@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxubaseTest.php 42746 2012-03-13 07:49:54Z linas.kukulskis $
+ * @version   SVN: $Id: oxubaseTest.php 44125 2012-04-20 13:00:02Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -2207,64 +2207,30 @@ class Unit_Views_oxubaseTest extends OxidTestCase
         $this->assertEquals( (bool) oxConfig::getInstance()->getConfigParam( "bl_perfLoadPrice" ), $oView->isPriceCalculated() );
     }
 
-     /**
-     * oxUbase::isVatIncluded() test case
-     *
-     * @return null
-     */
-    public function testIsVatIncluded()
-    {
-        $oUbase = $this->getMock( "oxubase", array( "getUser" ) );
-        $oUbase->expects( $this->any() )->method( 'getUser' )->will($this->returnValue( null ));
-
-
-        $this->assertTrue( $oUbase->isVatIncluded() );
-
-        oxConfig::getInstance()->setConfigParam( 'blEnterNetPrice', true );
-        oxConfig::getInstance()->setConfigParam( 'bl_perfCalcVatOnlyForBasketOrder', true );
-
-        $this->assertFalse( $oUbase->isVatIncluded() );
-
-    }
-
     /**
-     * oxUbase::isVatIncluded() test case
-     *
-     * @return null
+     * testing OxUBase::prepareSortColumns(), bugfix #2992, global sorting is saved in session
      */
-    public function testIsVatIncludedUserWithVat()
+    public function testSortingIsSaved()
     {
-        $oUser = new oxUser();
+        modSession::getInstance()->setVar("aSorting", null);
 
-        $oUbase = $this->getMock( "oxubase", array( "getUser" ) );
-        $oUbase->expects( $this->any() )->method( 'getUser' )->will($this->returnValue( $oUser ));
+        modConfig::setParameter( 'cnid', 'testCat' );
+        modConfig::setParameter( 'listorderby', 'oxvarminprice' );
+        modConfig::setParameter( 'listorder', 'asc' );
 
-        $oVatSelector = $this->getMock( 'oxVatSelector', array( 'getUserVat' ));
-        $oVatSelector->expects( $this->any() )->method( 'getUserVat')->will( $this->returnValue( 0.12 ) );
-        oxTestModules::addModuleObject( 'oxVatSelector', $oVatSelector );
+        $oSubj = new oxUBase();
+        $oSubj->prepareSortColumns();
 
-        $this->assertTrue( $oUbase->isVatIncluded() );
+        modConfig::setParameter( 'cnid', 'testCat' );
+        modConfig::setParameter( 'listorderby', 'oxtitle' );
+        modConfig::setParameter( 'listorder', 'desc' );
 
+        $oSubj->prepareSortColumns();
+
+        $aSort = modSession::getInstance()->getVar("aSorting");
+
+        $this->assertEquals(1, count($aSort) );
+        $this->assertEquals('oxtitle', $aSort["category"]["sortby"]);
+        $this->assertEquals('desc', $aSort["category"]["sortdir"]);
     }
-
-    /**
-     * oxUbase::isVatIncluded() test case
-     *
-     * @return null
-     */
-    public function testIsVatIncludedUserWithoutVat()
-    {
-        $oUser = new oxUser();
-
-        $oUbase = $this->getMock( "oxubase", array( "getUser" ) );
-        $oUbase->expects( $this->any() )->method( 'getUser' )->will($this->returnValue( $oUser ));
-
-        $oVatSelector = $this->getMock( 'oxVatSelector', array( 'getUserVat' ));
-        $oVatSelector->expects( $this->any() )->method( 'getUserVat')->will( $this->returnValue( false ) );
-        oxTestModules::addModuleObject( 'oxVatSelector', $oVatSelector );
-
-        $this->assertFalse( $oUbase->isVatIncluded() );
-
-    }
-
 }

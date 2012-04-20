@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: alist.php 43841 2012-04-13 09:36:38Z tomas $
+ * @version   SVN: $Id: alist.php 44080 2012-04-19 12:01:48Z linas.kukulskis $
  */
 
 /**
@@ -760,6 +760,16 @@ class aList extends oxUBase
         }
 
         return $this->_aArticleList;
+    }
+
+    /**
+     * Article count getter
+     *
+     * @return int
+     */
+    public function getArticleCount()
+    {
+        return $this->_iAllArtCnt;
     }
 
     /**

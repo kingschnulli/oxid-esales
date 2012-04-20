@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 43472 2012-04-03 15:16:34Z juergen.busch $
+ * @version   SVN: $Id: lang.php 44071 2012-04-19 10:34:30Z vaidas.matulevicius $
  */
 
 
@@ -194,7 +194,6 @@ $aLang = array(
 'PROMO_WILLENDIN_PREFIX'                                      => "Will end in ",
 'PROMO_WILLENDIN_SUFFIX'                                      => "!",
 'PROMO_WILLSTARTIN_PREFIX'                                    => "Will start in ",
-'PROMO_WILLSTARTIN_SUFFIX'                                    => "",
 'RECOMMLIST'                                                  => "Recomendation List",
 'RECOMMLIST_ALREADYRATED'                                     => "You have already rated!",
 'RECOMMLIST_LISTREVIEW'                                       => "Write a Review",

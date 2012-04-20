@@ -7,7 +7,7 @@
         [{if $oLongdesc->value}]
             [{capture append="tabs"}]<a href="#description">[{oxmultilang ident="PAGE_DETAILS_TABS_DESCRIPTION"}]</a>[{/capture}]
             [{capture append="tabsContent"}]
-            <div id="description">
+            <div id="description" class="cmsContent">
                 [{oxeval var=$oLongdesc}]
                 [{if $oDetailsProduct->oxarticles__oxexturl->value}]
                     <a id="productExturl" class="js-external" href="http://[{$oDetailsProduct->oxarticles__oxexturl->value}]">

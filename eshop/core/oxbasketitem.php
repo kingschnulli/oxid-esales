@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxbasketitem.php 43667 2012-04-10 13:21:41Z linas.kukulskis $
+ * @version   SVN: $Id: oxbasketitem.php 44105 2012-04-20 07:12:12Z mindaugas.rimgaila $
  */
 
 /**
@@ -415,7 +415,6 @@ class oxBasketItem extends oxSuperCfg
     {
         // icon url must be (re)loaded in case icon is not set or shop was switched between ssl/nonssl
         if ( $this->_sIconUrl === null || $this->_blSsl != $this->getConfig()->isSsl() ) {
-            $this->setLanguageId( oxLang::getInstance()->getBaseLanguage() );
             $this->_sIconUrl = $this->getArticle()->getIconUrl();
         }
         return $this->_sIconUrl;
@@ -549,8 +548,6 @@ class oxBasketItem extends oxSuperCfg
     {
         if ( $this->_sTitle === null || $this->getLanguageId() != oxLang::getInstance()->getBaseLanguage() ) {
 
-            $this->setLanguageId( oxLang::getInstance()->getBaseLanguage() );
-
             $oArticle = $this->getArticle( );
             $this->_sTitle = $oArticle->oxarticles__oxtitle->value;
 
@@ -582,7 +579,6 @@ class oxBasketItem extends oxSuperCfg
     public function getLink()
     {
         if ( $this->_sLink === null || $this->getLanguageId() != oxLang::getInstance()->getBaseLanguage() ) {
-            $this->setLanguageId( oxLang::getInstance()->getBaseLanguage() );
             $this->_sLink = oxUtilsUrl::getInstance()->cleanUrl( $this->getArticle()->getLink(), array( 'force_sid' ) );
         }
 
@@ -706,6 +702,8 @@ class oxBasketItem extends oxSuperCfg
         // product ID
         $this->_sProductId = $sProductId;
 
+        $this->_sTitle = null;
+        $this->_sVarSelect = null;
         $this->getTitle();
 
         // icon and details URL's
@@ -987,7 +985,6 @@ class oxBasketItem extends oxSuperCfg
 
         // #0003777: reload content on language change
         if ($iOldLang !== null && $iOldLang != $iLanguageId) {
-            $this->_sTitle = null;
             $this->_setArticle($this->getProductId());
         }
     }

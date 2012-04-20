@@ -48,4 +48,15 @@ class Unit_Maintenance_moduleFileInclusionTest extends OxidTestCase
         $oTestArt = oxNew('oxarticle');
         $this->assertEquals("Hi!", $oTestArt->sayHi());
     }
+
+    /**
+     * test main scenario
+     */
+    public function testMissingModuleInChain()
+    {
+        modConfig::getInstance()->setConfigParam('aModules', array('oxarticle'=>'testmod2&testmod'));
+
+        $oTestArt = oxNew('oxarticle');
+        $this->assertEquals("Hi!", $oTestArt->sayHi());
+    }
 }

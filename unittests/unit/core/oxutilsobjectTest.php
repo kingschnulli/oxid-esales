@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutilsobjectTest.php 43243 2012-03-28 11:09:15Z vilma $
+ * @version   SVN: $Id: oxutilsobjectTest.php 44130 2012-04-20 14:05:34Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -118,17 +118,6 @@ class Unit_Core_oxutilsobjectTest extends OxidTestCase
         modConfig::getInstance()->setConfigParam("sShopDir", $sShopDir);
         include_once $sShopDir."/modules/oxNewDummyModule.php";
 
-        $aModules = array(strtolower('oxNewDummyModule') => 'oxNewDummyUserModule&notExisting');
-        modConfig::getInstance()->setConfigParam("aModules", $aModules);
-
-        try {
-            $oNewDummyModule = oxNew( "oxNewDummyModule" );
-            $this->fail('An expected oxSystemComponentException has not been raised.');
-        } catch( oxSystemComponentException $oEx ) {
-             $this->assertEquals( $oEx->getMessage(), 'EXCEPTION_SYSTEMCOMPONENT_CLASSNOTFOUND' );
-             $this->assertEquals( strtolower( "oxNewDummyModule" ), $oEx->getComponent() );
-        }
-
         $aModules = array(strtolower('oxNewDummyModule') => 'oxNewDummyUserModule&oxNewDummyUserModule2');
         modConfig::getInstance()->setConfigParam("aModules", $aModules);
         $oNewDummyModule = oxNew("oxNewDummyModule" );
@@ -138,6 +127,13 @@ class Unit_Core_oxutilsobjectTest extends OxidTestCase
         //$oNewDummyUserModule2 = modUtils_oxNew("oxNewDummyUserModule2");
         $oNewDummyUserModule2 = oxNew("oxNewDummyUserModule2");
         $this->assertTrue($oNewDummyModule instanceof $oNewDummyUserModule2);
+
+        //if extended class do not exists, shop should work #3371 
+        $aModules = array(strtolower('oxNewDummyModule') => 'oxNewDummyUserModule&notExisting');
+        modConfig::getInstance()->setConfigParam("aModules", $aModules);
+
+        $oNewDummyModule = oxNew( "oxNewDummyModule" );
+        $this->assertTrue($oNewDummyModule instanceof oxNewDummyModule);
 
         try {
             // This code is expected to raise an exception ...

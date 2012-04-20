@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: help_lang.php 43952 2012-04-16 11:41:28Z juergen.busch $
+ * @version   SVN: $Id: help_lang.php 44106 2012-04-20 07:49:57Z vaidas.matulevicius $
  */
 
 /**
@@ -69,6 +69,8 @@ $aLang =  array(
 'HELP_SHOP_SYSTEM_INLINEIMGEMAIL'             => 'If the setting is checked, the pictures in e-mails are sent together with the e-mail. If the setting is unchecked, the pictures are downloaded by the e-mail program when the e-mail is opened.',
 
 'HELP_SHOP_SYSTEM_SHOP_LOCATION'              => 'Please choose the market to which shop is focused. According to it, additional eCommerce Services will be loaded from OXID server. Do not forget to enable option "Load additional Information from OXID server" in Master Settings -> Core Settings -> Settings -> Administration',
+    
+'HELP_SHOP_SYSTEM_UTILMODULE'                 => '[tr] Please enter your custom php files which will be included. Using these files you can overwrite eshop functions.',
 
 
 
@@ -417,7 +419,7 @@ $aLang =  array(
 
 'HELP_CATEGORY_MAIN_SORT'                     => 'You can use <span class="navipath_or_inputname">Sorting</span> to define the order in which categories are displayed: The category with the lowest number is displayed at the top, and the category with the highest number at the bottom.',
 
-'HELP_CATEGORY_MAIN_THUMB'                    => 'With <span class="navipath_or_inputname">Picture</span> and <span class="navipath_or_inputname">Upload Picture</span> you can upload a picture for this category. The picture is shown at top of the category is viewed. Select the picture in <span class="navipath_or_inputname">Upload Picture</span>. When clicking on <span class="navipath_or_inputname">Save</span>, th picture is uploaded. After uploading, the filename of the picture is shown in <span class="navipath_or_inputname">Picture</span>.',
+'HELP_CATEGORY_MAIN_THUMB'                    => 'With <span class="navipath_or_inputname">Picture</span> and <span class="navipath_or_inputname">Upload Picture</span> you can upload a picture for this category. The picture is shown at top of the category is viewed. Select the picture in <span class="navipath_or_inputname">Upload Picture</span>. When clicking on <span class="navipath_or_inputname">Save</span>, the picture is uploaded. After uploading, the filename of the picture is shown in <span class="navipath_or_inputname">Picture</span>.',
 'HELP_CATEGORY_MAIN_PROMOTION_ICON'           => 'With <span class="navipath_or_inputname">promotion icon</span> and <span class="navipath_or_inputname">upload icon</span> you can upload a category picture for promotion on start page. For displaying category promotion see <span class="navipath_or_inputname">Master Settings -> Customer Info -> Top offer in categories</span>',
 
 'HELP_CATEGORY_MAIN_SKIPDISCOUNTS'            => '<li>If <span class="navipath_or_inputname">Skip all negative discounts</span> is active, negative allowances will not be calculated for any products in this category.',
@@ -590,6 +592,7 @@ $aLang =  array(
 'HELP_DYN_TRUSTED_TSPAYMENT'                  => 'Assign the shop offered payment types at the appropriate payment to Trusted Store.',
 
 'HELP_PROMOTIONS_BANNER_PICTUREANDLINK'       => 'Upload banner image and enter banner URL which will be used when clicking on banner. If product is assigned to banner and URL is not entered, link to assigned product will be used when clicking on banner.',
+'HELP_SHOP_PERF_SEO_CACHE'                    => '[tr] Enables SEO cache, which increace performance, but need a lot of space in /tmp direcctory',
 
 'HELP_ALTERNATIVE_IMAGE_SERVER_NOTE'          => 'Alternative URL to remote image server can be specified in configuration file config.inc.php by setting <i>sAltImageUrl</i> and <i>sSSLAltImageUrl</i>.<br> Thus all product pictures will be loaded from this alternative server instead of the local one. However, uploaded files will be stored locally. In this case synchronization to external server has to be done manually or with custom scripts.',
 

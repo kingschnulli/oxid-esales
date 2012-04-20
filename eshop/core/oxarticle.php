@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticle.php 43694 2012-04-10 14:32:50Z linas.kukulskis $
+ * @version   SVN: $Id: oxarticle.php 44116 2012-04-20 11:58:58Z linas.kukulskis $
  */
 
 // defining supported link types
@@ -2385,7 +2385,7 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
     {
         if ( $this->_oAttributeList === null ) {
             $this->_oAttributeList = oxNew( 'oxattributelist' );
-            $this->_oAttributeList->loadAttributes( $this->getId() );
+            $this->_oAttributeList->loadAttributes( $this->getId(), $this->getProductParentId() );
         }
 
         return $this->_oAttributeList;

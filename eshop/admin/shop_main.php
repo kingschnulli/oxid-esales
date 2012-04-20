@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   admin
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: shop_main.php 40186 2011-11-23 15:43:42Z linas.kukulskis $
+ * @version   SVN: $Id: shop_main.php 44033 2012-04-18 11:01:41Z vilma $
  */
 
 
@@ -143,7 +143,7 @@ class Shop_Main extends oxAdminDetails
      */
     protected function _getNonCopyConfigVars()
     {
-        $aNonCopyVars = array("aSerials", "IMS", "IMD", "IMA", "blBackTag");
+        $aNonCopyVars = array("aSerials", "IMS", "IMD", "IMA", "blBackTag", "sUtilModule", "aModulePaths", "aModuleFiles", "aModuleTemplates", "aModules", "aDisabledModules");
         //adding non copable multishop field options
         $aMultiShopTables = $this->getConfig()->getConfigParam( 'aMultiShopTables' );
         foreach ( $aMultiShopTables as $sMultishopTable ) {

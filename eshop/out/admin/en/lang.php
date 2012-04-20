@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 43969 2012-04-16 15:22:52Z mindaugas.rimgaila $
+ * @version   SVN: $Id: lang.php 44106 2012-04-20 07:49:57Z vaidas.matulevicius $
  */
 
 /*
@@ -231,6 +231,7 @@ $aLang = array(
 'GENERAL_EXPORTSTATUSNEW'                                  => 'new',
 'GENERAL_EXPORTSTATUSUSED'                                 => 'used',
 'GENERAL_EXPORTLANGUAGE'                                   => 'Export for language',
+'GENERAL_EXPORTCUSTOMHEADER'                               => '[tr] Custom export header',
 'GENERAL_EXTERNALSTOCK'                                    => 'External Storehouse',
 'GENERAL_EXTRAINFO'                                        => 'Additional Info',
 'GENERAL_FAX'                                              => 'Fax',
@@ -921,7 +922,6 @@ $aLang = array(
 'MR'                                                       => 'Mr',
 'MRS'                                                      => 'Mrs',
 'HOME_DESC'                                                => 'Welcome to the OXID eShop Admin. This is an overview of the main areas and functions.',
-'HOME_EXPLAIN'                                             => '',
 'NAVIGATION_TITLE'                                         => 'Navigation',
 'NAVIGATION_ESHOPADMIN'                                    => 'eShop Admin',
 'NAVIGATION_LOGOUT'                                        => 'Logout',
@@ -1376,6 +1376,7 @@ $aLang = array(
 'SHOP_SYSTEM_SMARTYPHPHANDLING_QUOTE'                      => 'Display code without PHP tags',
 'SHOP_SYSTEM_SMARTYPHPHANDLING_ALLOW'                      => 'Execute the PHP code',
 'SHOP_SYSTEM_LDAP'                                         => 'Activate LDAP authentification (Please edit file core/oxldap.php)',
+'SHOP_SYSTEM_PLEASE_CHOOSE'                                => 'Please choose',
 
 'SHOP_SEO_SEOMODE'                                         => 'Active',
 'SHOP_SEO_DEFSEOLANGUAGE'                                  => 'Default language for SEO URLs',
@@ -1758,7 +1759,7 @@ $aLang = array(
 'mxtools'                                                  => 'Tools',
 'mxtheme'                                                  => 'Themes',
 'mxmodule'                                                 => 'Modules',
-'mxextensions'                                             => 'Extensions',
+'mxextensions'                                             => '<span class="new">Extensions</span>',
 'mxuadmin'                                                 => 'Administer Users',
 'mxurls'                                                   => 'Links',
 'mxugroups'                                                => 'User Groups',
@@ -1962,7 +1963,6 @@ $aLang = array(
 'SHOP_OPTIONS_GROUP_ADMINISTRATION'                        => 'Administration',
 'SHOP_OPTIONS_GROUP_OTHER_SETTINGS'                        => 'Other settings',
 'SHOP_OPTIONS_GROUP_VARIANTS'                              => 'Variants',
-'SHOP_OPTIONS_GROUP_MODULES'                               => 'Modules',
 'SHOP_OPTIONS_GROUP_PRIVATESALES'                          => 'Private Sales',
 'SHOP_OPTIONS_GROUP_INVITATIONS'                           => 'Invitations',
 'SHOP_OPTIONS_GROUP_FACEBOOK'                              => 'Facebook',
@@ -2084,6 +2084,9 @@ $aLang = array(
 'DELIVERY_RDFA_UPS'			                               => 'UPS',
 'SHOP_SYSTEM_SHOWREMEMBERME'                               => 'Show "Remember me" option in login box',
 'NEWSLETTER_SUBJECT'                                       => 'Subject',
+
+'SHOP_PERF_SEO_CACHE'                                      => '[Tr] Enable SEO cache',
+'INFO_MODULES_MOVED_TO_EXTENSIONS'                         => '[tr] Themes and modules handling moved to new menu "Extensions"',
 
 );
 

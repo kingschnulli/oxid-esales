@@ -3,7 +3,9 @@
     [{assign var="tpl" value=$oViewConf->getActTplName()}]
     [{assign var="template_title" value=$oView->getTitle()}]
     <h1 class="pageHead">[{$template_title}]</h1>
-    [{$oView->getParsedContent()}]
+    <div class="cmsContent">
+        [{$oView->getParsedContent()}]
+    </div>
     [{insert name="oxid_tracker" title=$template_title }]
 [{/capture}]
 [{include file="layout/page.tpl" sidebar="Left"}]

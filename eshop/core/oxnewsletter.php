@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxnewsletter.php 43480 2012-04-04 06:38:00Z vaidas.matulevicius $
+ * @version   SVN: $Id: oxnewsletter.php 44060 2012-04-19 07:51:59Z vaidas.matulevicius $
  */
 
 /**
@@ -172,8 +172,7 @@ class oxNewsletter extends oxBase
     /**
      * Creates oxemail object, calls mail sending function (oxEMail::sendNewsletterMail()
      * (#2542 added subject field)),
-     * returns true on success (if mailing function was unable to complete, sets emailing to
-     * user failure status in DB).
+     * returns true on success.
      *
      * @return bool
      */
@@ -181,13 +180,7 @@ class oxNewsletter extends oxBase
     {
         $oxEMail = oxNew( 'oxemail' );
         $blSend = $oxEMail->sendNewsletterMail( $this, $this->_oUser, $this->oxnewsletter__oxsubject->value );
-        
-        // store failed info
-        if ( !$blSend ) {
-            $oDb = oxDb::getDb();
-            $oDb->execute( "update oxnewssubscribed set oxemailfailed = '1' where oxemail = ".$oDb->quote( $this->_oUser->oxuser__oxusername->value ) );
-        }
-
+       
         return $blSend;
     }
 

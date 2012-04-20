@@ -65,17 +65,17 @@ function _groupExp(el) {
           <input type="hidden" name="editval[article__oxid]" value="[{ $oxid }]">
           <fieldset title="New file upload" style="padding-left: 5px;">
             <table cellspacing="0" cellpadding="0" border="0" width="98%">
-              [{block name="admin_article_downloads_newform"}] 
+              [{block name="admin_article_downloads_newform"}]
                   <tr>
                    <td class="edittext">
                       [{ oxmultilang ident="ARTICLE_FILES_ENTER_FILENAME" }] [{ oxinputhelp ident="HELP_ARTICLE_FILES_NEW" }] <input class="edittext" type="text" name="newfile[oxfiles__oxfilename]" class="edittext" [{$readonly}]> [{ oxmultilang ident="ARTICLE_FILES_OR" }] ([{ oxmultilang ident="GENERAL_MAX_FILE_UPLOAD"}] [{$sMaxFormattedFileSize}]) <input type="file" name="newArticleFile" class="edittext" [{$readonly}]>
                     </td>
-                  </tr>                  
+                  </tr>
                   <tr>
                     <td class="edittext">[{ oxmultilang ident="ARTICLE_FILES_NEW_PURCHASEDONLY" }]
                         <input class="edittext" type="hidden" name="newfile[oxfiles__oxpurchasedonly]" value='0'>
                         <input class="edittext" type="checkbox" checked name="newfile[oxfiles__oxpurchasedonly]" value='1' [{ $readonly }]>
-                    </td>                    
+                    </td>
                   </tr>
               [{/block}]
               [{block name="admin_article_downloads_newform_options"}]
@@ -131,38 +131,36 @@ function _groupExp(el) {
         </form>
     </td>
   </tr>
-                             
-            [{if count( $oFiles ) > 0 }]
-                <tr>
-                    <td><hr/></td>
-                </tr>
-                <tr>
-                    <td>
-                        <table cellspacing="0" cellpadding="0" border="0" width="98%">
-                            <tr>                    
-                                <td valign="top" class="edittext"> 
-                                
-                                    <form name="myedit" id="myedit" action="[{ $oViewConf->getSelfLink() }]" method="post">
-                                    [{$oViewConf->getHiddenSid()}]
-                                    <input type="hidden" name="cl" value="article_files">
-                                    <input type="hidden" name="fnc" value="">
-                                    <input type="hidden" name="oxid" value="[{ $oxid }]">
-                                    <input type="hidden" name="editval[article__oxid]" value="[{ $oxid }]">
-                                    <input type="hidden" name="voxid" value="[{ $oxid }]">
-                                    <input type="hidden" name="oxparentid" value="[{ $oxparentid }]">
-                                    <p><b>[{ oxmultilang ident="ARTICLE_FILES_TABLE_UPLOADEDFILES" }]</b></p>
-                                    <table cellspacing="0" cellpadding="0" border="0" width="98%">                              
-                                        <tr>
-                                        <td class="edittext" width="120">
-                                        [{ oxmultilang ident="ARTICLE_FILES_ISDOWNLOADABLE" }]
-                                        </td>
-                                        <td class="edittext">
-                                        <input class="edittext" type="hidden" name="editval[oxarticles__oxisdownloadable]" value='0'>
-                                        <input class="edittext" type="checkbox" name="editval[oxarticles__oxisdownloadable]" value='1' [{if $edit->oxarticles__oxisdownloadable->value == 1}]checked[{/if}] [{if $oxparentid }]readonly disabled[{/if}]>
-                                        [{ oxinputhelp ident="HELP_ARTICLE_IS_DOWNLOADABLE" }]
-                                        </td>
-                                        </tr>
-                                    </table>
+  <tr>
+      <td><hr/></td>
+  </tr>
+  <tr>
+      <td>
+          <table cellspacing="0" cellpadding="0" border="0" width="98%">
+              <tr>
+                  <td valign="top" class="edittext">
+                      <form name="myedit" id="myedit" action="[{ $oViewConf->getSelfLink() }]" method="post">
+                          [{$oViewConf->getHiddenSid()}]
+                          <input type="hidden" name="cl" value="article_files">
+                          <input type="hidden" name="fnc" value="">
+                          <input type="hidden" name="oxid" value="[{ $oxid }]">
+                          <input type="hidden" name="editval[article__oxid]" value="[{ $oxid }]">
+                          <input type="hidden" name="voxid" value="[{ $oxid }]">
+                          <input type="hidden" name="oxparentid" value="[{ $oxparentid }]">
+                          <table cellspacing="0" cellpadding="0" border="0" width="98%">
+                              <tr>
+                                  <td class="edittext" width="120">
+                                      [{ oxmultilang ident="ARTICLE_FILES_ISDOWNLOADABLE" }]
+                                  </td>
+                                  <td class="edittext">
+                                      <input class="edittext" type="hidden" name="editval[oxarticles__oxisdownloadable]" value='0'>
+                                      <input class="edittext" type="checkbox" name="editval[oxarticles__oxisdownloadable]" value='1' [{if $edit->oxarticles__oxisdownloadable->value == 1}]checked[{/if}] [{if $oxparentid }]readonly disabled[{/if}]>
+                                      [{ oxinputhelp ident="HELP_ARTICLE_IS_DOWNLOADABLE" }]
+                                  </td>
+                              </tr>
+                          </table>
+                          [{if count( $oFiles ) > 0 }]
+                                <p><b>[{ oxmultilang ident="ARTICLE_FILES_TABLE_UPLOADEDFILES" }]</b></p>
                                     [{foreach from=$oFiles item=oArticleFile}]
                                         [{ if $readonly || !$oArticleFile->isUploaded() }]
                                             [{assign var="readonlyRename" value="readonly disabled"}]
@@ -176,11 +174,11 @@ function _groupExp(el) {
                                                     <a class="delete" href="[{$oViewConf->getSelfLink()}]&cl=article_files&amp;fileid=[{$oArticleFile->getId()}]&amp;fnc=deletefile&amp;oxid=[{$oxid}]&amp;editlanguage=[{ $editlanguage }]" onClick='return confirm("[{ oxmultilang ident="GENERAL_YOUWANTTODELETE" }]")'></a>
                                                     <a href="#" onclick="_groupExp(this);return false;" class="rc"><b>[{$oArticleFile->oxfiles__oxfilename->value}]</b></a>
                                                     <dl style="padding-top:5px;">
-                                                        <table cellspacing="0" cellpadding="0" border="0"> 
+                                                        <table cellspacing="0" cellpadding="0" border="0">
                                                             <tr>
                                                                 <td class="edittext">[{ oxmultilang ident="ARTICLE_FILES_TABLE_FILENAME" }]</td>
                                                                 <td class="edittext">
-                                                                    <input type="text" class="editinput" size="40" maxlength="[{$oArticleFile->oxfiles__oxfilename->fldmax_length}]" name="article_files[[{$oArticleFile->getId()}]][oxfiles__oxfilename]" value="[{$oArticleFile->oxfiles__oxfilename->value}]" [{ $readonlyRename }]>                                                                   
+                                                                    <input type="text" class="editinput" size="40" maxlength="[{$oArticleFile->oxfiles__oxfilename->fldmax_length}]" name="article_files[[{$oArticleFile->getId()}]][oxfiles__oxfilename]" value="[{$oArticleFile->oxfiles__oxfilename->value}]" [{ $readonlyRename }]>
                                                                 </td>
                                                             </tr>
                                                             <tr>
@@ -220,15 +218,15 @@ function _groupExp(el) {
                                             </div>
                                         [{/block}]
                                     [{/foreach}]
-                                    <input type="submit" class="saveButton" name="save" value="[{ oxmultilang ident="GENERAL_SAVE" }]" onClick="Javascript:document.myedit.fnc.value='save'">
-                                </form>
-                            </td>                    
-                        </tr>
-                    </table>
-                </td>
-            </tr> 
-        [{/if}]                                
-                   
+                              [{/if}]
+                          <input type="submit" class="saveButton" name="save" value="[{ oxmultilang ident="GENERAL_SAVE" }]" onClick="Javascript:document.myedit.fnc.value='save'">
+                      </form>
+                  </td>
+              </tr>
+          </table>
+      </td>
+  </tr>
+
 </table>
 [{include file="bottomnaviitem.tpl"}]
 [{include file="bottomitem.tpl"}]

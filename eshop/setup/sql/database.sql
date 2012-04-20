@@ -557,6 +557,7 @@ INSERT INTO `oxconfig` VALUES('l8g3e140a4bc7993d7d715df951dfe25', 'oxbaseshop', 
 INSERT INTO `oxconfig` VALUES('l8g957be9e7b13412960c7670f71ba3b', 'oxbaseshop', '', 'iMaxDownloadsCount', 'str', 0xde);
 INSERT INTO `oxconfig` VALUES('mhjf24905a5b49c8d60aa31087b9797f', 'oxbaseshop', '', 'blShowRememberMe', 'bool', 0x07);
 INSERT INTO `oxconfig` VALUES('omc4555952125c3c2.98253113', 'oxbaseshop', '', 'blDisableNavBars', 'bool', 0x07);
+INSERT INTO `oxconfig` VALUES('mhjf24905a5b49c8d60aa31087b97971', 'oxbaseshop', '', 'blEnableSeoCache', 'bool', 0x07);
 
 -- default unconfigurable values to fallback if theme does not provide alternatives
 INSERT INTO `oxconfig` VALUES('8563fba1baec57c19.08644217', 'oxbaseshop', '', 'sThumbnailsize', 'str', 0x07c4b144c7b838);
@@ -1866,7 +1867,7 @@ CREATE TABLE `oxshops` (
 # Data for table `oxshops`
 #
 
-INSERT INTO `oxshops` VALUES ('oxbaseshop', 1, 0, '', 0, 'OXID eShop 4', 'OXID eShop 4', 'OXID eShop 4', '', '', 'online kaufen', 'purchase online', '', '', 'Der Onlineshop', 'Online Shop', '', '', 'info@myoxideshop.com', 'reply@myoxideshop.com', 'order@myoxideshop.com', 'Ihre Bestellung bei OXID eSales', 'Vielen Dank für Ihre Registrierung im OXID eShop', 'Ihr Passwort im OXID eShop', 'Ihre OXID eSales Bestellung wurde versandt', 'Your order at OXID eShop', 'Thank you for your registration at OXID eShop', 'Your OXID eShop password', 'Your OXID eSales Order has been shipped', '', '', '', '', '', '', '', '', '', '', '', 'Your Company Name', '2425 Maple Street', '9041', 'Any City, CA', 'United States', 'Bank of America', '1234567890', '900 1234567', '', '', '', 'John', 'Doe', '217-8918712', '217-8918713', 'www.myoxideshop.com', '', '', '', '', '', '', '', '', 'CE', '4.6.0_RC1', 1, 1, 0, 0);
+INSERT INTO `oxshops` VALUES ('oxbaseshop', 1, 0, '', 0, 'OXID eShop 4', 'OXID eShop 4', 'OXID eShop 4', '', '', 'online kaufen', 'purchase online', '', '', 'Der Onlineshop', 'Online Shop', '', '', 'info@myoxideshop.com', 'reply@myoxideshop.com', 'order@myoxideshop.com', 'Ihre Bestellung bei OXID eSales', 'Vielen Dank für Ihre Registrierung im OXID eShop', 'Ihr Passwort im OXID eShop', 'Ihre OXID eSales Bestellung wurde versandt', 'Your order at OXID eShop', 'Thank you for your registration at OXID eShop', 'Your OXID eShop password', 'Your OXID eSales Order has been shipped', '', '', '', '', '', '', '', '', '', '', '', 'Your Company Name', '2425 Maple Street', '9041', 'Any City, CA', 'United States', 'Bank of America', '1234567890', '900 1234567', '', '', '', 'John', 'Doe', '217-8918712', '217-8918713', 'www.myoxideshop.com', '', '', '', '', '', '', '', '', 'CE', '4.6.0', 1, 1, 0, 0);
 
 #
 # Table structure for table `oxstatistics`
@@ -2310,11 +2311,10 @@ CREATE TABLE `oxstates` (
 #
 # Data for table `oxstates`
 #
-
 INSERT INTO `oxstates` VALUES('MB', '8f241f11095649d18.02676059', 'Manitoba', 'MB', 'Manitoba', '', '');
-INSERT INTO `oxstates` VALUES('NB', '8f241f11095649d18.02676059', 'New Brunswick', 'NB', 'Neubraunschweig', '', '');
-INSERT INTO `oxstates` VALUES('NF', '8f241f11095649d18.02676059', 'Newfoundland and Labrador', 'NF', 'Neufundland und Labrador', '', '');
-INSERT INTO `oxstates` VALUES('NT', '8f241f11095649d18.02676059', 'Northwest Territories', 'NT', 'Nordwest-Territorien', '', '');
+INSERT INTO `oxstates` VALUES('NB', '8f241f11095649d18.02676059', 'Neubraunschweig', 'NB', 'New Brunswick', '', '');
+INSERT INTO `oxstates` VALUES('NF', '8f241f11095649d18.02676059', 'Neufundland und Labrador', 'NF', 'Newfoundland and Labrador', '', '');
+INSERT INTO `oxstates` VALUES('NT', '8f241f11095649d18.02676059', 'Nordwest-Territorien', 'NT', 'Northwest Territories', '', '');
 INSERT INTO `oxstates` VALUES('NS', '8f241f11095649d18.02676059', 'Nova Scotia', 'NS', 'Nova Scotia', '', '');
 INSERT INTO `oxstates` VALUES('NU', '8f241f11095649d18.02676059', 'Nunavut', 'NU', 'Nunavut', '', '');
 INSERT INTO `oxstates` VALUES('ON', '8f241f11095649d18.02676059', 'Ontario', 'ON', 'Ontario', '', '');
@@ -2324,15 +2324,15 @@ INSERT INTO `oxstates` VALUES('SK', '8f241f11095649d18.02676059', 'Saskatchewan'
 INSERT INTO `oxstates` VALUES('YK', '8f241f11095649d18.02676059', 'Yukon', 'YK', 'Yukon', '', '');
 INSERT INTO `oxstates` VALUES('AL', '8f241f11096877ac0.98748826', 'Alabama', 'AL', 'Alabama', '', '');
 INSERT INTO `oxstates` VALUES('AK', '8f241f11096877ac0.98748826', 'Alaska', 'AK', 'Alaska', '', '');
-INSERT INTO `oxstates` VALUES('AS', '8f241f11096877ac0.98748826', 'American Samoa', 'AS', 'Amerikanisch-Samoa', '', '');
+INSERT INTO `oxstates` VALUES('AS', '8f241f11096877ac0.98748826', 'Amerikanisch-Samoa', 'AS', 'American Samoa', '', '');
 INSERT INTO `oxstates` VALUES('AZ', '8f241f11096877ac0.98748826', 'Arizona', 'AZ', 'Arizona', '', '');
 INSERT INTO `oxstates` VALUES('AR', '8f241f11096877ac0.98748826', 'Arkansas', 'AR', 'Arkansas', '', '');
-INSERT INTO `oxstates` VALUES('CA', '8f241f11096877ac0.98748826', 'California', 'CA', 'Kalifornien', '', '');
+INSERT INTO `oxstates` VALUES('CA', '8f241f11096877ac0.98748826', 'Kalifornien', 'CA', 'California', '', '');
 INSERT INTO `oxstates` VALUES('CO', '8f241f11096877ac0.98748826', 'Colorado', 'CO', 'Colorado', '', '');
 INSERT INTO `oxstates` VALUES('CT', '8f241f11096877ac0.98748826', 'Connecticut', 'CT', 'Connecticut', '', '');
 INSERT INTO `oxstates` VALUES('DE', '8f241f11096877ac0.98748826', 'Delaware', 'DE', 'Delaware', '', '');
 INSERT INTO `oxstates` VALUES('DC', '8f241f11096877ac0.98748826', 'District of Columbia', 'DC', 'District of Columbia', '', '');
-INSERT INTO `oxstates` VALUES('FM', '8f241f11096877ac0.98748826', 'Federated States of Micronesia', 'FM', 'Föderierten Staaten von Mikronesien', '', '');
+INSERT INTO `oxstates` VALUES('FM', '8f241f11096877ac0.98748826', 'Föderierten Staaten von Mikronesien', 'FM', 'Federated States of Micronesia', '', '');
 INSERT INTO `oxstates` VALUES('FL', '8f241f11096877ac0.98748826', 'Florida', 'FL', 'Florida', '', '');
 INSERT INTO `oxstates` VALUES('GA', '8f241f11096877ac0.98748826', 'Georgia', 'GA', 'Georgia', '', '');
 INSERT INTO `oxstates` VALUES('GU', '8f241f11096877ac0.98748826', 'Guam', 'GU', 'Guam', '', '');
@@ -2345,7 +2345,7 @@ INSERT INTO `oxstates` VALUES('KS', '8f241f11096877ac0.98748826', 'Kansas', 'KS'
 INSERT INTO `oxstates` VALUES('KY', '8f241f11096877ac0.98748826', 'Kentucky', 'KY', 'Kentucky', '', '');
 INSERT INTO `oxstates` VALUES('LA', '8f241f11096877ac0.98748826', 'Louisiana', 'LA', 'Louisiana', '', '');
 INSERT INTO `oxstates` VALUES('ME', '8f241f11096877ac0.98748826', 'Maine', 'ME', 'Maine', '', '');
-INSERT INTO `oxstates` VALUES('MH', '8f241f11096877ac0.98748826', 'Marshall Islands', 'MH', 'Marshallinseln', '', '');
+INSERT INTO `oxstates` VALUES('MH', '8f241f11096877ac0.98748826', 'Marshallinseln', 'MH', 'Marshall Islands', '', '');
 INSERT INTO `oxstates` VALUES('MD', '8f241f11096877ac0.98748826', 'Maryland', 'MD', 'Maryland', '', '');
 INSERT INTO `oxstates` VALUES('MA', '8f241f11096877ac0.98748826', 'Massachusetts', 'MA', 'Massachusetts', '', '');
 INSERT INTO `oxstates` VALUES('MI', '8f241f11096877ac0.98748826', 'Michigan', 'MI', 'Michigan', '', '');
@@ -2357,11 +2357,11 @@ INSERT INTO `oxstates` VALUES('NE', '8f241f11096877ac0.98748826', 'Nebraska', 'N
 INSERT INTO `oxstates` VALUES('NV', '8f241f11096877ac0.98748826', 'Nevada', 'NV', 'Nevada', '', '');
 INSERT INTO `oxstates` VALUES('NH', '8f241f11096877ac0.98748826', 'New Hampshire', 'NH', 'New Hampshire', '', '');
 INSERT INTO `oxstates` VALUES('NJ', '8f241f11096877ac0.98748826', 'New Jersey', 'NJ', 'New Jersey', '', '');
-INSERT INTO `oxstates` VALUES('NM', '8f241f11096877ac0.98748826', 'Neumexiko', 'NM', 'New Mexico', '', '');
+INSERT INTO `oxstates` VALUES('NM', '8f241f11096877ac0.98748826', 'New Mexico', 'NM', 'Neumexiko', '', '');
 INSERT INTO `oxstates` VALUES('NY', '8f241f11096877ac0.98748826', 'New York', 'NY', 'New York', '', '');
 INSERT INTO `oxstates` VALUES('NC', '8f241f11096877ac0.98748826', 'North Carolina', 'NC', 'North Carolina', '', '');
 INSERT INTO `oxstates` VALUES('ND', '8f241f11096877ac0.98748826', 'North Dakota', 'ND', 'North Dakota', '', '');
-INSERT INTO `oxstates` VALUES('MP', '8f241f11096877ac0.98748826', 'Northern Mariana Islands', 'MP', 'Nördlichen Marianen', '', '');
+INSERT INTO `oxstates` VALUES('MP', '8f241f11096877ac0.98748826', 'Nördlichen Marianen', 'MP', 'Northern Mariana Islands', '', '');
 INSERT INTO `oxstates` VALUES('OH', '8f241f11096877ac0.98748826', 'Ohio', 'OH', 'Ohio', '', '');
 INSERT INTO `oxstates` VALUES('OK', '8f241f11096877ac0.98748826', 'Oklahoma', 'OK', 'Oklahoma', '', '');
 INSERT INTO `oxstates` VALUES('OR', '8f241f11096877ac0.98748826', 'Oregon', 'OR', 'Oregon', '', '');
@@ -2369,13 +2369,13 @@ INSERT INTO `oxstates` VALUES('PW', '8f241f11096877ac0.98748826', 'Palau', 'PW',
 INSERT INTO `oxstates` VALUES('PA', '8f241f11096877ac0.98748826', 'Pennsylvania', 'PA', 'Pennsylvania', '', '');
 INSERT INTO `oxstates` VALUES('PR', '8f241f11096877ac0.98748826', 'Puerto Rico', 'PR', 'Puerto Rico', '', '');
 INSERT INTO `oxstates` VALUES('RI', '8f241f11096877ac0.98748826', 'Rhode Island', 'RI', 'Rhode Island', '', '');
-INSERT INTO `oxstates` VALUES('SC', '8f241f11096877ac0.98748826', 'Südkarolina', 'SC', 'South Carolina', '', '');
-INSERT INTO `oxstates` VALUES('SD', '8f241f11096877ac0.98748826', 'Süddakota', 'SD', 'South Dakota', '', '');
+INSERT INTO `oxstates` VALUES('SC', '8f241f11096877ac0.98748826', 'South Carolina', 'SC', 'Südkarolina', '', '');
+INSERT INTO `oxstates` VALUES('SD', '8f241f11096877ac0.98748826', 'South Dakota', 'SD', 'Süddakota', '', '');
 INSERT INTO `oxstates` VALUES('TN', '8f241f11096877ac0.98748826', 'Tennessee', 'TN', 'Tennessee', '', '');
 INSERT INTO `oxstates` VALUES('TX', '8f241f11096877ac0.98748826', 'Texas', 'TX', 'Texas', '', '');
 INSERT INTO `oxstates` VALUES('UT', '8f241f11096877ac0.98748826', 'Utah', 'UT', 'Utah', '', '');
 INSERT INTO `oxstates` VALUES('VT', '8f241f11096877ac0.98748826', 'Vermont', 'VT', 'Vermont', '', '');
-INSERT INTO `oxstates` VALUES('VI', '8f241f11096877ac0.98748826', 'Virgin Islands', 'VI', 'Jungferninseln', '', '');
+INSERT INTO `oxstates` VALUES('VI', '8f241f11096877ac0.98748826', 'Jungferninseln', 'VI', 'Virgin Islands', '', '');
 INSERT INTO `oxstates` VALUES('VA', '8f241f11096877ac0.98748826', 'Virginia', 'VA', 'Virginia', '', '');
 INSERT INTO `oxstates` VALUES('WA', '8f241f11096877ac0.98748826', 'Washington', 'WA', 'Washington', '', '');
 INSERT INTO `oxstates` VALUES('WV', '8f241f11096877ac0.98748826', 'West Virginia', 'WV', 'West Virginia', '', '');

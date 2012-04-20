@@ -124,6 +124,7 @@ class Module_Main extends oxAdminDetails
         if ( !empty( $aModuleInfo ) ) {
             $aLegacyModules[$sModuleId]["id"] = $sModuleId;
             $aLegacyModules[$sModuleId]["title"] = ( $sModuleName ) ? $sModuleName : $sModuleId;
+            $aLegacyModules[$sModuleId]['extend'] = array();
 
             foreach ( $aModuleInfo as $sKey => $sValue ) {
                 if ( strpos( $sValue, "=>" ) > 1 ) {

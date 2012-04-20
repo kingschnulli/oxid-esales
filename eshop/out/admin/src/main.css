@@ -460,3 +460,7 @@ dl.moduleDesc a:hover {
     color: #555;
     text-decoration: none;
 }
+
+span.new{
+    padding: 1px 5px;
+}

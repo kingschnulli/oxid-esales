@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxfunctions.php 43640 2012-04-10 07:32:06Z alfonsas $
+ * @version   SVN: $Id: oxfunctions.php 44079 2012-04-19 12:01:36Z linas.kukulskis $
  */
 
 /**
@@ -54,7 +54,8 @@ function oxAutoload( $sClass )
     static $aClassPaths;
 
     if (!$aClassPaths) {
-        $aClassPaths = oxUtils::getInstance()->fromPhpFileCache("class_file_paths");
+        //removed due to #2931
+        //$aClassPaths = oxUtils::getInstance()->fromPhpFileCache("class_file_paths");
     }
 
     if (isset($aClassPaths[$sClass])) {
@@ -82,7 +83,7 @@ function oxAutoload( $sClass )
         if ( file_exists( $sFilename ) ) {
             if (!isset($aClassPaths[$sClass])) {
                 $aClassPaths[$sClass] = $sFilename;
-                oxUtils::getInstance()->toPhpFileCache("class_file_paths", $aClassPaths);
+                //oxUtils::getInstance()->toPhpFileCache("class_file_paths", $aClassPaths);
             }
             stopProfile("oxAutoload");
             include $sFilename;

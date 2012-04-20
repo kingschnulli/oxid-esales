@@ -59,7 +59,7 @@ function smarty_function_oxstyle($params, &$smarty)
         if (!preg_match('#^https?://#', $sStyle)) {
             // Separate query part #3305.
             $aStyle = explode('?', $sStyle);
-            $sStyle = $aStyle[0] = $myConfig->getResourceUrl($aStyle[0]);
+            $sStyle = $aStyle[0] = $myConfig->getResourceUrl($aStyle[0], $myConfig->isAdmin());
 
             // Append query part if still needed #3305.
             if ($sStyle && count($aStyle) > 1) {

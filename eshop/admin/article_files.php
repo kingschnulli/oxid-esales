@@ -57,6 +57,14 @@ class Article_Files extends oxAdminDetails
         if ( !$this->getConfig()->getConfigParam( 'blEnableDownloads' ) ) {
             oxUtilsView::getInstance()->addErrorToDisplay( 'EXCEPTION_DISABLED_DOWNLOADABLE_PRODUCTS' );
         }
+        $oArticle = $this->getArticle();
+        // variant handling
+        if ( $oArticle->oxarticles__oxparentid->value) {
+            $oParentArticle = oxNew( 'oxarticle' );
+            $oParentArticle->load( $oArticle->oxarticles__oxparentid->value);
+            $oArticle->oxarticles__oxisdownloadable = new oxField( $oParentArticle->oxarticles__oxisdownloadable->value );
+            $this->_aViewData["oxparentid"] = $oArticle->oxarticles__oxparentid->value;
+        }
 
         return $this->_sThisTemplate;
     }
@@ -77,12 +85,14 @@ class Article_Files extends oxAdminDetails
 
         //update article files
         $aArticleFiles = oxConfig::getParameter('article_files');
-        foreach ($aArticleFiles as $sArticleFileId => $aArticleFileUpdate) {
-            $oArticleFile = oxNew('oxFile');
-            $oArticleFile->load($sArticleFileId);
-            $aArticleFileUpdate  = $this->_processOptions($aArticleFileUpdate);
-            $oArticleFile->assign($aArticleFileUpdate);
-            $oArticleFile->save();
+        if (count($aArticleFiles) > 0) {
+            foreach ($aArticleFiles as $sArticleFileId => $aArticleFileUpdate) {
+                $oArticleFile = oxNew('oxFile');
+                $oArticleFile->load($sArticleFileId);
+                $aArticleFileUpdate  = $this->_processOptions($aArticleFileUpdate);
+                $oArticleFile->assign($aArticleFileUpdate);
+                $oArticleFile->save();
+            }
         }
     }
 

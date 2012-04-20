@@ -96,14 +96,14 @@
                         <td>
                                 [{ if !$basketitem->getWrappingId() }]
                                     [{if $editable }]
-                                        <a class="wrappingTrigger" rel="nofollow" href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=wrapping" params="aid="|cat:$basketitem->getProductId() }]" title="[{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_ADDWRAPPING" }]">[{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_ADDWRAPPING" }]</a>
+                                        <a class="wrappingTrigger" rel="nofollow" href="#" title="[{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_ADDWRAPPING" }]">[{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_ADDWRAPPING" }]</a>
                                     [{else}]
                                         [{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_NONE" }]
                                     [{/if}]
                                 [{else}]
                                     [{assign var="oWrap" value=$basketitem->getWrapping() }]
                                     [{if $editable }]
-                                        <a class="wrappingTrigger" rel="nofollow" href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=wrapping" params="aid="|cat:$basketitem->getProductId() }]" title="[{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_ADDWRAPPING" }]">[{$oWrap->oxwrapping__oxname->value}]</a>
+                                        <a class="wrappingTrigger" rel="nofollow" href="#" title="[{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_ADDWRAPPING" }]">[{$oWrap->oxwrapping__oxname->value}]</a>
                                     [{else}]
                                         [{$oWrap->oxwrapping__oxname->value}]
                                     [{/if}]

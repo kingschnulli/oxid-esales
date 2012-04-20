@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 43969 2012-04-16 15:22:52Z mindaugas.rimgaila $
+ * @version   SVN: $Id: lang.php 44106 2012-04-20 07:49:57Z vaidas.matulevicius $
  */
 
 $sLangName  = 'Deutsch';
@@ -234,6 +234,7 @@ $aLang = array(
 'GENERAL_EXPORTSTATUSNEW'                                  => 'neu',
 'GENERAL_EXPORTSTATUSUSED'                                 => 'gebraucht',
 'GENERAL_EXPORTLANGUAGE'                                   => 'Export für Sprache',
+'GENERAL_EXPORTCUSTOMHEADER'                               => '[tr] Custom export header',
 'GENERAL_EXTERNALSTOCK'                                    => 'Fremdlager',
 'GENERAL_EXTRAINFO'                                        => 'zus. Info',
 'GENERAL_FAX'                                              => 'Fax',
@@ -924,7 +925,6 @@ $aLang = array(
 'MR'                                                       => 'Herr',
 'MRS'                                                      => 'Frau',
 'HOME_DESC'                                                => 'Willkommen im OXID eShop Administrationsbereich. Hier finden Sie eine Übersicht über die grundlegenden Bereiche und Funktionen',
-'HOME_EXPLAIN'                                             => '',
 'NAVIGATION_TITLE'                                         => 'Navigation',
 'NAVIGATION_ESHOPADMIN'                                    => 'eShop Admin',
 'NAVIGATION_LOGOUT'                                        => 'Abmelden',
@@ -1379,6 +1379,7 @@ $aLang = array(
 'SHOP_SYSTEM_SMARTYPHPHANDLING_QUOTE'                      => 'Code ohne PHP-Tags anzeigen',
 'SHOP_SYSTEM_SMARTYPHPHANDLING_ALLOW'                      => 'Den PHP-Code ausführen',
 'SHOP_SYSTEM_LDAP'                                         => 'LDAP Authentifizierung aktivieren (Bitte Datei core/oxldap.php anpassen)',
+'SHOP_SYSTEM_PLEASE_CHOOSE'                                => 'Bitte auswählen',
 
 'SHOP_SEO_SEOMODE'                                         => 'Aktiv',
 'SHOP_SEO_DEFSEOLANGUAGE'                                  => 'Standardsprache für SEO URLs',
@@ -1966,7 +1967,6 @@ $aLang = array(
 'SHOP_OPTIONS_GROUP_ADMINISTRATION'                        => 'Administrationsbereich',
 'SHOP_OPTIONS_GROUP_OTHER_SETTINGS'                        => 'Weitere Einstellungen',
 'SHOP_OPTIONS_GROUP_VARIANTS'                              => 'Varianten',
-'SHOP_OPTIONS_GROUP_MODULES'                               => 'Module',
 'SHOP_OPTIONS_GROUP_PRIVATESALES'                          => 'Private Sales',
 'SHOP_OPTIONS_GROUP_INVITATIONS'                           => 'Einladungen',
 'SHOP_OPTIONS_GROUP_FACEBOOK'                              => 'Facebook',
@@ -2091,6 +2091,9 @@ $aLang = array(
 'SHOP_SYSTEM_SHOWREMEMBERME'                               => 'Option "Passwort merken" beim Login anzeigen',
 'NEWSLETTER_SUBJECT'                                       => 'Betreff',
 
+'SHOP_PERF_SEO_CACHE'                                      => '[Tr] Enable SEO cache',
+'INFO_MODULES_MOVED_TO_EXTENSIONS'                         => '[tr] Themes and modules handling moved to new menu "Extensions"',
+    
 );
 
 /*

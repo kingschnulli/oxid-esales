@@ -19,6 +19,10 @@ function _groupExp(el) {
 
 [{cycle assign="_clear_" values=",2" }]
 
+<div class="info">
+    <div class="infoNotice"> [{ oxmultilang ident="INFO_MODULES_MOVED_TO_EXTENSIONS" }]</div>
+</div>
+
 <form name="transfer" id="transfer" action="[{ $oViewConf->getSelfLink() }]" method="post">
     [{ $oViewConf->getHiddenSid() }]
     <input type="hidden" name="oxid" value="[{ $oxid }]">
@@ -186,22 +190,6 @@ function _groupExp(el) {
 
     <div class="groupExp">
         <div>
-            <a href="#" onclick="_groupExp(this);return false;" class="rc"><b>[{ oxmultilang ident="SHOP_OPTIONS_GROUP_MODULES" }]</b></a>
-            <dl>
-                <dt>
-                    <input type=text class="txt" style="width: 430px;" name=confstrs[sUtilModule] value="[{$confstrs.sUtilModule}]" [{ $readonly }]>
-                    [{ oxinputhelp ident="HELP_SHOP_SYSTEM_UTILMODULE" }]
-                </dt>
-                <dd>
-                  [{ oxmultilang ident="SHOP_SYSTEM_UTILMODULE" }]
-                </dd>
-                <div class="spacer"></div>
-            </dl>
-         </div>
-     </div>
-
-    <div class="groupExp">
-        <div>
             <a href="#" onclick="_groupExp(this);return false;" class="rc"><b>[{ oxmultilang ident="SHOP_OPTIONS_GROUP_ADMINISTRATION" }]</b></a>
             <dl>
                 <dt>
@@ -321,6 +309,7 @@ function _groupExp(el) {
             <dl>
                 <dt>
                     <select class="select" name=confstrs[sShopCountry] [{ $readonly }]>
+                        <option value="">[{ oxmultilang ident="SHOP_SYSTEM_PLEASE_CHOOSE" }]</option>
                         [{ foreach from=$shop_countries item=sShopCountry key=sCountryCode}]
                         <option value="[{$sCountryCode}]"[{if $sCountryCode == $confstrs.sShopCountry}] selected[{/if}]>[{$sShopCountry}]</option>
                         [{/foreach}]
@@ -329,6 +318,17 @@ function _groupExp(el) {
                 </dt>
                 <dd>
                     [{ oxmultilang ident="SHOP_SYSTEM_SHOP_LOCATION" }]
+                </dd>
+                <div class="spacer"></div>
+            </dl>
+                    
+            <dl>
+                <dt>
+                    <input type=text class="txt" style="width: 430px;" name=confstrs[sUtilModule] value="[{$confstrs.sUtilModule}]" [{ $readonly }]>
+                    [{ oxinputhelp ident="HELP_SHOP_SYSTEM_UTILMODULE" }]
+                </dt>
+                <dd>
+                  [{ oxmultilang ident="SHOP_SYSTEM_UTILMODULE" }]
                 </dd>
                 <div class="spacer"></div>
             </dl>

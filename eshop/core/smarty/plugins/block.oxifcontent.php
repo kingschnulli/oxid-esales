@@ -84,7 +84,7 @@ function smarty_block_oxifcontent( $params, $content, &$smarty, &$repeat)
         $oStr = getStr();
         $blHasSmarty = $oStr->strstr( $content, '[{' );
         if ( $blHasSmarty  ) {
-            $content = oxUtilsView::getInstance()->parseThroughSmarty( $content, $sIdent.md5($content) );
+            $content = oxUtilsView::getInstance()->parseThroughSmarty( $content, $sIdent.md5($content), $myConfig->getActiveView() );
         }
 
         if ($sAssign) {

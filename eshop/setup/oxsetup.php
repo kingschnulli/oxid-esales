@@ -559,6 +559,99 @@ class OxSetupSession extends oxSetupCore
     protected $_aSessionData = null;
 
     /**
+     * Session ID
+     *
+     * @var string
+     */
+    protected $_sSid = null;
+
+    /**
+     * Session name
+     *
+     * @var string
+     */
+    protected $_sSessionName = 'setup_sid';
+
+    /**
+     * Is new session
+     *
+     * @var bool
+     */
+    protected $_blNewSession = false;
+
+    /**
+     * Initialize session class
+     *
+     * @return null
+     */
+    public function __construct()
+    {
+        ini_set('session.use_cookies', 0);
+
+        // initialize session
+        $this->_startSession();
+        $this->_initSessionData();
+    }
+
+    /**
+     * Start session
+     *
+     * @return null
+     */
+    protected function _startSession()
+    {
+        session_name($this->_sSessionName);
+
+        $oUtils = $this->getInstance( "oxSetupUtils" );
+        $sSid = $oUtils->getRequestVar('sid', 'get');
+
+        if (empty($sSid)) {
+            $sSid = $oUtils->getRequestVar('sid', 'post');
+        }
+
+        if (!empty($sSid)) {
+            session_id($sSid);
+        }
+
+        session_start();
+        $sSid = $this->_validateSession();
+        $this->setSid($sSid);
+    }
+
+    /**
+     * Validate if session is started by setup script, if not, generate new session.
+     *
+     * @return string Session ID
+     */
+    protected function _validateSession()
+    {
+        if ($this->_blNewSession === true) {
+            $this->setSessionParam('setup_session', true);
+        } elseif ($this->getSessionParam('setup_session') !== true) {
+            $sNewSid = $this->_getNewSessionID();
+            session_write_close();
+
+            session_id($sNewSid);
+            session_start();
+            $this->setSessionParam('setup_session', true);
+        }
+
+        return session_id();
+    }
+
+    /**
+     * Generate new unique session ID
+     *
+     * @return string
+     */
+    protected function _getNewSessionID()
+    {
+        session_regenerate_id(false);
+        $this->_blNewSession = true;
+        return session_id();
+    }
+
+    /**
      * Returns session id, which is used in forms and urls
      * (actually this id keeps all session data)
      *
@@ -566,7 +659,19 @@ class OxSetupSession extends oxSetupCore
      */
     public function getSid()
     {
-        return rawurlencode( base64_encode( serialize( $this->getSessionData() ) ) );
+        return $this->_sSid;
+    }
+
+    /**
+     * Sets current session ID
+     *
+     * @param string $sSid session ID
+     *
+     * @return null
+     */
+    public function setSid($sSid)
+    {
+        $this->_sSid = $sSid;
     }
 
     /**
@@ -574,25 +679,9 @@ class OxSetupSession extends oxSetupCore
      *
      * @return array
      */
-    public function & getSessionData()
+    protected function _initSessionData()
     {
-        if ( $this->_aSessionData === null ) {
-            $oUtils = $this->getInstance( "oxSetupUtils" );
-
-            // Session Handling
-            $sSID = rawurldecode( $oUtils->getRequestVar( "sid" ) );
-
-            // creating array to store persistent data
-            $this->_aSessionData = array();
-
-            //decoding data from "sid" variable
-            if ( isset( $sSID ) && strlen( $sSID ) ) {
-                $aSIDData = base64_decode( $sSID );
-                if ( $aSIDData !== false ) {
-                    // unserializing persistent data
-                    $this->_aSessionData = unserialize( $aSIDData );
-                }
-            }
+        $oUtils = $this->getInstance( "oxSetupUtils" );
 
             //storring country value settings to session
             $sLocationLang = $oUtils->getRequestVar( "location_lang", "post" );
@@ -629,10 +718,16 @@ class OxSetupSession extends oxSetupCore
             if ( isset( $iEula ) ) {
                 $this->setSessionParam( 'eula', $iEula  );
             }
+    }
 
-        }
-
-        return $this->_aSessionData;
+    /**
+     * Return session object reference.
+     *
+     * @return array
+     */
+    protected function &_getSessionData()
+    {
+        return $_SESSION;
     }
 
     /**
@@ -644,7 +739,7 @@ class OxSetupSession extends oxSetupCore
      */
     public function getSessionParam( $sParamName )
     {
-        $aSessionData = & $this->getSessionData();
+        $aSessionData = & $this->_getSessionData();
         if ( isset( $aSessionData[$sParamName] ) ) {
             return $aSessionData[$sParamName];
         }
@@ -660,7 +755,7 @@ class OxSetupSession extends oxSetupCore
      */
     public function setSessionParam( $sParamName, $sParamValue  )
     {
-        $aSessionData = & $this->getSessionData();
+        $aSessionData = & $this->_getSessionData();
         $aSessionData[$sParamName] = $sParamValue;
     }
 }
@@ -1497,7 +1592,7 @@ class OxSetupUtils extends oxSetupCore
      * Returns variable from request
      *
      * @param string $sVarName     variable name
-     * @param string $sRequestType request type - "post", "get" [optional]
+     * @param string $sRequestType request type - "post", "get", "cookie" [optional]
      *
      * @return mixed
      */
@@ -1515,9 +1610,22 @@ class OxSetupUtils extends oxSetupCore
                     $sValue = $_GET[$sVarName];
                 }
                 break;
+            case 'cookie':
+                if ( isset( $_COOKIE[$sVarName] ) ) {
+                    $sValue = $_COOKIE[$sVarName];
+                }
+                break;
             default:
-                if ( ( $sValue = $this->getRequestVar( $sVarName, "post" ) ) == null ) {
-                    $sValue = $this->getRequestVar( $sVarName, "get" );
+                if ($sValue === null) {
+                    $sValue = $this->getRequestVar($sVarName, 'post');
+                }
+
+                if ($sValue === null) {
+                    $sValue = $this->getRequestVar($sVarName, 'get');
+                }
+
+                if ($sValue === null) {
+                    $sValue = $this->getRequestVar($sVarName, 'cookie');
                 }
                 break;
         }

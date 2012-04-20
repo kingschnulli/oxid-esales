@@ -2466,17 +2466,19 @@ a.tagText img{
     width: 250px;
 }
 
-.basketItems {
-    width: 250px;
-    height:230px;
-    overflow:hidden;
-}
-
 .scrollable .scrollbarBox {
     height: 200px;
     width:  265px;
     overflow: hidden;
 }
+
+.scrollable .basketItems {
+    width: 250px;
+    min-height:230px;
+    overflow:hidden;
+}
+
+
 
 /* --- Side Bar category tree ------------------------------ */
 #sidebar .tree {
@@ -5011,7 +5013,8 @@ div.agbButton  {
     float:right;
 }
 
-.agb a {
+
+.agb a, .cmsContent p a {
     color: #1d7e96;
 }
 
