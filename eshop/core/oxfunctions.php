@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxfunctions.php 44079 2012-04-19 12:01:36Z linas.kukulskis $
+ * @version   SVN: $Id: oxfunctions.php 44132 2012-04-20 14:42:39Z alfonsas $
  */
 
 /**
@@ -92,7 +92,8 @@ function oxAutoload( $sClass )
     }
 
     // Files registered by modules
-    if ( is_array( $aModuleFiles = oxConfig::getInstance()->getConfigParam( 'aModuleFiles' ) ) ) {
+    $aModuleFiles = oxConfig::getInstance()->getConfigParam( 'aModuleFiles' );
+    if ( is_array( $aModuleFiles ) ) {
         $sBasePath   = getShopBasePath();
         $oModulelist = oxNew('oxmodulelist');
         $aActiveModuleInfo = $oModulelist->getActiveModuleInfo();
@@ -119,17 +120,19 @@ function oxAutoload( $sClass )
     $sClass = preg_replace( '/_parent$/i', '', $sClass );
 
     // special case
-    if ( !in_array( $sClass, $aTriedClasses ) && is_array( $aModules = oxConfig::getInstance()->getConfigParam( 'aModules' ) ) ) {
-
-        $myUtilsObject = oxUtilsObject::getInstance();
-        foreach ( $aModules as $sParentName => $sModuleName ) {
-            // looking for module parent class
-            if ( stripos( $sModuleName, $sClass ) !== false ) {
-                $myUtilsObject->getClassName( $sParentName );
-                break;
+    if ( !in_array( $sClass, $aTriedClasses ) ) {
+        $aModules = oxConfig::getInstance()->getConfigParam( 'aModules' );
+        if ( is_array( $aModules ) ) {
+            $myUtilsObject = oxUtilsObject::getInstance();
+            foreach ( $aModules as $sParentName => $sModuleName ) {
+                // looking for module parent class
+                if ( stripos( $sModuleName, $sClass ) !== false ) {
+                    $myUtilsObject->getClassName( $sParentName );
+                    break;
+                }
             }
+            $aTriedClasses[] = $sClass;
         }
-        $aTriedClasses[] = $sClass;
     }
 
     stopProfile("oxAutoload");

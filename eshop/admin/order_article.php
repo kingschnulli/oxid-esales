@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   admin
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: order_article.php 40261 2011-11-24 13:52:22Z linas.kukulskis $
+ * @version   SVN: $Id: order_article.php 44135 2012-04-20 15:06:35Z linas.kukulskis $
  */
 
 /**
@@ -265,7 +265,7 @@ class Order_Article extends oxAdminDetails
 
         //get article id
         $sQ = "select oxartid from oxorderarticles where oxid = ".$oDb->quote( $sOrderArtId );
-        if ( ( $sArtId = oxDb::getDb()->getOne( $sQ ) ) ) {
+        if ( ( $sArtId = oxDb::getDb()->getOne( $sQ, false, false ) ) ) {
             $oOrder = oxNew( 'oxorder' );
             if ( $oOrder->load( $this->getEditObjectId() ) ) {
                 $oOrder->recalculateOrder();

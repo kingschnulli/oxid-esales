@@ -584,4 +584,57 @@ class Unit_Core_oxmodulelistTest extends OxidTestCase
 
             $this->assertFalse( $oModuleList->_isVendorDir( $sModulesDir."/invoicepdf" ) );
     }
+
+    /**
+     * oxmodulelist::getDeletedExtensions() test case
+     *
+     * @return null
+     */
+    public function testGetDeletedExtensions()
+    {
+        $aModules = array(
+            'oxarticle' => 'mod/testModule&mod2/testModule2/',
+        );
+            $aModules = array(
+                'oxarticle' => 'mod/testModule&mod2/testModule2/',
+                'oxorder' => 'invoicepdf/myorder'
+            );
+        $aDeletedExt = array(
+            'oxarticle' => array ('mod/testModule',
+                                  'mod2/testModule2/',)
+        );
+
+        modConfig::getInstance()->setConfigParam( "aModules", $aModules );
+
+        $oModuleList = $this->getProxyClass( 'oxModuleList' );
+        $aDeletedExtRes = $oModuleList->getDeletedExtensions();
+        $this->assertEquals( $aDeletedExt, $aDeletedExtRes );
+    }
+
+    /**
+     * oxmodulelist::getDeletedExtensionIds() test case
+     *
+     * @return null
+     */
+    public function testGetDeletedExtensionIds()
+    {
+        $aModulePaths = array(
+            'mod3' => 'mod',
+        );
+        modConfig::getInstance()->setConfigParam( "aModulePaths", $aModulePaths );
+
+        $aDeletedExt = array(
+            'oxarticle' => array ('mod/testModule',
+                                  'mod2/testModule2/',
+                                  'testModule3')
+        );
+        $aDeletedIds = array ('mod3',
+                              'mod2',
+                              'testModule3');
+
+        $oModuleList = $this->getProxyClass( 'oxModuleList' );
+        $aDeletedExtIds = $oModuleList->getDeletedExtensionIds($aDeletedExt);
+        $this->assertEquals( $aDeletedIds, $aDeletedExtIds );
+    }
+
 }

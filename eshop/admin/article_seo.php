@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   admin
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: article_seo.php 40261 2011-11-24 13:52:22Z linas.kukulskis $
+ * @version   SVN: $Id: article_seo.php 44135 2012-04-20 15:06:35Z linas.kukulskis $
  */
 
 /**
@@ -507,6 +507,6 @@ class Article_Seo extends Object_Seo
                    oxseo.oxobjectid = " . $oDb->quote( $sId ) . " and
                    oxseo.oxshopid = '{$iShopId}' and oxseo.oxlang = {$iLang} and oxparams = ".$oDb->quote( $sParam );
 
-        return (bool) oxDb::getDb()->getOne( $sQ );
+        return (bool) oxDb::getDb()->getOne( $sQ, false, false );
     }
 }

@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxadminview.php 43825 2012-04-12 13:44:02Z vilma $
+ * @version   SVN: $Id: oxadminview.php 44135 2012-04-20 15:06:35Z linas.kukulskis $
  */
 
 /**
@@ -273,7 +273,7 @@ class oxAdminView extends oxView
 
         if ( $sShopID = $myConfig->getShopId() ) {
             $sQ = "select oxversion from oxshops where oxid = '$sShopID' ";
-            $sVersion = oxDb::getDb()->getOne( $sQ );
+            $sVersion = oxDb::getDb()->getOne( $sQ, false, false );
         }
 
         $sVersion = preg_replace( "/(^[^0-9]+)(.+)$/", "$2", $sVersion );
@@ -515,7 +515,7 @@ class oxAdminView extends oxView
             if ( false !== $iEnglishId ) {
                 $sViewName = getViewName( "oxcountry", $iEnglishId );
                 $sQ = "select oxtitle from {$sViewName} where oxisoalpha2 = " . oxDb::getDb()->quote( $sCountryCode );
-                $sCountry = oxDb::getDb()->getOne( $sQ );
+                $sCountry = oxDb::getDb()->getOne( $sQ, false, false );
             } else {
                 // handling when english language is deleted
                 switch ( $sCountryCode ) {

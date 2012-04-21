@@ -240,6 +240,9 @@ class oxModule extends oxSuperCfg
         if (!$sModuleId) {
             $sModuleId = substr( $sModule, 0, strpos( $sModule, "/" ) );
         }
+        if (!$sModuleId) {
+            $sModuleId = $sModule;
+        }
         return $sModuleId;
     }
 

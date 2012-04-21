@@ -1001,4 +1001,17 @@ class Unit_Core_oxmoduleTest extends OxidTestCase
         $this->assertEquals( 'invoicepdf', $oModule->getIdByPath( $sModule ) );
     }
 
+    public function testGetIdByPathUnknownPathNotDir()
+    {
+        $aDisabledModules = array('test1');
+        $aModulePaths     = array("invoicepdf2" => "oe/invoicepdf2");
+        modConfig::getInstance()->setConfigParam( "aDisabledModules", $aDisabledModules );
+        modConfig::getInstance()->setConfigParam( "aModulePaths", $aModulePaths );
+        $sModule = "myorder";
+
+        $oModule = $this->getProxyClass('oxmodule');
+        $oModule->getIdByPath( $sModule );
+        $this->assertEquals( 'myorder', $oModule->getIdByPath( $sModule ) );
+    }
+
 }

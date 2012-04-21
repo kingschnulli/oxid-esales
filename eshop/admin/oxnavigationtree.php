@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxnavigationtree.php 43363 2012-03-30 07:25:08Z vilma $
+ * @version   SVN: $Id: oxnavigationtree.php 44135 2012-04-20 15:06:35Z linas.kukulskis $
  */
 
 /**
@@ -856,7 +856,7 @@ class OxNavigationTree extends oxSuperCfg
     {
         $sVersion = "";
         if ( ( $sShopId = $this->getConfig()->getShopId() ) ) {
-            $sVersion = oxDb::getDb()->getOne( "select oxversion from oxshops where oxid = '$sShopId' " );
+            $sVersion = oxDb::getDb()->getOne( "select oxversion from oxshops where oxid = '$sShopId' ", false, false );
             $sVersion = preg_replace( "/(^[^0-9]+)(.+)$/", "\$2", $sVersion );
         }
 

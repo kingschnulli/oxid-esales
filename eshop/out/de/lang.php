@@ -497,6 +497,7 @@ $aLang = array(
 'ORDER_IS_CANCELED'                                           => "Bestellung wurde storniert!",
 'ORDER_NO'                                                    => "Bestellnummer:",
 'ORDER_NUMBER'                                                => "Bestellnr.",
+'BRAND'                                                       => "Marke",
 'OUR_BRANDS'                                                  => "unsere Marken",
 'OUR_REGULAR_PRICE'                                           => "(Unser regulärer Preis.)",
 'OXID_ESALES_URL'                                             => "http://www.oxid-esales.com/de/startseite",

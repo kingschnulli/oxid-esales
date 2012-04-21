@@ -489,6 +489,7 @@ $aLang = array(
 'ORDER_IS_CANCELED'                                           => "Order is canceled.",
 'ORDER_NO'                                                    => "Order No.:",
 'ORDER_NUMBER'                                                => "Order No.",
+'BRAND'                                                       => "Brand",
 'OUR_BRANDS'                                                  => "Our<br>brands",
 'OUR_REGULAR_PRICE'                                           => "(Our regular price.)",
 'OXID_ESALES_URL'                                             => "http://www.oxid-esales.com/",

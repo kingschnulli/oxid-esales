@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxmodulelist.php 43829 2012-04-12 14:39:28Z vilma $
+ * @version   SVN: $Id: oxmodulelist.php 44136 2012-04-20 15:08:16Z vilma $
  */
 
 /**
@@ -156,19 +156,8 @@ class oxModuleList extends oxSuperCfg
     {
         $aDeletedExt = $this->getDeletedExtensions();
 
-        //collectind deleted extensions ID's
-        $aDeletedExtIds = array();
-        if ( !empty($aDeletedExt) ) {
-            foreach ( $aDeletedExt as $sOxClass => $aDeletedModules ) {
-                foreach ( $aDeletedModules as $sModulePath ) {
-                     $aDeletedExtIds[] = substr( $sModulePath, 0, strpos( $sModulePath, "/" ) );
-                }
-            }
-        }
-
-        if ( !empty( $aDeletedExtIds ) ) {
-            $aDeletedExtIds = array_unique( $aDeletedExt );
-        }
+        //collecting deleted extension IDs
+        $aDeletedExtIds = $this->getDeletedExtensions($aDeletedExt);
 
         // removing from aModules config varviable
         $this->_removeFromModulesArray( $aDeletedExt );
@@ -184,10 +173,36 @@ class oxModuleList extends oxSuperCfg
     }
 
     /**
+     * Returns deleted extension Ids
+     *
+     * @param array $aDeletedExt deleted extensions
+     *
+     * @return array
+     */
+    public function getDeletedExtensionIds($aDeletedExt)
+    {
+        $aDeletedExtIds = array();
+        if ( !empty($aDeletedExt) ) {
+            $oModule = oxNew("oxModule");
+            foreach ( $aDeletedExt as $sOxClass => $aDeletedModules ) {
+                foreach ( $aDeletedModules as $sModulePath ) {
+                    $aDeletedExtIds[] = $oModule->getIdByPath($sModulePath);
+                }
+            }
+        }
+
+        if ( !empty( $aDeletedExtIds ) ) {
+            $aDeletedExtIds = array_unique( $aDeletedExtIds );
+        }
+
+        return $aDeletedExtIds;
+    }
+
+    /**
      * Checks moduels list - if there is extensions that are registered, but
      * extension directory is missing
      *
-     * @return null
+     * @return array
      */
     public function getDeletedExtensions()
     {
@@ -195,13 +210,9 @@ class oxModuleList extends oxSuperCfg
 
         foreach ( $aModules as $sOxClass => $aModulesList ) {
             foreach ( $aModulesList as $sModulePath ) {
-                if (  strpos( $sModulePath, "/" ) ) {
-                    $sExtDir = substr( $sModulePath, 0, strpos( $sModulePath, "/" ) );
-                    $sExtPath = $this->getConfig()->getModulesDir() . $sExtDir;
-
-                    if ( !is_dir( $sExtPath ) ) {
-                        $aDeletedExt[$sOxClass][] = $sModulePath;
-                    }
+                $sExtPath = $this->getConfig()->getModulesDir() . $sModulePath.".php";
+                if ( !file_exists( $sExtPath ) ) {
+                    $aDeletedExt[$sOxClass][] = $sModulePath;
                 }
             }
         }
@@ -276,7 +287,6 @@ class oxModuleList extends oxSuperCfg
     protected function _removeFromModulesArray( $aDeletedExt )
     {
         $aExt = $this->getAllModules();
-
         $aUpdatedExt = $this->diffModuleArrays( $aExt, $aDeletedExt );
         $aUpdatedExt = $this->buildModuleChains( $aUpdatedExt );
 
@@ -327,6 +337,9 @@ class oxModuleList extends oxSuperCfg
      */
     protected function _removeFromDatabase( $aDeletedExtIds )
     {
+        if ( !is_array($aDeletedExtIds) || !count($aDeletedExtIds) ) {
+            return;
+        }
         $sDelExtIds = array();
 
         foreach ( $aDeletedExtIds as $sDeletedExtId ) {
