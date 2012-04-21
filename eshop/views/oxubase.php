@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxubase.php 42678 2012-03-09 13:48:13Z linas.kukulskis $
+ * @version   SVN: $Id: oxubase.php 44123 2012-04-20 12:41:37Z tomas $
  */
 
 /**
@@ -1099,7 +1099,7 @@ class oxUBase extends oxView
                 $this->_sListOrderDir = $sSortDir;
 
                 // caching sorting config
-                $this->setItemSorting( $sCnid, $sSortBy, $sSortDir );
+                $this->setItemSorting( "category", $sSortBy, $sSortDir );
             }
         }
     }
@@ -2241,7 +2241,6 @@ class oxUBase extends oxView
         $pageNavigation = new stdClass();
 
         $pageNavigation->NrOfPages = $this->_iCntPages;
-        $pageNavigation->iArtCnt   = $this->_iAllArtCnt;
         $iActPage = $this->getActPage();
         $pageNavigation->actPage   = $iActPage + 1;
         $sUrl = $this->generatePageNavigationUrl();
@@ -2309,6 +2308,7 @@ class oxUBase extends oxView
     /**
      * Article count getter
      *
+     * @deprecated in v4.5.10 (2012-04-19); Moved to alist view
      * @return int
      */
     public function getArticleCount()

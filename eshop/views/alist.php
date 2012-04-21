@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   views
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: alist.php 38776 2011-09-15 12:21:20Z arvydas.vapsva $
+ * @version   SVN: $Id: alist.php 44075 2012-04-19 11:21:16Z linas.kukulskis $
  */
 
 /**
@@ -762,6 +762,16 @@ class aList extends oxUBase
         }
 
         return $this->_aArticleList;
+    }
+
+    /**
+     * Article count getter
+     *
+     * @return int
+     */
+    public function getArticleCount()
+    {
+        return $this->_iAllArtCnt;
     }
 
     /**
