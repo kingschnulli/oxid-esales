@@ -112,74 +112,19 @@ class Module_Main extends oxAdminDetails
      *
      * @return bool
      */
-    public function enableActivation()
+    public function saveLegacyModule()
     {
-        $aLegacyModules = $this->getConfig()->getConfigParam( "aLegacyModules" );
-
         $aModuleInfo = explode( "\n", trim( oxConfig::getParameter("aExtendedClasses") ) );
         $sModuleLegacyId = trim( $this->getEditObjectId() );
         $sModuleId = trim( oxConfig::getParameter("moduleId") );
         $sModuleName = trim( oxConfig::getParameter("moduleName") );
 
-        if ( !empty( $aModuleInfo ) ) {
-            $aLegacyModules[$sModuleId]["id"] = $sModuleId;
-            $aLegacyModules[$sModuleId]["title"] = ( $sModuleName ) ? $sModuleName : $sModuleId;
-            $aLegacyModules[$sModuleId]['extend'] = array();
-
-            foreach ( $aModuleInfo as $sKey => $sValue ) {
-                if ( strpos( $sValue, "=>" ) > 1 ) {
-                    $aClassInfo    = explode( "=>", $sValue );
-                    $sClassName    = trim( $aClassInfo[0] );
-                    $sExtendString = trim( $aClassInfo[1] );
-                    $aLegacyModules[$sModuleId]['extend'][$sClassName] = $sExtendString;
-                }
-            }
-        }
+        $oModule = oxNew('oxModule');
+        $sModuleId = $oModule->saveLegacyModule($sModuleId, $sModuleName, $aModuleInfo);
 
         if ( $sModuleLegacyId != $sModuleId ) {
-            $this->_updateModuleConfigVars( $sModuleLegacyId, $sModuleId );
+            $oModule->updateModuleIds( $sModuleLegacyId, $sModuleId );
             $this->setEditObjectId($sModuleId);
-        }
-        if ( !empty( $aLegacyModules[$sModuleId]['extend'] ) ) {
-            $this->getConfig()->saveShopConfVar( "aarr", "aLegacyModules", $aLegacyModules );
-        }
-    }
-
-    /**
-     * Update module ID in modules config variables aModulePaths and aDisabledModules.
-     *
-     * @param string $sModuleLegacyId Old module ID
-     * @param string $sModuleId       New module ID
-     *
-     * @return null
-     */
-    protected function _updateModuleConfigVars( $sModuleLegacyId, $sModuleId )
-    {
-        $oConfig = $this->getConfig();
-
-        // updating module ID in aModulePaths config var
-        $aModulePaths = $oConfig->getConfigParam( 'aModulePaths' );
-        $aModulePaths[$sModuleId] = $aModulePaths[$sModuleLegacyId];
-        unset( $aModulePaths[$sModuleLegacyId] );
-
-        $oConfig->saveShopConfVar( 'aarr', 'aModulePaths', $aModulePaths );
-
-        if ( isset($aModulePaths[$sModuleLegacyId]) ) {
-            $aModulePaths[$sModuleId] = $aModulePaths[$sModuleLegacyId];
-            unset( $aModulePaths[$sModuleLegacyId] );
-            $oConfig->saveShopConfVar( 'aarr', 'aModulePaths', $aModulePaths );
-        }
-
-        // updating module ID in aDisabledModules config var
-        $aDisabledModules = $oConfig->getConfigParam( 'aDisabledModules' );
-
-        if ( is_array($aDisabledModules) ) {
-            $iOldKey = array_search( $sModuleLegacyId, $aDisabledModules );
-            if ( $iOldKey !== false ) {
-                unset( $aDisabledModules[$iOldKey] );
-                $aDisabledModules[$iOldKey] = $sModuleId;
-                $oConfig->saveShopConfVar( 'arr', 'aDisabledModules', $aDisabledModules );
-            }
         }
     }
 }

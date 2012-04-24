@@ -61,30 +61,49 @@ class Unit_Admin_ModuleMainTest extends OxidTestCase
     }
 
     /**
-     * Theme_Main::Render() test case - loading module object
+     * Theme_Main::saveLegacyModule()
+     *
+     * @return null
+     */
+    public function testSaveLegacyModule()
+    {
+        // prepearing test data
+        modConfig::setParameter( "aExtendedClasses", "oxarticle => dir1/module1\n" );
+        modConfig::setParameter( "moduleId", "dir1_module1" );
+        modConfig::setParameter( "moduleName", "module1" );
+        modConfig::setParameter( "oxid", "dir1_module1" );
+        modConfig::getInstance()->setConfigParam( "aLegacyModules", null );
+
+        // result data
+        $aLegacyModules = array( "dir1_module1" => array( "id" => "dir1_module1",
+                                                          "title" => "module1",
+                                                          "extend" => array("oxarticle" => "dir1/module1")) );
+
+        $oModuleMain = new Module_Main();
+        $this->assertEquals( "dir1_module1", $oModuleMain->getEditObjectId() );
+        $oModuleMain->saveLegacyModule();
+        $this->assertEquals( $aLegacyModules, modConfig::getInstance()->getConfigParam( "aLegacyModules" ) );
+        $this->assertEquals( "dir1_module1", $oModuleMain->getEditObjectId() );
+    }
+
+    /**
+     * Theme_Main::saveLegacyModule() test case
      *
      * @return null
      */
     public function testUpdateModuleConfigVars()
     {
         // prepearing test data
-        $aTestModulePaths     = array( "dir1/module1" => "dir1/module1", "dir2/module2" => "dir2/module2" );
-        $aTestDisabledModules = array( "dir2/module2", "dir4/module4" );
-        
-        modConfig::getInstance()->setConfigParam( "aModulePaths", $aTestModulePaths );
-        modConfig::getInstance()->setConfigParam( "aDisabledModules", $aTestDisabledModules );
+        modConfig::setParameter( "aExtendedClasses", "oxarticle => dir1/module1\n" );
+        modConfig::setParameter( "moduleId", "dir1_module1" );
+        modConfig::setParameter( "moduleName", "module1" );
+        modConfig::setParameter( "oxid", "dir1/module1" );
+        modConfig::getInstance()->setConfigParam( "aLegacyModules", null );
 
-        // result data
-        $aModulePaths     = array( "dir1/module1" => "dir1/module1", "dir2Module" => "dir2/module2" );
-        $aDisabledModules = array( "dir2Module", "dir4/module4" );
+        $oModuleMain = new Module_Main();
+        $this->assertEquals( "dir1/module1", $oModuleMain->getEditObjectId() );
 
-        $oConfig = $this->getMock( 'oxConfig', array('saveShopConfVar') );
-        $oConfig->expects( $this->at(0) )->method('saveShopConfVar')->with($this->equalTo("aarr"), $this->equalTo("aModulePaths"), $this->equalTo($aModulePaths) );
-        $oConfig->expects( $this->at(1) )->method('saveShopConfVar')->with($this->equalTo("arr"), $this->equalTo("aDisabledModules"), $this->equalTo($aDisabledModules) );
-
-        $oModuleMain = $this->getMock( 'Module_Main', array('getConfig'), array(), "", false );
-        $oModuleMain->expects( $this->any() )->method('getConfig')->will( $this->returnValue( $oConfig ) );
-
-        $oModuleMain->_updateModuleConfigVars( "dir2/module2", "dir2Module" );
+        $oModuleMain->saveLegacyModule();
+        $this->assertEquals( "dir1_module1", $oModuleMain->getEditObjectId() );
     }
 }

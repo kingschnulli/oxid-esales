@@ -49,7 +49,7 @@ class Module_List extends oxAdminList
         $sModulesDir = $this->getConfig()->getModulesDir();
 
         $oModuleList = oxNew( "oxModuleList" );
-        $aModules = $oModuleList->getModulesFromDir( $sModulesDir, $sVendorDir );
+        $aModules = $oModuleList->getModulesFromDir( $sModulesDir );
 
         parent::render();
 

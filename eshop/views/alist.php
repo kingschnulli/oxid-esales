@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: alist.php 44080 2012-04-19 12:01:48Z linas.kukulskis $
+ * @version   SVN: $Id: alist.php 44217 2012-04-23 15:39:35Z linas.kukulskis $
  */
 
 /**
@@ -349,7 +349,7 @@ class aList extends oxUBase
         // load only articles which we show on screen
         $oArtList = oxNew( 'oxarticlelist' );
         $oArtList->setSqlLimit( $iNrofCatArticles * $this->_getRequestPageNr(), $iNrofCatArticles );
-        $oArtList->setCustomSorting( $this->getSortingSql( $oCategory->getId() ) );
+        $oArtList->setCustomSorting( $this->getSortingSql( "category" ) );
 
         if ( $oCategory->isPriceCategory() ) {
             $dPriceFrom = $oCategory->oxcategories__oxpricefrom->value;

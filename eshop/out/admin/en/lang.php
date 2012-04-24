@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 44106 2012-04-20 07:49:57Z vaidas.matulevicius $
+ * @version   SVN: $Id: lang.php 44168 2012-04-23 09:06:30Z juergen.busch $
  */
 
 /*
@@ -231,7 +231,7 @@ $aLang = array(
 'GENERAL_EXPORTSTATUSNEW'                                  => 'new',
 'GENERAL_EXPORTSTATUSUSED'                                 => 'used',
 'GENERAL_EXPORTLANGUAGE'                                   => 'Export for language',
-'GENERAL_EXPORTCUSTOMHEADER'                               => '[tr] Custom export header',
+'GENERAL_EXPORTCUSTOMHEADER'                               => 'User defined header',
 'GENERAL_EXTERNALSTOCK'                                    => 'External Storehouse',
 'GENERAL_EXTRAINFO'                                        => 'Additional Info',
 'GENERAL_FAX'                                              => 'Fax',
@@ -1362,7 +1362,7 @@ $aLang = array(
 'SHOP_SYSTEM_SHOWVARIANTREVIEWS'                           => 'Show Variant Ratings for "Parent" Product',
 'SHOP_SYSTEM_STOREIPS'                                     => 'Store User IP Addresses (check your local laws if legal)',
 'SHOP_SYSTEM_SHOP_LOCATION'                                => 'Shop market',
-'SHOP_SYSTEM_UTILMODULE'                                   => 'Additional Utilitly Modules',
+'SHOP_SYSTEM_UTILMODULE'                                   => 'Additional Utility Module',
 'SHOP_SYSTEM_VARIANTSSELECTION'                            => 'Display Variants in Assignment Lists in eShop admin',
 'SHOP_SYSTEM_VARIANTPARENTBUYABLE'                         => '"Parent" Products can be purchased',
 'SHOP_SYSTEM_VARIANTINHERITAMOUNTPRICE'                    => 'Variants inherit Scale Prices from "Parent" Product',
@@ -2085,8 +2085,8 @@ $aLang = array(
 'SHOP_SYSTEM_SHOWREMEMBERME'                               => 'Show "Remember me" option in login box',
 'NEWSLETTER_SUBJECT'                                       => 'Subject',
 
-'SHOP_PERF_SEO_CACHE'                                      => '[Tr] Enable SEO cache',
-'INFO_MODULES_MOVED_TO_EXTENSIONS'                         => '[tr] Themes and modules handling moved to new menu "Extensions"',
+'SHOP_PERF_SEO_CACHE'                                      => 'Enable SEO cache',
+'INFO_MODULES_MOVED_TO_EXTENSIONS'                         => 'Themes and modules handling moved to new menu "Extensions"',
 
 );
 

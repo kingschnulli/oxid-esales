@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxbasket.php 43965 2012-04-16 15:04:42Z vilma $
+ * @version   SVN: $Id: oxbasket.php 44167 2012-04-23 08:45:17Z linas.kukulskis $
  */
 
 /**
@@ -1081,7 +1081,9 @@ class oxBasket extends oxSuperCfg
      */
     protected function _calcBasketTotalDiscount()
     {
-        if ( $this->_oTotalDiscount === null || ( $this->_blUpdateNeeded && !$this->isAdmin() ) ) {
+        if ( $this->_oTotalDiscount === null || ( !$this->isAdmin() ) ) {
+
+
             $this->_oTotalDiscount = oxNew( 'oxPrice' );
             $this->_oTotalDiscount->setBruttoPriceMode();
 

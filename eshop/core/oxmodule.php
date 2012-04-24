@@ -812,4 +812,77 @@ class oxModule extends oxSuperCfg
         return $aTemplates;
     }
 
+    /**
+     * Enables modules, that dont have metadata file activation/deactivation.
+     * Writes to "aLegacyModules" config variable classes, that current module
+     * extedens.
+     *
+     * @param string $sModuleId   Module id
+     * @param string $sModuleName Module name
+     * @param string $aModuleInfo Extended classes
+     *
+     * @return string module id
+     */
+    public function saveLegacyModule($sModuleId, $sModuleName, $aModuleInfo = null)
+    {
+        $aLegacyModules = $this->getLegacyModules();
+
+        if ( !empty( $aModuleInfo ) && is_array($aModuleInfo)) {
+            $aLegacyModules[$sModuleId]["id"] = $sModuleId;
+            $aLegacyModules[$sModuleId]["title"] = ( $sModuleName ) ? $sModuleName : $sModuleId;
+            $aLegacyModules[$sModuleId]['extend'] = array();
+
+            foreach ( $aModuleInfo as $sKey => $sValue ) {
+                if ( strpos( $sValue, "=>" ) > 1 ) {
+                    $aClassInfo    = explode( "=>", $sValue );
+                    $sClassName    = trim( $aClassInfo[0] );
+                    $sExtendString = trim( $aClassInfo[1] );
+                    $aLegacyModules[$sModuleId]['extend'][$sClassName] = $sExtendString;
+                }
+            }
+        }
+
+        if ( !empty( $aLegacyModules[$sModuleId]['extend'] ) ) {
+            $this->getConfig()->saveShopConfVar( "aarr", "aLegacyModules", $aLegacyModules );
+        }
+        return $sModuleId;
+    }
+
+    /**
+     * Update module ID in modules config variables aModulePaths and aDisabledModules.
+     *
+     * @param string $sModuleLegacyId Old module ID
+     * @param string $sModuleId       New module ID
+     *
+     * @return null
+     */
+    public function updateModuleIds( $sModuleLegacyId, $sModuleId )
+    {
+        $oConfig = $this->getConfig();
+
+        // updating module ID in aModulePaths config var
+        $aModulePaths = $oConfig->getConfigParam( 'aModulePaths' );
+        $aModulePaths[$sModuleId] = $aModulePaths[$sModuleLegacyId];
+        unset( $aModulePaths[$sModuleLegacyId] );
+
+        $oConfig->saveShopConfVar( 'aarr', 'aModulePaths', $aModulePaths );
+
+        if ( isset($aModulePaths[$sModuleLegacyId]) ) {
+            $aModulePaths[$sModuleId] = $aModulePaths[$sModuleLegacyId];
+            unset( $aModulePaths[$sModuleLegacyId] );
+            $oConfig->saveShopConfVar( 'aarr', 'aModulePaths', $aModulePaths );
+        }
+
+        // updating module ID in aDisabledModules config var
+        $aDisabledModules = $oConfig->getConfigParam( 'aDisabledModules' );
+
+        if ( is_array($aDisabledModules) ) {
+            $iOldKey = array_search( $sModuleLegacyId, $aDisabledModules );
+            if ( $iOldKey !== false ) {
+                unset( $aDisabledModules[$iOldKey] );
+                $aDisabledModules[$iOldKey] = $sModuleId;
+                $oConfig->saveShopConfVar( 'arr', 'aDisabledModules', $aDisabledModules );
+            }
+        }
+    }
 }

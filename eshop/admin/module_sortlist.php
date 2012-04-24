@@ -23,18 +23,16 @@
  */
 
 /**
- * Admin article main deliveryset manager.
- * There is possibility to change deliveryset name, article, user
- * and etc.
- * Admin Menu: Shop settings -> Shipping & Handling -> Main Sets.
+ * Extentions sorting list handler.
+ * Admin Menu: Extentions -> Module -> Installed Shop Modules.
  * @package admin
  */
 class Module_Sortlist extends oxAdminDetails
 {
 
     /**
-     * Executes parent method parent::render(), creates deliveryset category tree,
-     * passes data to Smarty engine and returns name of template file "deliveryset_main.tpl".
+     * Executes parent method parent::render(), loads active and disabled extentions,
+     * checks if there are some delted and registered modules and returns name of template file "module_sortlist.tpl".
      *
      * @return string
      */
@@ -69,14 +67,14 @@ class Module_Sortlist extends oxAdminDetails
      */
     public function save()
     {
-        $oConfig = $this->getConfig();
+        $aModule = oxConfig::getParameter("aModules");
 
-        $aModules = json_decode( $oConfig->getParameter("aModules"), true );
+        $aModules = json_decode( $aModule, true );
 
         $oModule = oxNew( "oxModule" );
         $aModules = $oModule->buildModuleChains( $aModules );
 
-        $oConfig->saveShopConfVar( "aarr", "aModules", $aModules );
+        $this->getConfig()->saveShopConfVar( "aarr", "aModules", $aModules );
     }
 
     /**

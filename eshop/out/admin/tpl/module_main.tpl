@@ -103,7 +103,7 @@
                 <input type="hidden" name="cl" value="module_main">
                 <input type="hidden" name="oxid" value="[{$oModule->getId()}]">
                 <input type="hidden" name="updatelist" value="1">
-                <input type="hidden" name="fnc" value="enableActivation">
+                <input type="hidden" name="fnc" value="saveLegacyModule">
 
                 [{if $oModule->isRegistered()}]
                 <div id="editLegacyInfoBox" class="info" align="center">
@@ -140,7 +140,7 @@
                         <textarea name="aExtendedClasses" style="width: 233px; height: 70px;">[{$sModuleClasses}]</textarea>
                     </fieldset>
 
-                    <input type="submit" id="module_enableActivation" class="saveButton" value="[{ oxmultilang ident="GENERAL_SAVE" }]">
+                    <input type="submit" id="module_saveLegacyModule" class="saveButton" value="[{ oxmultilang ident="GENERAL_SAVE" }]">
                 </div>
 
             </div>

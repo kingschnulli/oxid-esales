@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxmodulelist.php 44136 2012-04-20 15:08:16Z vilma $
+ * @version   SVN: $Id: oxmodulelist.php 44206 2012-04-23 14:52:13Z vilma $
  */
 
 /**
@@ -379,7 +379,7 @@ class oxModuleList extends oxSuperCfg
             $sModuleDirName  = basename( $sModuleDirPath );
 
             // skipping some file
-            if ( in_array( $sModuleDirName, $this->_aSkipFiles ) ) {
+            if ( in_array( $sModuleDirName, $this->_aSkipFiles ) || (!is_dir( $sModuleDirPath ) && substr($sModuleDirName, -4) != ".php")) {
                 continue;
             }
 

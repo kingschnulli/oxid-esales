@@ -6,9 +6,9 @@
 
 
 [{capture append="oxidBlock_sidebar"}]
-    [{if $actCategory && $actCategory->getIconUrl()}]
-        [{assign var="listType" value=$oView->getListType()}]
-        [{if $listType=='manufacturer' || $listType=='vendor'}]
+    [{assign var="listType" value=$oView->getListType()}]
+    [{if $listType=='manufacturer' || $listType=='vendor'}]
+        [{if $actCategory && $actCategory->getIconUrl()}]
         <div class="box">
             <h3>
                 [{if $listType=='manufacturer'}]

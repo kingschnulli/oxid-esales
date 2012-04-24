@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxubase.php 44125 2012-04-20 13:00:02Z linas.kukulskis $
+ * @version   SVN: $Id: oxubase.php 44218 2012-04-23 15:39:49Z linas.kukulskis $
  */
 
 /**
@@ -1082,14 +1082,16 @@ class oxUBase extends oxView
 
             $sCnid = oxConfig::getParameter( 'cnid' );
 
-
             $sSortBy  = oxConfig::getParameter( $this->getSortOrderByParameterName() );
             $sSortDir = oxConfig::getParameter( $this->getSortOrderParameterName() );
 
             $oStr = getStr();
-            if ( (!$sSortBy || !in_array( $oStr->strtolower($sSortBy), $aSortColumns) || !in_array( $oStr->strtolower($sSortDir), $aSortDir) ) && $aSorting = $this->getSorting( $sCnid ) ) {
-                $sSortBy  = $aSorting['sortby'];
-                $sSortDir = $aSorting['sortdir'];
+            if ( (!$sSortBy ||
+                !in_array( $oStr->strtolower($sSortBy), $aSortColumns) ||
+                !in_array( $oStr->strtolower($sSortDir), $aSortDir) ) &&
+                $aSorting = $this->getSorting( "category" ) ) {
+                    $sSortBy  = $aSorting['sortby'];
+                    $sSortDir = $aSorting['sortdir'];
             }
 
             if ( $sSortBy && oxDb::getInstance()->isValidFieldName( $sSortBy ) &&

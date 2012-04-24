@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxbasketTest.php 43965 2012-04-16 15:04:42Z vilma $
+ * @version   SVN: $Id: oxbasketTest.php 44183 2012-04-23 10:52:54Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -3687,10 +3687,9 @@ class Unit_Core_oxbasketTest extends OxidTestCase
 
         $oTotalDiscount = new oxPrice(100);
 
-        $oBasket = $this->getProxyClass( "oxBasket" );
+        $oBasket = $this->getMock($this->getProxyClassName( 'oxBasket' ), array( 'isAdmin' ) );
+        $oBasket->expects( $this->any() )->method( 'isAdmin' )->will($this->returnValue( true ) );
         $oBasket->setTotalDiscount( 100 );
-        $oBasket->afterUpdate();
-
         $oBasket->setNonPublicVar( '_aDiscounts', $aDiscounts );
         $oBasket->UNITcalcBasketTotalDiscount();
 

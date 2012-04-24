@@ -17,7 +17,7 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   main
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
  * @version   SVN: $Id: theme.php 25466 2010-02-01 14:12:07Z alfonsas $
  */
@@ -32,7 +32,7 @@ $aModule = array(
     'thumbnail'    => 'picture.png',
     'version'      => '1.0',
     'author'       => 'OXID eSales AG',
-    'extend'      => array(
+    'extend'       => array(
         'oxorder' => 'invoicepdf/myorder'
     )
 );
