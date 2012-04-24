@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 44045 2012-04-18 14:58:49Z linas.kukulskis $
+ * @version   SVN: $Id: lang.php 44195 2012-04-23 12:58:55Z juergen.busch $
  */
 
 $sLangName  = 'Deutsch';
@@ -208,7 +208,7 @@ $aLang = array(
 'GENERAL_EXPORTSTATUSNEW'                                  => 'neu',
 'GENERAL_EXPORTSTATUSUSED'                                 => 'gebraucht',
 'GENERAL_EXPORTLANGUAGE'                                   => 'Export für Sprache',
-'GENERAL_EXPORTCUSTOMHEADER'                               => '[tr] Custom export header',
+'GENERAL_EXPORTCUSTOMHEADER'                               => 'Benutzerdefinierte Kopfzeile',
 'GENERAL_EXTERNALSTOCK'                                    => 'Fremdlager',
 'GENERAL_EXTRAINFO'                                        => 'zus. Info',
 'GENERAL_FAX'                                              => 'Fax',
@@ -1744,7 +1744,7 @@ $aLang = array(
 'PROMOTIONS_ARTICLE_ALLITEMS'                              => 'Alle verfügbaren Produkte',
 'SHOP_SYSTEM_SHOWREMEMBERME'                               => 'Option "Passwort merken" beim Login anzeigen',
 
-'SHOP_PERF_SEO_CACHE'                                      => '[Tr] Enable SEO cache',
+'SHOP_PERF_SEO_CACHE'                                      => 'SEO Cache aktivieren',
 
 );
 
