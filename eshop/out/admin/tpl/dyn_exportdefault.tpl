@@ -148,7 +148,7 @@
                 [{ oxmultilang ident="GENERAL_EXPORTCUSTOMHEADER" }]
             </td>
             <td class="edittext">
-                <input type="text" class="editinput" size="50" name="sExportCustomHeader" value="" [{ $readonly }]>
+                <input type="text" class="editinput" size="50" maxlength="10" name="sExportCustomHeader" value="" [{ $readonly }]>
             [{ oxinputhelp ident="HELP_GENERAL_EXPORTCUSTOMHEADER" }]
             </td>
         </tr>

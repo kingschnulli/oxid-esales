@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxubaseTest.php 44205 2012-04-23 14:40:51Z tomas $
+ * @version   SVN: $Id: oxubaseTest.php 44123 2012-04-20 12:41:37Z tomas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -1281,7 +1281,7 @@ class Unit_Views_oxubaseTest extends OxidTestCase
         modConfig::setParameter( 'cnid', 'xxx' );
         modConfig::getInstance()->setConfigParam( 'aSortCols', array('oxid', 'oxprice') );
 
-        $oView->setItemSorting( 'category', 'oxid', 'asc' );
+        $oView->setItemSorting( 'xxx', 'oxid', 'asc' );
         $oView->prepareSortColumns();
         $this->assertEquals( 'oxid', $oView->getListOrderBy() );
         $this->assertEquals( 'asc', $oView->getListOrderDirection() );

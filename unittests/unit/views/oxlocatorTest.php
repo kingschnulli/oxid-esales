@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxlocatorTest.php 44210 2012-04-23 15:07:06Z tomas $
+ * @version   SVN: $Id: oxlocatorTest.php 32947 2011-02-07 09:12:37Z vilma $
  */
 
 
@@ -178,7 +178,7 @@ class Unit_Views_oxlocatorTest extends OxidTestCase
         $oCategory->load( $sActCat );
 
         $oLocatorTarget = $this->getMock( 'oxubase', array( 'getLinkType', 'prepareSortColumns', 'getSortingSql', 'setCatTreePath', 'getCatTreePath', 'getActCategory', 'getCategoryTree', 'showSorting' ) );
-        $oLocatorTarget->expects( $this->once() )->method( 'getSortingSql')->with( $this->equalTo( "category" ) )->will( $this->returnValue( 'oxid' ) );
+        $oLocatorTarget->expects( $this->once() )->method( 'getSortingSql')->with( $this->equalTo( $sActCat ) )->will( $this->returnValue( 'oxid' ) );
         $oLocatorTarget->expects( $this->once() )->method( 'prepareSortColumns' );
         $oLocatorTarget->expects( $this->any() )->method( 'setCatTreePath' );
         $oLocatorTarget->expects( $this->any() )->method( 'getCatTreePath' );
@@ -223,7 +223,7 @@ class Unit_Views_oxlocatorTest extends OxidTestCase
         $oCategory->load( $sActCat );
 
         $oLocatorTarget = $this->getMock( 'oxubase', array( 'getLinkType', 'prepareSortColumns', 'getSortingSql', 'setCatTreePath', 'getCatTreePath', 'getActCategory', 'getCategoryTree', 'showSorting' ) );
-        $oLocatorTarget->expects( $this->once() )->method( 'getSortingSql')->with( $this->equalTo( "category" ) )->will( $this->returnValue( 'oxid' ) );
+        $oLocatorTarget->expects( $this->once() )->method( 'getSortingSql')->with( $this->equalTo( $sActCat ) )->will( $this->returnValue( 'oxid' ) );
         $oLocatorTarget->expects( $this->once() )->method( 'prepareSortColumns' );
         $oLocatorTarget->expects( $this->any() )->method( 'setCatTreePath' );
         $oLocatorTarget->expects( $this->any() )->method( 'getCatTreePath' );

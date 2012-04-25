@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 44196 2012-04-23 12:59:15Z juergen.busch $
+ * @version   SVN: $Id: lang.php 44045 2012-04-18 14:58:49Z linas.kukulskis $
  */
 
 /*
@@ -213,7 +213,7 @@ $aLang = array(
 'GENERAL_EXPORTSTATUSNEW'                                  => 'new',
 'GENERAL_EXPORTSTATUSUSED'                                 => 'used',
 'GENERAL_EXPORTLANGUAGE'                                   => 'Export for language',
-'GENERAL_EXPORTCUSTOMHEADER'                               => 'User defined header',
+'GENERAL_EXPORTCUSTOMHEADER'                               => '[tr] Custom export header',
 'GENERAL_EXTERNALSTOCK'                                    => 'External Storehouse',
 'GENERAL_EXTRAINFO'                                        => 'Additional Info',
 'GENERAL_FAX'                                              => 'Fax',
@@ -1747,7 +1747,7 @@ $aLang = array(
 'PROMOTIONS_ARTICLE_ALLITEMS'                              => 'All available Products',
 'SHOP_SYSTEM_SHOWREMEMBERME'                               => 'Show "Remember me" option in login box',
 
-'SHOP_PERF_SEO_CACHE'                                      => 'Enable SEO cache',
+'SHOP_PERF_SEO_CACHE'                                      => '[Tr] Enable SEO cache',
 
 );
 
