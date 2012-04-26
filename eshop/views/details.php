@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: details.php 43673 2012-04-10 13:23:49Z linas.kukulskis $
+ * @version   SVN: $Id: details.php 44346 2012-04-25 11:01:12Z linas.kukulskis $
  */
 
 /**
@@ -611,7 +611,7 @@ class Details extends oxUBase
         }
         // for ajax call
         if ($this->getConfig()->getParameter('blAjax', true )) {
-            die($blAddedTag);
+            oxUtils::getInstance()->showMessageAndExit( $blAddedTag );
         }
     }
 
@@ -636,7 +636,7 @@ class Details extends oxUBase
             $oSmarty = oxUtilsView::getInstance()->getSmarty();
             $oSmarty->assign('oView', $this );
             $oSmarty->assign('oViewConf', $this->getViewConfig() );
-            die($oSmarty->fetch( 'page/details/inc/editTags.tpl', $this->getViewId() ));
+            oxUtils::getInstance()->showMessageAndExit( $oSmarty->fetch( 'page/details/inc/editTags.tpl', $this->getViewId() ) );
         }
     }
 
@@ -658,7 +658,7 @@ class Details extends oxUBase
             $oSmarty = oxUtilsView::getInstance()->getSmarty();
             $oSmarty->assign('oView', $this );
             $oSmarty->assign('oViewConf', $this->getViewConfig() );
-            die($oSmarty->fetch( 'page/details/inc/tags.tpl', $this->getViewId() ));
+            oxUtils::getInstance()->showMessageAndExit( $oSmarty->fetch( 'page/details/inc/tags.tpl', $this->getViewId() ) );
         }
     }
 

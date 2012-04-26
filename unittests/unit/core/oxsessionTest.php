@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxsessionTest.php 43969 2012-04-16 15:22:52Z mindaugas.rimgaila $
+ * @version   SVN: $Id: oxsessionTest.php 44276 2012-04-24 13:50:19Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -1235,6 +1235,19 @@ class Unit_Core_oxsessionTest extends OxidTestCase
     {
         oxConfig::getInstance()->setConfigParam( 'blMallSharedBasket', 1 );
         $this->assertEquals( 'basket', $this->oSession->UNITgetBasketName());
+    }
+
+    /**
+     *  oxsession::getBasket() bad instance
+     */
+    function testGetBasket_badInstance()
+    {
+        $oArticle = oxNew( 'oxarticle' );
+        $oSession = $this->getMock( 'oxsession', array( '_getBasketName' ) );
+        $oSession->expects( $this->once() )->method( '_getBasketName')->will( $this->returnValue( serialize($oArticle)) );
+
+        $oSessionBasket = $oSession->getBasket();
+        $this->assertTrue($oSessionBasket instanceof oxbasket, "oSessionBasket is instance of oxbasket (found ".get_class($oSessionBasket).")");
     }
 
     /**

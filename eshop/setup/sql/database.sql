@@ -603,7 +603,7 @@ INSERT INTO `oxconfig` VALUES('18a12329124850cd8f63cda6e8e7b4e1', 'oxbaseshop', 
 INSERT INTO `oxconfig` VALUES('18a23429124850cd8f63cda6e8e7b4e1', 'oxbaseshop', 'theme:azure', 'bl_showVouchers', 'bool', 0x07);
 INSERT INTO `oxconfig` VALUES('18a34529124850cd8f63cda6e8e7b4e1', 'oxbaseshop', 'theme:azure', 'bl_showGiftWrapping', 'bool', 0x07);
 INSERT INTO `oxconfig` VALUES('15342e4cab0ee774acb3905838384984', 'oxbaseshop', 'theme:azure', 'blShowBirthdayFields', 'bool', 0x07);
-INSERT INTO `oxconfig` VALUES('11296159b7641d31b93423972af6150b', 'oxbaseshop', 'theme:azure', 'iTopNaviCatCount', 'str', '');
+INSERT INTO `oxconfig` VALUES('11296159b7641d31b93423972af6150b', 'oxbaseshop', 'theme:azure', 'iTopNaviCatCount', 'str', 0xFB);
 INSERT INTO `oxconfig` VALUES('173455b29d0db9ee774b788731623955', 'oxbaseshop', 'theme:azure', 'blShowFinalStep', 'bool', 0x07);
 INSERT INTO `oxconfig` VALUES('1ec42a395d0595ee7741091898848789', 'oxbaseshop', 'theme:azure', 'sManufacturerIconsize', 'str', 0x07c4b144c7b838);
 INSERT INTO `oxconfig` VALUES('1ec42a395d0595ee7741091898848798', 'oxbaseshop', 'theme:azure', 'sCatIconsize', 'str', 0x070de94ac9b636);
@@ -1867,7 +1867,7 @@ CREATE TABLE `oxshops` (
 # Data for table `oxshops`
 #
 
-INSERT INTO `oxshops` VALUES ('oxbaseshop', 1, 0, '', 0, 'OXID eShop 4', 'OXID eShop 4', 'OXID eShop 4', '', '', 'online kaufen', 'purchase online', '', '', 'Der Onlineshop', 'Online Shop', '', '', 'info@myoxideshop.com', 'reply@myoxideshop.com', 'order@myoxideshop.com', 'Ihre Bestellung bei OXID eSales', 'Vielen Dank für Ihre Registrierung im OXID eShop', 'Ihr Passwort im OXID eShop', 'Ihre OXID eSales Bestellung wurde versandt', 'Your order at OXID eShop', 'Thank you for your registration at OXID eShop', 'Your OXID eShop password', 'Your OXID eSales Order has been shipped', '', '', '', '', '', '', '', '', '', '', '', 'Your Company Name', '2425 Maple Street', '9041', 'Any City, CA', 'United States', 'Bank of America', '1234567890', '900 1234567', '', '', '', 'John', 'Doe', '217-8918712', '217-8918713', 'www.myoxideshop.com', '', '', '', '', '', '', '', '', 'CE', '4.6.0_RC2', 1, 1, 0, 0);
+INSERT INTO `oxshops` VALUES ('oxbaseshop', 1, 0, '', 0, 'OXID eShop 4', 'OXID eShop 4', 'OXID eShop 4', '', '', 'online kaufen', 'purchase online', '', '', 'Der Onlineshop', 'Online Shop', '', '', 'info@myoxideshop.com', 'reply@myoxideshop.com', 'order@myoxideshop.com', 'Ihre Bestellung bei OXID eSales', 'Vielen Dank für Ihre Registrierung im OXID eShop', 'Ihr Passwort im OXID eShop', 'Ihre OXID eSales Bestellung wurde versandt', 'Your order at OXID eShop', 'Thank you for your registration at OXID eShop', 'Your OXID eShop password', 'Your OXID eSales Order has been shipped', '', '', '', '', '', '', '', '', '', '', '', 'Your Company Name', '2425 Maple Street', '9041', 'Any City, CA', 'United States', 'Bank of America', '1234567890', '900 1234567', '', '', '', 'John', 'Doe', '217-8918712', '217-8918713', 'www.myoxideshop.com', '', '', '', '', '', '', '', '', 'CE', '4.6.0', 1, 1, 0, 0);
 
 #
 # Table structure for table `oxstatistics`

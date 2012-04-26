@@ -343,4 +343,17 @@ class Unit_Core_oxLegacyDbTest extends OxidTestCase
         $oLegacyDb->setTransactionIsolationLevel( $sLevel );
     }
 
+    /**
+     * Test case for oxLegacyDb::setTransactionIsolationLevel();
+     */
+    public function testSetTransactionIsolationLevelBadName()
+    {
+        $sLevel = 'Bad level';
+
+        $oLegacyDb = $this->getMock( "oxLegacyDb", array( "getDb" ) );
+        $oLegacyDb->expects( $this->never() )->method( "getDb" );
+
+        $oLegacyDb->setTransactionIsolationLevel( $sLevel );
+    }
+
 }

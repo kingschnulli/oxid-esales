@@ -146,15 +146,15 @@ class oxFile extends oxBase
      */
     protected function _getBaseDownloadDirPath()
     {
-        $sConfigValue = oxConfig::getInstance()->getConfigParam('sDownloadsDir');
+        $sConfigValue = oxConfig::getInstance()->getConfigParam( 'sDownloadsDir' );
 
         //Unix full path is set
-        if ($sConfigValue && $sConfigValue[0] == DIR_SEP) {
+        if ( $sConfigValue && $sConfigValue[0] == DIR_SEP) {
             return $sConfigValue;
         }
 
         //relative path is set
-        if ($sConfigValue) {
+        if ( $sConfigValue ) {
             $sPath = getShopBasePath() . DIR_SEP . $sConfigValue;
             return $sPath;
         }
@@ -234,7 +234,7 @@ class oxFile extends oxBase
      */
     protected function _getFileHash( $sFileName )
     {
-        return md5_file($sFileName);
+        return md5_file( $sFileName );
     }
 
     /**
@@ -461,8 +461,8 @@ class oxFile extends oxBase
     {
         $iSize = null;
         $sFilename = $this->getStoreLocation();
-        if (file_exists($sFilename)) {
-            return filesize($sFilename);
+        if ( file_exists( $sFilename ) ) {
+            $iSize = filesize( $sFilename );
         }
         return $iSize;
     }

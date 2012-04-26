@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxdbmetadatahandlerTest.php 43838 2012-04-13 08:35:53Z linas.kukulskis $
+ * @version   SVN: $Id: oxdbmetadatahandlerTest.php 44345 2012-04-25 11:00:14Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -102,6 +102,18 @@ class Unit_Core_oxDbMetaDataHandlerTest extends OxidTestCase
         $this->assertTrue( $oDbMeta->fieldExists("OXUSERID", "oxreviews") );
         $this->assertFalse( $oDbMeta->fieldExists("oxblablabla", "oxreviews") );
         $this->assertFalse( $oDbMeta->fieldExists("", "oxreviews") );
+
+    }
+
+    /*
+     * Test if field name (camelCase) exists in given table
+     */
+    public function testFieldExistsCamelCase()
+    {
+        $oDbMeta = $this->getMock('oxDbMetaDataHandler', array('getFields'));
+        $oDbMeta->expects($this->once())->method('getFields')->with('oxreviews')->will($this->returnValue(array('field1', 'field2Name', 'FIELD')));
+
+        $this->assertTrue( $oDbMeta->fieldExists("field2Name", "oxreviews") );
     }
 
     /*

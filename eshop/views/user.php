@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   views
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: user.php 40395 2011-11-30 15:30:30Z linas.kukulskis $
+ * @version   SVN: $Id: user.php 44254 2012-04-24 11:46:00Z linas.kukulskis $
  */
 
 /**

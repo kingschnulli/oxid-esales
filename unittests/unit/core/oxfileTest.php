@@ -94,6 +94,50 @@ class Unit_Core_oxfileTest extends OxidTestCase
     }
 
     /**
+     * Test for oxFiles::getStoreLocation()
+     *
+     * @return null
+     */
+    public function testGetStoreLocationUnixFullPath()
+    {
+       oxConfig::getInstance()->setConfigParam( 'sDownloadsDir', '/fullPath' );
+
+        $oFile = $this->getMock( 'oxFile', array( '_getFileLocation'));
+        $oFile->expects( $this->once() )->method( '_getFileLocation' )->will( $this->returnValue( 'fileName' ) );
+
+        $this->assertEquals( '/fullPath/fileName', $oFile->getStoreLocation());
+    }
+
+    /**
+     * Test for oxFiles::getStoreLocation()
+     *
+     * @return null
+     */
+    public function testGetStoreLocationRelativePath()
+    {
+        oxConfig::getInstance()->setConfigParam( 'sDownloadsDir', 'relativePath' );
+
+        $oFile = $this->getMock( 'oxFile', array( '_getFileLocation'));
+        $oFile->expects( $this->once() )->method( '_getFileLocation' )->will( $this->returnValue( 'fileName' ) );
+
+        $this->assertEquals( getShopBasePath().'/relativePath/fileName', $oFile->getStoreLocation());
+    }
+
+    /**
+     * Test for oxFiles::getStoreLocation()
+     *
+     * @return null
+     */
+    public function testGetStoreLocationNotSet()
+    {
+        $oFile = $this->getMock( 'oxFile', array( '_getFileLocation'));
+        $oFile->expects( $this->once() )->method( '_getFileLocation' )->will( $this->returnValue( 'fileName' ) );
+
+        $this->assertEquals( getShopBasePath().'/out/downloads/fileName', $oFile->getStoreLocation());
+    }
+
+
+    /**
      * Test for oxFiles::delete()
      *
      * @return null

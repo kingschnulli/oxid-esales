@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcmpBasketTest.php 41947 2012-02-01 09:29:57Z mindaugas.rimgaila $
+ * @version   SVN: $Id: oxcmpBasketTest.php 44319 2012-04-25 08:43:17Z mindaugas.rimgaila $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -547,7 +547,7 @@ class Unit_Views_oxcmpBasketTest extends OxidTestCase
                     $this->equalTo('a_aid'),
                     $this->equalTo('a_am'),
                     $this->equalTo('a_sel'),
-                    $this->equalTo('a_persparam'),
+                    $this->equalTo(array('details' => 'a_persparam')),
                     $this->equalTo('a_override'),
                     $this->equalTo(true),
                     $this->equalTo('a_basketitemid')
@@ -557,7 +557,7 @@ class Unit_Views_oxcmpBasketTest extends OxidTestCase
                     $this->equalTo('b_aid'),
                     $this->equalTo('b_am'),
                     $this->equalTo('b_sel'),
-                    $this->equalTo('b_persparam'),
+                    $this->equalTo(array('details' => 'b_persparam')),
                     $this->equalTo('b_override'),
                     $this->equalTo(true),
                     $this->equalTo('b_basketitemid')
@@ -575,7 +575,7 @@ class Unit_Views_oxcmpBasketTest extends OxidTestCase
                         'aid' => 'a_aid',
                         'am' => 'a_am',
                         'sel' => 'a_sel',
-                        'persparam' => 'a_persparam',
+                        'persparam' => array('details' => 'a_persparam'),
                         'override' => 'a_override',
                         'bundle' => 'a_bundle',
                         'basketitemid' => 'a_basketitemid',
@@ -584,7 +584,7 @@ class Unit_Views_oxcmpBasketTest extends OxidTestCase
                         'aid' => 'b_aid',
                         'am' => 'b_am',
                         'sel' => 'b_sel',
-                        'persparam' => 'b_persparam',
+                        'persparam' => array('details' => 'b_persparam'),
                         'override' => 'b_override',
                         'bundle' => 'b_bundle',
                         'basketitemid' => 'b_basketitemid',
@@ -767,7 +767,7 @@ class Unit_Views_oxcmpBasketTest extends OxidTestCase
                     $this->equalTo('a_aid'),
                     $this->equalTo(10),
                     $this->equalTo('a_sel'),
-                    $this->equalTo('a_persparam'),
+                    $this->equalTo( array( 'details' => 'a_persparam' ) ),
                     $this->equalTo('a_override'),
                     $this->equalTo(true),
                     $this->equalTo('a_basketitemid')
@@ -786,7 +786,7 @@ class Unit_Views_oxcmpBasketTest extends OxidTestCase
                         'aid' => 'a_aid',
                         'am' => 10,
                         'sel' => 'a_sel',
-                        'persparam' => 'a_persparam',
+                        'persparam' => array( 'details' => 'a_persparam' ),
                         'override' => 'a_override',
                         'bundle' => 'a_bundle',
                         'basketitemid' => 'a_basketitemid',
@@ -800,7 +800,7 @@ class Unit_Views_oxcmpBasketTest extends OxidTestCase
                         'aid' => 'a_aid',
                         'am' => 5,
                         'sel' => 'a_sel',
-                        'persparam' => 'a_persparam',
+                        'persparam' => array( 'details' => 'a_persparam' ),
                         'override' => 'a_override',
                         'bundle' => 'a_bundle',
                         'basketitemid' => 'a_basketitemid',

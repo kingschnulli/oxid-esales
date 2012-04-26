@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: userTest.php 41916 2012-01-31 13:26:57Z mindaugas.rimgaila $
+ * @version   SVN: $Id: userTest.php 44250 2012-04-24 11:41:42Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -390,5 +390,48 @@ class Unit_Views_userTest extends OxidTestCase
         $oO->expects($this->any())->method('getSession')->will($this->returnValue($oS));
 
         $this->assertFalse($oO->isDownloadableProductWarning());
+    }
+
+    /**
+     * Testing user::getBreadCrumb()
+     *
+     * @return null
+     */
+    public function testGetBreadCrumb()
+    {
+        $oUser    = new User();
+        $aResult  = array();
+        $aResults = array();
+
+        $aResult["title"] = oxLang::getInstance()->translateString( 'PAGE_CHECKOUT_USER', oxLang::getInstance()->getBaseLanguage(), false );
+        $aResult["link"]  = $oUser->getLink();
+
+        $aResults[] = $aResult;
+
+        $this->assertEquals( $aResults, $oUser->getBreadCrumb() );
+    }
+
+    /**
+     * Testing user::getCountryList()
+     *
+     * @return null
+     */
+    public function testGetCountryList()
+    {
+        $oUser = new User();
+        $this->assertTrue( count( $oUser->getCountryList() ) > 0 );
+    }
+
+    /**
+     * Testing user::modifyBillAddress()
+     *
+     * @return null
+     */
+    public function testModifyBillAddress()
+    {
+        oxConfig::getInstance()->setParameter('blnewssubscribed', true);
+
+        $oUser = new User();
+        $this->assertEquals( oxConfig::getInstance()->getParameter('blnewssubscribed'), $oUser->modifyBillAddress() );
     }
 }

@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxadminview.php 44135 2012-04-20 15:06:35Z linas.kukulskis $
+ * @version   SVN: $Id: oxadminview.php 44289 2012-04-24 15:38:42Z vilma $
  */
 
 /**
@@ -249,10 +249,10 @@ class oxAdminView extends oxView
 
             if ( !$sLangAbbr ) {
                 $oLang = oxLang::getInstance();
-                $sLangAbbr = $oLang->getLanguageAbbr( $oLang->getObjectTplLanguage() );
+                $sLangAbbr = $oLang->getLanguageAbbr( $oLang->getTplLanguage() );
             }
 
-            if ( $sLangAbbr != "de" && $sLangAbbr != "fr" ) {
+            if ( $sLangAbbr != "de" ) {
                 $sLangAbbr = "en";
             }
 
@@ -515,20 +515,20 @@ class oxAdminView extends oxView
             if ( false !== $iEnglishId ) {
                 $sViewName = getViewName( "oxcountry", $iEnglishId );
                 $sQ = "select oxtitle from {$sViewName} where oxisoalpha2 = " . oxDb::getDb()->quote( $sCountryCode );
-                $sCountry = oxDb::getDb()->getOne( $sQ, false, false );
+                $sCountryName = oxDb::getDb()->getOne( $sQ, false, false );
+                if ( $sCountryName ) {
+                    $sCountry = $sCountryName;
+                }
             } else {
                 // handling when english language is deleted
                 switch ( $sCountryCode ) {
                     case 'de':
                         return 'germany';
-                    case 'fr':
-                        return 'france';
                     default:
                         return 'international';
                 }
             }
         }
-
         return strtolower( $sCountry );
     }
 

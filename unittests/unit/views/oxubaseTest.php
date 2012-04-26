@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxubaseTest.php 44218 2012-04-23 15:39:49Z linas.kukulskis $
+ * @version   SVN: $Id: oxubaseTest.php 44342 2012-04-25 10:59:43Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -1281,7 +1281,7 @@ class Unit_Views_oxubaseTest extends OxidTestCase
         modConfig::setParameter( 'cnid', 'xxx' );
         modConfig::getInstance()->setConfigParam( 'aSortCols', array('oxid', 'oxprice') );
 
-        $oView->setItemSorting( 'category', 'oxid', 'asc' );
+        $oView->setItemSorting( 'xxx', 'oxid', 'asc' );
         $oView->prepareSortColumns();
         $this->assertEquals( 'oxid', $oView->getListOrderBy() );
         $this->assertEquals( 'asc', $oView->getListOrderDirection() );
@@ -2205,32 +2205,5 @@ class Unit_Views_oxubaseTest extends OxidTestCase
     {
         $oView = new oxUbase();
         $this->assertEquals( (bool) oxConfig::getInstance()->getConfigParam( "bl_perfLoadPrice" ), $oView->isPriceCalculated() );
-    }
-
-    /**
-     * testing OxUBase::prepareSortColumns(), bugfix #2992, global sorting is saved in session
-     */
-    public function testSortingIsSaved()
-    {
-        modSession::getInstance()->setVar("aSorting", null);
-
-        modConfig::setParameter( 'cnid', 'testCat' );
-        modConfig::setParameter( 'listorderby', 'oxvarminprice' );
-        modConfig::setParameter( 'listorder', 'asc' );
-
-        $oSubj = new oxUBase();
-        $oSubj->prepareSortColumns();
-
-        modConfig::setParameter( 'cnid', 'testCat' );
-        modConfig::setParameter( 'listorderby', 'oxtitle' );
-        modConfig::setParameter( 'listorder', 'desc' );
-
-        $oSubj->prepareSortColumns();
-
-        $aSort = modSession::getInstance()->getVar("aSorting");
-
-        $this->assertEquals(1, count($aSort) );
-        $this->assertEquals('oxtitle', $aSort["category"]["sortby"]);
-        $this->assertEquals('desc', $aSort["category"]["sortdir"]);
     }
 }

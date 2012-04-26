@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcmp_basket.php 41947 2012-02-01 09:29:57Z mindaugas.rimgaila $
+ * @version   SVN: $Id: oxcmp_basket.php 44319 2012-04-25 08:43:17Z mindaugas.rimgaila $
  */
 
 /**
@@ -387,7 +387,7 @@ class oxcmp_basket extends oxView
 
             $dAmount = isset( $aProductInfo['am'] )?$aProductInfo['am']:0;
             $aSelList = isset( $aProductInfo['sel'] )?$aProductInfo['sel']:null;
-            $aPersParam = isset( $aProductInfo['persparam'] )?$aProductInfo['persparam']:null;
+            $aPersParam = ( isset( $aProductInfo['persparam'] ) && is_array( $aProductInfo['persparam'] ) && strlen( $aProductInfo['persparam']['details'] ) )?$aProductInfo['persparam']:null;
             $blOverride = isset( $aProductInfo['override'] )?$aProductInfo['override']:null;
             $blIsBundle = isset( $aProductInfo['bundle'] )?true:false;
             $sOldBasketItemId = isset( $aProductInfo['basketitemid'] )?$aProductInfo['basketitemid']:null;
