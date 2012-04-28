@@ -27,6 +27,13 @@ test("main", function() {
 });
 
 /*test("testPosition", function (){
+    // We expect one asynchronous test ( stop() start() )
+    asyncTest('test1', function() {
+      expect(1);
+      ok(true);
+      start();
+    });
+
     // setting widget
     $('#oxDay').oxInnerLabel( {sReloadElement:'#userChangeAddress'} );
 
