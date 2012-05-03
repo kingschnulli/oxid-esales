@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: test_utils.php 44494 2012-04-27 16:08:04Z mindaugas.rimgaila $
+ * @version   SVN: $Id: test_utils.php 44524 2012-05-02 15:00:17Z mindaugas.rimgaila $
  */
 
 define ('MAX_LOOP_AMOUNT', 4);
@@ -177,7 +177,11 @@ class oxTestModules
             preg_match("@(.*?)\((.*?)\)@", $fncName, $aMatches);
 
             $fncName = trim( $aMatches[1] );
-            $aFncParams = explode( ',', $aMatches[2] );
+            if ( trim($aMatches[2]) ) {
+                $aFncParams = explode( ',', $aMatches[2] );
+            } else {
+                $aFncParams = array();
+            }
         }
 
         if (method_exists($last, $fncName)) {
@@ -196,6 +200,11 @@ class oxTestModules
 
                     if ( isset( $aFncParams[$iKey] ) ) {
                         $fncName .= $aFncParams[$iKey];
+
+                        if(strpos( $aFncParams[$iKey], '=' ) === false && $oParam->isDefaultValueAvailable() ) {
+                            $fncName .= ' = '.var_export($oParam->getDefaultValue(),true);
+                        }
+
                         continue;
                     }
 
