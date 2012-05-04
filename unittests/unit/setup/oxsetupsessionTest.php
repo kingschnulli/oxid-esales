@@ -31,6 +31,83 @@ require_once getShopBasePath().'/setup/oxsetup.php';
  */
 class Unit_Setup_oxSetupSessionTest extends OxidTestCase
 {
+    public function setUp()
+    {
+        session_cache_limiter(false);
+        return parent::setUp();
+    }
+
+    /**
+     * Prepare oxSetupSession proxy mock object.
+     *
+     * @return oxSetupSession proxy mock class
+     */
+    protected function _getSessionMock($aMockFunctions = array())
+    {
+        $aMockFunctions = array_merge($aMockFunctions, array( '_startSession', '_initSessionData' ));
+        $oSession = $this->getMock( $this->getProxyClassName('oxSetupSession'), $aMockFunctions );
+        return $oSession;
+    }
+
+    /**
+     * Testing oxSetupSession::_validateSession() - new session.
+     *
+     * @return null
+     */
+    public function testValidateSession_newsession()
+    {
+        $oSession = $this->_getSessionMock(array('setSessionParam', '_getNewSessionID'));
+        $oSession->setNonPublicVar('_blNewSession', true);
+        $oSession->expects( $this->at(0) )->method('setSessionParam')->with( $this->equalTo('setup_session'), $this->equalTo(true) );
+        $oSession->expects( $this->never() )->method('_getNewSessionID');
+        $oSession->UNITvalidateSession();
+    }
+
+    /**
+     * Testing oxSetupSession::_validateSession() - old session, key param not set, invalid.
+     *
+     * @return null
+     */
+    public function testValidateSession_oldsession_invalid()
+    {
+        $oSession = $this->_getSessionMock(array('setSessionParam', 'getSessionParam', '_getNewSessionID'));
+        $oSession->setNonPublicVar('_blNewSession', null);
+        $oSession->expects( $this->at(0) )->method('getSessionParam')->with( $this->equalTo('setup_session') )->will( $this->returnValue(null) );
+        $oSession->expects( $this->at(1) )->method('_getNewSessionID')->will( $this->returnValue('someSID') );
+        $oSession->expects( $this->at(2) )->method('setSessionParam')->with( $this->equalTo('setup_session'), $this->equalTo(true) );
+        $oSession->UNITvalidateSession();
+    }
+
+    /**
+     * Testing oxSetupSession::_validateSession() - old session, key param not set, valid.
+     *
+     * @return null
+     */
+    public function testValidateSession_oldsession_valid()
+    {
+        $oSession = $this->_getSessionMock(array('setSessionParam', 'getSessionParam', '_getNewSessionID'));
+        $oSession->setNonPublicVar('_blNewSession', null);
+        $oSession->expects( $this->at(0) )->method('getSessionParam')->with( $this->equalTo('setup_session') )->will( $this->returnValue(true) );
+        $oSession->expects( $this->never() )->method('_getNewSessionID');
+        $oSession->expects( $this->never() )->method('setSessionParam');
+        $oSession->UNITvalidateSession();
+    }
+
+    /**
+     * Testing oxSetupSession::_getNewSessionID().
+     *
+     * @return null
+     */
+    public function testGetNewSessionID()
+    {
+        $this->markTestSkipped('Can\'t mock session functions.');
+
+        $oSession = $this->_getSessionMock();
+        $oSession->setNonPublicVar('_blNewSession', 'test');
+        $oSession->UNITgetNewSessionID();
+        $this->assertSame(true, $oSession->getNonPublicVar('_blNewSession'));
+    }
+
     /**
      * Testing oxSetupSession::getSid()
      *
@@ -38,45 +115,50 @@ class Unit_Setup_oxSetupSessionTest extends OxidTestCase
      */
     public function testGetSid()
     {
-        $oSession = $this->getMock( "oxSetupSession", array( "getSessionData" ) );
-        $oSession->expects( $this->once() )->method( "getSessionData" )->will( $this->returnValue( 'testSessionData' ) );
-        $this->assertEquals( rawurlencode( base64_encode( serialize( 'testSessionData' ) ) ), $oSession->getSid() );
+        $oSession = $this->_getSessionMock();
+        $oSession->setNonPublicVar('_sSid', 'testSessionSID');
+        $this->assertSame( 'testSessionSID', $oSession->getSid() );
     }
 
     /**
-     * Testing oxSetupSession::getSessionData()
+     * Testing oxSetupSession::setSid()
      *
      * @return null
      */
-    public function testGetSessionData()
+    public function testSetSid()
     {
-        $oUtils = $this->getMock( "oxStdClass", array( "getRequestVar" ) );
-        $oUtils->expects( $this->at( 0 ) )->method( "getRequestVar" )->with( $this->equalTo( "sid" ) )->will( $this->returnValue( base64_encode( serialize( "test" ) ) ) );
-        $oUtils->expects( $this->at( 1 ) )->method( "getRequestVar" )->with( $this->equalTo( "location_lang" ), $this->equalTo( "post" ) )->will( $this->returnValue( "testLocationLang" ) );
-        $oUtils->expects( $this->at( 2 ) )->method( "getRequestVar" )->with( $this->equalTo( "country_lang" ), $this->equalTo( "post" ) )->will( $this->returnValue( "testCountryLang" ) );
-        $oUtils->expects( $this->at( 3 ) )->method( "getRequestVar" )->with( $this->equalTo( "use_dynamic_pages" ), $this->equalTo( "post" ) )->will( $this->returnValue( "testUseDynamicPages" ) );
-        $oUtils->expects( $this->at( 4 ) )->method( "getRequestVar" )->with( $this->equalTo( "check_for_updates" ), $this->equalTo( "post" ) )->will( $this->returnValue( "testCheckForUpdates" ) );
-        $oUtils->expects( $this->at( 5 ) )->method( "getRequestVar" )->with( $this->equalTo( "iEula" ), $this->equalTo( "post" ) )->will( $this->returnValue( "testEula" ) );
-
-        $oSession = $this->getMock( "oxSetupSession", array( "getInstance", "setSessionParam" ) );
-        $oSession->expects( $this->at( 0 ) )->method( "getInstance" )->with( $this->equalTo( "oxSetupUtils" ) )->will( $this->returnValue( $oUtils ) );
-        $oSession->expects( $this->at( 1 ) )->method( "setSessionParam" )->with( $this->equalTo( "location_lang" ), $this->equalTo( "testLocationLang" )  );
-        $oSession->expects( $this->at( 2 ) )->method( "setSessionParam" )->with( $this->equalTo( "country_lang" ), $this->equalTo( "testCountryLang" )  );
-        $oSession->expects( $this->at( 3 ) )->method( "setSessionParam" )->with( $this->equalTo( "use_dynamic_pages" ), $this->equalTo( "testUseDynamicPages" )  );
-        $oSession->expects( $this->at( 4 ) )->method( "setSessionParam" )->with( $this->equalTo( "check_for_updates" ), $this->equalTo( "testCheckForUpdates" )  );
-        $oSession->expects( $this->at( 5 ) )->method( "setSessionParam" )->with( $this->equalTo( "eula" ), $this->equalTo( "testEula" )  );
-        $this->assertEquals( "test", $oSession->getSessionData() );
+        $oSession = $this->_getSessionMock();
+        $oSession->setSid('testNewSessionSID');
+        $this->assertSame( 'testNewSessionSID', $oSession->getNonPublicVar( '_sSid' ) );
     }
 
     /**
-     * Testing oxSetupSession::setSessionParam() and oxSetupSession::getSessionParam()
+     * Testing oxSetupSession::getSessionParam() - non existing key.
      *
      * @return null
      */
-    public function testSetSessionParamAndGetSessionParam()
+    public function testGetSessionParam_notfound()
     {
-        $oSession = new oxSetupSession();
-        $oSession->setSessionParam( "testParamName", "testParamValue" );
-        $this->assertEquals( "testParamValue", $oSession->getSessionParam( "testParamName" ) );
+        $aParams = array('testKey' => 'testParam');
+
+        $oSession = $this->_getSessionMock( array('_getSessionData') );
+        $oSession->expects( $this->at(0) )->method('_getSessionData')->will( $this->returnValue($aParams) );
+
+        $this->assertSame( null, $oSession->getSessionParam( 'testBadKey' ), 'Incorrect not found response.' );
+    }
+
+    /**
+     * Testing oxSetupSession::getSessionParam() - existing key.
+     *
+     * @return null
+     */
+    public function testGetSessionParam_found()
+    {
+        $aParams = array('testKey' => 'testParam');
+
+        $oSession = $this->_getSessionMock( array('_getSessionData') );
+        $oSession->expects( $this->at(0) )->method('_getSessionData')->will( $this->returnValue($aParams) );
+
+        $this->assertSame( 'testParam', $oSession->getSessionParam( 'testKey' ), 'Incorrect found response.' );
     }
 }

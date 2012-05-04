@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticleTest.php 42945 2012-03-16 13:47:11Z linas.kukulskis $
+ * @version   SVN: $Id: oxarticleTest.php 43646 2012-04-10 07:53:12Z alfonsas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -306,7 +306,7 @@ class Unit_Core_oxarticleTest extends OxidTestCase
         $oArticle = new oxArticle();
         $oArticle->oxarticles__oxlongdesc = new oxField( "test" );
 
-        $oDesc = $oArticle->getArticleLongDesc();
+        $oDesc = $oArticle->getLongDescription();
         $this->assertTrue( $oDesc instanceof oxField );
         $this->assertEquals( "test", $oDesc->value );
     }
@@ -909,7 +909,7 @@ class Unit_Core_oxarticleTest extends OxidTestCase
      *
      * @return null
      */
-    public function testGetArticleLongDescSmartyProcessing()
+    public function testGetLongDescriptionSmartyProcessing()
     {
         modConfig::getInstance()->setConfigParam( 'blExport', 1 );
         modConfig::getInstance()->setConfigParam( 'blProductive', 1 );
@@ -1660,8 +1660,36 @@ class Unit_Core_oxarticleTest extends OxidTestCase
     public function testGetArticleRatingAverage()
     {
         $this->oArticle->oxarticles__oxrating = new oxField(3.52345, oxField::T_RAW);
+        $this->oArticle->oxarticles__oxratingcnt = new oxField(1, oxField::T_RAW);
 
         $this->assertEquals( 3.5, $this->oArticle->getArticleRatingAverage());
+        $this->assertEquals( 1, $this->oArticle->getArticleRatingCount());
+
+        // inserting few test records
+        $oRev = new oxreview();
+        $oRev->setId( '_testrev1' );
+        $oRev->oxreviews__oxobjectid = new oxField( '_testArt' );
+        $oRev->oxreviews__oxtype     = new oxField( 'oxarticle' );
+        $oRev->oxreviews__oxrating    = new oxField( 3 );
+        $oRev->save();
+
+        $oRev = new oxreview();
+        $oRev->setId( '_testrev2' );
+        $oRev->oxreviews__oxobjectid = new oxField( '_testArt' );
+        $oRev->oxreviews__oxtype     = new oxField( 'oxarticle' );
+        $oRev->oxreviews__oxrating     = new oxField( 1 );
+        $oRev->save();
+
+        $oRev = new oxreview();
+        $oRev->setId( '_testrev3' );
+        $oRev->oxreviews__oxobjectid = new oxField( '_testVar' );
+        $oRev->oxreviews__oxtype     = new oxField( 'oxarticle' );
+        $oRev->oxreviews__oxrating     = new oxField( 5 );
+        $oRev->save();
+
+        $this->assertEquals( 3, $this->oArticle->getArticleRatingAverage( true ));
+        $this->assertEquals( 3, $this->oArticle->getArticleRatingCount( true ));
+
     }
 
     /**
@@ -4286,7 +4314,7 @@ class Unit_Core_oxarticleTest extends OxidTestCase
      *
      * @return null
      */
-    public function testGetArticleLongDesc()
+    public function testGetLongDescription()
     {
         oxDb::getDb()->execute("insert into oxartextends (oxid, oxlongdesc) values ( '_testArt', 'test &amp;')");
         $oArticle = new oxArticle();
@@ -4304,14 +4332,15 @@ class Unit_Core_oxarticleTest extends OxidTestCase
      *
      * @return null
      */
-    public function testGetArticleLongDescInOtherLang()
+    public function testGetLongDescriptionInOtherLang()
     {
         oxDb::getDb()->execute("insert into oxartextends (oxid, oxlongdesc_1) values ( '_testArt', 'lang 1 test &amp;')");
 
         $oArticle = new oxArticle();
+        $oArticle->load( '_testArt' );
         $oArticle->setLanguage( 1 );
         $oArticle->aaa = true;
-        $this->assertEquals( 'lang 1 test &amp;', $oArticle->getArticleLongDesc( '_testArt' )->value);
+        $this->assertEquals( 'lang 1 test &amp;', $oArticle->getLongDescription( '_testArt' )->value);
     }
 
     /**
@@ -4321,7 +4350,7 @@ class Unit_Core_oxarticleTest extends OxidTestCase
      *
      * @return null
      */
-    public function testGetArticleLongDescWithSmartyTags()
+    public function testGetLongDescriptionWithSmartyTags()
     {
         modConfig::getInstance()->setConfigParam( 'bl_perfParseLongDescinSmarty', true );
         $sDesc = 'aa[{* smarty comment *}]zz';
@@ -4338,13 +4367,13 @@ class Unit_Core_oxarticleTest extends OxidTestCase
      *
      * @return null
      */
-    public function testGetArticleLongDescCached()
+    public function testGetLongDescriptionCached()
     {
         oxDb::getDb()->execute("insert into oxartextends (oxid, oxlongdesc) values ( '_testArt', 'aaaad')");
 
         $oArticle = new oxArticle();
         $oArticle->load( $this->oArticle->getId() );
-        $this->assertEquals( 'aaaad', $oArticle->getArticleLongDesc()->value);
+        $this->assertEquals( 'aaaad', $oArticle->getLongDescription()->value);
     }
 
     /**
@@ -4484,7 +4513,7 @@ class Unit_Core_oxarticleTest extends OxidTestCase
 
         $oArticle2 = new _oxArticle();
         $oArticle2->load('_testVar');
-        $this->assertEquals( $oArticle2->getArticleLongDesc()->value, 'testLongDesc');
+        $this->assertEquals( $oArticle2->getLongDescription()->value, 'testLongDesc');
     }
 
     /**
@@ -5881,7 +5910,7 @@ class Unit_Core_oxarticleTest extends OxidTestCase
      */
     public function testGetMoreDetailLinkTestingIfAllRequestParamsAreSet()
     {
-        oxTestModules::addFunction('oxUtilsUrl', 'processUrl($url, $final)', '{return "PROC".$url.(int)$final."CORP";}');
+        oxTestModules::addFunction('oxUtilsUrl', 'processUrl($url, $blFinalUrl = true, $aParams = NULL, $iLang = NULL)', '{return "PROC".$url.(int)$final."CORP";}');
 
         modConfig::setParameter( 'cnid', 'yyy' );
         $oArticle = $this->getMock( "oxarticle", array( 'getId' ) );
@@ -5913,7 +5942,7 @@ class Unit_Core_oxarticleTest extends OxidTestCase
         modConfig::setParameter( 'cl', 'thankyou' );
         modConfig::setParameter( 'tpl', '/my/tpl/file.tpl' );
 
-        oxTestModules::addFunction('oxUtilsUrl', 'processUrl($url, $final)', '{return "PROC".$url.(int)$final."CORP";}');
+        oxTestModules::addFunction('oxUtilsUrl', 'processUrl($url, $blFinalUrl = true, $aParams = NULL, $iLang = NULL)', '{return "PROC".$url.(int)$final."CORP";}');
 
         $oArticle = $this->getMock( "oxarticle", array( 'getId' ) );
         $oArticle->expects( $this->exactly( 2 ) )->method( 'getId' )->will($this->returnValue( 'xxx' ) );
@@ -6451,7 +6480,7 @@ class Unit_Core_oxarticleTest extends OxidTestCase
 
         $oArticle = oxNew( "oxarticle" );
         $this->assertTrue( $oArticle->load( 'test_SubshopFields_savesRawValue' ) );
-        $this->assertEquals( 'lalaal&!<b><', $oArticle->getArticleLongDesc()->getRawValue() );
+        $this->assertEquals( 'lalaal&!<b><', $oArticle->getLongDescription()->getRawValue() );
 
         // lang 1
         $oArticle = oxNew("oxarticle");
@@ -6462,13 +6491,13 @@ class Unit_Core_oxarticleTest extends OxidTestCase
 
         $oArticle = oxNew( "oxarticle" );
         $this->assertTrue( $oArticle->loadInLang( 1, 'test_SubshopFields_savesRawValue' ) );
-        $this->assertEquals( 'lalaal&!<b><a', $oArticle->getArticleLongDesc()->getRawValue() );
+        $this->assertEquals( 'lalaal&!<b><a', $oArticle->getLongDescription()->getRawValue() );
 
         // back in 0 lang
         $oArticle = oxNew( "oxarticle" );
         $oArticle->setLanguage(0);
         $this->assertTrue( $oArticle->load( 'test_SubshopFields_savesRawValue' ) );
-        $this->assertEquals( 'lalaal&!<b><', $oArticle->getArticleLongDesc()->getRawValue() );
+        $this->assertEquals( 'lalaal&!<b><', $oArticle->getLongDescription()->getRawValue() );
     }
 
     /**
@@ -7008,10 +7037,10 @@ class Unit_Core_oxarticleTest extends OxidTestCase
         $aQ[] = "ALTER TABLE oxartextends_set1 ADD OXLONGDESC_5 text COLLATE latin1_general_ci NOT NULL";
         $aQ[] = "ALTER TABLE oxartextends_set1 ADD OXTAGS_5 varchar(255) COLLATE latin1_general_ci NOT NULL";
 
-        $aQ[] = "CREATE OR REPLACE VIEW oxv_oxarticles_1_1 AS SELECT oxarticles.* FROM oxarticles";
-        $aQ[] = "CREATE OR REPLACE VIEW oxv_oxarticles_1_0 AS SELECT oxarticles.* FROM oxarticles";
-        $aQ[] = "CREATE OR REPLACE VIEW oxv_oxartextends_0 AS SELECT oxartextends.* FROM oxartextends";
-        $aQ[] = "CREATE OR REPLACE VIEW oxv_oxartextends_1 AS SELECT oxartextends.* FROM oxartextends";
+        $aQ[] = "CREATE OR REPLACE SQL SECURITY INVOKER VIEW oxv_oxarticles_1_1 AS SELECT oxarticles.* FROM oxarticles";
+        $aQ[] = "CREATE OR REPLACE SQL SECURITY INVOKER VIEW oxv_oxarticles_1_0 AS SELECT oxarticles.* FROM oxarticles";
+        $aQ[] = "CREATE OR REPLACE SQL SECURITY INVOKER VIEW oxv_oxartextends_0 AS SELECT oxartextends.* FROM oxartextends";
+        $aQ[] = "CREATE OR REPLACE SQL SECURITY INVOKER VIEW oxv_oxartextends_1 AS SELECT oxartextends.* FROM oxartextends";
 
         $oDb = oxDb::getDb();
         foreach ( $aQ as $sQ ) {
@@ -7084,7 +7113,81 @@ class Unit_Core_oxarticleTest extends OxidTestCase
         }
     }
 
+    public function testGetUnitName()
+    {
+        $sConstName = "_UNIT_KG";
+        $oProduct = new oxArticle();
+
+        // unit name is not set
+        $oProduct->oxarticles__oxunitname = new oxField( null );
+        $this->assertNull( $oProduct->getUnitName() );
+
+        // unit name is set..
+        $oProduct->oxarticles__oxunitname = new oxField( $sConstName );
+        $this->assertEquals( oxLang::getInstance()->translateString( $sConstName ), $oProduct->getUnitName() );
+    }
+
+
+     /**
+     * Test case for getArticlefiles
+     *
+     * @return null
+     */
+     public function testGetArticleFiles()
+    {
+
+        $oDb = oxDb::getDb();
+
+        // inserting test data
+        $aQ[] = "insert into oxfiles (oxid, OXARTID, OXFILENAME) values ('testId1','_testArt','testFile1') ";
+        $aQ[] = "insert into oxfiles (oxid, OXARTID, OXFILENAME) values ('testId2','_testArt','testFile2') ";
+        $aQ[] = "insert into oxfiles (oxid, OXARTID, OXFILENAME) values ('testId3','_testVar','testFile3') ";
+        $aQ[] = "insert into oxfiles (oxid, OXARTID, OXFILENAME) values ('testId4','_testVar','testFile4') ";
+        $aQ[] = "insert into oxfiles (oxid, OXARTID, OXFILENAME) values ('testId5','_testVar','testFile5') ";
+
+        foreach ( $aQ as $sQ ) {
+            $oDb->execute( $sQ );
+        }
+
+        $oArticle = new oxArticle();
+        $oArticle->load('_testVar');
+
+        modConfig::getInstance()->setConfigParam( 'blVariantParentBuyable', false );
+
+        $this->assertEquals( 3, count( $oArticle->getArticleFiles() ) );
+        //checking chache
+        $this->assertEquals( 3, count( $oArticle->getArticleFiles( true ) ) );
+
+        $oArticle = new oxArticle();
+        $oArticle->load('_testVar');
+        $this->assertEquals( 5, count( $oArticle->getArticleFiles( true ) ) );
+
+        $oArticle = new oxArticle();
+        $oArticle->load('_testVar');
+        modConfig::getInstance()->setConfigParam( 'blVariantParentBuyable', true );
+
+        $this->assertEquals( 3, count( $oArticle->getArticleFiles() ) );
+        $oArticle = new oxArticle();
+        $oArticle->load('_testVar');
+        $this->assertEquals( 3, count( $oArticle->getArticleFiles(true) ) );
+
+    }
+
     /**
+     * Test checking oxarticle::isDownloadable
+     *
+     * @return null
+     */
+    public function testIsDownloadable()
+    {
+        $oArticle = new oxArticle();
+        $oArticle->load('_testArt');
+        $oArticle->oxarticles__oxisdownloadable = new oxField( true );
+
+        $this->assertTrue( $oArticle->isDownloadable() );
+    }
+
+/**
      * Test has amount price
      *
      * @return null
@@ -7126,4 +7229,25 @@ class Unit_Core_oxarticleTest extends OxidTestCase
 
         $this->assertTrue( $oProduct->hasAmountPrice() );
     }
+
+    /**
+     * Test has amount price
+     *
+     * @return null
+     */
+    public function testSetRating()
+    {
+        $oProduct = new oxArticle();
+        $oProduct->load( "1126" );
+        $oProduct->setRatingAverage( 4 );
+        $oProduct->setRatingCount( 13 );
+        $oProduct->save();
+
+        $oP = new oxArticle();
+        $oP->load( "1126" );
+
+        $this->assertEquals( 4, $oP->oxarticles__oxrating->value );
+        $this->assertEquals( 13, $oP->oxarticles__oxratingcnt->value );
+    }
+
 }

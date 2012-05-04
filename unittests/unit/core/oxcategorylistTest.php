@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcategorylistTest.php 39678 2011-11-02 13:56:01Z arvydas.vapsva $
+ * @version   SVN: $Id: oxcategorylistTest.php 43061 2012-03-21 08:24:16Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -974,10 +974,11 @@ class Unit_Core_oxCategoryListTest extends OxidTestCase
                 $iTrue &= ~2;
         }
 
+
         $aUpdateInfo = array (
-            '<b>Processing : 1-8|1-8</b>(_test1)<br>',
             '<b>Processing : Eco-Fashion</b>(943a9ba3050e78b443c16e043ae60ef3)<br>',
             '<b>Processing : Geschenke</b>(8a142c3e4143562a5.46426637)<br>',
+             '<b>Processing : 1-8|1-8</b>(_test1)<br>',
         );
 
         $this->assertTrue( $iTrue == 1 || $iTrue == 2 );

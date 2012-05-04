@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxattributelist.php 44112 2012-04-20 11:36:00Z linas.kukulskis $
+ * @version   SVN: $Id: oxattributelist.php 44400 2012-04-25 18:41:04Z vilma $
  */
 
 /**
@@ -53,7 +53,7 @@ class oxAttributeList extends oxList
         }
 
         foreach ($aIds as $iKey => $sVal) {
-            $aIds[$iKey] = mysql_real_escape_string($sVal);
+            $aIds[$iKey] = oxDb::getInstance()->escapeString($sVal);
         }
 
         $sAttrViewName = getViewName( 'oxattribute' );
@@ -74,10 +74,10 @@ class oxAttributeList extends oxList
      *
      * @return array $aAttributes
      */
-    protected function _createAttributeListFromSql( $sSelect)
+    protected function _createAttributeListFromSql( $sSelect )
     {
         $aAttributes = array();
-        $rs = oxDb::getDb()->execute( $sSelect);
+        $rs = oxDb::getDb()->select( $sSelect );
         if ($rs != false && $rs->recordCount() > 0) {
             while (!$rs->EOF) {
                 if ( !isset( $aAttributes[$rs->fields[0]])) {
@@ -98,36 +98,21 @@ class oxAttributeList extends oxList
     /**
      * Load attributes by article Id
      *
-     * @param string $sArtId    article id
-     * @param string $sParentId article parent id
+     * @param string $sArtId article ids
      *
      * @return null;
      */
-    public function loadAttributes( $sArtId, $sParentId = null )
+    public function loadAttributes( $sArtId )
     {
         if ( $sArtId ) {
 
-            $sAttrTableName = getViewName( 'oxattribute' );
-            $sObject2AtrrTableName  = getViewName( 'oxobject2attribute' );
+            $sAttrViewName = getViewName( 'oxattribute' );
+            $sViewName     = getViewName( 'oxobject2attribute' );
 
-            $sSelect  = "SELECT `Attributes`.`oxid`, `Attributes`.`oxtitle`,  ";
-
-            if ( !$sParentId ) {
-                $sSelect .= "`ArticleAtrr`.`oxvalue` AS `oxvalue` ";
-            } else {
-                $sSelect .= "IFNULL( `ArticleAtrr`.`oxvalue`, `ParentAtrr`.`oxvalue` ) AS `oxvalue` ";
-            }
-
-            $sSelect .= "FROM {$sAttrTableName} AS `Attributes` ";
-            $sSelect .= "LEFT JOIN {$sObject2AtrrTableName} AS `ArticleAtrr` ON `Attributes`.`oxid` = `ArticleAtrr`.`oxattrid` ";
-            $sSelect .= ($sParentId) ? "LEFT JOIN {$sObject2AtrrTableName} AS `ParentAtrr` ON `Attributes`.`oxId` = `ParentAtrr`.`oxattrid` " : "";
-            $sSelect .= "WHERE 1 ";
-            $sSelect .= "AND `ArticleAtrr`.`oxobjectid` = '{$sArtId}' AND `ArticleAtrr`.`oxvalue` != '' ";
-            $sSelect .= ($sParentId) ? "OR `ParentAtrr`.`oxobjectid` = '{$sParentId}' AND `ParentAtrr`.`oxvalue` != '' " : "";
-            $sSelect .= "ORDER BY ";
-            $sSelect .= "`ArticleAtrr`.`oxpos`, ";
-            $sSelect .= ($sParentId) ? "`ParentAtrr`.`oxpos`, " : "";
-            $sSelect .= "`Attributes`.`oxpos`";
+            $sSelect  = "select {$sAttrViewName}.*, o2a.* from {$sViewName} as o2a ";
+            $sSelect .= "left join {$sAttrViewName} on {$sAttrViewName}.oxid = o2a.oxattrid ";
+            $sSelect .= "where o2a.oxobjectid = '{$sArtId}' and o2a.oxvalue != '' ";
+            $sSelect .= "order by o2a.oxpos, {$sAttrViewName}.oxpos";
 
             $this->selectString( $sSelect );
         }
@@ -170,8 +155,7 @@ class oxAttributeList extends oxList
                        "WHERE att.oxid = o2a.oxattrid AND c2a.oxobjectid = $sActCatQuoted AND c2a.oxattrid = att.oxid AND o2a.oxvalue !='' AND o2a.oxobjectid IN ($sArtIds) ".
                        "ORDER BY c2a.oxsort , att.oxpos, att.oxtitle, o2a.oxvalue";
 
-
-            $rs = $oDb->execute( $sSelect );
+            $rs = $oDb->select( $sSelect );
 
             if ( $rs != false && $rs->recordCount() > 0 ) {
                 while ( !$rs->EOF && list( $sAttId, $sAttTitle, $sAttValue ) = $rs->fields ) {

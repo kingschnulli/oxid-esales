@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxmediaurlTest.php 38537 2011-09-05 09:03:20Z linas.kukulskis $
+ * @version   SVN: $Id: oxmediaurlTest.php 39003 2011-10-04 07:34:31Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -55,6 +55,10 @@ class Unit_Core_oxmediaurlTest extends OxidTestCase
     protected function tearDown()
     {
         $this->cleanUpTable('oxmediaurls');
+        $sFilePath = oxConfig::getInstance()->getConfigParam('sShopDir').'/out/media/test.jpg';
+        if (file_exists($sFilePath)) {
+            unlink($sFilePath);
+        }
         return parent::tearDown();
     }
 
@@ -187,6 +191,8 @@ class Unit_Core_oxmediaurlTest extends OxidTestCase
 
     public function testGetLink()
     {
+        $sFilePath = oxConfig::getInstance()->getConfigParam('sShopDir').'/out/media/test.jpg';
+        file_put_contents($sFilePath, 'test jpg file');
         $oCfg = $this->getMock('oxConfig', array( 'isSsl', 'getShopUrl', 'getSslShopUrl'  ));
         $oCfg->expects( $this->any() )->method( 'isSsl' )->will( $this->returnValue( 0 ) );
         $oCfg->expects( $this->any() )->method( 'getShopUrl' )->will( $this->returnValue( 'http://shop/' ) );
@@ -198,8 +204,8 @@ class Unit_Core_oxmediaurlTest extends OxidTestCase
         // uploaded file
         $oMediaUrl->oxmediaurls__oxurl = new oxField('test.jpg', oxField::T_RAW);
         $oMediaUrl->oxmediaurls__oxdesc = new oxField('test1', oxField::T_RAW);
-        $oMediaUrl->oxmediaurls__oxisuploaded = new oxField(1, oxField::T_RAW);
-        $sExpt = 'http://shop/out/media/test.jpg';
+        $oMediaUrl->oxmediaurls__oxisuploaded = new oxField(0, oxField::T_RAW);
+        $sExpt = 'test.jpg';
         $this->assertEquals($sExpt, $oMediaUrl->getLink());
 
         // youtube link
@@ -228,6 +234,20 @@ class Unit_Core_oxmediaurlTest extends OxidTestCase
 
         // uploaded file
         $oMediaUrl->oxmediaurls__oxurl = new oxField('test.jpg', oxField::T_RAW);
+        $oMediaUrl->oxmediaurls__oxdesc = new oxField('test1', oxField::T_RAW);
+        $oMediaUrl->oxmediaurls__oxisuploaded = new oxField(1, oxField::T_RAW);
+        $sExpt = 'https://shop/out/media/test.jpg';
+        $this->assertEquals($sExpt, $oMediaUrl->getLink());
+
+        // uploaded file with full url (#2444)
+        $oMediaUrl->oxmediaurls__oxurl = new oxField('https://shop/out/media/test.jpg', oxField::T_RAW);
+        $oMediaUrl->oxmediaurls__oxdesc = new oxField('test1', oxField::T_RAW);
+        $oMediaUrl->oxmediaurls__oxisuploaded = new oxField(1, oxField::T_RAW);
+        $sExpt = 'https://shop/out/media/test.jpg';
+        $this->assertEquals($sExpt, $oMediaUrl->getLink());
+
+        // uploaded file with different url (#2444) is it ok so?
+        $oMediaUrl->oxmediaurls__oxurl = new oxField('https://shop/out/mymedia/test.jpg', oxField::T_RAW);
         $oMediaUrl->oxmediaurls__oxdesc = new oxField('test1', oxField::T_RAW);
         $oMediaUrl->oxmediaurls__oxisuploaded = new oxField(1, oxField::T_RAW);
         $sExpt = 'https://shop/out/media/test.jpg';
@@ -269,6 +289,19 @@ class Unit_Core_oxmediaurlTest extends OxidTestCase
         $oMediaUrl = new oxMediaUrl();
         $oMediaUrl->load('_test3');
         $oMediaUrl->oxmediaurls__oxisuploaded = new oxField(true, oxField::T_RAW);
+        $this->assertTrue(file_exists($sFilePath));
+        $oMediaUrl->delete();
+        $this->assertFalse(file_exists($sFilePath));
+    }
+
+    public function testDeleteUploadedIfFullPathAdded( $sOXID = null )
+    {
+        $sFilePath = oxConfig::getInstance()->getConfigParam('sShopDir').'/out/media/test.jpg';
+        file_put_contents($sFilePath, 'test jpg file');
+        $oMediaUrl = new oxMediaUrl();
+        $oMediaUrl->load('_test3');
+        $oMediaUrl->oxmediaurls__oxisuploaded = new oxField(true, oxField::T_RAW);
+        $oMediaUrl->oxmediaurls__oxurl = new oxField(modConfig::getInstance()->getShopUrl().'/out/media/test.jpg', oxField::T_RAW);
         $this->assertTrue(file_exists($sFilePath));
         $oMediaUrl->delete();
         $this->assertFalse(file_exists($sFilePath));

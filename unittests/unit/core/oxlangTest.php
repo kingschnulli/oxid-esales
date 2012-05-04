@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxlangTest.php 38202 2011-08-17 15:00:28Z linas.kukulskis $
+ * @version   SVN: $Id: oxlangTest.php 43298 2012-03-29 13:10:18Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -172,28 +172,90 @@ class Unit_Core_oxLangTest extends OxidTestCase
 
     public function testGetLangFilesPathForModules()
     {
-        $sMdir = realpath((dirname(__FILE__).'/../moduleTestBlock'));
+        $sFilePath = oxConfig::getInstance()->getConfigParam('sShopDir').'modules/test1/out/lang/de/';
+
+        if( !is_dir($sFilePath) ){
+            mkdir( $sFilePath, 0755, true);
+        }
+
+        file_put_contents( $sFilePath."/test_lang.php", 'langfile' );
 
         $sPath = oxConfig::getInstance()->getOutDir( );
+        $sShopPath = oxConfig::getInstance()->getConfigParam('sShopDir');
         $aPathArray = array(
               $sPath . "de/lang.php"
             , $sPath . "azure/de/lang.php"
             , $sPath . "azure/de/cust_lang.php"
             , $sPath . "azure/1/de/lang.php"
-            , $sMdir . "/modules/test1/out/lang/de/test_lang.php" );
+            , $sShopPath . "modules/test1/out/lang/de/test_lang.php" );
+        $aInfo = array( 'test1' => 'test1' );
 
-        $oConfig = $this->getMock( "oxConfig", array( "getOutDir", "getConfigParam", "getShopId" ) );
+        $oConfig = $this->getMock( "oxConfig", array( "getOutDir", "getConfigParam", "getShopId", "getModulesDir" ) );
         $oConfig->expects( $this->at(0) )->method( 'getOutDir' )->will( $this->returnValue( $sPath ) );
         $oConfig->expects( $this->at(1) )->method( 'getConfigParam' )->with( $this->equalTo( 'sTheme' ) )->will( $this->returnValue( 'azure' ) );
         $oConfig->expects( $this->at(2) )->method( 'getConfigParam' )->with( $this->equalTo( 'sCustomTheme' ) )->will( $this->returnValue( '' ) );
         $oConfig->expects( $this->at(3) )->method( 'getShopId' )->will( $this->returnValue( 1 ) );
+        $oConfig->expects( $this->at(4) )->method( 'getModulesDir' )->will( $this->returnValue( oxConfig::getInstance()->getConfigParam('sShopDir') . "modules/" ) );
 
-        $oLang = $this->getMock( "oxLang", array( "getConfig") );
+        $oLang = $this->getMock( "oxLang", array( "getConfig", "_getActiveModuleInfo") );
         $oLang->expects( $this->any() )->method( 'getConfig' )->will( $this->returnValue( $oConfig ) );
-
-        overrideGetShopBasePath( $sMdir );
+        $oLang->expects( $this->any() )->method( '_getActiveModuleInfo' )->will( $this->returnValue( $aInfo ) );
 
         $this->assertEquals( $aPathArray, $oLang->UNITgetLangFilesPathArray( false, 0 ) );
+
+        unlink( $sShopPath . "modules/test1/out/lang/de/test_lang.php" );
+        rmdir( $sShopPath . "modules/test1/out/lang/de/" );
+        rmdir( $sShopPath . "modules/test1/out/lang/" );
+        rmdir( $sShopPath . "modules/test1/out/" );
+        rmdir( $sShopPath . "modules/test1/" );
+
+    }
+
+
+    public function testGetLangFilesPathForAdmin()
+    {
+       $sFilePath = oxConfig::getInstance()->getConfigParam('sShopDir').'modules/test1/out/admin/de/';
+
+       if( !is_dir($sFilePath) ){
+            mkdir( $sFilePath, 0755, true);
+       }
+
+        file_put_contents( $sFilePath."/test1_lang.php", 'langfile' );
+        file_put_contents( $sFilePath."/module_options.php", 'langfile' );
+
+        $sPath = oxConfig::getInstance()->getOutDir( );
+        $sShopPath = oxConfig::getInstance()->getConfigParam('sShopDir');
+        $aPathArray = array(
+              $sPath . "admin/de/lang.php"
+            , $sPath . "admin/de/cust_lang.php"
+            , $sPath . "admin/de/help_lang.php"
+            , $sPath . "azure/de/theme_options.php"
+            , $sPath . "basic/de/theme_options.php"
+            , $sShopPath . "modules/test1/out/admin/de/test1_lang.php"
+            , $sShopPath . "modules/test1/out/admin/de/module_options.php"
+        );
+        $aInfo = array( 'test1' => 'test1' );
+
+        $oConfig = $this->getMock( "oxConfig", array( "getOutDir", "getConfigParam", "getShopId", "getModulesDir" ) );
+        $oConfig->expects( $this->at(0) )->method( 'getOutDir' )->will( $this->returnValue( $sPath ) );
+        $oConfig->expects( $this->at(1) )->method( 'getConfigParam' )->with( $this->equalTo( 'sTheme' ) )->will( $this->returnValue( 'azure' ) );
+        $oConfig->expects( $this->at(2) )->method( 'getConfigParam' )->with( $this->equalTo( 'sCustomTheme' ) )->will( $this->returnValue( '' ) );
+        $oConfig->expects( $this->at(3) )->method( 'getShopId' )->will( $this->returnValue( 1 ) );
+        $oConfig->expects( $this->at(4) )->method( 'getModulesDir' )->will( $this->returnValue( oxConfig::getInstance()->getConfigParam('sShopDir') . "modules/" ) );
+        $oConfig->expects( $this->at(5) )->method( 'getModulesDir' )->will( $this->returnValue( oxConfig::getInstance()->getConfigParam('sShopDir') . "modules/" ) );
+
+        $oLang = $this->getMock( "oxLang", array( "getConfig", "_getActiveModuleInfo") );
+        $oLang->expects( $this->any() )->method( 'getConfig' )->will( $this->returnValue( $oConfig ) );
+        $oLang->expects( $this->any() )->method( '_getActiveModuleInfo' )->will( $this->returnValue( $aInfo ) );
+
+        $this->assertEquals( $aPathArray, $oLang->UNITgetLangFilesPathArray( true, 0 ) );
+
+        unlink( $sShopPath . "modules/test1/out/admin/de/test1_lang.php" );
+        unlink( $sShopPath . "modules/test1/out/admin/de/module_options.php" );
+        rmdir( $sShopPath . "modules/test1/out/admin/de/" );
+        rmdir( $sShopPath . "modules/test1/out/admin/" );
+        rmdir( $sShopPath . "modules/test1/out/" );
+        rmdir( $sShopPath . "modules/test1/" );
     }
 
     public function testGetLangFileCacheName()
@@ -218,12 +280,12 @@ class Unit_Core_oxLangTest extends OxidTestCase
 
         //writing a test lang file
         $sFilePath = oxConfig::getInstance()->getConfigParam( 'sCompileDir' );
-        file_put_contents( $sFilePath . "/baselang$sFilePrefix.txt", '<?php $aLang = array( "charset" => "baseCharset", "TESTKEY" => "baseVal");' );
-        file_put_contents( $sFilePath . "/testlang$sFilePrefix.txt", '<?php $aLang = array( "charset" => "testCharset", "TESTKEY" => "testVal");' );
+        file_put_contents( $sFilePath . "/baselang$sFilePrefix.txt", '<?php $aSeoReplaceChars = array("t1" => "r1", "t2" => "r2", "t3" => "r3"); $aLang = array( "charset" => "baseCharset", "TESTKEY" => "baseVal");' );
+        file_put_contents( $sFilePath . "/testlang$sFilePrefix.txt", '<?php $aSeoReplaceChars = array("t1" => "overide1"); $aLang = array( "charset" => "testCharset", "TESTKEY" => "testVal");' );
 
         $aLangFilesPath = array( $sFilePath . "/baselang$sFilePrefix.txt", $sFilePath . "/testlang$sFilePrefix.txt" );
 
-        $aResult = array( "charset" => "baseCharset", "TESTKEY" => "testVal" );
+        $aResult = array( "charset" => "baseCharset", "TESTKEY" => "testVal", '_aSeoReplaceChars' => array( "t1" => "overide1", "t2" => "r2", "t3" => "r3" ) );
 
         $oLang = $this->getMock( "oxlang", array( "_getLangFilesPathArray", "_recodeLangArray" ) );
         $oLang->expects( $this->any() )->method( '_getLangFilesPathArray' )->will( $this->returnValue( $aLangFilesPath ) );
@@ -242,21 +304,23 @@ class Unit_Core_oxLangTest extends OxidTestCase
 
         //writing a test lang file
         $sFilePath = oxConfig::getInstance()->getConfigParam( 'sCompileDir' );
-        file_put_contents( $sFilePath . "/baselang$sFilePrefix.txt", '<?php $aLang = array( "charset" => "baseCharset", "TESTKEY" => "baseVal");' );
+        file_put_contents( $sFilePath . "/baselang$sFilePrefix.txt", '<?php $aSeoReplaceChars = array("t1" => "overide1"); $aLang = array( "charset" => "baseCharset", "TESTKEY" => "baseVal");' );
         file_put_contents( $sFilePath . "/testlang$sFilePrefix.txt", '<?php $aLang = array( "charset" => "testCharset", "TESTKEY" => "testVal");' );
 
         $aLangFilesPath = array( $sFilePath . "/baselang$sFilePrefix.txt", $sFilePath . "/testlang$sFilePrefix.txt" );
 
-        $aResult = array( "charset" => "UTF-8", "TESTKEY" => "testVal" );
+        $aResult = array( "charset" => "UTF-8", "TESTKEY" => "testVal", '_aSeoReplaceChars' => array("t1" => "overide1") );
 
         $oConfig = $this->getMock( "oxConfig", array( "isUtf" ) );
         $oConfig->expects( $this->any() )->method( 'isUtf' )->will( $this->returnValue( true ) );
 
         $oLang = $this->getMock( "oxlang", array( '_getLangFileCacheName', "_getLangFilesPathArray", "_recodeLangArray", "getConfig" ) );
-        $oLang->expects( $this->any() )->method( '_getLangFileCacheName' )->will( $this->returnValue( false ) );
-        $oLang->expects( $this->any() )->method( '_getLangFilesPathArray' )->will( $this->returnValue( $aLangFilesPath ) );
-        $oLang->expects( $this->atLeastOnce() )->method( '_recodeLangArray' )->will( $this->returnValue( $aResult ) );
-        $oLang->expects( $this->any() )->method( 'getConfig' )->will( $this->returnValue( $oConfig ) );
+        $oLang->expects( $this->at(0) )->method( 'getConfig' )->will( $this->returnValue( $oConfig ) );
+        $oLang->expects( $this->at(1) )->method( '_getLangFileCacheName' )->will( $this->returnValue( false ) );
+        $oLang->expects( $this->at(2) )->method( '_getLangFilesPathArray' )->will( $this->returnValue( $aLangFilesPath ) );
+        $oLang->expects( $this->at(3) )->method( '_recodeLangArray' )->will( $this->returnValue( array( "charset" => "UTF-8", "TESTKEY" => "baseVal" ) ) );
+        $oLang->expects( $this->at(4) )->method( '_recodeLangArray' )->will( $this->returnValue( array("t1" => "overide1") ) );
+        $oLang->expects( $this->at(5) )->method( '_recodeLangArray' )->will( $this->returnValue( array( "charset" => "UTF-8", "TESTKEY" => "testVal" ) ) );
         $oLangFilesData = $oLang->UNITgetLanguageFileData( false, 0 );
 
         $this->assertEquals( $aResult, $oLangFilesData );
@@ -1018,7 +1082,7 @@ class Unit_Core_oxLangTest extends OxidTestCase
         $oLang = new oxLang();
 
         $this->assertEquals( 1, $oLang->validateLanguage( 1 ) );
-        $this->assertEquals( 0, $oLang->validateLanguage( 2 ) );
+        $this->assertEquals( 0, $oLang->validateLanguage( 3 ) );
         $this->assertEquals( 0, $oLang->validateLanguage( 'xxx' ) );
     }
 
@@ -1431,7 +1495,115 @@ class Unit_Core_oxLangTest extends OxidTestCase
             $this->assertTrue( count($aTable) == 24 );
     }
 
+    /**
+     * Test case for oxLang::_collectSimilar()
+     *
+     * @return null
+     */
+    public function testCollectSimilar()
+    {
+        $aData = array( "A_1_1" => "1_1",
+                        "A_1_2" => "1_2",
+                        "A_1_3" => "1_3",
+                        "A_1_4" => "1_4",
+
+                        "B_1_1" => "1_1",
+                        "B_1_2" => "1_2",
+                        "B_1_3" => "1_3",
+                        "B_1_4" => "1_4",
+                      );
+
+        $aResData1 = array( "A_1_1" => "1_1",
+                            "A_1_2" => "1_2",
+                            "A_1_3" => "1_3",
+                            "A_1_4" => "1_4"
+                           );
+
+        $aResData2 = array( "B_1_1" => "1_1",
+                            "B_1_2" => "1_2",
+                            "B_1_3" => "1_3",
+                            "B_1_4" => "1_4"
+                           );
+
+        $oLang = new oxLang();
+
+        // initial check..
+        $this->assertEquals( $aResData1, $oLang->UNITcollectSimilar( $aData, "A_1_" ) );
+        $this->assertEquals( $aResData2, $oLang->UNITcollectSimilar( $aData, "B_1_" ) );
+
+        // checking if appends given array
+        $aCollection = $oLang->UNITcollectSimilar( $aData, "A_1_" );
+        $this->assertEquals( $aResData1 + $aResData2, $oLang->UNITcollectSimilar( $aData, "B_1_", $aCollection ) );
+    }
+
+    /**
+     * Test case for oxLang::getSimilarByKey()
+     *
+     * @return null
+     */
+    public function testGetSimilarByKey()
+    {
+        $oLang = new oxLang();
+
+        // non admin
+        $aRes = $oLang->getSimilarByKey( "DETAILS_VPE_MESSAGE_", 0, false );
+        $this->assertTrue( count( $aRes ) == 2 );
+        $this->assertTrue( isset( $aRes["DETAILS_VPE_MESSAGE_1"] ) );
+        $this->assertTrue( isset( $aRes["DETAILS_VPE_MESSAGE_2"] ) );
+
+        $aRes = $oLang->getSimilarByKey( "DETAILS_VPE_MESSAGE_", 1, false );
+        $this->assertTrue( count( $aRes ) == 2 );
+        $this->assertTrue( isset( $aRes["DETAILS_VPE_MESSAGE_1"] ) );
+        $this->assertTrue( isset( $aRes["DETAILS_VPE_MESSAGE_2"] ) );
+
+        // non admin from map
+        $aRes = $oLang->getSimilarByKey( "ADD_RECOMM_", 0, false );
+        $this->assertTrue( count( $aRes ) == 6 );
+        $this->assertTrue( isset( $aRes["ADD_RECOMM_ADDRECOMMLINK1"] ) );
+        $this->assertTrue( isset( $aRes["ADD_RECOMM_YOURCOMMENT"] ) );
+
+        $aRes = $oLang->getSimilarByKey( "ADD_RECOMM_", 1, false );
+        $this->assertTrue( count( $aRes ) == 6 );
+        $this->assertTrue( isset( $aRes["ADD_RECOMM_ADDRECOMMLINK1"] ) );
+        $this->assertTrue( isset( $aRes["ADD_RECOMM_YOURCOMMENT"] ) );
+
+        // admin
+        $aRes = $oLang->getSimilarByKey( "GENERAL_ADMIN_", 0, true );
+        $this->assertTrue( count( $aRes ) == 2 );
+        $this->assertTrue( isset( $aRes["GENERAL_ADMIN_TITLE"] ) );
+        $this->assertTrue( isset( $aRes["GENERAL_ADMIN_TITLE_1"] ) );
+
+        $aRes = $oLang->getSimilarByKey( "GENERAL_ADMIN_", 1, true );
+        $this->assertTrue( count( $aRes ) == 2 );
+        $this->assertTrue( isset( $aRes["GENERAL_ADMIN_TITLE"] ) );
+        $this->assertTrue( isset( $aRes["GENERAL_ADMIN_TITLE_1"] ) );
+    }
+
+    public function testGetSeoReplaceChars()
+    {
+        $oModConf = modConfig::getInstance();
+        $oModConf->setConfigParam('aSeoReplaceChars', array('t1' => 'r1', 't2' => 'r2'));
+        $aLangChars = array('t1' => 'new1', 't3' => 'r3');
+        $aExpResult = array(
+            't1' => 'new1',
+            't2' => 'r2',
+            't3' => 'r3',
+        );
+
+        $oLang = $this->getMock( "oxlang", array( "translateString", 'getConfig' ) );
+        $oLang->expects( $this->any() )->method('getConfig')->will($this->returnValue($oModConf));
+        $oLang->expects( $this->once() )->method( 'translateString' )->will( $this->returnValue( $aLangChars ) );
+        $aReplaceData = $oLang->getSeoReplaceChars(1);
+
+        $this->assertEquals( $aExpResult, $aReplaceData );
+    }
+
+    public function testGetActiveModuleInfo()
+    {
+        oxTestModules::addFunction( 'oxModulelist', 'getActiveModuleInfo', '{ return true; }');
+        $oUV = $this->getProxyClass('oxlang');
+
+        $this->assertTrue($oUV->UNITgetActiveModuleInfo());
+    }
+
 }
-
-
-

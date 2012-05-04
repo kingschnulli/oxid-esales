@@ -19,11 +19,23 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: contentTest.php 40522 2011-12-12 12:40:30Z linas.kukulskis $
+ * @version   SVN: $Id: contentTest.php 43774 2012-04-11 12:06:29Z vaidas.matulevicius $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
 require_once realpath( "." ).'/unit/test_config.inc.php';
+
+/*
+ * Dummy class for getParsedContent function test.
+ * 
+ */
+class contentTest_oxUtilsView extends oxUtilsView
+{
+    public function parseThroughSmarty( $sDesc, $sOxid = null, $oActView = null, $blRecompile = false )
+    {
+        return $sDesc;
+    }
+}
 
 /**
  * Tests for content class
@@ -47,9 +59,10 @@ class Unit_Views_contentTest extends OxidTestCase
         $this->_oObj->oxcontents__oxshopid = new oxField($sShopId, oxField::T_RAW);
         $this->_oObj->oxcontents__oxloadid = new oxField('_testLoadId', oxField::T_RAW);
         $this->_oObj->oxcontents__oxcontent = new oxField("testcontentDE&, &, !@#$%^&*%$$&@'.,;p\"ss", oxField::T_RAW);
+        //$this->_oObj->oxcontents__oxcontent = new oxField('[{ $oxcmp_shop->oxshops__oxowneremail->value }]', oxField::T_RAW);
         $this->_oObj->oxcontents__oxcontent_1 = new oxField("testcontentENG&, &, !@#$%^&*%$$&@'.,;p\"ss", oxField::T_RAW);
         $this->_oObj->oxcontents__oxactive = new oxField('1', oxField::T_RAW);
-        $this->_oObj->oxcontents__oxactive_1 = new oxField('1', oxField::T_RAW);
+        $this->_oObj->oxcontents__oxactive_1 = new oxField('1', oxField::T_RAW);       
         $this->_oObj->save();
 
         $sOxid = $this->_oObj->getId();
@@ -66,7 +79,10 @@ class Unit_Views_contentTest extends OxidTestCase
     protected function tearDown()
     {
         $this->_oObj->delete();
+        $this->cleanUpTable( 'oxdelivery' );
+        $this->cleanUpTable( 'oxdel2delset' );
         parent::tearDown();
+        oxRemClassModule('contentTest_oxUtilsView');
     }
 
     /**
@@ -98,7 +114,7 @@ class Unit_Views_contentTest extends OxidTestCase
      */
     public function testGetContentIdIfAgb()
     {
-        $sContentId = oxDb::getDb( true )->getOne( "SELECT oxid FROM oxcontents WHERE oxloadid = 'oxagb' " );
+        $sContentId = oxDb::getDb( oxDB::FETCH_MODE_ASSOC )->getOne( "SELECT oxid FROM oxcontents WHERE oxloadid = 'oxagb' " );
         modConfig::setParameter( 'oxcid', $sContentId );
         modConfig::getInstance()->setConfigParam( "blPsLoginEnabled", true );
 
@@ -365,7 +381,7 @@ class Unit_Views_contentTest extends OxidTestCase
         modConfig::getInstance()->setConfigParam( "blPsLoginEnabled", false );
 
         oxTestModules::addFunction( 'oxUtils', 'redirect', '{ throw new Exception($aA[0]); }');
-        $sContentId = oxDb::getDb( true )->getOne( "SELECT oxid FROM oxcontents WHERE oxloadid = 'oximpressum' " );
+        $sContentId = oxDb::getDb( oxDB::FETCH_MODE_ASSOC )->getOne( "SELECT oxid FROM oxcontents WHERE oxloadid = 'oximpressum' " );
 
         $oObj = new content();
         $this->assertEquals( $sContentId, $oObj->getContentId() );
@@ -485,5 +501,236 @@ class Unit_Views_contentTest extends OxidTestCase
         modConfig::setParameter( 'oxcid', $this->_oObj->getId() );
         $oContent = new content();
         $this->assertEquals( 'test', $oContent->getTitle() );
+    }
+
+    /**
+     * Content::showRdfa() Test case
+     *
+     * @return null
+     */
+    public function testShowRdfa()
+    {
+        $oConf = modConfig::getInstance();
+        $oConf->setConfigParam('blRDFaEmbedding', '_test_value');
+
+        $oView = new Content();
+        $this->assertSame( '_test_value', $oView->showRdfa() );
+    }
+
+    /**
+     * Content::getContentPageTpl() Test Business case
+     *
+     * @return null
+     */
+    public function testGetContentPageTpl_Business()
+    {
+        $oConf = modConfig::getInstance();
+        $oConf->setConfigParam('sRDFaBusinessEntityLoc', '_test_value');
+
+        $oContent = new stdClass();
+        $oContent->oxcontents__oxloadid = new oxField('_test_value');
+
+        $oViewProxy = $this->getProxyClass('Content');
+        $sExpResp = $oViewProxy->getNonPublicVar('_sBusinessTemplate');
+        $this->assertFalse(empty($sExpResp));
+
+        $oView = $this->getMock('Content', array('getContent'));
+        $oView->expects( $this->once() )->method('getContent')->will( $this->returnValue($oContent) );
+        $aTpl = $oView->getContentPageTpl();
+        $this->assertSame($sExpResp, $aTpl[0]);
+    }
+
+    /**
+     * Content::getContentPageTpl() Test Delivery case
+     *
+     * @return null
+     */
+    public function testGetContentPageTpl_Delivery()
+    {
+        $oConf = modConfig::getInstance();
+        $oConf->setConfigParam('sRDFaDeliveryChargeSpecLoc', '_test_value');
+
+        $oContent = new stdClass();
+        $oContent->oxcontents__oxloadid = new oxField('_test_value');
+
+        $oViewProxy = $this->getProxyClass('Content');
+        $sExpResp = $oViewProxy->getNonPublicVar('_sDeliveryTemplate');
+        $this->assertFalse(empty($sExpResp));
+
+        $oView = $this->getMock('Content', array('getContent'));
+        $oView->expects( $this->once() )->method('getContent')->will( $this->returnValue($oContent) );
+        $aTpl = $oView->getContentPageTpl();
+        $this->assertSame($sExpResp, $aTpl[0]);
+    }
+
+    /**
+     * Content::getContentPageTpl() Test Payment case
+     *
+     * @return null
+     */
+    public function testGetContentPageTpl_Payment()
+    {
+        $oConf = modConfig::getInstance();
+        $oConf->setConfigParam('sRDFaPaymentChargeSpecLoc', '_test_value');
+
+        $oContent = new stdClass();
+        $oContent->oxcontents__oxloadid = new oxField('_test_value');
+
+        $oViewProxy = $this->getProxyClass('Content');
+        $sExpResp = $oViewProxy->getNonPublicVar('_sPaymentTemplate');
+        $this->assertFalse(empty($sExpResp));
+
+        $oView = $this->getMock('Content', array('getContent'));
+        $oView->expects( $this->once() )->method('getContent')->will( $this->returnValue($oContent) );
+        $aTpl = $oView->getContentPageTpl();
+        $this->assertSame($sExpResp, $aTpl[0]);
+    }
+
+    /**
+     * Content::getBusinessEntityExtends() Test case
+     *
+     * @return null
+     */
+    public function testGetBusinessEntityExtends()
+    {
+        $oConf = modConfig::getInstance();
+        $oConf->setConfigParam('_test1', '_value1');
+        $oConf->setConfigParam('_test2', '_value2');
+        $aInput = array('_test2', '_test1', '_testX');
+        $aExpResp = array('_test2' => '_value2', '_test1' => '_value1', '_testX' => null);
+
+        $oViewProxy = $this->getProxyClass('Content');
+        $oViewProxy->setNonPublicVar('_aBusinessEntityExtends', $aInput);
+        $this->assertSame( $aExpResp, $oViewProxy->getBusinessEntityExtends() );
+    }
+
+    /**
+     * Content::getNotMappedToRDFaPayments() Test case
+     *
+     * @return null
+     */
+    public function testGetNotMappedToRDFaPayments()
+    {
+        oxTestModules::addFunction( 'oxPaymentList', 'getNonRDFaPaymentList', '{ return \'_call_getNonRDFaPaymentList\'; }');
+
+        $oView = new Content();
+        $oResp = $oView->getNotMappedToRDFaPayments();
+        $this->assertTrue($oResp instanceof oxpaymentlist);
+    }
+
+    /**
+     * Content::getNotMappedToRDFaDeliverySets() Test case
+     *
+     * @return null
+     */
+    public function testGetNotMappedToRDFaDeliverySets()
+    {
+        oxTestModules::addFunction( 'oxdeliverysetlist', 'getNonRDFaDeliverySetList', '{ return \'_call_getNonRDFaDeliverySetList\'; }');
+
+        $oView = new Content();
+        $oResp = $oView->getNotMappedToRDFaDeliverySets();
+        $this->assertTrue($oResp instanceof oxdeliverysetlist);
+    }
+
+    /**
+     * Content::getDeliveryChargeSpecs() Test case
+     *
+     * @return null
+     */
+    public function testGetDeliveryChargeSpecs()
+    {
+        $oDelivery = oxNew( 'oxdelivery' );
+        $oDelivery->setId('_testDeliveryId');
+        $oDelivery->oxdelivery__oxtitle = new oxField('_testDelivertTitle' . $i, oxField::T_RAW);
+        $oDelivery->oxdelivery__oxactive = new oxField(1, oxField::T_RAW);
+        $oDelivery->oxdelivery__oxdeltype = new oxField('p', oxField::T_RAW);
+        $oDelivery->oxdelivery__oxparam = new oxField(0, oxField::T_RAW);
+        $oDelivery->oxdelivery__oxparamend = new oxField(999999, oxField::T_RAW);
+        $oDelivery->oxdelivery__oxaddsum = new oxField(10, oxField::T_RAW);
+        $oDelivery->oxdelivery__oxaddsumtype = new oxField('%', oxField::T_RAW);
+
+        $oDelivery->save();
+
+        $oDel2Delset = oxNew( 'oxbase' );
+        $oDel2Delset->init( 'oxdel2delset' );
+        $oDel2Delset->setId( '_testDel2DelSetId' );
+        $oDel2Delset->oxdel2delset__oxdelid = new oxField($oDelivery->getId(), oxField::T_RAW);
+        $oDel2Delset->oxdel2delset__oxdelsetid = new oxField('oxidstandard', oxField::T_RAW);
+        $oDel2Delset->save();
+
+        $oView = new Content();
+        $oResp = $oView->getDeliveryChargeSpecs();
+
+        $this->assertEquals(5, count($oResp));
+        foreach ( $oResp as $oDelivery ) {
+            $this->assertTrue($oDelivery instanceof oxdelivery);
+            $this->assertTrue($oDelivery->deliverysetmethods instanceof oxdeliverysetlist);
+        }
+    }
+
+    /**
+     * Content::getDeliveryList() Test case
+     *
+     * @return null
+     */
+    public function testGetDeliveryList()
+    {
+        oxTestModules::addFunction( 'oxdeliverylist', 'getList', '{ return \'_call_getList\'; }');
+
+        $oView = new Content();
+        $oResp = $oView->getDeliveryList();
+        $this->assertTrue($oResp instanceof oxdeliverylist);
+    }
+
+    /**
+     * Content::getRdfaVAT() Test case
+     *
+     * @return null
+     */
+    public function testGetRdfaVAT()
+    {
+        $oConf = modConfig::getInstance();
+        $oConf->setConfigParam('iRDFaVAT', 123);
+
+        $oView = new Content();
+        $this->assertSame( 123, $oView->getRdfaVAT() );
+    }
+
+    /**
+     * Content::getRdfaPriceValidity() Test case
+     *
+     * @return null
+     */
+    public function testGetRdfaPriceValidity()
+    {
+        $oConf = modConfig::getInstance();
+        $oConf->setConfigParam('iRDFaPriceValidity', 3);
+
+        $oView = new Content();
+        $aResp = $oView->getRdfaPriceValidity();
+        $this->assertSame( array('validfrom', 'validthrough'),  array_keys($aResp));
+
+        $startTime = time() - (2*60*60);
+        $endTime = $startTime + (3 * 24 * 60 * 60);
+
+        $this->assertTrue( date('Y-m-d\TH:i:s', $startTime) <= $aResp['validfrom'] );
+        $this->assertTrue( date('Y-m-d\TH:i:s', $endTime) <= $aResp['validthrough'] );
+    }
+    
+    /**
+     * Content::getParsedContent() Test case
+     *
+     * @return null
+     */
+    public function testGetParsedContent()
+    {   
+        oxAddClassModule('contentTest_oxUtilsView', 'oxUtilsView');
+
+        $this->_oObj->oxcontents__oxcontent = new oxField('[{ $oxcmp_shop->oxshops__oxowneremail->value }]', oxField::T_RAW);
+        $this->_oObj->save();
+        modConfig::setParameter( 'oxcid', $this->_oObj->getId() );
+        $oContent = new content();
+
+        $this->assertEquals( $oContent->getContent()->oxcontents__oxcontent->value, $oContent->getParsedContent() );
     }
 }

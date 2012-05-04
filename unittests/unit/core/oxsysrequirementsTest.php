@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxsysrequirementsTest.php 42554 2012-03-01 07:40:25Z saulius.stasiukaitis $
+ * @version   SVN: $Id: oxsysrequirementsTest.php 43969 2012-04-16 15:22:52Z mindaugas.rimgaila $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -39,7 +39,7 @@ class Unit_Core_oxSysRequirementsTest extends OxidTestCase
     {
         $oSysReq = new oxSysRequirements();
         $aRequiredModules = $oSysReq->getRequiredModules();
-            $sCnt = 22;
+            $sCnt = 24;
         if ( isAdmin() ) {
             $sCnt++;
         }
@@ -62,7 +62,7 @@ class Unit_Core_oxSysRequirementsTest extends OxidTestCase
         $this->assertEquals( 3, count($aSysInfo));
         $sCnt = 13;
         $this->assertEquals( $sCnt, count($aSysInfo['php_extennsions']));
-        $this->assertEquals( 7, count($aSysInfo['php_config']));
+        $this->assertEquals( 9, count($aSysInfo['php_config']));
         $sCnt = 4;
             $sCnt = 2;
         if ( isAdmin() ) {
@@ -134,7 +134,7 @@ class Unit_Core_oxSysRequirementsTest extends OxidTestCase
         $sUrl = "http://www.oxidforge.org/wiki/Installation";
 
         $oSubj = new oxSysRequirements();
-        $this->assertEquals( $sUrl."#PHP_version_at_least_5.2.0", $oSubj->getReqInfoUrl( "php_version") );
+        $this->assertEquals( $sUrl."#PHP_version_at_least_5.2.10", $oSubj->getReqInfoUrl( "php_version") );
         $this->assertEquals( $sUrl, $oSubj->getReqInfoUrl( "none") );
         $this->assertEquals( $sUrl."#Zend_Optimizer", $oSubj->getReqInfoUrl( "zend_optimizer") );
     }
@@ -317,12 +317,15 @@ class Unit_Core_oxSysRequirementsTest extends OxidTestCase
                 ->with($this->equalTo('test0'), $this->equalTo(false))
                 ->will($this->returnValue(dirname(__FILE__).'/../moduleTestBlock/testTpl_nonexisting.tpl'));
         $oCfg->expects($this->at(1))->method('getTemplatePath')
-                ->with($this->equalTo('test1'), $this->equalTo(false))
-                ->will($this->returnValue(dirname(__FILE__).'/../moduleTestBlock/testTpl.tpl'));
+                ->with($this->equalTo('test0'), $this->equalTo(true))
+                ->will($this->returnValue(dirname(__FILE__).'/../moduleTestBlock/testTpl_nonexisting.tpl'));
         $oCfg->expects($this->at(2))->method('getTemplatePath')
                 ->with($this->equalTo('test1'), $this->equalTo(false))
                 ->will($this->returnValue(dirname(__FILE__).'/../moduleTestBlock/testTpl.tpl'));
         $oCfg->expects($this->at(3))->method('getTemplatePath')
+                ->with($this->equalTo('test1'), $this->equalTo(false))
+                ->will($this->returnValue(dirname(__FILE__).'/../moduleTestBlock/testTpl.tpl'));
+        $oCfg->expects($this->at(4))->method('getTemplatePath')
                 ->with($this->equalTo('test1'), $this->equalTo(false))
                 ->will($this->returnValue(dirname(__FILE__).'/../moduleTestBlock/testTpl.tpl'));
 
