@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   views
- * @copyright (C) OXID eSales AG 2003-2012
+ * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: user.php 44254 2012-04-24 11:46:00Z linas.kukulskis $
+ * @version   SVN: $Id: user.php 38776 2011-09-15 12:21:20Z arvydas.vapsva $
  */
 
 /**
@@ -277,21 +277,4 @@ class User extends oxUBase
 
         return $aPaths;
     }
-
-    /**
-     * Returns warning message if user want to buy downloadable product without registration.
-     *
-     * @return bool
-     */
-    public function isDownloadableProductWarning()
-    {
-        $oBasket = $this->getSession()->getBasket();
-        if ( $oBasket && $this->getConfig()->getConfigParam( "blEnableDownloads" ) ) {
-            if ( $oBasket->hasDownloadableProducts() ) {
-                return true;
-            }
-        }
-        return false;
-    }
-
 }

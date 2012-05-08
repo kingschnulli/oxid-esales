@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: test_config.inc.php 42273 2012-02-15 08:37:18Z vilma $
+ * @version   SVN: $Id: test_config.inc.php 34014 2011-03-25 14:06:07Z sarunas $
  */
 
 // DO NOT TOUCH THIS _ INSTEAD FIX NOTICES - DODGER
@@ -102,11 +102,7 @@ function initDbDump()
     if ($done) {
         throw new Exception("init already done");
     }
-    if (file_exists('unit/dbMaintenance.php')) {
-        include_once 'unit/dbMaintenance.php';
-    } else {
-        include_once 'dbMaintenance.php';
-    }
+    include_once 'unit/dbMaintenance.php';
     $dbM = new dbMaintenance();
     $dbM->dumpDB();
     $done = true;

@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: order_overview.php 44135 2012-04-20 15:06:35Z linas.kukulskis $
+ * @version   SVN: $Id: order_overview.php 41852 2012-01-28 13:54:58Z arvydas.vapsva $
  */
 
 /**
@@ -264,14 +264,12 @@ class Order_Overview extends oxAdminDetails
     {
         $blCan = false;
         //V #529: check if PDF invoice module is active
-        $oModule = oxNew('oxmodule');
-        $oModule->load('invoicepdf');
-        if ( $oModule->isActive() ) {
+        if ( oxUtilsObject::getInstance()->isModuleActive( 'oxorder', 'myorder' ) ) {
             $oDb = oxDb::getDb();
             $sOrderId = $this->getEditObjectId();
             $sTable = getViewName( "oxorderarticles" );
             $sQ = "select count(oxid) from {$sTable} where oxorderid = ".$oDb->quote( $sOrderId )." and oxstorno = 0";
-            $blCan = (bool) $oDb->getOne( $sQ, false, false );
+            $blCan = (bool) $oDb->getOne( $sQ );
         }
         return $blCan;
     }

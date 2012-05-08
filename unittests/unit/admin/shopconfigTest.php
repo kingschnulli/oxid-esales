@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: shopconfigTest.php 30855 2010-11-11 11:56:44Z sarunas $
+ * @version   SVN: $Id: shopconfigTest.php 44474 2012-04-27 12:26:32Z mindaugas.rimgaila $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -30,6 +30,12 @@ require_once realpath( "." ).'/unit/test_config.inc.php';
  */
 class Unit_Admin_ShopConfigTest extends OxidTestCase
 {
+    public function setUp()
+    {
+        modConfig::getInstance()->setAdminMode( true );
+        return parent::setUp();
+    }
+
     /**
      * Shop_Config::Render() test case
      *

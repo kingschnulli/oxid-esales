@@ -105,31 +105,13 @@ if ( !function_exists( 'getLocation' ) ) {
      */
     function getLocation()
     {
-        $aLocationCountries = array();
+        $aCountries = array();
         if ( defined( 'OXID_PHP_UNIT' ) ) {
             include getShopBasePath()."admin/shop_countries.php";
         } else {
             include getInstallPath()."admin/shop_countries.php";
         }
         return $aLocationCountries;
-    }
-}
-
-if ( !function_exists( 'getLanguages' ) ) {
-    /**
-     * Includes country list for setup
-     *
-     * @return null
-     */
-    function getLanguages()
-    {
-        $aLanguages = array();
-        if ( defined( 'OXID_PHP_UNIT' ) ) {
-            include getShopBasePath()."admin/shop_countries.php";
-        } else {
-            include getInstallPath()."admin/shop_countries.php";
-        }
-        return $aLanguages;
     }
 }
 
@@ -559,99 +541,6 @@ class OxSetupSession extends oxSetupCore
     protected $_aSessionData = null;
 
     /**
-     * Session ID
-     *
-     * @var string
-     */
-    protected $_sSid = null;
-
-    /**
-     * Session name
-     *
-     * @var string
-     */
-    protected $_sSessionName = 'setup_sid';
-
-    /**
-     * Is new session
-     *
-     * @var bool
-     */
-    protected $_blNewSession = false;
-
-    /**
-     * Initialize session class
-     *
-     * @return null
-     */
-    public function __construct()
-    {
-        ini_set('session.use_cookies', 0);
-
-        // initialize session
-        $this->_startSession();
-        $this->_initSessionData();
-    }
-
-    /**
-     * Start session
-     *
-     * @return null
-     */
-    protected function _startSession()
-    {
-        session_name($this->_sSessionName);
-
-        $oUtils = $this->getInstance( "oxSetupUtils" );
-        $sSid = $oUtils->getRequestVar('sid', 'get');
-
-        if (empty($sSid)) {
-            $sSid = $oUtils->getRequestVar('sid', 'post');
-        }
-
-        if (!empty($sSid)) {
-            session_id($sSid);
-        }
-
-        session_start();
-        $sSid = $this->_validateSession();
-        $this->setSid($sSid);
-    }
-
-    /**
-     * Validate if session is started by setup script, if not, generate new session.
-     *
-     * @return string Session ID
-     */
-    protected function _validateSession()
-    {
-        if ($this->_blNewSession === true) {
-            $this->setSessionParam('setup_session', true);
-        } elseif ($this->getSessionParam('setup_session') !== true) {
-            $sNewSid = $this->_getNewSessionID();
-            session_write_close();
-
-            session_id($sNewSid);
-            session_start();
-            $this->setSessionParam('setup_session', true);
-        }
-
-        return session_id();
-    }
-
-    /**
-     * Generate new unique session ID
-     *
-     * @return string
-     */
-    protected function _getNewSessionID()
-    {
-        session_regenerate_id(false);
-        $this->_blNewSession = true;
-        return session_id();
-    }
-
-    /**
      * Returns session id, which is used in forms and urls
      * (actually this id keeps all session data)
      *
@@ -659,19 +548,7 @@ class OxSetupSession extends oxSetupCore
      */
     public function getSid()
     {
-        return $this->_sSid;
-    }
-
-    /**
-     * Sets current session ID
-     *
-     * @param string $sSid session ID
-     *
-     * @return null
-     */
-    public function setSid($sSid)
-    {
-        $this->_sSid = $sSid;
+        return rawurlencode( base64_encode( serialize( $this->getSessionData() ) ) );
     }
 
     /**
@@ -679,9 +556,25 @@ class OxSetupSession extends oxSetupCore
      *
      * @return array
      */
-    protected function _initSessionData()
+    public function & getSessionData()
     {
-        $oUtils = $this->getInstance( "oxSetupUtils" );
+        if ( $this->_aSessionData === null ) {
+            $oUtils = $this->getInstance( "oxSetupUtils" );
+
+            // Session Handling
+            $sSID = rawurldecode( $oUtils->getRequestVar( "sid" ) );
+
+            // creating array to store persistent data
+            $this->_aSessionData = array();
+
+            //decoding data from "sid" variable
+            if ( isset( $sSID ) && strlen( $sSID ) ) {
+                $aSIDData = base64_decode( $sSID );
+                if ( $aSIDData !== false ) {
+                    // unserializing persistent data
+                    $this->_aSessionData = unserialize( $aSIDData );
+                }
+            }
 
             //storring country value settings to session
             $sLocationLang = $oUtils->getRequestVar( "location_lang", "post" );
@@ -693,12 +586,6 @@ class OxSetupSession extends oxSetupCore
             $sCountryLang = $oUtils->getRequestVar( "country_lang", "post" );
             if ( isset( $sCountryLang ) ) {
                 $this->setSessionParam( 'country_lang', $sCountryLang );
-            }
-
-            //storring shop language value settings to session
-            $sShopLang = $oUtils->getRequestVar( "sShopLang", "post" );
-            if ( isset( $sShopLang ) ) {
-                $this->setSessionParam( 'sShopLang', $sShopLang );
             }
 
             //storring dyn pages settings to session
@@ -718,16 +605,10 @@ class OxSetupSession extends oxSetupCore
             if ( isset( $iEula ) ) {
                 $this->setSessionParam( 'eula', $iEula  );
             }
-    }
 
-    /**
-     * Return session object reference.
-     *
-     * @return array
-     */
-    protected function &_getSessionData()
-    {
-        return $_SESSION;
+        }
+
+        return $this->_aSessionData;
     }
 
     /**
@@ -739,7 +620,7 @@ class OxSetupSession extends oxSetupCore
      */
     public function getSessionParam( $sParamName )
     {
-        $aSessionData = & $this->_getSessionData();
+        $aSessionData = & $this->getSessionData();
         if ( isset( $aSessionData[$sParamName] ) ) {
             return $aSessionData[$sParamName];
         }
@@ -755,7 +636,7 @@ class OxSetupSession extends oxSetupCore
      */
     public function setSessionParam( $sParamName, $sParamValue  )
     {
-        $aSessionData = & $this->_getSessionData();
+        $aSessionData = & $this->getSessionData();
         $aSessionData[$sParamName] = $sParamValue;
     }
 }
@@ -982,7 +863,7 @@ class OxSetupDb extends oxSetupCore
         $sLocationLang  = isset( $aParams["location_lang"] ) ? $aParams["location_lang"] : $oSession->getSessionParam( 'location_lang' );
         $blCheckForUpdates = isset( $aParams["check_for_updates"] ) ? $aParams["check_for_updates"] : $oSession->getSessionParam( 'check_for_updates' );
         $sCountryLang  = isset( $aParams["country_lang"] ) ? $aParams["country_lang"] : $oSession->getSessionParam( 'country_lang' );
-        $sShopLang  = isset( $aParams["sShopLang"] ) ? $aParams["sShopLang"] : $oSession->getSessionParam( 'sShopLang' );
+        $sAdminLang = isset( $aParams["setup_lang"] ) ? $aParams["setup_lang"] :  $oSession->getSessionParam('setup_lang');
         $sBaseShopId = $this->getInstance( "oxSetup" )->getShopId();
 
         $this->execSql( "update oxcountry set oxactive = '0'" );
@@ -1022,7 +903,7 @@ class OxSetupDb extends oxSetupCore
             foreach ($aLanguageParams as $sKey => $aLang) {
                 $aLanguageParams[$sKey]["active"] = "0";
             }
-            $aLanguageParams[$sShopLang]["active"] = "1";
+            $aLanguageParams[$sAdminLang]["active"] = "1";
 
             $sValue = serialize( $aLanguageParams );
             $sID4 = $oUtils->generateUid();
@@ -1592,7 +1473,7 @@ class OxSetupUtils extends oxSetupCore
      * Returns variable from request
      *
      * @param string $sVarName     variable name
-     * @param string $sRequestType request type - "post", "get", "cookie" [optional]
+     * @param string $sRequestType request type - "post", "get" [optional]
      *
      * @return mixed
      */
@@ -1610,22 +1491,9 @@ class OxSetupUtils extends oxSetupCore
                     $sValue = $_GET[$sVarName];
                 }
                 break;
-            case 'cookie':
-                if ( isset( $_COOKIE[$sVarName] ) ) {
-                    $sValue = $_COOKIE[$sVarName];
-                }
-                break;
             default:
-                if ($sValue === null) {
-                    $sValue = $this->getRequestVar($sVarName, 'post');
-                }
-
-                if ($sValue === null) {
-                    $sValue = $this->getRequestVar($sVarName, 'get');
-                }
-
-                if ($sValue === null) {
-                    $sValue = $this->getRequestVar($sVarName, 'cookie');
+                if ( ( $sValue = $this->getRequestVar( $sVarName, "post" ) ) == null ) {
+                    $sValue = $this->getRequestVar( $sVarName, "get" );
                 }
                 break;
         }
@@ -2029,7 +1897,6 @@ class oxSetupController extends oxSetupCore
         $oView->setTitle( 'STEP_0_TITLE' );
         $oView->setViewParam( "blContinue", $blContinue );
         $oView->setViewParam( "aGroupModuleInfo", $aGroupModuleInfo );
-        $oView->setViewParam( "aLanguages", getLanguages() );
         $oView->setViewParam( "sSetupLang", $this->getInstance( "oxSetupSession" )->getSessionParam( 'setup_lang' ) );
         return "systemreq.php";
     }
@@ -2051,8 +1918,6 @@ class oxSetupController extends oxSetupCore
         $oView->setTitle( 'STEP_1_TITLE' );
         $oView->setViewParam( "aCountries", getCountryList() );
         $oView->setViewParam( "aLocations", getLocation() );
-        $oView->setViewParam( "aLanguages", getLanguages() );
-        $oView->setViewParam( "sShopLang", $oSession->getSessionParam( 'sShopLang' ) );
         $oView->setViewParam( "sSetupLang", $this->getInstance( "oxSetupLang" )->getSetupLang() );
         $oView->setViewParam( "sLocationLang", $oSession->getSessionParam('location_lang') );
         $oView->setViewParam( "sCountryLang", $oSession->getSessionParam('country_lang') );
@@ -2263,7 +2128,7 @@ class oxSetupController extends oxSetupCore
         }
 
         //swap database to english
-        if ( $oSession->getSessionParam('sShopLang') != "de" ) {
+        if ( $oSession->getSessionParam('location_lang') != "de" ) {
             try {
                 $oDb->queryFile( "$sqlDir/en.sql" );
             } catch ( Exception $oExcp ) {
@@ -2576,7 +2441,7 @@ class oxSetupAps extends oxSetupCore
         }
 
         //swap database to english
-        if ( $aParams["sShopLang"] != "de" ) {
+        if ( $aParams["location_lang"] != "de" ) {
             $oDb->queryFile( "en.sql" );
         }
 

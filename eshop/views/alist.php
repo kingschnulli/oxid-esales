@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: alist.php 44342 2012-04-25 10:59:43Z linas.kukulskis $
+ * @version   SVN: $Id: alist.php 44498 2012-04-30 06:58:51Z saulius.stasiukaitis $
  */
 
 /**
@@ -442,6 +442,9 @@ class aList extends oxUBase
      */
     protected function _prepareMetaDescription( $sMeta, $iLength = 1024, $blDescTag = false )
     {
+        // using language constant ..
+        $sDescription = oxLang::getInstance()->translateString( 'ALIST_META_DESCRIPTION_PREFIX' );
+
         // appending parent title
         if ( $oCategory = $this->getActCategory() ) {
             if ( ( $oParent = $oCategory->getParentCategory() ) ) {
@@ -453,14 +456,15 @@ class aList extends oxUBase
         }
 
         // and final component ..
-        //changed for #2776
-        if ( ( $sSuffix = $this->getConfig()->getActiveShop()->oxshops__oxtitleprefix->value ) ) {
+        if ( ( $sSuffix = $this->getConfig()->getActiveShop()->oxshops__oxstarttitle->value ) ) {
             $sDescription .= " {$sSuffix}";
         }
 
         // making safe for output
         $sDescription = getStr()->cleanStr($sDescription);
-        return trim( strip_tags( getStr()->html_entity_decode( $sDescription ) ) );
+        $sDescription = strip_tags( getStr()->html_entity_decode( $sDescription ) );
+        $sDescription = getStr()->htmlspecialchars( $sDescription );
+        return trim( $sDescription );
     }
 
     /**
@@ -574,7 +578,7 @@ class aList extends oxUBase
         if ( count( $aArticleList = $this->getArticleList() ) ) {
             $oStr = getStr();
             foreach ( $aArticleList as $oProduct ) {
-                $sDesc = strip_tags( trim( $oStr->strtolower( $oProduct->getLongDescription()->value ) ) );
+                $sDesc = strip_tags( trim( $oStr->strtolower( $oProduct->getArticleLongDesc()->value ) ) );
 
                 //removing dots from string (they are not cleaned up during general string cleanup)
                 $sDesc = $oStr->preg_replace( "/\./", " ", $sDesc );
@@ -612,7 +616,7 @@ class aList extends oxUBase
     {
         // assign template name
         if ( ( $sTplName = basename( oxConfig::getParameter( 'tpl' ) ) ) ) {
-            $this->_sThisTemplate = 'custom/'.$sTplName;
+            $this->_sThisTemplate = $sTplName;
         } elseif ( ( $oCategory = $this->getActCategory() ) && $oCategory->oxcategories__oxtemplate->value ) {
             $this->_sThisTemplate = $oCategory->oxcategories__oxtemplate->value;
         }

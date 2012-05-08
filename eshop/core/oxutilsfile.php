@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutilsfile.php 43698 2012-04-10 14:53:40Z mindaugas.rimgaila $
+ * @version   SVN: $Id: oxutilsfile.php 43650 2012-04-10 09:00:56Z saulius.stasiukaitis $
  */
 
 /**
@@ -123,14 +123,14 @@ class oxUtilsFile extends oxSuperCfg
      * @var array
      */
     protected $_aAllowedFiles = array( 'gif', 'jpg', 'jpeg', 'png', 'pdf' );
-
+    
     /**
      * Counts how many new files added.
-     *
+     * 
      * @var integer
      */
     protected $_iNewFilesCounter = 0;
-
+    
     /**
      * Returns object instance
      *
@@ -178,12 +178,12 @@ class oxUtilsFile extends oxSuperCfg
     {
         return $this->_iNewFilesCounter;
     }
-
+    
     /**
      * Setter for param _iNewFilesCounter which counts how many new files added.
-     *
+     * 
      * @param integer $iNewFilesCounter New files count.
-     *
+     * 
      * @return void
      */
     protected function _setNewFilesCounter( $iNewFilesCounter )
@@ -480,7 +480,7 @@ class oxUtilsFile extends oxSuperCfg
 
                 $sValue  = strtolower( $sValue );
                 $sImagePath = $this->_getImagePath( $sType );
-
+                
                 // Should translate error to user if file was uploaded
                 if ( UPLOAD_ERR_OK !== $iError && UPLOAD_ERR_NO_FILE !== $iError ) {
                     $sErrorsDescription = $this->translateError( $iError );
@@ -514,7 +514,7 @@ class oxUtilsFile extends oxSuperCfg
                     }
                 }
             }
-
+            
             $this->_setNewFilesCounter( $iNewFilesCounter );
         }
 
@@ -727,28 +727,21 @@ class oxUtilsFile extends oxSuperCfg
     /**
      * Returns image storage path
      *
-     * @param string $sType       image type
-     * @param bool   $blGenerated generated image dir.
+     * @param string $sType image type
      *
      * @return string
      */
-    public function getImageDirByType( $sType, $blGenerated = false )
+    public function getImageDirByType( $sType )
     {
         $sFolder = array_key_exists( $sType, $this->_aTypeToPath ) ? $this->_aTypeToPath[ $sType ] : '0';
-        $sDir = $this->normalizeDir( $sFolder );
-
-        if ($blGenerated === true) {
-            $sDir = str_replace('master/', 'generated/', $sDir);
-        }
-
-        return $sDir;
+        return $this->normalizeDir( $sFolder );
     }
-
+    
     /**
      * Translate php file upload errors to user readable format.
-     *
+     * 
      * @param integer $iError php file upload error number
-     *
+     * 
      * @return string
      */
     function translateError( $iError )
@@ -758,32 +751,7 @@ class oxUtilsFile extends oxSuperCfg
         if ( $iError > 0 && $iError < 9 && 5 !== $iError ) {
             $message = 'EXCEPTION_FILEUPLOADERROR_'.( (int) $iError );
         }
-
-        return $message;
-    }
-
-    /**
-     * Returns mime type by filename
-     *
-     * @param string $sFileName File name
-     *
-     * @return string
-     */
-    public function getMimeType($sFileName)
-    {
-        //for PHP 5.3
-        if (function_exists("finfo_file")) {
-            $rFinfo = finfo_open(FILEINFO_MIME_TYPE);
-            $sMime = finfo_file($rFinfo, $sFileName);
-            return $sMime;
-        }
-
-        //deprecated functionality
-        if (function_exists("mime_content_type")) {
-            $sMime = mime_content_type($sFileName);
-            return $sMime;
-        }
-
-        return null;
+        
+        return $message; 
     }
 }

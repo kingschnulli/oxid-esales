@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxdeliverylistTest.php 41419 2012-01-16 15:53:27Z vilma $
+ * @version   SVN: $Id: oxdeliverylistTest.php 34972 2011-04-27 13:34:00Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -1083,15 +1083,5 @@ class Unit_Core_oxdeliverylistTest extends OxidTestCase
         $this->assertEquals( 3, $oDList->count() );
         $this->assertEquals( array( '_testDeliveryId1', '_testDeliveryId2', '_testDeliveryId3' ),
                              array_keys( $oDList->aList ) );
-    }
-
-    /**
-     * Testing loadDeliveryListForProduct
-     */
-    public function testLoadDeliveryListForProduct()
-    {
-         $oDList = oxNew( "oxDeliveryList" );
-         $oDList->loadDeliveryListForProduct( $this->_aTestProducts[0] );
-         $this->assertEquals( 7, $oDList->count() );
     }
 }

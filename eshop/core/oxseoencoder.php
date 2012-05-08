@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxseoencoder.php 44052 2012-04-19 06:21:44Z linas.kukulskis $
+ * @version   SVN: $Id: oxseoencoder.php 44336 2012-04-25 10:40:22Z linas.kukulskis $
  */
 
 /**
@@ -236,7 +236,7 @@ class oxSeoEncoder extends oxSuperCfg
 
         $sStdUrl   = $this->_trimUrl( $sStdUrl );
         $sObjectId = $this->getDynamicObjectId( $iShopId, $sStdUrl );
-        $sSeoUrl   = $this->_prepareUri( $this->addLanguageParam( $sSeoUrl, $iLang ), $iLang );
+        $sSeoUrl   = $this->_prepareUri( $this->addLanguageParam( $sSeoUrl, $iLang ) );
 
         //load details link from DB
         $sOldSeoUrl = $this->_loadFromDb( 'dynamic', $sObjectId, $iLang );
@@ -330,7 +330,7 @@ class oxSeoEncoder extends oxSuperCfg
      */
     protected function _getUniqueSeoUrl( $sSeoUrl, $sObjectId = null, $iObjectLang = null )
     {
-        $sSeoUrl = $this->_prepareUri( $sSeoUrl, $iObjectLang );
+        $sSeoUrl = $this->_prepareUri( $sSeoUrl );
         $oStr = getStr();
         $sExt = '';
         if ( $oStr->preg_match( '/(\.html?|\/)$/i', $sSeoUrl, $aMatched ) ) {
@@ -341,12 +341,12 @@ class oxSeoEncoder extends oxSuperCfg
             $sBaseSeoUrl = $oStr->substr( $sSeoUrl, 0, $oStr->strlen( $sSeoUrl ) - $oStr->strlen( $sExt ) );
         }
 
+        $oDb = oxDb::getDb();
         $iShopId = $this->getConfig()->getShopId();
         $iCnt = 0;
         $sCheckSeoUrl = $this->_trimUrl( $sSeoUrl );
         $sQ = "select 1 from oxseo where oxshopid = '{$iShopId}'";
 
-        $oDb = oxDb::getDb();
         // skipping self
         if ( $sObjectId && isset($iObjectLang) ) {
             $iObjectLang = (int) $iObjectLang;
@@ -391,7 +391,7 @@ class oxSeoEncoder extends oxSuperCfg
         $iLang = (int) $iLang;
 
         if ( !isset( self::$_aFixedCache[$sType][$sShopId][$sId][$iLang] ) ) {
-            $oDb = oxDb::getDb();
+            $oDb = oxDb::getDb( true );
 
             $sQ = "SELECT `oxfixed`
                 FROM `oxseo`
@@ -521,13 +521,11 @@ class oxSeoEncoder extends oxSuperCfg
      */
     protected function _loadFromDb( $sType, $sId, $iLang, $iShopId = null, $sParams = null, $blStrictParamsCheck = true)
     {
-
         if ( $iShopId === null ) {
             $iShopId = $this->getConfig()->getShopId();
         }
 
         $iLang = (int) $iLang;
-        $oDb = oxDb::getDb( oxDb::FETCH_MODE_ASSOC );
 
         $sQ = "
             SELECT
@@ -536,9 +534,9 @@ class oxSeoEncoder extends oxSuperCfg
                 `oxexpired`,
                 `oxtype`
             FROM `oxseo`
-            WHERE `oxtype` = ".$oDb->quote( $sType )."
-               AND `oxobjectid` = ".$oDb->quote( $sId ) ."
-               AND `oxshopid` = ".$oDb->quote( $iShopId )."
+            WHERE `oxtype` = ".oxDb::getDb()->quote( $sType )."
+               AND `oxobjectid` = ".oxDb::getDb()->quote( $sId ) ."
+               AND `oxshopid` = ".oxDb::getDb()->quote( $iShopId )."
                AND `oxlang` = '{$iLang}'";
 
         $sParams = $sParams ? $sParams : '';
@@ -555,8 +553,8 @@ class oxSeoEncoder extends oxSuperCfg
 
         // looking in cache
         if ( ( $sSeoUrl = $this->_loadFromCache( $sIdent, $sType, $iLang, $iShopId, $sParams ) ) === false ) {
-            $oRs = $oDb->select( $sQ );
-
+            $oDb = oxDb::getDb( true );
+            $oRs = $oDb->execute( $sQ );
             if ( $oRs && $oRs->recordCount() > 0 && !$oRs->EOF ) {
                 // moving expired static urls to history ..
                 if ( $oRs->fields['oxexpired'] && ( $oRs->fields['oxtype'] == 'static' || $oRs->fields['oxtype'] == 'dynamic' ) ) {
@@ -604,15 +602,14 @@ class oxSeoEncoder extends oxSuperCfg
     /**
      * Makes safe seo uri - removes unsupported/reserved characters
      *
-     * @param string $sUri  seo uri
-     * @param int    $iLang language ID, for which URI should be prepared
+     * @param string $sUri seo uri
      *
      * @return string
      */
-    protected function _prepareUri( $sUri, $iLang = false )
+    protected function _prepareUri( $sUri )
     {
         // decoding entities
-        $sUri = $this->encodeString( $sUri, true, $iLang );
+        $sUri = $this->encodeString( $sUri );
 
         // basic string preparation
         $sUri = strip_tags( $sUri );
@@ -640,7 +637,7 @@ class oxSeoEncoder extends oxSuperCfg
 
         // SEO id is empty ?
         if ( !$sUri && self::$_sPrefix ) {
-            $sUri = $this->_prepareUri( self::$_sPrefix, $iLang );
+            $sUri = $this->_prepareUri( self::$_sPrefix );
         }
 
         $sAdd = '';
@@ -668,13 +665,12 @@ class oxSeoEncoder extends oxSuperCfg
      *
      * @param string $sTitle         Original object title
      * @param bool   $blSkipTruncate Truncate title into defined lenght or not
-     * @param int    $iLang          language ID, for which to prepare the title
      *
      * @return string
      */
-    protected function _prepareTitle( $sTitle, $blSkipTruncate = false, $iLang = false )
+    protected function _prepareTitle( $sTitle, $blSkipTruncate = false )
     {
-        $sTitle = $this->encodeString( $sTitle, true, $iLang );
+        $sTitle = $this->encodeString( $sTitle );
         $sSep = self::$_sSeparator;
         if (!$sSep || ('/' == $sSep)) {
             $sSep = '_';
@@ -720,7 +716,7 @@ class oxSeoEncoder extends oxSuperCfg
      */
     protected function _saveToDb( $sType, $sObjectId, $sStdUrl, $sSeoUrl, $iLang, $iShopId = null, $blFixed = null, $sParams = null )
     {
-        $oDb = oxDb::getDb( oxDb::FETCH_MODE_ASSOC );
+        $oDb = oxDb::getDb( true );
         if ( $iShopId === null ) {
             $iShopId = $this->getConfig()->getShopId();
         }
@@ -746,9 +742,10 @@ class oxSeoEncoder extends oxSuperCfg
                 oxobjectid = {$sQtedObjectId} and oxshopid = {$iQtedShopId}  and oxlang = {$iLang} ";
 
         $sQ .= $sParams ? " and oxparams = {$sQtedParams} " : '';
+        //$sQ .= isset( $blFixed ) ? " and oxfixed = " . ( (int) $blFixed ) . " " : '';
         $sQ .= "limit 1";
 
-        $oRs = $oDb->select( $sQ );
+        $oRs = $oDb->execute( $sQ );
         if ( $oRs && $oRs->recordCount() > 0 && !$oRs->EOF ) {
             if ( $oRs->fields['samestdurl'] && $oRs->fields['sameseourl'] && $oRs->fields['oxexpired'] ) {
                 // fixed state change
@@ -834,22 +831,17 @@ class oxSeoEncoder extends oxSuperCfg
      * Replaces special chars in text
      *
      * @param string $sString        string to encode
-     * @param bool   $blReplaceChars is true, replaces user defined (oxlang::getSeoReplaceChars) characters into alternative
-     * @param int    $iLang          language, for which to encode the string
+     * @param bool   $blReplaceChars is true, replaces user defined (oxconfig::aSeoReplaceChars) characters into alternative
      *
      * @return string
      */
-    public function encodeString( $sString, $blReplaceChars = true, $iLang = false )
+    public function encodeString( $sString, $blReplaceChars = true )
     {
         // decoding entities
         $sString = getStr()->html_entity_decode( $sString );
 
         if ( $blReplaceChars ) {
-            if ($iLang === false || !is_numeric($iLang)) {
-                $iLang = oxLang::getInstance()->getEditLanguage();
-            }
-
-            if ( $aReplaceChars = oxLang::getInstance()->getSeoReplaceChars($iLang) ) {
+            if ( $aReplaceChars = $this->getConfig()->getConfigParam( 'aSeoReplaceChars' ) ) {
                 $sString = str_replace( array_keys( $aReplaceChars ), array_values( $aReplaceChars ), $sString );
             }
         }
@@ -1032,7 +1024,7 @@ class oxSeoEncoder extends oxSuperCfg
 
             if ( $sOldObjectId ) {
                 // move changed records to history
-                if ( !$oDb->getOne( "select (" . $oDb->quote( $sSeoUrl ) . " like oxseourl) & (" . $oDb->quote( $sStdUrl ) . " like oxstdurl) from oxseo where oxobjectid = ".$oDb->quote( $sOldObjectId )." and oxshopid = '{$iShopId}' and oxlang = '{$iLang}' ", false, false) ) {
+                if ( !$oDb->getOne( "select (" . $oDb->quote( $sSeoUrl ) . " like oxseourl) & (" . $oDb->quote( $sStdUrl ) . " like oxstdurl) from oxseo where oxobjectid = ".$oDb->quote( $sOldObjectId )." and oxshopid = '{$iShopId}' and oxlang = '{$iLang}' " ) ) {
                     $this->_copyToHistory( $sOldObjectId, $iShopId, $iLang, 'static', $sObjectId );
                 }
             }
@@ -1142,7 +1134,7 @@ class oxSeoEncoder extends oxSuperCfg
         $sSeoUrl = $this->_processSeoUrl( $this->_trimUrl( $sSeoUrl ? $sSeoUrl : $this->_getAltUri( $sAltObjectId ? $sAltObjectId : $sObjectId, $iLang ) ), $sObjectId, $iLang, $blExclude );
         if ( $this->_saveToDb( $sType, $sObjectId, $sStdUrl, $sSeoUrl, $iLang, $iShopId, $blFixed, $sParams ) ) {
 
-            $oDb = oxDb::getDb();
+            $oDb = oxDb::getDb( true );
 
             //
             $sQtedObjectId = $oDb->quote( $sAltObjectId ? $sAltObjectId : $sObjectId );
@@ -1150,7 +1142,7 @@ class oxSeoEncoder extends oxSuperCfg
 
             $oStr = getStr();
             if ( $sKeywords !== false ) {
-                $sKeywords = $oDb->quote( $oStr->htmlspecialchars( $this->encodeString( strip_tags( $sKeywords ), false, $iLang ) ) );
+                $sKeywords = $oDb->quote( $oStr->htmlspecialchars( $this->encodeString( strip_tags( $sKeywords ), false ) ) );
             }
 
             if ( $sDescription !== false ) {
@@ -1193,7 +1185,7 @@ class oxSeoEncoder extends oxSuperCfg
     {
         $oDb = oxDb::getDb();
         $sQ = "delete from oxseo where oxobjectid = " . $oDb->quote( $sObjectId ) . " and oxshopid = " . $oDb->quote( $iShopId ) . " and oxlang = " . $oDb->quote( $iLang ) . " and oxtype = " . $oDb->quote( $sType ) . " ";
-        $oDb->execute( $sQ );
+        oxDb::getDb()->execute( $sQ );
     }
 
     /**
@@ -1246,15 +1238,14 @@ class oxSeoEncoder extends oxSuperCfg
      */
     public function fetchSeoUrl( $sStdUrl, $iLanguage = null )
     {
-        $oDb = oxDb::getDb( oxDb::FETCH_MODE_ASSOC );
+        $oDb = oxDb::getDb( true );
         $iLanguage = isset( $iLanguage ) ? ( (int) $iLanguage ) : oxLang::getInstance()->getBaseLanguage();
         $sSeoUrl   = false;
 
         $sShopId = $this->getConfig()->getShopId();
 
-        $sQ = "SELECT `oxseourl`, `oxlang` FROM `oxseo` WHERE `oxstdurl` = " . $oDb->quote( $sStdUrl ) . " AND `oxlang` = '$iLanguage' AND `oxshopid` = '$sShopId' LIMIT 1";
-
-        $oRs = $oDb->select( $sQ );
+        $sQ = "select oxseourl, oxlang from oxseo where oxstdurl = ".$oDb->quote( $sStdUrl )." and oxlang = '$iLanguage' and oxshopid = '$sShopId' limit 1";
+        $oRs = $oDb->execute( $sQ );
         if ( !$oRs->EOF ) {
             $sSeoUrl = $oRs->fields['oxseourl'];
         }

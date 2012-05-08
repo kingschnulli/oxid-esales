@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxuserlist.php 40432 2011-12-02 08:34:56Z justinas.straksys $
+ * @version   SVN: $Id: oxuserlist.php 25467 2010-02-01 14:14:26Z alfonsas $
  */
 
 /**
@@ -50,7 +50,7 @@ class oxUserList extends oxList
      */
     public function loadWishlistUsers( $sSearchStr)
     {
-        $sSearchStr = oxDb::getInstance()->escapeString($sSearchStr);
+        $sSearchStr = mysql_real_escape_string($sSearchStr);
         if (!$sSearchStr) {
             return;
         }

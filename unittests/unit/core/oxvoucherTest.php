@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxvoucherTest.php 44115 2012-04-20 11:58:43Z linas.kukulskis $
+ * @version   SVN: $Id: oxvoucherTest.php 44095 2012-04-19 16:08:50Z saulius.stasiukaitis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -424,8 +424,12 @@ class Unit_Core_oxvoucherTest extends OxidTestCase
             $this->fail( 'can not load voucher' );
             return;
         }
-
-        $this->assertEquals( 0, $oNewVoucher->getDiscountValue( null ) );
+        try {
+            $oNewVoucher->getDiscountValue(null);
+        } catch ( oxVoucherException $oEx ) {
+            return; //OK
+        }
+        $this->fail();
     }
 
     /**
@@ -586,9 +590,10 @@ class Unit_Core_oxvoucherTest extends OxidTestCase
         try {
             $aErrors = $oNewVoucher->UNITisAvailablePrice( $dPrice );
         } catch (oxVoucherException $oEx) {
-            $this->fail();
-            return;
+            $sErrorMsg = $oEx->getMessage();
         }
+
+        $this->assertEquals( 'EXCEPTION_VOUCHER_TOTALBELOWZERO', $sErrorMsg );
     }
 
     /**

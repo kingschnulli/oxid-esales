@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxstrmbTest.php 34141 2011-04-01 14:59:12Z sarunas $
+ * @version   SVN: $Id: oxstrmbTest.php 44499 2012-04-30 06:59:07Z saulius.stasiukaitis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -215,7 +215,7 @@ class Unit_Core_oxstrMbTest extends OxidTestCase
 
     public function testCleanStr()
     {
-        $this->assertEquals( '                      ', $this->_oSubj->cleanStr( " \" ".'\''." : ! ? \n \r \t \xc2\x95 \xc2\xa0 ;" ) );
+        $this->assertEquals( " \" ".'\''." : ! ?            ", $this->_oSubj->cleanStr( " \" ".'\''." : ! ? \n \r \t \xc2\x95 \xc2\xa0 ;" ) );
     }
 
     public function testCleanStrLeavesDots()

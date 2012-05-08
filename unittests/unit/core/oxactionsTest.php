@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxactionsTest.php 43590 2012-04-06 13:34:41Z linas.kukulskis $
+ * @version   SVN: $Id: oxactionsTest.php 37095 2011-07-15 14:24:50Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -89,7 +89,7 @@ class Unit_Core_oxactionsTest extends OxidTestCase
         $sArtOxid = 'xxx';
         $this->_oAction->addArticle( $sArtOxid );
 
-        $sCheckOxid = oxDb::getDb( oxDB::FETCH_MODE_ASSOC )->getOne( "select oxid from oxactions2article where oxactionid = '".$this->_oAction->getId()."' and oxartid = '$sArtOxid' ");
+        $sCheckOxid = oxDb::getDb(true)->getOne( "select oxid from oxactions2article where oxactionid = '".$this->_oAction->getId()."' and oxartid = '$sArtOxid' ");
         if ( !$sCheckOxid ) {
             $this->fail( "fail adding article" );
         }
@@ -107,7 +107,7 @@ class Unit_Core_oxactionsTest extends OxidTestCase
         $this->_oAction->addArticle( $sArtOxid );
         $this->assertTrue( $this->_oAction->removeArticle( $sArtOxid ) );
 
-        $sCheckOxid = oxDb::getDb( oxDB::FETCH_MODE_ASSOC )->getOne( "select oxid from oxactions2article where oxactionid = '".$this->_oAction->getId()."' and oxartid = '$sArtOxid' ");
+        $sCheckOxid = oxDb::getDb(true)->getOne( "select oxid from oxactions2article where oxactionid = '".$this->_oAction->getId()."' and oxartid = '$sArtOxid' ");
         if ( $sCheckOxid ) {
             $this->fail("fail removing article");
         }
@@ -150,7 +150,7 @@ class Unit_Core_oxactionsTest extends OxidTestCase
         $this->_oAction->addArticle( $sArtOxid );
         $this->_oAction->delete();
 
-        $sCheckOxid = oxDb::getDb( oxDB::FETCH_MODE_ASSOC )->GetOne( "select oxid from oxactions2article where oxactionid = '".$this->_oAction->getId()."'" );
+        $sCheckOxid = oxDb::getDb(true)->GetOne( "select oxid from oxactions2article where oxactionid = '".$this->_oAction->getId()."'" );
         $oAction = oxNew("oxactions");
         if ( $sCheckOxid || $oAction->Load( $this->sOxId ) ) {
             $this->fail("fail deleting");

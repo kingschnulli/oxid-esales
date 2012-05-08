@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxconfigTest.php 43279 2012-03-29 11:57:22Z vilma $
+ * @version   SVN: $Id: oxconfigTest.php 44640 2012-05-08 08:46:23Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -41,17 +41,6 @@ class modForTestInitNoConnection extends oxConfig
         throw $oEx;
     }
 }
-
-class modForTestInitLoadingPriority extends oxConfig
-{
-    public $iDebug;
-
-    public function _loadVarsFromDb($sShopID, $aOnlyVars = null, $sModule = '')
-    {
-        $this->iDebug = 33;
-    }
-}
-
 // P
 /*
 class modForTestGetTemplateDirExpectsDefault extends oxConfig
@@ -579,7 +568,7 @@ class Unit_Core_oxconfigTest extends OxidTestCase
         $oConfig->init();
         $sShopId  = $oConfig->getShopId();
         $sConfKey = $oConfig->getConfigParam( 'sConfigKey' );
-        $oDb = oxDb::getDb( oxDB::FETCH_MODE_ASSOC );
+        $oDb = oxDb::getDb(true);
 
         $aVars = array( "theme:basic#iNewBasketItemMessage",
                         "theme:azure#iNewBasketItemMessage",
@@ -1316,6 +1305,21 @@ class Unit_Core_oxconfigTest extends OxidTestCase
         $_SERVER['HTTP_HOST'] = 'www.example.com.ru';
         $_SERVER['SCRIPT_NAME'] = '';
         $this->assertTrue( $oConfig->isCurrentUrl( $sUrl ) );
+
+        $sUrl = 'http://www.example.com.ru';
+        $oConfig = new oxConfig();
+        $oConfig->init();
+        $_SERVER['HTTP_HOST'] = 'www.example.com.ru';
+        $_SERVER['SCRIPT_NAME'] = '';
+        $this->assertTrue( $oConfig->isCurrentUrl( $sUrl ) );
+
+        //#4010: force_sid added in https to every link
+        $sUrl = 'https://www.example.com.ru';
+        $oConfig = new oxConfig();
+        $oConfig->init();
+        $_SERVER['HTTP_HOST'] = 'www.example.com.ru';
+        $_SERVER['SCRIPT_NAME'] = '';
+        $this->assertTrue( $oConfig->isCurrentUrl( $sUrl ) );
     }
 
 
@@ -1934,7 +1938,6 @@ class Unit_Core_oxconfigTest extends OxidTestCase
 
 
 
-
     public function testGetOutDir()
     {
         $oConfig = new oxConfig();
@@ -2188,7 +2191,7 @@ class Unit_Core_oxconfigTest extends OxidTestCase
         $this->assertEquals( $sQ, $oConfig->getDecodeValueQuery() );
     }
 
-    public function testGetShopMainUrl()
+     public function testGetShopMainUrl()
     {
         $oConfig = $this->getProxyClass( "oxConfig" );
 
@@ -2204,98 +2207,6 @@ class Unit_Core_oxconfigTest extends OxidTestCase
         $oConfig->setNonPublicVar("_blIsSsl", true );
         $this->assertEquals( $sSSLUrl, $oConfig->getShopMainUrl() );
 
-    }
-
-    /**
-     * Checks if config variables loaded from congfig.inc.php file
-     * takes higher priority compared to the ones loaded from db.
-     * This is a test case for bug #3427
-     */
-    public function testConfigFilePriority()
-    {
-        $oConfig = new modForTestInitLoadingPriority();
-        $oConfig->init();
-        $this->assertNotEquals(33, $oConfig->iDebug);
-    }
-
-    /**
-     * Checks if shop license has demo mode
-     */
-    public function testHasDemoKey()
-    {
-            return;
-        // all modules off
-        $oSerial = $this->getMock( 'oxSerial', array( "isFlagEnabled" ) );
-        $oSerial->expects( $this->once() )->method( 'isFlagEnabled')->will( $this->returnValue( true ) );
-
-        $oConfig = $this->getMock( 'oxconfig', array( "getSerial" ) );
-        $oConfig->expects( $this->once() )->method( 'getSerial')->will( $this->returnValue( $oSerial ) );
-
-        $this->assertTrue( $oConfig->hasDemoKey() );
-    }
-
-
-    /**
-     * oxmodule::getAllModules() test case
-     *
-     * @return null
-     */
-    public function testGetAllModules()
-    {
-        $aModules = array(
-            'oxorder'  => 'testExt1/module1&testExt2/module1',
-            'oxnews'   => 'testExt2/module2'
-        );
-
-        $aResult = array(
-            'oxorder'  => array( 'testExt1/module1', 'testExt2/module1' ),
-            'oxnews'   => array( 'testExt2/module2' )
-        );
-
-        $oConfig = $this->getMock( 'oxconfig', array( "getConfigParam" ) );
-        $oConfig->expects( $this->once() )->method( 'getConfigParam')->with( $this->equalTo( "aModules" ) )->will( $this->returnValue( $aModules ) );
-
-        $this->assertEquals( $aResult, $oConfig->getAllModules() );
-    }
-
-    /**
-     * oxmodule::parseModuleChains() test case, empty
-     *
-     * @return null
-     */
-    public function testParseModuleChainsEmpty()
-    {
-        $oConfig = $this->getProxyClass('oxconfig');
-
-        $aModules = array();
-        $aModulesArray  = array();
-        $this->assertEquals($aModulesArray, $oConfig->parseModuleChains($aModules));
-    }
-
-    /**
-     * oxmodule::parseModuleChains() test case, single
-     *
-     * @return null
-     */
-    public function testParseModuleChainsSigle()
-    {
-        $oConfig = $this->getProxyClass('oxconfig');
-        $aModules = array('oxtest' => 'test/mytest');
-        $aModulesArray  = array('oxtest' => array('test/mytest'));
-        $this->assertEquals($aModulesArray, $oConfig->parseModuleChains($aModules));
-    }
-
-    /**
-     * oxmodule::parseModuleChains() test case
-     *
-     * @return null
-     */
-    public function testParseModuleChains()
-    {
-        $oConfig = $this->getProxyClass('oxconfig');
-        $aModules = array('oxtest' => 'test/mytest&test1/mytest1');
-        $aModulesArray  = array('oxtest' => array('test/mytest','test1/mytest1'));
-        $this->assertEquals($aModulesArray, $oConfig->parseModuleChains($aModules));
     }
 
 }

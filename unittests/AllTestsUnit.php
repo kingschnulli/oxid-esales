@@ -48,7 +48,6 @@ class AllTestsUnit extends PHPUnit_Framework_TestCase
      */
     static function suite()
     {
-        chdir(dirname(__FILE__));
         $oSuite = new PHPUnit_Framework_TestSuite( 'PHPUnit' );
         $sFilter = getenv("PREG_FILTER");
         //foreach ( array( oxTESTSUITEDIR, oxTESTSUITEDIR.'/admin', oxTESTSUITEDIR.'/core', oxTESTSUITEDIR.'/views', oxTESTSUITEDIR.'/maintenance', oxTESTSUITEDIR.'/setup' ) as $sDir ) {
@@ -67,6 +66,7 @@ class AllTestsUnit extends PHPUnit_Framework_TestCase
                 if (!$sFilter || preg_match("&$sFilter&i", $sFilename)) {
                     error_reporting( (E_ALL ^ E_NOTICE) | E_STRICT );
                     ini_set('display_errors', true);
+
                     include_once $sFilename;
                     $sClassName = str_replace( array( "/", ".php" ), array( "_", "" ), $sFilename );
 

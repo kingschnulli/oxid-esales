@@ -220,7 +220,7 @@ class UnitUtf8_utf8Test extends OxidTestCase
     public function testOxArticleSetAndGetTags()
     {
         $sValue  = 'nekilnojamojo turto agentūrų verslo sėkme Литовские европарламентарии, срок полномочий которых в 2009 году подходит к концу Der Umstieg war für uns ein voller erfolg. OXID eShop ist flexibel und benutzerfreundlich';
-        $sResult = 'nekilnojamojo turto agentūrų verslo sėkme литовские европарл,срок полномочий которых в 2009 году подходит к концу der ums,sėkme литовские für';
+        $sResult = 'nekilnojamojo turto agentūrų verslo sėkme литовские европарламентарии,срок полномочий которых в 2009 году подходит к концу der umstieg war für uns ein voller erfolg. oxid eshop ist flexibel und benutzerfreundlich,sėkme литовские für';
 
         $oArticle = new oxarticle();
         $oArticle->setId( '_testArticle' );
@@ -976,7 +976,7 @@ class UnitUtf8_utf8Test extends OxidTestCase
                           'oxorder__oxdelfax', 'oxorder__oxdelsal', 'oxorder__oxbillnr',
                           'oxorder__oxtrackcode', 'oxorder__oxremark', 'oxorder__oxcurrency',
                           'oxorder__oxtransid', 'oxorder__oxcardtext',
-                          'oxorder__oxxid', 'oxorder__oxip' );
+                          'oxorder__oxxid', 'oxorder__oxip', 'oxorder__oxtransstatus' );
 
         $oOrder = oxNew( 'oxorder' );
         $oOrder->setId( '_testOrder' );
@@ -1209,7 +1209,6 @@ class UnitUtf8_utf8Test extends OxidTestCase
         $oArt2->oxarticles__oxtitle = new oxField('title2');
         $oArt2->oxarticles__oxprice = new oxField(10);
         $oArt2->oxarticles__oxshortdesc = new oxField($sValue);
-        $oArt2->oxarticles__oxtimestamp = new oxField('2011-09-06 09:46:42');
         $oArr = new oxarticlelist();
         $oArr->assign( array( $oArt2 ) );
 
@@ -1218,8 +1217,7 @@ class UnitUtf8_utf8Test extends OxidTestCase
         $oSAr2->link  = 'artlinkextra';
         $oSAr2->guid  = 'artlinkextra';
         $oSAr2->isGuidPermalink = true;
-        $oSAr2->description = "&lt;img src=&#039;".$oArt2->getThumbnailUrl()."&#039; border=0 align=&#039;left&#039; hspace=5&gt;".$sValue;
-        $oSAr2->date = "Tue, 06 Sep 2011 09:46:42 +0200";
+        $oSAr2->description = "&lt;img src=&#039;".$oArt2->getIconUrl()."&#039; border=0 align=&#039;left&#039; hspace=5&gt;".$sValue;
 
         $this->assertEquals(array($oSAr2), $oRss->UNITgetArticleItems($oArr));
 
@@ -1390,14 +1388,14 @@ class UnitUtf8_utf8Test extends OxidTestCase
 
 
         $oShop = oxNew( 'oxshop' );
-        $oShop->setId( 5 );
+        $oShop->setId( '5' );
         foreach ( $aFields as $sFieldName ) {
             $oShop->{$sFieldName} = new oxField( $sValue );
         }
         $oShop->save();
 
         $oShop = oxNew( 'oxshop' );
-        $oShop->load( 5 );
+        $oShop->load( '5' );
 
         foreach ( $aFields as $sFieldName ) {
             $this->assertTrue( strcmp( $oShop->{$sFieldName}->value, $sValue ) === 0, "$sFieldName (".$oShop->{$sFieldName}->value.")" );
@@ -1826,6 +1824,7 @@ class UnitUtf8_utf8Test extends OxidTestCase
     public function testaListPrepareMetaDescription()
     {
         $sValue = "agentūЛитовfür\n\r\t\xc2\x95\xc2\xa0";
+        $sDescription = oxLang::getInstance()->translateString( 'INC_HEADER_YOUAREHERE' );
         $oActCat = new oxcategory();
         $oActCat->oxcategories__oxtitle = $this->getMock( 'oxField', array( '__get' ) );
         $oActCat->oxcategories__oxtitle->expects( $this->once() )->method( '__get')->will( $this->returnValue( $sValue ) );
@@ -1833,7 +1832,7 @@ class UnitUtf8_utf8Test extends OxidTestCase
         $oListView = $this->getMock( 'alist', array( 'getActCategory' ) );
         $oListView->expects( $this->any() )->method( 'getActCategory')->will( $this->returnValue( $oActCat ) );
 
-        $sDescription = "agentūЛитовfür     . " . oxConfig::getInstance()->getActiveShop()->oxshops__oxtitleprefix->value;
+        $sDescription = $sDescription . " agentūЛитовfür     . " . oxConfig::getInstance()->getActiveShop()->oxshops__oxstarttitle->value;
 
         $oView = new oxubase();
         $this->assertEquals( $sDescription, $oListView->UNITprepareMetaDescription( false ) );
@@ -1931,7 +1930,7 @@ class UnitUtf8_utf8Test extends OxidTestCase
         $oView = new oxubase();
         $sResult = $oView->UNITprepareMetaDescription( $sDesc );
 
-        $this->assertEquals( "", $sResult);
+        $this->assertEquals( "&quot; &#039; : ! ?", $sResult);
     }
 
     public function testuBasePrepareMetaDescription()

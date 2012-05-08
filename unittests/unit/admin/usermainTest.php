@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: usermainTest.php 33190 2011-02-10 15:56:27Z arvydas.vapsva $
+ * @version   SVN: $Id: usermainTest.php 44474 2012-04-27 12:26:32Z mindaugas.rimgaila $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -141,5 +141,26 @@ class Unit_Admin_UserMainTest extends OxidTestCase
         $oView->render();
 
         $this->assertEquals( "EXCEPTION_USER_USEREXISTS", $oView->getViewDataElement( "sSaveError" ) );
+    }
+
+    /**
+     * Test User_Main::Save() - try to set new password with spec. chars.
+     * #0003680
+     *
+     * @return null
+     */
+    public function testSave_passwordSpecChars()
+    {
+        $sPass = '&quot;&#34;"o?p[]XfdKvA=#3K8tQ%';
+        modConfig::setParameter( 'newPassword', $sPass );
+
+        $oUser = $this->getMock( 'oxStdClass', array( 'setPassword', 'checkIfEmailExists', 'load' ) );
+        $oUser->expects( $this->once() )->method( 'setPassword' )->with( $this->equalTo( $sPass ) );
+        $oUser->expects( $this->once() )->method( 'checkIfEmailExists' )->will( $this->returnValue( true ) );
+        oxTestModules::addModuleObject( 'oxuser', $oUser );
+
+        $oView = $this->getMock( 'User_Main', array( 'getEditObjectId', '_allowAdminEdit' ) );
+        $oView->expects( $this->once() )->method( '_allowAdminEdit' )->will( $this->returnValue( true ) );
+        $oView->save();
     }
 }

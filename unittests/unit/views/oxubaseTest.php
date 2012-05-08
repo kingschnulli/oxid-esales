@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxubaseTest.php 44342 2012-04-25 10:59:43Z linas.kukulskis $
+ * @version   SVN: $Id: oxubaseTest.php 44499 2012-04-30 06:59:07Z saulius.stasiukaitis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -747,7 +747,7 @@ class Unit_Views_oxubaseTest extends OxidTestCase
         $oView = new oxubase();
         $sResult = $oView->UNITprepareMetaDescription( $sDesc );
 
-        $this->assertEquals( "", $sResult);
+        $this->assertEquals( "&quot; &#039; : ! ?", $sResult);
     }
 
     /*
@@ -1011,7 +1011,7 @@ class Unit_Views_oxubaseTest extends OxidTestCase
     public function testGetContentId()
     {
         $oView = $this->getProxyClass( 'oxubase' );
-        $sContentId = oxDb::getDb( oxDB::FETCH_MODE_ASSOC )->getOne( "SELECT oxid FROM oxcontents WHERE oxloadid = 'oximpressum' " );
+        $sContentId = oxDb::getDb( true )->getOne( "SELECT oxid FROM oxcontents WHERE oxloadid = 'oximpressum' " );
         $this->assertEquals( $sContentId, $oView->getContentId() );
     }
 
@@ -1066,11 +1066,13 @@ class Unit_Views_oxubaseTest extends OxidTestCase
         modConfig::setParameter('searchparam', 'sa"');
         modConfig::setParameter('searchcnid', 'sa"%22');
         modConfig::setParameter('searchvendor', 'sa%22"');
+        modConfig::setParameter('searchmanufacturer', 'ma%22"');
+
         $oV->setListType('lalala');
         $this->assertEquals('', $oV->getDynUrlParams());
         $oV->setListType('search');
         $sGot = $oV->getDynUrlParams();
-        $this->assertEquals('&amp;listtype=search&amp;searchparam=sa%22&amp;searchcnid=sa%22%22&amp;searchvendor=sa%22%22', $sGot);
+        $this->assertEquals('&amp;listtype=search&amp;searchparam=sa%22&amp;searchcnid=sa%22%22&amp;searchvendor=sa%22%22&amp;searchmanufacturer=ma%22%22', $sGot);
     }
 
     public function testGetDynUrlParamsInTaglist()
@@ -2161,28 +2163,17 @@ class Unit_Views_oxubaseTest extends OxidTestCase
      *
      * @return null
      */
-    public function testisFbWidgetVisible()
+    public function testisFbWidgetWisible()
     {
         // cookie OFF
         oxTestModules::addFunction("oxUtilsServer", "getOxCookie", "{return 0;}");
         $oView = new oxUbase();
-        $this->assertFalse( $oView->isFbWidgetVisible() );
+        $this->assertFalse( $oView->isFbWidgetWisible() );
 
         // cookie ON
         oxTestModules::addFunction("oxUtilsServer", "getOxCookie", "{return 1;}");
         $oView = new oxUbase();
-        $this->assertTrue( $oView->isFbWidgetVisible() );
-    }
-
-     /**
-     * oxUbase::isEnabledDownloadabaleFiles() test case
-     *
-     * @return null
-     */
-    public function testIsEnabledDownloadableFiles()
-    {
-        $oView = new oxUbase();
-        $this->assertEquals( (bool) oxConfig::getInstance()->getConfigParam( "blEnableDownloads" ), $oView->isEnabledDownloadableFiles() );
+        $this->assertTrue( $oView->isFbWidgetWisible() );
     }
 
     /**
@@ -2192,18 +2183,221 @@ class Unit_Views_oxubaseTest extends OxidTestCase
      */
     public function testShowRememberMe()
     {
-        $oView = new oxUbase();
-        $this->assertEquals((bool) oxConfig::getInstance()->getConfigParam( "blShowRememberMe" ),  $oView->showRememberMe() );
-    }
+        modConfig::getInstance()->setConfigParam('blShowRememberMe', true );
 
-    /**
-     * oxUbase::isPriceCalculated() test case
-     *
+        $oView = new oxUbase();
+        $this->assertTrue( $oView->showRememberMe() );
+    }
+    /* oxubase::getCatMoreUrl() test case
+     * 
      * @return null
      */
-    public function testIsPriceCalculated()
+    public function testGetCatMoreUrl()
     {
-        $oView = new oxUbase();
-        $this->assertEquals( (bool) oxConfig::getInstance()->getConfigParam( "bl_perfLoadPrice" ), $oView->isPriceCalculated() );
+        $oUBase = new oxUBase();
+        $this->assertEquals( $oUBase->getConfig()->getShopHomeURL().'cnid=oxmore', $oUBase->getCatMoreUrl() );
     }
+    
+    /*
+     * oxubase::isFieldRequired() test case
+     * 
+     * @return null
+     */
+    public function testIsFieldRequired()
+    {
+        $aArray = array( 'test' => 'isset' );
+        
+        $oUbase = $this->getProxyClass( 'oxUBase' );
+        $oUbase->setNonPublicVar( '_aMustFillFields', $aArray );
+        
+        $this->assertTrue( $oUbase->isFieldRequired( 'test' ) );
+        $this->assertFalse( $oUbase->isFieldRequired( 'testFalse' ) );
+        $this->assertFalse( $oUbase->isFieldRequired( null ) );
+    }
+    
+    /*
+     * oxubase::getSearchCatId() test case
+     * 
+     * @return null
+     */
+    public function testGetSearchCatId()
+    {
+        $oUbase = new oxubase();
+        $this->assertNull( $oUbase->getSearchCatId() );
+    }
+    
+    /*
+     * oxubase::getSearchVendor() test case
+     * 
+     * @return null
+     */
+    public function testGetSearchVendor()
+    {
+        $oUbase = new oxubase();
+        $this->assertNull( $oUbase->getSearchVendor() );
+    }
+    
+    /*
+     * oxubase::getSearchManufacturer() test case
+     * 
+     * @return null
+     */
+    public function testGetSearchManufacturer()
+    {
+        $oUbase = new oxubase();
+        $this->assertNull( $oUbase->getSearchManufacturer() );
+    }
+    
+    /*
+     * oxubase::getLastProducts() test case
+     * 
+     * @return null
+     */
+    public function testGetLastProducts()
+    {
+        $oUbase = new oxubase();
+        $this->assertNull( $oUbase->getLastProducts() );
+    }
+    
+    /*
+     * oxubase::getPageNavigationLimitedBottom() test case
+     * 
+     * @return null
+     */
+    public function testGetPageNavigationLimitedBottom()
+    {
+        $oUbase = new oxubase();        
+        $oRes = new stdClass();
+        $oRes->NrOfPages = null;
+        $oRes->actPage = 1;
+        $this->assertEquals( $oRes ,$oUbase->getPageNavigationLimitedBottom() );
+    }
+    
+    /*
+     * oxubase::getPageNavigationLimitedTop() test case
+     * 
+     * @return null
+     */
+    public function testGetPageNavigationLimitedTop()
+    {
+        $oUbase = new oxubase();
+        $oRes = new stdClass();
+        $oRes->NrOfPages = null;
+        $oRes->actPage = 1;        
+        $this->assertEquals( $oRes ,$oUbase->getPageNavigationLimitedTop() );
+    }
+    /*
+     * oxubase::getPageNavigation() test case
+     * 
+     * @return null
+     */
+    public function testGetPageNavigation()
+    {
+        $oUbase = new oxubase();
+        $this->assertNull( $oUbase->getPageNavigation() );
+    }
+    
+    /*
+     * oxubase::getAlsoBoughtTheseProducts() test case
+     * 
+     * @return null
+     */
+    public function testGetAlsoBoughtTheseProducts()
+    {
+        $oUbase = new oxubase();
+        $this->assertNull( $oUbase->getAlsoBoughtTheseProducts() );
+    }
+    
+    /*
+     * oxubase::getArticleId() test case
+     * 
+     * @return null
+     */
+    public function testGetArticleId()
+    {
+        $oUbase = new oxubase();
+        $this->assertNull( $oUbase->getArticleId() );
+    }
+    
+    /*
+     * oxubase::getCrossSelling() test case
+     * 
+     * @return null
+     */
+    public function testGetCrossSelling()
+    {
+        $oUbase = new oxubase();
+        $this->assertNull( $oUbase->getCrossSelling() );
+    }
+    
+    /*
+     * oxubase::getSimilarProducts() test case
+     * 
+     * @return null
+     */
+    public function testGetSimilarProducts()
+    {
+        $oUbase = new oxubase();
+        $this->assertNull( $oUbase->getSimilarProducts() );
+    }
+    
+    /*
+     * oxubase::getAccessoires() test case
+     * 
+     * @return null
+     */
+    public function testGetAccessoires()
+    {
+        $oUbase = new oxubase();
+        $this->assertNull( $oUbase->getAccessoires() );
+    }
+    
+    /*
+     * oxubase::getPaymentList() test case
+     * 
+     * @return null
+     */
+    public function testGetPaymentList()
+    {
+        $oUbase = new oxubase();
+        $this->assertNull( $oUbase->getPaymentList() );
+    }
+    
+    /*
+     * oxubase::getEditTags() test case
+     * 
+     * @return null
+     */
+    public function testGetEditTags()
+    {
+        $oUbase = new oxubase();
+        $this->assertNull( $oUbase->getEditTags() );
+    }  
+    
+    /*
+     * oxubase::loadManufacturerTree() test case
+     * 
+     * @return null
+     */
+    public function testLoadManufacturerTree()
+    {   
+        modConfig::getInstance()->setConfigParam( "bl_perfLoadManufacturerTree", true );
+             
+        $oUbase = new oxubase();        
+        $this->assertTrue( $oUbase->loadManufacturerTree() );
+    }
+        
+    /*
+     * oxubase::loadManufacturerTree() test case
+     * 
+     * @return null
+     */
+    public function testLoadManufacturerTreeFalse()
+    {
+        modConfig::getInstance()->setConfigParam( "bl_perfLoadManufacturerTree", false );
+        
+        $oUbase = new oxubase();
+        $this->assertFalse( $oUbase->loadManufacturerTree() );
+    }
+    
 }

@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcmpBasketTest.php 44319 2012-04-25 08:43:17Z mindaugas.rimgaila $
+ * @version   SVN: $Id: oxcmpBasketTest.php 44471 2012-04-27 12:06:58Z vaidas.matulevicius $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -485,7 +485,7 @@ class Unit_Views_oxcmpBasketTest extends OxidTestCase
         modConfig::setParameter( 'anid', 'b:artidn');
         modConfig::setParameter( 'am', 'b:am');
         modConfig::setParameter( 'sel', 'b:sel');
-        modConfig::setParameter( 'persparam', array('details' => 'b:persparam'));
+        modConfig::setParameter( 'persparam', 'b:persparam');
         modConfig::setParameter( 'bindex', 'bindex');
 
         $o =new oxcmp_basket();
@@ -495,28 +495,13 @@ class Unit_Views_oxcmpBasketTest extends OxidTestCase
                     (
                         'am' => 'b:am',
                         'sel' => 'b:sel',
-                        'persparam' => array('details' => 'b:persparam'),
+                        'persparam' => 'b:persparam',
                         'override' => false,
                         'basketitemid' => 'bindex',
                     )
 
             ),
             $o->UNITgetItems());
-
-        modConfig::setParameter( 'persparam', 'b:persparam');
-        $this->assertSame(array
-            (
-                'b:artid' => array
-                    (
-                        'am' => 'b:am',
-                        'sel' => 'b:sel',
-                        'persparam' => null,
-                        'override' => false,
-                        'basketitemid' => 'bindex',
-                    )
-
-            ),
-            $o->UNITgetItems(), '"Details" field in persparams is mandatory');
     }
 
 
@@ -547,7 +532,7 @@ class Unit_Views_oxcmpBasketTest extends OxidTestCase
                     $this->equalTo('a_aid'),
                     $this->equalTo('a_am'),
                     $this->equalTo('a_sel'),
-                    $this->equalTo(array('details' => 'a_persparam')),
+                    $this->equalTo('a_persparam'),
                     $this->equalTo('a_override'),
                     $this->equalTo(true),
                     $this->equalTo('a_basketitemid')
@@ -557,7 +542,7 @@ class Unit_Views_oxcmpBasketTest extends OxidTestCase
                     $this->equalTo('b_aid'),
                     $this->equalTo('b_am'),
                     $this->equalTo('b_sel'),
-                    $this->equalTo(array('details' => 'b_persparam')),
+                    $this->equalTo('b_persparam'),
                     $this->equalTo('b_override'),
                     $this->equalTo(true),
                     $this->equalTo('b_basketitemid')
@@ -575,7 +560,7 @@ class Unit_Views_oxcmpBasketTest extends OxidTestCase
                         'aid' => 'a_aid',
                         'am' => 'a_am',
                         'sel' => 'a_sel',
-                        'persparam' => array('details' => 'a_persparam'),
+                        'persparam' => 'a_persparam',
                         'override' => 'a_override',
                         'bundle' => 'a_bundle',
                         'basketitemid' => 'a_basketitemid',
@@ -584,7 +569,7 @@ class Unit_Views_oxcmpBasketTest extends OxidTestCase
                         'aid' => 'b_aid',
                         'am' => 'b_am',
                         'sel' => 'b_sel',
-                        'persparam' => array('details' => 'b_persparam'),
+                        'persparam' => 'b_persparam',
                         'override' => 'b_override',
                         'bundle' => 'b_bundle',
                         'basketitemid' => 'b_basketitemid',
@@ -767,7 +752,7 @@ class Unit_Views_oxcmpBasketTest extends OxidTestCase
                     $this->equalTo('a_aid'),
                     $this->equalTo(10),
                     $this->equalTo('a_sel'),
-                    $this->equalTo( array( 'details' => 'a_persparam' ) ),
+                    $this->equalTo('a_persparam'),
                     $this->equalTo('a_override'),
                     $this->equalTo(true),
                     $this->equalTo('a_basketitemid')
@@ -786,7 +771,7 @@ class Unit_Views_oxcmpBasketTest extends OxidTestCase
                         'aid' => 'a_aid',
                         'am' => 10,
                         'sel' => 'a_sel',
-                        'persparam' => array( 'details' => 'a_persparam' ),
+                        'persparam' => 'a_persparam',
                         'override' => 'a_override',
                         'bundle' => 'a_bundle',
                         'basketitemid' => 'a_basketitemid',
@@ -800,7 +785,7 @@ class Unit_Views_oxcmpBasketTest extends OxidTestCase
                         'aid' => 'a_aid',
                         'am' => 5,
                         'sel' => 'a_sel',
-                        'persparam' => array( 'details' => 'a_persparam' ),
+                        'persparam' => 'a_persparam',
                         'override' => 'a_override',
                         'bundle' => 'a_bundle',
                         'basketitemid' => 'a_basketitemid',
@@ -879,6 +864,28 @@ class Unit_Views_oxcmpBasketTest extends OxidTestCase
         $oCmp = oxNew('oxcmp_basket');
         $this->assertFalse( $oCmp->isRootCatChanged() );
     }
+    
+    /**
+     * Testing oxcmp_categories::isRootCatChanged() test case used for bascet exclude
+     *
+     * @return null
+     */
+    public function testIsRootCatChanged_ShowCatChangeWarning()
+    {
+        $oB = $this->getMock('basket', array( 'showCatChangeWarning', 'setCatChangeWarningState'));        
+        $oB->expects($this->once())->method('showCatChangeWarning')->will($this->returnValue( true ));
+        $oB->expects($this->once())->method('setCatChangeWarningState')->will($this->returnValue( null ));
+        
+        $oS = $this->getMock('oxsession', array( 'getBasket'));
+        $oS->expects($this->once())->method('getBasket')->will($this->returnValue( $oB ));
+        
+        
+        $oCB = $this->getMock('oxcmp_basket', array('getSession',));
+        $oCB->expects($this->once())->method('getSession')->will($this->returnValue( $oS ));
+        
+        
+        $this->assertTrue( $oCB->isRootCatChanged() );
+    }
 
 
     public function testInitNormalShop()
@@ -944,6 +951,32 @@ class Unit_Views_oxcmpBasketTest extends OxidTestCase
         $o = new oxcmp_basket();
         $o->UNITsetLastCallFnc('tobasket');
         $this->assertEquals( 'tobasket', $o->UNITgetLastCallFnc() );
+    }
+    
+    public function testExecuteuserchoiceToBasket()
+    {
+        modConfig::setParameter( 'tobasket', true );
+        
+        $oCB = new oxcmp_basket();
+        $this->assertEquals( 'basket', $oCB->executeuserchoice() );
+    }
+    
+    public function testExecuteuserchoiceElseCase()
+    {        
+        $oB = $this->getMock('stdclass', array('deleteBasket'));
+        $oB->expects($this->once())->method('deleteBasket')->will($this->returnValue( null ));
+
+        $oS = $this->getMock('oxsession', array('getBasket'));
+        $oS->expects($this->once())->method('getBasket')->will($this->returnValue( $oB ));
+        
+        $oP = $this->getMock('stdclass', array('setRootCatChanged'));
+        $oP->expects($this->once())->method('setRootCatChanged')->will($this->returnValue( null ));
+
+        $oCB = $this->getMock('oxcmp_basket', array('getSession', 'getParent'));
+        $oCB->expects($this->any())->method('getSession')->will($this->returnValue( $oS ));
+        $oCB->expects($this->any())->method('getParent')->will($this->returnValue( $oP ));
+        
+        $this->assertNull( $oCB->executeuserchoice() );
     }
 
 }

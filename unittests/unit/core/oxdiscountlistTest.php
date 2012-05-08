@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxdiscountlistTest.php 42685 2012-03-09 15:20:13Z tomas $
+ * @version   SVN: $Id: oxdiscountlistTest.php 43062 2012-03-21 09:14:58Z tomas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -193,7 +193,7 @@ class Unit_Core_oxDiscountlistTest extends OxidTestCase
 
         $this->assertEquals( 1, count($oResDiscount) );
         $this->assertEquals( '_testDiscountId', $aResDiscountKeys[0] );
-        $this->assertEquals( '_testDiscountId', $oResDiscount->sOXID);
+        $this->assertEquals( '_testDiscountId', $oResDiscount->sOXID );
         $this->assertEquals( 'testDiscountTitle', $oResDiscount->sDiscount );
         $this->assertEquals( 2.5, $oResDiscount->dDiscount );
         $this->assertEquals( 23.75, $oPrice->getBruttoPrice());
@@ -657,6 +657,4 @@ class Unit_Core_oxDiscountlistTest extends OxidTestCase
         oxDiscountList::getInstance()->forceReload();
         $this->assertTrue( oxDiscountList::getInstance()->hasSkipDiscountCategories() );
     }
-
-
 }

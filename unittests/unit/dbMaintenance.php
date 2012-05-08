@@ -245,7 +245,6 @@ class dbMaintenance
     public function dumpDB()
     {
         $sDbName = oxConfig::getInstance()->getConfigParam('dbName');
-        
         $time = microtime (true);
         $this->myDB = oxDb::getDb();
         $myConfig = oxConfig::getInstance();

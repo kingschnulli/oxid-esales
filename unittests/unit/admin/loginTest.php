@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: loginTest.php 43112 2012-03-23 09:44:33Z rimvydas.paskevicius $
+ * @version   SVN: $Id: loginTest.php 44480 2012-04-27 13:44:32Z mindaugas.rimgaila $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -30,6 +30,12 @@ require_once realpath( "." ).'/unit/test_config.inc.php';
  */
 class Unit_Admin_loginTest extends OxidTestCase
 {
+    public function setUp()
+    {
+        modConfig::getInstance()->setAdminMode( true );
+        return parent::setUp();
+    }
+
     /**
      * Tear down the fixture.
      *
@@ -53,21 +59,25 @@ class Unit_Admin_loginTest extends OxidTestCase
      */
     public function testLogin()
     {
+        $this->setExpectedException( 'oxException', 'LOGIN_ERROR' );
+
         $oConfig = oxConfig::getInstance();
 
         $oUser = oxNew( "oxUser" );
         $oUser->setId( "_testUserId" );
         $oUser->oxuser__oxactive = new oxField( "1" );
-        $oUser->oxuser__oxusername = new oxField( "&\"\'\\<>adminname" );
+        $oUser->oxuser__oxusername = new oxField( "&\"\'\\<>adminname", oxField::T_RAW );
         $oUser->setPassword( "&\"\'\\<>adminpsw" );
         $oUser->save();
+
+        oxTestModules::addFunction( 'oxUtilsView', 'addErrorToDisplay', '{ throw new oxException($aA[0]); }' );
+        oxTestModules::addFunction( 'oxUtilsServer', 'getOxCookie', '{ return array(\'test\'); }' );
 
         $_SERVER['REQUEST_METHOD'] = "POST";
         $oConfig->setParameter( "user", "&\"\'\\<>adminname" );
         $oConfig->setParameter( "pwd", "&\"\'\\<>adminpsw" );
 
         $oLogin = $this->getProxyClass( 'login' );
-
         $this->assertEquals( "admin_start", $oLogin->checklogin() );
     }
 

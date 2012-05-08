@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: guestbookTest.php 44287 2012-04-24 15:09:36Z linas.kukulskis $
+ * @version   SVN: $Id: guestbookTest.php 44284 2012-04-24 15:07:01Z mindaugas.rimgaila $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -155,7 +155,7 @@ class Unit_Views_GuestbookTest extends OxidTestCase
     {
         $oObj = new GuestBook();
         $oObj->prepareSortColumns();
-        $this->assertEquals( array( 'author', 'date' ), $oObj->getSortColumns() );
+        $this->assertEquals( array( 'oxuser.oxusername', 'oxgbentries.oxcreate' ), $oObj->getSortColumns() );
     }
 
     /**
@@ -167,7 +167,7 @@ class Unit_Views_GuestbookTest extends OxidTestCase
     {
         $oObj = new GuestBook();
         $oObj->prepareSortColumns();
-        $this->assertEquals( 'date', $oObj->getGbSortBy() );
+        $this->assertEquals( 'oxgbentries.oxcreate', $oObj->getGbSortBy() );
     }
 
     /**

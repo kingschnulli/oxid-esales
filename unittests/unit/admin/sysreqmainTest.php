@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: sysreqmainTest.php 43977 2012-04-16 16:36:26Z mindaugas.rimgaila $
+ * @version   SVN: $Id: sysreqmainTest.php 30321 2010-10-15 10:53:13Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -68,7 +68,7 @@ class Unit_Admin_sysreqmainTest extends OxidTestCase
         $sUrl = "http://www.oxidforge.org/wiki/Installation";
 
         $oSubj = new sysreq_main();
-        $this->assertEquals( $sUrl."#PHP_version_at_least_5.2.10", $oSubj->getReqInfoUrl( "php_version", false ) );
+        $this->assertEquals( $sUrl."#PHP_version_at_least_5.2.0", $oSubj->getReqInfoUrl( "php_version", false ) );
         $this->assertEquals( $sUrl, $oSubj->getReqInfoUrl( "none", false ) );
         $this->assertEquals( $sUrl."#Zend_Optimizer", $oSubj->getReqInfoUrl( "zend_optimizer", false ) );
     }

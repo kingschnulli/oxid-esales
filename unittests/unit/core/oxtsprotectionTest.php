@@ -51,6 +51,7 @@ class Unit_Core_oxtsprotectionTest extends OxidTestCase
      */
     public function testGetTsProducts()
     {
+        modConfig::getInstance()->setConfigParam( 'blCalcVATForPayCharge', true );
         $oTsProtection = oxNew('oxtsprotection');
         $oProducts = $oTsProtection->getTsProducts(50);
         $oProduct = current($oProducts);

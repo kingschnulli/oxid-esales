@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: forgotpwdTest.php 32117 2010-12-21 12:48:06Z linas.kukulskis $
+ * @version   SVN: $Id: forgotpwdTest.php 44474 2012-04-27 12:26:32Z mindaugas.rimgaila $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -193,7 +193,7 @@ class Unit_Views_forgotpwdTest extends OxidTestCase
         $this->assertEquals( 'forgotpwd?success=1', $oView->updatePassword() );
     }
 
-	/**
+    /**
      * Testing Account_Newsletter::getBreadCrumb()
      *
      * @return null
@@ -205,5 +205,23 @@ class Unit_Views_forgotpwdTest extends OxidTestCase
         $this->assertEquals(1, count($oF->getBreadCrumb()));
     }
 
+    /**
+     * Test ForgotPwd::updatePassword() - try to set password with spec. chars.
+     * #0003680
+     *
+     * @return null
+     */
+    public function testUpdatePassword_passwordSpecChars()
+    {
+        $sPass = '&quot;&#34;"o?p[]XfdKvA=#3K8tQ%';
+        modConfig::setParameter( 'password_new', $sPass );
+        modConfig::setParameter( 'password_new_confirm', $sPass );
 
+        $oUser = $this->getMock( 'oxStdClass', array( 'checkPassword' ) );
+        $oUser->expects( $this->once() )->method( 'checkPassword' )->with( $this->equalTo( $sPass ), $this->equalTo( $sPass ), $this->equalTo( true ) )->will( $this->returnValue( new oxException() ) );
+        oxTestModules::addModuleObject( 'oxuser', $oUser );
+
+        $oView = new ForgotPwd();
+        $oView->updatePassword();
+    }
 }

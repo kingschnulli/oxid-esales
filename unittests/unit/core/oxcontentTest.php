@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcontentTest.php 42179 2012-02-13 08:42:24Z arvydas.vapsva $
+ * @version   SVN: $Id: oxcontentTest.php 28277 2010-06-10 15:10:39Z arvydas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -300,23 +300,4 @@ class Unit_Core_oxcontentTest extends OxidTestCase
         $this->assertSame($sId, oxSeoEncoderContent::getInstance()->onDelete[0]);
     }
 
-    /**
-     * Test case for oxContent::loadCredits()
-     *
-     * @return null
-     */
-    public function testloadCredits()
-    {
-        // default "oxcredits"
-        $sId = "oxcredits";
-        $oContent = new oxContent();
-        $this->assertTrue( $oContent->loadCredits( $sId ) );
-        $this->assertEquals( $sId, $oContent->oxcontents__oxloadid->value );
-        $this->assertNotEquals( "", $oContent->oxcontents__oxcontent->value  );
-
-        // unknown "credits"
-        $sId = "credits";
-        $oContent = new oxContent();
-        $this->assertFalse( $oContent->loadCredits( $sId ) );
-    }
 }

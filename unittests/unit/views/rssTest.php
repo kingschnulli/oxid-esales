@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: rssTest.php 33635 2011-03-03 13:12:20Z linas.kukulskis $
+ * @version   SVN: $Id: rssTest.php 44474 2012-04-27 12:26:32Z mindaugas.rimgaila $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -204,9 +204,9 @@ class Unit_Views_rssTest extends OxidTestCase
         $oRssFeed = $this->getMock('stdclass', array('loadSearchArticles'));
         $oRssFeed->expects($this->once())->method('loadSearchArticles')->with(
                 $this->equalTo('x&searchparam'),
-                $this->equalTo('x&searchcnid'),
-                $this->equalTo('x&searchvendor'),
-                $this->equalTo('x&searchmanufacturer')
+                $this->equalTo('x&amp;searchcnid'),
+                $this->equalTo('x&amp;searchvendor'),
+                $this->equalTo('x&amp;searchmanufacturer')
         );
 
         $oRss = $this->getMock('Rss', array('getConfig', '_getRssFeed'));
@@ -281,7 +281,7 @@ class Unit_Views_rssTest extends OxidTestCase
         $oCfg->expects($this->once())->method('getConfigParam')->with($this->equalTo('bl_rssCategories'))->will($this->returnValue(true));
 
         $oObj = $this->getMock('stdclass', array('load'));
-        $oObj->expects($this->once())->method('load')->with($this->equalTo('x&objid'))->will($this->returnValue(true));
+        $oObj->expects($this->once())->method('load')->with($this->equalTo('x&amp;objid'))->will($this->returnValue(true));
 
         $oUtils = $this->getMock('stdclass', array('handlePageNotFoundError'));
         $oUtils->expects($this->never())->method('handlePageNotFoundError');
@@ -324,7 +324,7 @@ class Unit_Views_rssTest extends OxidTestCase
         $oCfg->expects($this->once())->method('getConfigParam')->with($this->equalTo('bl_rssRecommLists'))->will($this->returnValue(true));
 
         $oObj = $this->getMock('stdclass', array('load'));
-        $oObj->expects($this->once())->method('load')->with($this->equalTo('x&objid'))->will($this->returnValue(true));
+        $oObj->expects($this->once())->method('load')->with($this->equalTo('x&amp;objid'))->will($this->returnValue(true));
 
         $oUtils = $this->getMock('stdclass', array('handlePageNotFoundError'));
         $oUtils->expects($this->never())->method('handlePageNotFoundError');
@@ -369,7 +369,7 @@ class Unit_Views_rssTest extends OxidTestCase
         $oCfg->expects($this->once())->method('getConfigParam')->with($this->equalTo('bl_rssRecommListArts'))->will($this->returnValue(true));
 
         $oObj = $this->getMock('stdclass', array('load'));
-        $oObj->expects($this->once())->method('load')->with($this->equalTo('x&objid'))->will($this->returnValue(true));
+        $oObj->expects($this->once())->method('load')->with($this->equalTo('x&amp;objid'))->will($this->returnValue(true));
 
         $oUtils = $this->getMock('stdclass', array('handlePageNotFoundError'));
         $oUtils->expects($this->never())->method('handlePageNotFoundError');
@@ -394,7 +394,7 @@ class Unit_Views_rssTest extends OxidTestCase
         $oCfg->expects($this->once())->method('getConfigParam')->with($this->equalTo('bl_rssRecommListArts'))->will($this->returnValue(true));
 
         $oObj = $this->getMock('stdclass', array('load'));
-        $oObj->expects($this->once())->method('load')->with($this->equalTo('x&objid'))->will($this->returnValue(false));
+        $oObj->expects($this->once())->method('load')->with($this->equalTo('x&amp;objid'))->will($this->returnValue(false));
 
         $oUtils = $this->getMock('stdclass', array('handlePageNotFoundError'));
         $oUtils->expects($this->once())->method('handlePageNotFoundError');
@@ -416,7 +416,7 @@ class Unit_Views_rssTest extends OxidTestCase
         $oCfg->expects($this->once())->method('getConfigParam')->with($this->equalTo('bl_rssRecommLists'))->will($this->returnValue(true));
 
         $oObj = $this->getMock('stdclass', array('load'));
-        $oObj->expects($this->once())->method('load')->with($this->equalTo('x&objid'))->will($this->returnValue(false));
+        $oObj->expects($this->once())->method('load')->with($this->equalTo('x&amp;objid'))->will($this->returnValue(false));
 
         $oUtils = $this->getMock('stdclass', array('handlePageNotFoundError'));
         $oUtils->expects($this->once())->method('handlePageNotFoundError');

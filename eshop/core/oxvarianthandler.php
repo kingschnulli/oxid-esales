@@ -17,7 +17,7 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   core
- * @copyright (C) OXID eSales AG 2003-2012
+ * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
  * @version   SVN: $Id: oxvarianthandler.php 22524 2009-09-22 11:47:27Z tomas $
  */
@@ -453,7 +453,6 @@ class oxVariantHandler extends oxSuperCfg
      */
     protected function _getSelections( $sTitle )
     {
-
         if ( $this->getConfig()->getConfigParam( 'blUseMultidimensionVariants' ) ) {
             $aSelections = explode( $this->_sMdSeparator, $sTitle );
         } else {
@@ -478,10 +477,8 @@ class oxVariantHandler extends oxSuperCfg
     {
         $aReturn = false;
 
-
         // assigning variants
         $aVarSelects = $this->_getSelections( $sVarName );
-
         if ($iLimit) {
             $aVarSelects = array_slice($aVarSelects, 0, $iLimit);
         }
@@ -500,8 +497,6 @@ class oxVariantHandler extends oxSuperCfg
             if ($sActVariantId) {
                 $oCurrentVariant = $oVariantList[$sActVariantId];
             }
-
-
 
             return array(
                 'selections' => $aVariantSelections,

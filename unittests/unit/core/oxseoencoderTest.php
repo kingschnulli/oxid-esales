@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxseoencoderTest.php 43624 2012-04-06 15:38:40Z linas.kukulskis $
+ * @version   SVN: $Id: oxseoencoderTest.php 42280 2012-02-15 13:00:56Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -604,7 +604,7 @@ class Unit_Core_oxSeoEncoderTest extends OxidTestCase
     public function testSettingEmptyMetaDataWhileUpdatingObjectSeoInfo()
     {
         $iShopId = oxConfig::getInstance()->getBaseShopId();
-        $oDb = oxDb::getDb( oxDB::FETCH_MODE_ASSOC );
+        $oDb = oxDb::getDb(true);
 
         $oEncoder = new oxSeoEncoder();
         $oEncoder->addSeoEntry( 'testid', $iShopId, 0, 'index.php?cl=std', 'seo/url/', 'oxcategory', 0, 'oxkeywords', 'oxdescription', '' );
@@ -1083,7 +1083,7 @@ class Unit_Core_oxSeoEncoderTest extends OxidTestCase
     public function testSaveToDb_forExpiredLinksAndRootCateogoriesIds()
     {
         $iShopId = oxConfig::getInstance()->getBaseShopId();
-        $oDb = oxDb::getDb( oxDB::FETCH_MODE_ASSOC );
+        $oDb = oxDb::getDb( true );
 
         // seo urls
         $sObjectId = '_testId1';

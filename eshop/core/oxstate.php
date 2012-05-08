@@ -55,8 +55,7 @@ class oxState extends oxI18n
      */
     public function getIdByCode( $sCode, $sCountryId )
     {
-        $oDb = oxDb::getDb();
-        return $oDb->getOne( "select oxid from oxstates where oxisoalpha2 = ".$oDb->quote( $sCode )." AND oxcountryid = ".$oDb->quote( $sCountryId ));
+        return oxDb::getDb()->getOne( "select oxid from oxstates where oxisoalpha2 = ? AND oxcountryid = ?", array( $sCode, $sCountryId ) );
     }
 
 }
