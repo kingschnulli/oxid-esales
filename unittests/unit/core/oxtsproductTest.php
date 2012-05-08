@@ -47,7 +47,6 @@ class Unit_Core_oxtsproductTest extends OxidTestCase
      */
     public function testGetFPrice()
     {
-        modConfig::getInstance()->setConfigParam( 'blCalcVATForPayCharge', true );
         modConfig::getInstance()->setConfigParam( 'blEnterNetPrice', false );
         $oSubj = $this->getProxyClass("oxTsProduct");
         $oSubj->setNonPublicVar('_sTsId', 'TS080501_500_30_EUR');

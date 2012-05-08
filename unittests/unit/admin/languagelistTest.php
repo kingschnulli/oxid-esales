@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: languagelistTest.php 25400 2010-01-27 22:42:50Z alfonsas $
+ * @version   SVN: $Id: languagelistTest.php 43111 2012-03-23 09:38:03Z rimvydas.paskevicius $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';

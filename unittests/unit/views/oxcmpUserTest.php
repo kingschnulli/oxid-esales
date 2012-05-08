@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcmpUserTest.php 42894 2012-03-15 07:24:20Z saulius.stasiukaitis $
+ * @version   SVN: $Id: oxcmpUserTest.php 42987 2012-03-19 08:54:54Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -60,7 +60,7 @@ class Unit_Views_oxcmpUserTest extends OxidTestCase
         oxDb::getDb()->execute( $sQ );
         $sQ = 'delete from oxaddress where oxid like "test%" ';
         oxDb::getDb()->execute( $sQ );
-        
+
         $this->cleanUpTable('oxuser');
         $this->cleanUpTable('oxnewssubscribed');
 
@@ -1102,10 +1102,10 @@ class Unit_Views_oxcmpUserTest extends OxidTestCase
         $oNewsSubscribed->oxnewssubscribed__oxuserid  = new oxField( '_test_oxuserid', oxField::T_RAW );
         $oNewsSubscribed->oxnewssubscribed__oxemail   = new oxField( '_test@oxid.de', oxField::T_RAW );
         $oNewsSubscribed->save();
-        
+
         $oUser->changeUserData( $sUser, $sPassword, $sPassword2, $aInvAddress, $aDelAddress );
         $oUser->setNewsSubscription( false, false );
-        
+
         $oNewsSubscribed->load( '_test_9191965231c39c27141aab0431' );
         $this->assertNotEquals( $oNewsSubscribed->oxnewssubscribed__oxunsubscribed->value, '0000-00-00 00:00:00' );
     }

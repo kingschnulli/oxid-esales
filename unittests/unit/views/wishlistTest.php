@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: wishlistTest.php 35563 2011-05-24 08:39:56Z arunas.paskevicius $
+ * @version   SVN: $Id: wishlistTest.php 40264 2011-11-24 14:04:45Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -124,7 +124,7 @@ class Unit_Views_wishlistTest extends OxidTestCase
         modConfig::setParameter( 'search', 'testUserName' );
 
         $oWishList = $this->getProxyClass("Wishlist");
-        $myDB      = oxDb::getDB( true );
+        $myDB      = oxDb::getDB( oxDB::FETCH_MODE_ASSOC );
 
         // adding article to basket
         $sQ = 'insert into oxuserbaskets ( oxid, oxuserid, oxtitle ) values ( "_testBasketId1", "'.$this->_oUser->getId().'", "wishlist" ) ';
@@ -182,10 +182,10 @@ class Unit_Views_wishlistTest extends OxidTestCase
         $oWishList = new Wishlist();
         $aResults  = array();
         $aResult   = array();
-        
+
         $aResult["title"] = oxLang::getInstance()->translateString( 'PAGE_WISHLIST_PRODUCTS_TITLE', oxLang::getInstance()->getBaseLanguage(), false );
         $aResult["link"]  = $oWishList->getLink();
-        
+
         $aResults[] = $aResult;
 
         $this->assertEquals($aResults, $oWishList->getBreadCrumb());

@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: ordermainTest.php 33189 2011-02-10 15:55:32Z arvydas.vapsva $
+ * @version   SVN: $Id: ordermainTest.php 43464 2012-04-03 12:43:35Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -118,6 +118,30 @@ class Unit_Admin_OrderMainTest extends OxidTestCase
     }
 
     /**
+     * Order_Main::senddownloadlinks() test case
+     *
+     * @return null
+     */
+    public function testSenddownloadlinks()
+    {
+        //
+        oxTestModules::addFunction( 'oxorder', 'load', '{ return true; }');
+        oxTestModules::addFunction( 'oxemail', 'sendDownloadLinksMail', '{ throw new Exception( "sendDownloadLinksMail" ); }');
+
+        modConfig::setParameter( "oxid", "testId" );
+
+        // testing..
+        try {
+            $oView = new Order_Main();
+            $oView->senddownloadlinks();
+        } catch ( Exception $oExcp ) {
+            $this->assertEquals( "sendDownloadLinksMail", $oExcp->getMessage(), "error in Order_Main::senddownloadlinks()" );
+            return;
+        }
+        $this->fail( "error in Order_Main::senddownloadlinks()" );
+    }
+
+    /**
      * Order_Main::Resetorder() test case
      *
      * @return null
@@ -139,56 +163,4 @@ class Unit_Admin_OrderMainTest extends OxidTestCase
         $this->fail( "error in Order_Main::resetorder()" );
     }
 
-    /**
-     * Order_Main::ChangeDelSet() test case
-     *
-     * @return null
-     */
-    public function testChangeDelSet()
-    {
-        //
-        oxTestModules::addFunction( 'oxorder', 'load', '{ return true; }');
-        oxTestModules::addFunction( 'oxorder', 'reloadDiscount', '{}');
-        oxTestModules::addFunction( 'oxorder', 'setDelivery', '{}');
-        oxTestModules::addFunction( 'oxorder', 'recalculateOrder', '{ throw new Exception( "recalculateOrder" ); }');
-
-        modConfig::setParameter( "setDelSet", "testDelSet" );
-        modConfig::setParameter( "oxid", "testId" );
-
-        // testing..
-        try {
-            $oView = new Order_Main();
-            $oView->changeDelSet();
-        } catch ( Exception $oExcp ) {
-            $this->assertEquals( "recalculateOrder", $oExcp->getMessage(), "error in Order_Main::changeDelSet()" );
-            return;
-        }
-        $this->fail( "error in Order_Main::changeDelSet()" );
-    }
-
-    /**
-     * Order_Main::ChangePayment() test case
-     *
-     * @return null
-     */
-    public function testChangePayment()
-    {
-        //
-        oxTestModules::addFunction( 'oxorder', 'load', '{ return true; }');
-        oxTestModules::addFunction( 'oxorder', 'reloadDiscount', '{}');
-        oxTestModules::addFunction( 'oxorder', 'recalculateOrder', '{ throw new Exception( "recalculateOrder" ); }');
-
-        modConfig::setParameter( "setPayment", "testPayment" );
-        modConfig::setParameter( "oxid", "testId" );
-
-        // testing..
-        try {
-            $oView = new Order_Main();
-            $oView->changePayment();
-        } catch ( Exception $oExcp ) {
-            $this->assertEquals( "recalculateOrder", $oExcp->getMessage(), "error in Order_Main::changePayment()" );
-            return;
-        }
-        $this->fail( "error in Order_Main::changePayment()" );
-    }
 }

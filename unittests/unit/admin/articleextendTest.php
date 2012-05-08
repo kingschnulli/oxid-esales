@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: articleextendTest.php 38538 2011-09-05 09:03:51Z linas.kukulskis $
+ * @version   SVN: $Id: articleextendTest.php 38804 2011-09-19 14:39:05Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -240,4 +240,16 @@ class Unit_Admin_ArticleExtendTest extends OxidTestCase
         $this->assertTrue( (bool) oxDb::getDb()->getOne( "select 1 from oxmediaurls where oxurl = 'testUrl' and oxdesc='testDesc' ") );
     }
 
+    /**
+     * Test case for Article_Extend::getUnitsArray()
+     *
+     * @return null
+     */
+    public function testGetUnitsArray()
+    {
+        $aArray = oxLang::getInstance()->getSimilarByKey( "_UNIT_", 0, false );
+        $oView = new Article_Extend();
+
+        $this->assertEquals( $aArray, $oView->getUnitsArray() );
+    }
 }

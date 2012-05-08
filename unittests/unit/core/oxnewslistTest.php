@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxnewslistTest.php 27813 2010-05-19 13:03:54Z rimvydas.paskevicius $
+ * @version   SVN: $Id: oxnewslistTest.php 43565 2012-04-05 14:08:15Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -116,7 +116,7 @@ class Unit_Core_oxnewslistTest extends OxidTestCase
 
         $oNewsList = new oxnewslist();
         $oNewsList->setUser( $oUser );
-        $oNewsList->loadNews( 1 );
+        $oNewsList->loadNews(0, 1 );
 
         $this->assertEquals( 1, $oNewsList->count() );
         $oItem = $oNewsList->current();

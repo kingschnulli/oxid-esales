@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxuserbasketitemTest.php 29921 2010-09-21 12:18:02Z sarunas $#
+ * @version   SVN: $Id: oxuserbasketitemTest.php 40616 2011-12-14 14:09:53Z arvydas.vapsva $#
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -222,14 +222,6 @@ class Unit_Core_oxuserbasketitemTest extends OxidTestCase
 
         //$this->assertTrue( $oArticle->getNonPublicVar('_blForceSkipAbPrice') );
         //$this->assertTrue( $oArticle->getNonPublicVar('_blDoNotLoadVariants') );
-    }
-    // testing article title formatting - article has parent
-    public function testGetArticleTitleFormatterArticleHasParent()
-    {
-        $oBasketItem = new oxuserbasketitem();
-        $oBasketItem->oxuserbasketitems__oxartid = new oxField('xxx', oxField::T_RAW);
-        $oArticle = $oBasketItem->getArticle( 'xxx' );
-        $this->assertEquals( 'xxx, yyy', $oArticle->oxarticles__oxtitle->value );
     }
     // testing article title formatting - article has NO parent
     public function testGetArticleTitleFormatterArticleHasNoParent()

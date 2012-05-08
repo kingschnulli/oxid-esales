@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxsession.php 43979 2012-04-16 16:45:39Z mindaugas.rimgaila $
+ * @version   SVN: $Id: oxsession.php 44277 2012-04-24 13:50:29Z linas.kukulskis $
  */
 
 DEFINE('_DB_SESSION_HANDLER', getShopBasePath() . 'core/adodblite/session/adodb-session.php');
@@ -624,7 +624,13 @@ class oxSession extends oxSuperCfg
             //#1746
             oxNew('oxbasketitem');
 
-            $oBasket = ( $sBasket && ( $oBasket = unserialize( $sBasket ) ) ) ? $oBasket : oxNew( 'oxbasket' );
+            $oBasket = ( $sBasket && ( $oBasket = unserialize( $sBasket ) ) ) ? $oBasket : null;
+
+            //#3908
+            if ( !$oBasket || !($oBasket instanceof oxbasket)) {
+                $oBasket = oxNew('oxbasket');
+            }
+
             $this->_validateBasket($oBasket);
             $this->setBasket( $oBasket );
         }
@@ -911,7 +917,7 @@ class oxSession extends oxSuperCfg
     {
         $oDb = oxDb::getDb();
         //matze changed sesskey to SessionID because structure of oxsession changed!!
-        $sSID = $oDb->GetOne("select SessionID from oxsessions where SessionID = ".$oDb->quote( $this->getId() ));
+        $sSID = $oDb->getOne("select SessionID from oxsessions where SessionID = ".$oDb->quote( $this->getId() ));
 
         //2007-05-14
         //we check _blNewSession as well as this may be actually new session not written to db yet
@@ -939,7 +945,7 @@ class oxSession extends oxSuperCfg
         $sCurrUrl  = $myConfig->isSsl() ? $myConfig->getSslShopUrl() : $myConfig->getShopUrl();
 
         $blSessCookieSetOnce = false;
-        if ( isset( $aSessCookieSetOnce[$sCurrUrl] ) ) {
+        if ( is_array($aSessCookieSetOnce) && isset( $aSessCookieSetOnce[$sCurrUrl] ) ) {
             $blSessCookieSetOnce = $aSessCookieSetOnce[$sCurrUrl];
         }
 
@@ -956,6 +962,10 @@ class oxSession extends oxSuperCfg
 
         //if we detect the cookie then set session var for possible later use
         if ( $sCookieSid == "oxid" && !$blSessCookieSetOnce ) {
+            if (!is_array($aSessCookieSetOnce)) {
+                $aSessCookieSetOnce = array();
+            }
+
             $aSessCookieSetOnce[$sCurrUrl] = "ox_true";
             self::setVar( "sessioncookieisset", $aSessCookieSetOnce );
         }

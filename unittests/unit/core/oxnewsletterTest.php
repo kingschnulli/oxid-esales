@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxnewsletterTest.php 32550 2011-01-18 08:11:31Z arvydas.vapsva $
+ * @version   SVN: $Id: oxnewsletterTest.php 44061 2012-04-19 07:52:54Z vaidas.matulevicius $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -59,6 +59,19 @@ class modEmailOxNewsLetter2 extends oxEmail
     }
 }
 
+/*
+ * Dummy class for newsletter subject test.
+ * 
+ */
+class modEmailOxNewsLetterSubject extends oxEmail
+{
+    public $Timeout       = 2;
+    public function sendNewsletterMail( $oNews, $oUser, $sSubject = null )
+    {
+        throw new oxexception($sSubject);
+    }
+}
+
 class oxnewsletterForUnit_oxnewsletterTest extends oxnewsletter
 {
     public function setNonPublicVar( $sVarName, $sVarValue )
@@ -84,7 +97,7 @@ class Unit_Core_oxnewsletterTest extends OxidTestCase
 
         $oDB = oxDb::getDb();
 
-        $sInsert = "INSERT INTO `oxnewsletter` VALUES ( 'newstest', 'oxbaseshop', 'Test', 'TestHTML', 'TestPlain' )";
+        $sInsert = "INSERT INTO `oxnewsletter` VALUES ( 'newstest', 'oxbaseshop', 'Test', 'TestHTML', 'TestPlain', 'TestSubject' )";
         $oDB->Execute( $sInsert );
 
         $sInsert = "INSERT INTO `oxobject2group` VALUES ( 'test', 'oxbaseshop', 'newstest', 'oxidnewcustomer' )";
@@ -338,11 +351,27 @@ class Unit_Core_oxnewsletterTest extends OxidTestCase
         $oTestNews->UNITsetUser( 'oxdefaultadmin' );
         $blMailWasSent = $oTestNews->send();
         $this->assertTrue( $blMailWasSent );
-
-        $oDB = oxDb::getDb();
-        $sSQL .= 'select oxemailfailed from oxnewssubscribed where oxuserid = "oxdefaultadmin" ';
-        $sFailed = $oDB->getOne( $sSQL );
-        $this->assertEquals( '0', $sFailed );
+    }	
+	
+    /*
+     * oxNewsletter::send - Testing for correct subject value.
+     * 
+     * @return null
+     */
+    public function testSendMail_Subject()
+    {
+        oxAddClassModule( 'modEmailOxNewsLetterSubject', 'oxEmail' );
+		
+        $oTestNews = oxNew( "oxNewsLetter" );		
+        if ( !$oTestNews->load( 'oxidnewsletter' ) )
+             $this->fail( 'can not load news' );
+		
+		$oTestNews->oxnewsletter__oxsubject->value = "TestSubject";
+		
+		$this->setExpectedException('oxexception', "TestSubject");
+		
+        $oTestNews->UNITsetUser( 'oxdefaultadmin' );
+        $blMailWasSent = $oTestNews->send();       
     }
 
     public function testSendMailAndFail()
@@ -357,11 +386,6 @@ class Unit_Core_oxnewsletterTest extends OxidTestCase
         $oTestNews->UNITsetUser( 'oxdefaultadmin' );
         $blMailWasSent = $oTestNews->send();
         $this->assertFalse( $blMailWasSent );
-
-        $oDB = oxDb::getDb();
-        $sSQL .= 'select oxemailfailed from oxnewssubscribed where oxuserid = "oxdefaultadmin" ';
-        $sFailed = $oDB->getOne( $sSQL );
-        $this->assertEquals( '1', $sFailed );
     }
 
     /**

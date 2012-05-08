@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: paymentTest.php 40613 2011-12-14 13:59:39Z mindaugas.rimgaila $
+ * @version   SVN: $Id: paymentTest.php 43132 2012-03-23 14:19:06Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -662,7 +662,7 @@ class Unit_Views_paymentTest extends OxidTestCase
     }
     public function testRenderReturnsToBasketIfReservationOnAndBasketEmpty()
     {
-        oxTestModules::addFunction('oxUtils', 'redirect($url)', '{throw new Exception($url);}');
+        oxTestModules::addFunction('oxUtils', 'redirect($url, $blAddRedirectParam = true, $iHeaderCode = 301)', '{throw new Exception($url);}');
         modConfig::getInstance()->setConfigParam('blPsBasketReservationEnabled', true);
         modConfig::setParameter( 'sslredirect', 'forced' );
 
@@ -693,7 +693,7 @@ class Unit_Views_paymentTest extends OxidTestCase
         $sRedirUrl = oxConfig::getInstance()->getShopHomeURL().'cl=basket';
         $this->setExpectedException('Exception', $sRedirUrl);
 
-        oxTestModules::addFunction('oxUtils', 'redirect($url)', '{throw new Exception($url);}');
+        oxTestModules::addFunction('oxUtils', 'redirect($url, $blAddRedirectParam = true, $iHeaderCode = 301)', '{throw new Exception($url);}');
         modConfig::getInstance()->setConfigParam('blPsBasketReservationEnabled', false);
         // skip redirect to SSL
         modConfig::setParameter( 'sslredirect', 'forced' );
@@ -715,7 +715,7 @@ class Unit_Views_paymentTest extends OxidTestCase
         $sRedirUrl = oxConfig::getInstance()->getShopHomeURL().'cl=start';
         $this->setExpectedException('Exception', $sRedirUrl);
 
-        oxTestModules::addFunction('oxUtils', 'redirect($url)', '{throw new Exception($url);}');
+        oxTestModules::addFunction('oxUtils', 'redirect($url, $blAddRedirectParam = true, $iHeaderCode = 301)', '{throw new Exception($url);}');
         modConfig::getInstance()->setConfigParam('blPsBasketReservationEnabled', false);
         // skip redirect to SSL
         modConfig::setParameter( 'sslredirect', 'forced' );
@@ -735,7 +735,6 @@ class Unit_Views_paymentTest extends OxidTestCase
     public function testGetTsProtections()
     {
         modConfig::getInstance()->setConfigParam( 'blEnterNetPrice', false );
-        modConfig::getInstance()->setConfigParam( 'blCalcVATForPayCharge', true );
         $oP = $this->getMock('oxprice', array('getBruttoPrice'));
         $oP->expects($this->once())->method('getBruttoPrice')->will($this->returnValue(50));
         $oB = $this->getMock('oxbasket', array('getPrice'));

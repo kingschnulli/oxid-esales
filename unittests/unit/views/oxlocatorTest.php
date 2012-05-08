@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxlocatorTest.php 32947 2011-02-07 09:12:37Z vilma $
+ * @version   SVN: $Id: oxlocatorTest.php 44342 2012-04-25 10:59:43Z linas.kukulskis $
  */
 
 

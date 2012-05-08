@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: priceCalculationTest.php 43439 2012-04-02 12:55:55Z mindaugas.rimgaila $
+ * @version   SVN: $Id: priceCalculationTest.php 43506 2012-04-04 07:22:26Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -123,11 +123,10 @@ class testArticleBasePrices extends Unit_Maintenance_priceCalculationTest
                 continue;
             }
             $data[1] = str_replace(',', '.', $data[1]);
-            if (!is_numeric($data[1])) {
+            if (!is_numeric(trim($data[1]))) {
                 continue;
             }
             $aData = array('oxid'=>$data[0], 'oxprice'=>str_replace(',', '.', $data[1]), 'oxpricea'=>str_replace(',', '.', $data[2]), 'oxpriceb'=>str_replace(',', '.', $data[3]), 'oxpricec'=>str_replace(',', '.', $data[4]));
-
             switch ($data[5]) {
                 case "A":
                     $sGroup = 'oxidpricea';
@@ -169,7 +168,7 @@ class testArticleBasePrices extends Unit_Maintenance_priceCalculationTest
         $blParam = oxConfig::getInstance()->getConfigParam( 'blOverrideZeroABCPrices' ) ;
         oxConfig::getInstance()->setConfigParam( 'blOverrideZeroABCPrices', 1) ;
 
-        $this->checkEquals($dExpected, $oArticle->getBasePrice());
+        $this->checkEquals($dExpected, $oArticle->getBasePrice(), "from article: ".$oArticle->getId().", if expected: $dExpected");
 
         oxConfig::getInstance()->setConfigParam( 'blOverrideZeroABCPrices', $blParam) ;
     }
@@ -620,16 +619,17 @@ class testAdvBasketPrices extends Unit_Maintenance_priceCalculationTest
                 // netto prices ?
                 if ( strlen(trim( $data[4] )) ) {
                    modConfig::getInstance()->setConfigParam( 'blEnterNetPrice', (bool)$data[4] );
+                   modConfig::getInstance()->setConfigParam( 'blWrappingVatOnTop', (bool)$data[4] );
                 }
 
                 // VAT for wrapping ?
                 if ( strlen(trim( $data[20] )) ) {
-                    modConfig::getInstance()->setConfigParam( 'blCalcVatForWrapping', (bool)$data[20] );
+                    modConfig::getInstance()->setConfigParam( 'blShowVATForWrapping', (bool)$data[20] );
                 }
 
                 // VAT for delivery ?
                 if ( strlen(trim( $data[24] )) ) {
-                    modConfig::getInstance()->setConfigParam( 'blCalcVATForDelivery', (bool)$data[24] );
+                    modConfig::getInstance()->setConfigParam( 'blShowVATForDelivery', (bool)$data[24] );
                 }
 
                 // currency rate ?

@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxubaseTest.php 44123 2012-04-20 12:41:37Z tomas $
+ * @version   SVN: $Id: oxubaseTest.php 44342 2012-04-25 10:59:43Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -1011,7 +1011,7 @@ class Unit_Views_oxubaseTest extends OxidTestCase
     public function testGetContentId()
     {
         $oView = $this->getProxyClass( 'oxubase' );
-        $sContentId = oxDb::getDb( true )->getOne( "SELECT oxid FROM oxcontents WHERE oxloadid = 'oximpressum' " );
+        $sContentId = oxDb::getDb( oxDB::FETCH_MODE_ASSOC )->getOne( "SELECT oxid FROM oxcontents WHERE oxloadid = 'oximpressum' " );
         $this->assertEquals( $sContentId, $oView->getContentId() );
     }
 
@@ -2161,17 +2161,28 @@ class Unit_Views_oxubaseTest extends OxidTestCase
      *
      * @return null
      */
-    public function testisFbWidgetWisible()
+    public function testisFbWidgetVisible()
     {
         // cookie OFF
         oxTestModules::addFunction("oxUtilsServer", "getOxCookie", "{return 0;}");
         $oView = new oxUbase();
-        $this->assertFalse( $oView->isFbWidgetWisible() );
+        $this->assertFalse( $oView->isFbWidgetVisible() );
 
         // cookie ON
         oxTestModules::addFunction("oxUtilsServer", "getOxCookie", "{return 1;}");
         $oView = new oxUbase();
-        $this->assertTrue( $oView->isFbWidgetWisible() );
+        $this->assertTrue( $oView->isFbWidgetVisible() );
+    }
+
+     /**
+     * oxUbase::isEnabledDownloadabaleFiles() test case
+     *
+     * @return null
+     */
+    public function testIsEnabledDownloadableFiles()
+    {
+        $oView = new oxUbase();
+        $this->assertEquals( (bool) oxConfig::getInstance()->getConfigParam( "blEnableDownloads" ), $oView->isEnabledDownloadableFiles() );
     }
 
     /**
@@ -2181,36 +2192,18 @@ class Unit_Views_oxubaseTest extends OxidTestCase
      */
     public function testShowRememberMe()
     {
-        modConfig::getInstance()->setConfigParam('blShowRememberMe', true );
-
         $oView = new oxUbase();
-        $this->assertTrue( $oView->showRememberMe() );
+        $this->assertEquals((bool) oxConfig::getInstance()->getConfigParam( "blShowRememberMe" ),  $oView->showRememberMe() );
     }
 
     /**
-     * testing OxUBase::prepareSortColumns(), bugfix #2992, global sorting is saved in session
+     * oxUbase::isPriceCalculated() test case
+     *
+     * @return null
      */
-    public function testSortingIsSaved()
+    public function testIsPriceCalculated()
     {
-        modSession::getInstance()->setVar("aSorting", null);
-
-        modConfig::setParameter( 'cnid', 'testCat' );
-        modConfig::setParameter( 'listorderby', 'oxvarminprice' );
-        modConfig::setParameter( 'listorder', 'asc' );
-
-        $oSubj = new oxUBase();
-        $oSubj->prepareSortColumns();
-
-        modConfig::setParameter( 'cnid', 'testCat' );
-        modConfig::setParameter( 'listorderby', 'oxtitle' );
-        modConfig::setParameter( 'listorder', 'desc' );
-
-        $oSubj->prepareSortColumns();
-
-        $aSort = modSession::getInstance()->getVar("aSorting");
-
-        $this->assertEquals(1, count($aSort) );
-        $this->assertEquals('oxtitle', $aSort["category"]["sortby"]);
-        $this->assertEquals('desc', $aSort["category"]["sortdir"]);
+        $oView = new oxUbase();
+        $this->assertEquals( (bool) oxConfig::getInstance()->getConfigParam( "bl_perfLoadPrice" ), $oView->isPriceCalculated() );
     }
 }

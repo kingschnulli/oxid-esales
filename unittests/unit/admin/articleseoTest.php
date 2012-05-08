@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: articleseoTest.php 38325 2011-08-22 12:30:00Z arvydas.vapsva $
+ * @version   SVN: $Id: articleseoTest.php 40264 2011-11-24 14:04:45Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -73,7 +73,7 @@ class Unit_Admin_ArticleSeoTest extends OxidTestCase
                oxarticles.oxid={$sO2CView}.oxobjectid where
                oxarticles.oxactive='1' and {$sO2CView}.oxobjectid is not null";
 
-        $oDb = oxDb::getDb( true );
+        $oDb = oxDb::getDb( oxDB::FETCH_MODE_ASSOC );
         $sProdId = $oDb->getOne( $sQ );
 
         // must be existing
@@ -486,7 +486,7 @@ class Unit_Admin_ArticleSeoTest extends OxidTestCase
                oxarticles.oxid={$sO2CView}.oxobjectid where
                oxarticles.oxactive='1' and {$sO2CView}.oxobjectid is not null";
 
-        $oDb = oxDb::getDb( true );
+        $oDb = oxDb::getDb( oxDB::FETCH_MODE_ASSOC );
         $sProdId = $oDb->getOne( $sQ );
 
         // must be existing
@@ -520,7 +520,7 @@ class Unit_Admin_ArticleSeoTest extends OxidTestCase
                oxarticles.oxid=oxartextends.oxid where
                oxarticles.oxactive='1' and oxartextends.oxid is not null and oxartextends.oxtags != ''";
 
-        $oDb = oxDb::getDb( true );
+        $oDb = oxDb::getDb( oxDB::FETCH_MODE_ASSOC );
         $sProdId = $oDb->getOne( $sQ );
 
         // must be existing

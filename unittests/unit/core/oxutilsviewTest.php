@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutilsviewTest.php 41722 2012-01-24 11:33:57Z mindaugas.rimgaila $
+ * @version   SVN: $Id: oxutilsviewTest.php 43298 2012-03-29 13:10:18Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -485,12 +485,14 @@ class Unit_Core_oxUtilsViewTest extends OxidTestCase
 
         $oCfg = $this->getMock('oxConfig', array('getConfigParam'));
         $oCfg->expects($this->any())->method('getConfigParam')->with($this->equalTo('sShopDir'))->will($this->returnValue($sMdir));
+        $aInfo = array( 'test1' => 'test1', '__sModule__' => '__sModule__' );
 
         $oUV = $this->getMock(
                 oxTestModules::publicize('oxUtilsView', '_getTemplateBlock'),
-                array('getConfig')
+                array('getConfig', '_getActiveModuleInfo')
             );
         $oUV->expects($this->any())->method('getConfig')->will($this->returnValue($oCfg));
+        $oUV->expects($this->any())->method('_getActiveModuleInfo')->will($this->returnValue($aInfo));
 
         $this->assertEquals('*this is module test block*', $oUV->p_getTemplateBlock('test1', 'test2'));
 
@@ -510,16 +512,18 @@ class Unit_Core_oxUtilsViewTest extends OxidTestCase
         $oCfg = $this->getMock('oxConfig', array('getShopId'));
         $oCfg->expects($this->at(0))->method('getShopId')->will($this->returnValue('15'));
         $oCfg->expects($this->at(1))->method('getShopId')->will($this->returnValue('25'));
+        $aInfo = array( 'module1' => 'module1', 'module2' => 'module2' );
 
-        $o = $this->getMock('oxUtilsView', array('getConfig', '_getTemplateBlock'));
+        $o = $this->getMock('oxUtilsView', array('getConfig', '_getActiveModuleInfo', '_getTemplateBlock'));
         $o->expects($this->any())->method('getConfig')->will($this->returnValue($oCfg));
-        $o->expects($this->at(1))->method('_getTemplateBlock')
+        $o->expects($this->any())->method('_getActiveModuleInfo')->will($this->returnValue($aInfo));
+        $o->expects($this->at(3))->method('_getTemplateBlock')
                                     ->with($this->equalTo('module2'), $this->equalTo('contentfile3'))
                                     ->will($this->returnValue('content3'));
-        $o->expects($this->at(2))->method('_getTemplateBlock')
+        $o->expects($this->at(4))->method('_getTemplateBlock')
                                     ->with($this->equalTo('module1'), $this->equalTo('contentfile1'))
                                     ->will($this->returnValue('content1'));
-        $o->expects($this->at(3))->method('_getTemplateBlock')
+        $o->expects($this->at(5))->method('_getTemplateBlock')
                                     ->with($this->equalTo('module2'), $this->equalTo('contentfile2'))
                                     ->will($this->returnValue('content2'));
 
@@ -550,19 +554,21 @@ class Unit_Core_oxUtilsViewTest extends OxidTestCase
         $oCfg = $this->getMock('oxConfig', array('getShopId'));
         $oCfg->expects($this->at(0))->method('getShopId')->will($this->returnValue('15'));
         $oCfg->expects($this->at(1))->method('getShopId')->will($this->returnValue('25'));
+        $aInfo = array( 'module1' => 'module1', 'module2' => 'module2' );
 
         $oE = $this->getMock('oxException', array('debugOut'));
         $oE->expects($this->once())->method('debugOut');
 
-        $o = $this->getMock('oxUtilsView', array('getConfig', '_getTemplateBlock'));
+        $o = $this->getMock('oxUtilsView', array('getConfig', '_getActiveModuleInfo', '_getTemplateBlock'));
         $o->expects($this->any())->method('getConfig')->will($this->returnValue($oCfg));
-        $o->expects($this->at(1))->method('_getTemplateBlock')
+        $o->expects($this->any())->method('_getActiveModuleInfo')->will($this->returnValue($aInfo));
+        $o->expects($this->at(3))->method('_getTemplateBlock')
                                     ->with($this->equalTo('module2'), $this->equalTo('contentfile3'))
                                     ->will($this->throwException($oE));
-        $o->expects($this->at(2))->method('_getTemplateBlock')
+        $o->expects($this->at(4))->method('_getTemplateBlock')
                                     ->with($this->equalTo('module1'), $this->equalTo('contentfile1'))
                                     ->will($this->returnValue('content1'));
-        $o->expects($this->at(3))->method('_getTemplateBlock')
+        $o->expects($this->at(5))->method('_getTemplateBlock')
                                     ->with($this->equalTo('module2'), $this->equalTo('contentfile2'))
                                     ->will($this->returnValue('content2'));
 
@@ -592,10 +598,12 @@ class Unit_Core_oxUtilsViewTest extends OxidTestCase
     {
         $oCfg = $this->getMock('oxConfig', array('getShopId'));
         $oCfg->expects($this->at(0))->method('getShopId')->will($this->returnValue('15'));
+        $aInfo = array( 'module99' => 'module99' );
 
-        $o = $this->getMock('oxUtilsView', array('getConfig', '_getTemplateBlock'));
+        $o = $this->getMock('oxUtilsView', array('getConfig', '_getTemplateBlock', '_getActiveModuleInfo'));
         $o->expects($this->any())->method('getConfig')->will($this->returnValue($oCfg));
-        $o->expects($this->at(1))->method('_getTemplateBlock')
+        $o->expects($this->any())->method('_getActiveModuleInfo')->will($this->returnValue($aInfo));
+        $o->expects($this->once())->method('_getTemplateBlock')
                                     ->with($this->equalTo('module99'), $this->equalTo('contentfile99'))
                                     ->will($this->returnValue('content99'));
 
@@ -608,4 +616,16 @@ class Unit_Core_oxUtilsViewTest extends OxidTestCase
                 $o->getTemplateBlocks('inc/filename.tpl')
         );
     }
+
+    /**
+     * base test
+     */
+    public function testGetActiveModuleInfo()
+    {
+        oxTestModules::addFunction( 'oxModulelist', 'getActiveModuleInfo', '{ return true; }');
+        $oUV = $this->getProxyClass('oxUtilsView');
+
+        $this->assertTrue($oUV->UNITgetActiveModuleInfo());
+    }
+
 }
