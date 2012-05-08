@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxviewconfigTest.php 43905 2012-04-15 15:48:15Z alfonsas $
+ * @version   SVN: $Id: oxviewconfigTest.php 36721 2011-07-05 11:09:46Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -562,24 +562,21 @@ class Unit_Views_oxviewConfigTest extends OxidTestCase
     {
         $sMdir = realpath((dirname(__FILE__).'/../moduleTestBlock'));
 
-        $myConfig = modConfig::getInstance();
-        $myConfig->setConfigParam( "sShopDir", $sMdir."/" );
+        $oVC = new oxViewConfig();
+        overrideGetShopBasePath($sMdir);
 
-        $oVC = $this->getMock( 'oxViewConfig', array( 'getConfig' ) );
-        $oVC->expects( $this->any() )->method( 'getConfig')->will( $this->returnValue( $myConfig ) );
+        $this->assertEquals("$sMdir/modules/test1/out", $oVC->getModulePath('test1', 'out'));
+        $this->assertEquals("$sMdir/modules/test1/out/", $oVC->getModulePath('test1', '/out/'));
 
-        $this->assertEquals($sMdir."/modules/test1/out", $oVC->getModulePath('test1', 'out'));
-        $this->assertEquals($sMdir."/modules/test1/out/", $oVC->getModulePath('test1', '/out/'));
-
-        $this->assertEquals($sMdir."/modules/test1/out/blocks/test2.tpl", $oVC->getModulePath('test1', 'out/blocks/test2.tpl'));
-        $this->assertEquals($sMdir."/modules/test1/out/blocks/test2.tpl", $oVC->getModulePath('test1', '/out/blocks/test2.tpl'));
+        $this->assertEquals("$sMdir/modules/test1/out/blocks/test2.tpl", $oVC->getModulePath('test1', 'out/blocks/test2.tpl'));
+        $this->assertEquals("$sMdir/modules/test1/out/blocks/test2.tpl", $oVC->getModulePath('test1', '/out/blocks/test2.tpl'));
 
         // check exception throwing
         try {
             $oVC->getModulePath('test1', '/out/blocks/test1.tpl');
             $this->fail("should have thrown");
         } catch (oxFileException $e) {
-            $this->assertEquals("Requested file not found for module test1 (".$sMdir."/modules/test1/out/blocks/test1.tpl)", $e->getMessage());
+            $this->assertEquals("Requested file not found for module test1 ($sMdir/modules/test1/out/blocks/test1.tpl)", $e->getMessage());
         }
     }
 
@@ -588,11 +585,8 @@ class Unit_Views_oxviewConfigTest extends OxidTestCase
         $sBaseUrl  = oxConfig::getInstance()->getCurrentShopUrl();
         $sMdir = realpath((dirname(__FILE__).'/../moduleTestBlock'));
 
-        $myConfig = modConfig::getInstance();
-        $myConfig->setConfigParam( "sShopDir", $sMdir."/" );
-
-        $oVC = $this->getMock( 'oxViewConfig', array( 'getConfig' ) );
-        $oVC->expects( $this->any() )->method( 'getConfig')->will( $this->returnValue( $myConfig ) );
+        $oVC = new oxViewConfig();
+        overrideGetShopBasePath($sMdir);
 
         $this->assertEquals("{$sBaseUrl}modules/test1/out", $oVC->getModuleUrl('test1', 'out'));
         $this->assertEquals("{$sBaseUrl}modules/test1/out/", $oVC->getModuleUrl('test1', '/out/'));
@@ -605,8 +599,7 @@ class Unit_Views_oxviewConfigTest extends OxidTestCase
             $oVC->getModuleUrl('test1', '/out/blocks/test1.tpl');
             $this->fail("should have thrown");
         } catch (oxFileException $e) {
-            $sBaseUrl  = oxConfig::getInstance()->getConfigParam('sShopDir');
-            $this->assertEquals("Requested file not found for module test1 (".$sMdir."/modules/test1/out/blocks/test1.tpl)", $e->getMessage());
+            $this->assertEquals("Requested file not found for module test1 ($sMdir/modules/test1/out/blocks/test1.tpl)", $e->getMessage());
         }
     }
 
@@ -667,141 +660,5 @@ class Unit_Views_oxviewConfigTest extends OxidTestCase
         $oViewConf = $this->getMock( "oxConfig", array( "getImageUrl" ) );
         $oViewConf->expects( $this->once() )->method( "getImageUrl" )->will( $this->returnValue( "shopUrl/out/theme/img/" ) );
         $this->assertEquals( "shopUrl/out/theme/img/", $oViewConf->getImageUrl() );
-    }
-
-    /**
-     * Checks if shop licenze is in staging mode
-     */
-    public function testHasDemoKey()
-    {
-            return;
-
-        $oConfig = $this->getMock( "oxConfig", array( "hasDemoKey" ) );
-        $oConfig->expects( $this->once() )->method( "hasDemoKey" )->will( $this->returnValue( true ) );
-
-        $oViewConfig = $this->getMock( 'oxViewConfig', array('getConfig') );
-        $oViewConfig->expects($this->any())->method('getConfig')->will( $this->returnValue( $oConfig ) );
-
-        $this->assertTrue( $oViewConfig->hasDemoKey() );
-    }
-
-
-    /**
-     * Testing getSelfLink()
-     */
-    public function testGetSelfLink()
-    {
-        $oConfig = $this->getMock( "oxConfig", array( "getShopHomeURL" ) );
-        $oConfig->expects( $this->once() )->method( "getShopHomeURL" )->will( $this->returnValue( "testShopUrl" ) );
-
-        $oViewConfig = $this->getMock( 'oxViewConfig', array('getConfig') );
-        $oViewConfig->expects($this->any())->method('getConfig')->will( $this->returnValue( $oConfig ) );
-
-        $this->assertEquals( "testShopUrl", $oViewConfig->getSelfLink() );
-    }
-
-    /**
-     * Testing getSslSelfLink()
-     */
-    public function testGetSslSelfLink()
-    {
-        $oConfig = $this->getMock( "oxConfig", array( "getShopSecureHomeURL" ) );
-        $oConfig->expects( $this->once() )->method( "getShopSecureHomeURL" )->will( $this->returnValue( "testSecureShopUrl" ) );
-
-        $oViewConfig = $this->getMock( 'oxViewConfig', array('getConfig') );
-        $oViewConfig->expects($this->any())->method('getConfig')->will( $this->returnValue( $oConfig ) );
-
-        $this->assertEquals( "testSecureShopUrl", $oViewConfig->getSslSelfLink() );
-    }
-
-    /**
-     * Testing getSslSelfLink() - admin mode
-     */
-    public function testGetSslSelfLink_adminMode()
-    {
-        $oConfig = $this->getMock( "oxConfig", array( "getShopSecureHomeURL" ) );
-        $oConfig->expects( $this->never() )->method( "getShopSecureHomeURL" );
-
-        $oViewConfig = $this->getMock( 'oxViewConfig', array('getConfig', 'isAdmin', 'getSelfLink') );
-        $oViewConfig->expects( $this->any() )->method( 'getConfig' )->will( $this->returnValue( $oConfig ) );
-        $oViewConfig->expects( $this->any() )->method( 'isAdmin' )->will( $this->returnValue( true ) );
-        $oViewConfig->expects( $this->once() )->method( "getSelfLink" )->will( $this->returnValue("testShopUrl") );
-
-        $this->assertEquals( "testShopUrl", $oViewConfig->getSslSelfLink() );
-    }
-
-    /**
-     * Testing isAltImageServerConfigured() - nothing configured
-     */
-    public function testIsAltImageServerConfigured_none()
-    {
-        modConfig::getInstance()->setConfigParam('sAltImageUrl', '');
-        modConfig::getInstance()->setConfigParam('sAltImageDir', '');
-        modConfig::getInstance()->setConfigParam('sSSLAltImageUrl', '');
-        modConfig::getInstance()->setConfigParam('sSSLAltImageDir', '');
-
-        $oViewConfig = oxNew('oxViewConfig');
-
-        $this->assertFalse( $oViewConfig->isAltImageServerConfigured() );
-    }
-
-    /**
-     * Testing isAltImageServerConfigured() - http url configured
-     */
-    public function testIsAltImageServerConfigured_httpurl()
-    {
-        modConfig::getInstance()->setConfigParam('sAltImageUrl', 'http://img.oxid-esales.com');
-        modConfig::getInstance()->setConfigParam('sAltImageDir', '');
-        modConfig::getInstance()->setConfigParam('sSSLAltImageUrl', '');
-        modConfig::getInstance()->setConfigParam('sSSLAltImageDir', '');
-
-        $oViewConfig = oxNew('oxViewConfig');
-
-        $this->assertTrue( $oViewConfig->isAltImageServerConfigured() );
-    }
-
-    /**
-     * Testing isAltImageServerConfigured() - http dir configured
-     */
-    public function testIsAltImageServerConfigured_httpdir()
-    {
-        modConfig::getInstance()->setConfigParam('sAltImageUrl', '');
-        modConfig::getInstance()->setConfigParam('sAltImageDir', 'http://img.oxid-esales.com');
-        modConfig::getInstance()->setConfigParam('sSSLAltImageUrl', '');
-        modConfig::getInstance()->setConfigParam('sSSLAltImageDir', '');
-
-        $oViewConfig = oxNew('oxViewConfig');
-
-        $this->assertTrue( $oViewConfig->isAltImageServerConfigured() );
-    }
-
-    /**
-     * Testing isAltImageServerConfigured() - https url configured
-     */
-    public function testIsAltImageServerConfigured_httpsurl()
-    {
-        modConfig::getInstance()->setConfigParam('sAltImageUrl', '');
-        modConfig::getInstance()->setConfigParam('sAltImageDir', '');
-        modConfig::getInstance()->setConfigParam('sSSLAltImageUrl', 'https://img.oxid-esales.com');
-        modConfig::getInstance()->setConfigParam('sSSLAltImageDir', '');
-
-        $oViewConfig = oxNew('oxViewConfig');
-
-        $this->assertTrue( $oViewConfig->isAltImageServerConfigured() );
-    }
-
-    /**
-     * Testing isAltImageServerConfigured() - https dir configured
-     */
-    public function testIsAltImageServerConfigured_httpsdir()
-    {
-        modConfig::getInstance()->setConfigParam('sAltImageUrl', '');
-        modConfig::getInstance()->setConfigParam('sAltImageDir', '');
-        modConfig::getInstance()->setConfigParam('sSSLAltImageUrl', '');
-        modConfig::getInstance()->setConfigParam('sSSLAltImageDir', 'https://img.oxid-esales.com');
-
-        $oViewConfig = oxNew('oxViewConfig');
-
-        $this->assertTrue( $oViewConfig->isAltImageServerConfigured() );
     }
 }

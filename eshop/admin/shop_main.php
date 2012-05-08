@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: shop_main.php 44135 2012-04-20 15:06:35Z linas.kukulskis $
+ * @version   SVN: $Id: shop_main.php 44031 2012-04-18 10:57:19Z vilma $
  */
 
 
@@ -31,13 +31,6 @@
  */
 class Shop_Main extends oxAdminDetails
 {
-    /**
-     * Shop field set size, limited to 64bit by MySQL
-     *
-     * @var int
-     */
-    const SHOP_FIELD_SET_SIZE = 64;
-
     /**
      * Executes parent method parent::render(), creates oxCategoryList and
      * oxshop objects, passes it's data to Smarty engine and returns name of
@@ -124,11 +117,7 @@ class Shop_Main extends oxAdminDetails
         }
 
 
-        try {
-            $oShop->save();
-        } catch ( oxExeption $e ) {
-            return;
-        }
+        $oShop->save();
 
         $this->_aViewData["updatelist"] =  "1";
 
@@ -143,7 +132,7 @@ class Shop_Main extends oxAdminDetails
      */
     protected function _getNonCopyConfigVars()
     {
-        $aNonCopyVars = array("aSerials", "IMS", "IMD", "IMA", "blBackTag", "sUtilModule", "aModulePaths", "aModuleFiles", "aModuleTemplates", "aModules", "aDisabledModules");
+        $aNonCopyVars = array("aSerials", "IMS", "IMD", "IMA", "blBackTag", "sUtilModule", "aModules");
         //adding non copable multishop field options
         $aMultiShopTables = $this->getConfig()->getConfigParam( 'aMultiShopTables' );
         foreach ( $aMultiShopTables as $sMultishopTable ) {
@@ -198,8 +187,6 @@ class Shop_Main extends oxAdminDetails
 
     /**
      * Returns shop id and shop name array
-     *
-     * @deprecated since 4.6.0 call oxshop::getShopIds()
      *
      * @return array
      */

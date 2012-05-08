@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxviewconfig.php 43904 2012-04-15 15:47:57Z alfonsas $
+ * @version   SVN: $Id: oxviewconfig.php 42955 2012-03-16 15:02:49Z linas.kukulskis $
  */
 
 /**
@@ -360,11 +360,6 @@ class oxViewConfig extends oxSuperCfg
      */
     public function getSslSelfLink()
     {
-        if ( $this->isAdmin() ) {
-            // using getSelfLink() method in admin mode (#2745)
-            return $this->getSelfLink();
-        }
-
         if ( ( $sValue = $this->getViewConfigParam( 'sslselflink' ) ) === null ) {
             $sValue = $this->getConfig()->getShopSecureHomeURL();
             $this->setViewConfigParam( 'sslselflink', $sValue );
@@ -507,14 +502,12 @@ class oxViewConfig extends oxSuperCfg
     /**
      * Returns shops resource url
      *
-     * @param string $sFile resource file name
-     *
      * @return string
      */
-    public function getResourceUrl( $sFile = null )
+    public function getResourceUrl()
     {
         if ( ( $sValue = $this->getViewConfigParam( 'basetpldir' ) ) === null ) {
-            $sValue = $this->getConfig()->getResourceUrl( $sFile, $this->isAdmin() );
+            $sValue = $this->getConfig()->getResourceUrl( null, $this->isAdmin() );
             $this->setViewConfigParam( 'basetpldir', $sValue );
         }
         return $sValue;
@@ -552,16 +545,15 @@ class oxViewConfig extends oxSuperCfg
      * Returns image url
      *
      * @param string $sFile Image file name
-     * @param bool   $bSsl  Whether to force SSL
      *
      * @return string
      */
-    public function getImageUrl( $sFile = null, $bSsl = null )
+    public function getImageUrl( $sFile = null )
     {
         if ($sFile) {
-           $sValue = $this->getConfig()->getImageUrl( $this->isAdmin(), $bSsl, null, $sFile );
+           $sValue = $this->getConfig()->getImageUrl( $this->isAdmin(), null, null, $sFile );
         } elseif ( ( $sValue = $this->getViewConfigParam( 'imagedir' ) ) === null ) {
-            $sValue = $this->getConfig()->getImageUrl( $this->isAdmin(), $bSsl );
+            $sValue = $this->getConfig()->getImageUrl( $this->isAdmin() );
             $this->setViewConfigParam( 'imagedir', $sValue );
         }
         return $sValue;
@@ -825,16 +817,6 @@ class oxViewConfig extends oxSuperCfg
             $this->setViewConfigParam( 'lang', $sValue );
         }
         return $sValue;
-    }
-
-     /**
-     * Returns session language id
-     *
-     * @return string
-     */
-    public function getActLanguageAbbr()
-    {
-        return oxLang::getInstance()->getLanguageAbbr( $this->getActLanguageId() );
     }
 
     /**
@@ -1241,19 +1223,13 @@ class oxViewConfig extends oxSuperCfg
         if (!$sFile || ($sFile[0] != '/')) {
             $sFile = '/'.$sFile;
         }
-        $oModule = oxNew("oxmodule");
-        $sModulePath = $oModule->getModulePath($sModule);
-        $sFile = $this->getConfig()->getModulesDir().$sModulePath.$sFile;
+        $sFile = rtrim(getShopBasePath(), '/').'/modules/'.basename($sModule).$sFile;
         if (file_exists($sFile) || is_dir($sFile)) {
             return $sFile;
-        } else {
-            $oEx = oxNew( "oxFileException", "Requested file not found for module $sModule ($sFile)" );
-            $oEx->debugOut();
-            if (!$this->getConfig()->getConfigParam( 'iDebug' )) {
-                return '';
-            }
-            throw $oEx;
         }
+        $oEx = oxNew( "oxFileException", "Requested file not found for module $sModule ($sFile)" );
+        $oEx->debugOut();
+        throw $oEx;
     }
 
     /**
@@ -1268,12 +1244,12 @@ class oxViewConfig extends oxSuperCfg
      */
     public function getModuleUrl($sModule, $sFile = '')
     {
-        $sUrl = str_replace(
-                    rtrim($this->getConfig()->getConfigParam('sShopDir'), '/'),
-                    rtrim($this->getConfig()->getCurrentShopUrl( false ), '/'),
-                    $this->getModulePath($sModule, $sFile)
-                           );
-        return $sUrl;
+        if (!$sFile || ($sFile[0] != '/')) {
+            $sFile = '/'.$sFile;
+        }
+        // check if file exists
+        $this->getModulePath($sModule, $sFile);
+        return rtrim($this->getConfig()->getCurrentShopUrl( false ), '/').'/modules/'.basename($sModule).$sFile;
     }
 
     /**
@@ -1314,20 +1290,4 @@ class oxViewConfig extends oxSuperCfg
     {
         return $this->showSelectLists() && (bool) $this->getConfig()->getConfigParam( 'bl_perfLoadSelectListsInAList' );
     }
-
-
-
-    /**
-     * Checks if alternative image server is configured.
-     *
-     * @return bool
-     */
-    public function isAltImageServerConfigured()
-    {
-        $oConfig = $this->getConfig();
-
-        return $oConfig->getConfigParam('sAltImageUrl') || $oConfig->getConfigParam('sSSLAltImageUrl') ||
-               $oConfig->getConfigParam('sAltImageDir') || $oConfig->getConfigParam('sSSLAltImageDir');
-    }
-
 }

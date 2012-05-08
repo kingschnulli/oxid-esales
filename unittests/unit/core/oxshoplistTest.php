@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxshoplistTest.php 40264 2011-11-24 14:04:45Z linas.kukulskis $
+ * @version   SVN: $Id: oxshoplistTest.php 32010 2010-12-17 15:10:51Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -38,10 +38,10 @@ class Unit_Core_oxshoplistTest extends OxidTestCase
     protected function setUp()
     {
         parent::setUp();
-        oxDb::getDb()->Execute( "delete from oxshops where oxid > 1" );
+        oxDb::getDb( true)->Execute( "delete from oxshops where oxid > 1" );
         for ( $i = 2; $i < 5; $i++ ) {
             $sQ = "insert into `oxshops` (OXID, OXACTIVE, OXNAME) VALUES ($i, 1, 'Test Shop $i') ";
-            oxDb::getDb()->Execute( $sQ );
+            oxDb::getDb( true)->Execute( $sQ );
         }
     }
 

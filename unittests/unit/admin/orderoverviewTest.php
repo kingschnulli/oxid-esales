@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: orderoverviewTest.php 43251 2012-03-28 12:19:42Z vilma $
+ * @version   SVN: $Id: orderoverviewTest.php 40128 2011-11-22 13:48:49Z ramunas.skarbalius $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -38,7 +38,6 @@ class Unit_Admin_OrderOverviewTest extends OxidTestCase
     protected function tearDown()
     {
         $this->cleanUpTable( 'oxorder' );
-        $this->cleanUpTable( "oxorderarticles" );
         parent::tearDown();
     }
 
@@ -265,24 +264,11 @@ class Unit_Admin_OrderOverviewTest extends OxidTestCase
      */
     public function testCanExport()
     {
-        oxTestModules::addFunction( 'oxModule', 'isActive', '{ return true; }');
-
-        $oBase = new oxbase();
-        $oBase->init( "oxorderarticles" );
-        $oBase->setId( "_testOrderArticleId");
-        $oBase->oxorderarticles__oxorderid = new oxField( "testOrderId" );
-        $oBase->oxorderarticles__oxamount  = new oxField( 1 );
-        $oBase->oxorderarticles__oxartid   = new oxField( "1126" );
-        $oBase->oxorderarticles__oxordershopid = new oxField( oxConfig::getInstance()->getShopId() );
-        $oBase->save();
+        oxTestModules::addFunction( 'oxUtilsObject', 'isModuleActive', '{ return true; }');
 
         // testing..
         $oView = new Order_Overview();
-
-        $oView = $this->getMock( "Order_Overview", array( "getEditObjectId" ) );
-        $oView->expects( $this->any() )->method( 'getEditObjectId')->will( $this->returnValue( 'testOrderId' ) );
-
-        $this->assertTrue( $oView->canExport() );
+        $this->assertFalse( $oView->canExport() );
     }
 
     /**

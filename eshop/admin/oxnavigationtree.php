@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   admin
- * @copyright (C) OXID eSales AG 2003-2012
+ * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxnavigationtree.php 44285 2012-04-24 15:09:15Z linas.kukulskis $
+ * @version   SVN: $Id: oxnavigationtree.php 39646 2011-10-28 12:09:05Z arvydas.vapsva $
  */
 
 /**
@@ -506,20 +506,29 @@ class OxNavigationTree extends oxSuperCfg
 
         // including module menu files
         $sPath = getShopBasePath();
-        $oModulelist = oxNew('oxmodulelist');
-        $aActiveModuleInfo = $oModulelist->getActiveModuleInfo();
-        if (is_array($aActiveModuleInfo)) {
-            foreach ( $aActiveModuleInfo as $sModulePath ) {
-                $sFullPath = $sPath. "modules/" . $sModulePath;
-                // missing file/folder?
-                if ( is_dir( $sFullPath ) ) {
-                    // including menu file
-                    $sMenuFile = $sFullPath . "/menu.xml";
-                    if ( file_exists( $sMenuFile ) && is_readable( $sMenuFile ) ) {
-                        $aFilesToLoad[] = $sMenuFile;
+        $aPathsToCheck = array( 'modules/' );
+        $sPathToCheck  = reset( $aPathsToCheck );
+        while ( $sPathToCheck ) {
+            $sFullPath = $sPath.$sPathToCheck;
+
+            // missing file/folder?
+            if ( is_dir( $sFullPath ) ) {
+
+                // adding subfolders
+                $aSubF = glob( $sFullPath."*", GLOB_ONLYDIR );
+                if ( is_array( $aSubF ) ) {
+                    foreach ( $aSubF as $sNewFolder ) {
+                        $aPathsToCheck[] = str_replace( $sPath, "", $sNewFolder ) . "/";
                     }
                 }
+
+                // including menu file
+                $sMenuFile = "{$sFullPath}menu.xml";
+                if ( file_exists( $sMenuFile ) && is_readable( $sMenuFile ) ) {
+                    $aFilesToLoad[] = $sMenuFile;
+                }
             }
+            $sPathToCheck = next( $aPathsToCheck );
         }
 
         $blLoadDynContents = $myConfig->getConfigParam( 'blLoadDynContents' );
@@ -856,7 +865,7 @@ class OxNavigationTree extends oxSuperCfg
     {
         $sVersion = "";
         if ( ( $sShopId = $this->getConfig()->getShopId() ) ) {
-            $sVersion = oxDb::getDb()->getOne( "select oxversion from oxshops where oxid = '$sShopId' ", false, false );
+            $sVersion = oxDb::getDb()->getOne( "select oxversion from oxshops where oxid = '$sShopId' " );
             $sVersion = preg_replace( "/(^[^0-9]+)(.+)$/", "\$2", $sVersion );
         }
 
@@ -898,7 +907,7 @@ class OxNavigationTree extends oxSuperCfg
         $oLang = oxLang::getInstance();
 
         $iDynLang = $myConfig->getConfigParam( 'iDynInterfaceLanguage' );
-        $iDynLang = isset( $iDynLang )?$iDynLang:( $oLang->getTplLanguage() );
+        $iDynLang = isset( $iDynLang )?$iDynLang:( $oLang->getObjectTplLanguage() );
 
         $aLanguages = $oLang->getLanguageArray();
         $sLangAbr = $aLanguages[$iDynLang]->abbr;

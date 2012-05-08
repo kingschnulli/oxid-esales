@@ -44,12 +44,12 @@
             [{/if}]
             <div class="activationtext">[{oxmultilang ident="PROMO_WILLSTARTIN_PREFIX"}]
               [{if 86400 > $promo->getTimeUntilStart()}]
-                <span class="promoTimeout">[{$promo->getTimeUntilStart()|oxformattime}]</span>
+                <span class="promoTimeout">[{$promo->getTimeUntilStart()|oxformattime}]</span>[{oxmultilang ident="PROMO_WILLSTARTIN_SUFFIX"}]
               [{elseif 172800 > $promo->getTimeUntilStart()}]
-                [{oxmultilang ident="PROMO_ONEDAY"}]
+                [{oxmultilang ident="PROMO_ONEDAY"}][{oxmultilang ident="PROMO_WILLSTARTIN_SUFFIX"}]
               [{else}]
                 [{math equation="x1/x2" x1=$promo->getTimeUntilStart() x2=86400 assign="_days"}]
-                [{$_days|floor}] [{oxmultilang ident="PROMO_DAYS"}]
+                [{$_days|floor}] [{oxmultilang ident="PROMO_DAYS"}][{oxmultilang ident="PROMO_WILLSTARTIN_SUFFIX"}]
               [{/if}]
             </div>
         </div>

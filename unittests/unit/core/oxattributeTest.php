@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxattributeTest.php 43613 2012-04-06 14:41:31Z linas.kukulskis $
+ * @version   SVN: $Id: oxattributeTest.php 32775 2011-01-27 14:53:51Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -173,8 +173,8 @@ class Unit_Core_oxattributeTest extends OxidTestCase
         $aId = $oAttr->getAttributeAssigns('test_oxid');
         $this->assertEquals( 1, count($aId) );
     }
-
-
+    
+    
     /**
      * Test set attribute title.
      *
@@ -186,7 +186,7 @@ class Unit_Core_oxattributeTest extends OxidTestCase
         $oAttr->setTitle( 'title' );
         $this->assertEquals( 'title', $oAttr->getTitle() );
     }
-
+    
     /**
      * Test set attribute active value.
      *
@@ -198,7 +198,7 @@ class Unit_Core_oxattributeTest extends OxidTestCase
         $oAttr->setActiveValue( 'selectedValue' );
         $this->assertEquals( 'selectedValue', $oAttr->getActiveValue() );
     }
-
+    
     /**
      * Test add attribute value.
      *
@@ -209,9 +209,9 @@ class Unit_Core_oxattributeTest extends OxidTestCase
         $oAttr = new oxAttribute();
         $oAttr->addValue( 'val1' );
         $oAttr->addValue( 'val2' );
-
+        
         $this->assertEquals( array( 'val1', 'val2' ), $oAttr->getValues() );
     }
-
-
+    
+    
 }

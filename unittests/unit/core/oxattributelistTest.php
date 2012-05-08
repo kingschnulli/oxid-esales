@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxattributelistTest.php 44383 2012-04-25 13:39:26Z linas.kukulskis $
+ * @version   SVN: $Id: oxattributelistTest.php 33273 2011-02-15 13:53:28Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -167,24 +167,24 @@ class Unit_Core_oxattributelistTest extends OxidTestCase
 
         $this->assertEquals( 0, count($oAttrList));
     }
-
+    
     public function testGetCategoryAttributes()
     {
         $sCategoryId = '8a142c3e60a535f16.78077188';
         $sAttributeId = '8a142c3e9cd961518.80299776';
-
+        
         $myDB = oxDb::getDb();
         $myDB->Execute('insert into oxcategory2attribute (oxid, oxobjectid, oxattrid, oxsort) values ("test3","'.$sCategoryId.'","'.$sAttributeId.'", "333")');
-
-
+        
+        
         $oAttrList = oxNew( "oxattributelist" );
-        $oAttrList->getCategoryAttributes( $sCategoryId, 1);
+        $oAttrList->getCategoryAttributes( $sCategoryId, 1); 
         $oAttribute = $oAttrList->offsetGet($sAttributeId);
-
-
+        
+        
             $this->assertEquals( 1, $oAttrList->count() );
             $this->assertEquals( 6, count($oAttribute->getValues()));
-
+        
     }
 
 }

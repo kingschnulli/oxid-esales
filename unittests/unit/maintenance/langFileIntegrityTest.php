@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: langFileIntegrityTest.php 43172 2012-03-26 10:46:57Z vilma $
+ * @version   SVN: $Id: langFileIntegrityTest.php 37263 2011-07-22 10:26:58Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -53,8 +53,8 @@ class Unit_Maintenance_langFileIntegrityTest extends OxidTestCase
         $aLangIdentsDE = array_keys( $this->_getLanguageArray('', 1, 'de') );
         $aLangIdentsEN = array_keys( $this->_getLanguageArray('', 1, 'en') );
 
-        $this->assertEquals( array(), array_diff($aLangIdentsDE, $aLangIdentsEN), 'ident does not match EN misses');
-        $this->assertEquals( array(), array_diff($aLangIdentsEN, $aLangIdentsDE), 'ident does not match DE misses');
+        $this->assertEquals( array(), array_diff($aLangIdentsDE, $aLangIdentsEN), 'ident does not match');
+        $this->assertEquals( array(), array_diff($aLangIdentsEN, $aLangIdentsDE), 'ident does not match');
         $this->assertEquals( count($aLangIdentsDE), count($aLangIdentsEN), 'ident count does not match');
         //$this->assertEquals( $aLangIdentsDE, $aLangIdentsEN,'ident order match');
     }
@@ -75,8 +75,8 @@ class Unit_Maintenance_langFileIntegrityTest extends OxidTestCase
         $aLangIdentsDE    = array_keys(array_merge($aGenericIdentsDE, $aMapIdentsDE, $aBasicIdentsDE));
         $aLangIdentsEN    = array_keys(array_merge($aGenericIdentsEN, $aMapIdentsEN, $aBasicIdentsEN));
 
-        $this->assertEquals( array(), array_diff($aLangIdentsDE, $aLangIdentsEN), 'ident does not match EN misses');
-        $this->assertEquals( array(), array_diff($aLangIdentsEN, $aLangIdentsDE), 'ident does not match DE misses');
+        $this->assertEquals( array(), array_diff($aLangIdentsDE, $aLangIdentsEN), 'ident does not match');
+        $this->assertEquals( array(), array_diff($aLangIdentsEN, $aLangIdentsDE), 'ident does not match');
         $this->assertEquals( count($aLangIdentsDE), count($aLangIdentsEN), 'ident count does not match');
         //$this->assertEquals( $aLangIdentsDE, $aLangIdentsEN,'ident order match');
     }
@@ -97,8 +97,8 @@ class Unit_Maintenance_langFileIntegrityTest extends OxidTestCase
         $aLangIdentsDE    = array_keys(array_merge($aGenericIdentsDE, $aMapIdentsDE, $aAzureIdentsDE));
         $aLangIdentsEN    = array_keys(array_merge($aGenericIdentsEN, $aMapIdentsEN, $aAzureIdentsEN));
 
-        $this->assertEquals( array(), array_diff($aLangIdentsDE, $aLangIdentsEN), 'ident does not match EN misses');
-        $this->assertEquals( array(), array_diff($aLangIdentsEN, $aLangIdentsDE), 'ident does not match DE misses');
+        $this->assertEquals( array(), array_diff($aLangIdentsDE, $aLangIdentsEN), 'ident does not match');
+        $this->assertEquals( array(), array_diff($aLangIdentsEN, $aLangIdentsDE), 'ident does not match');
         $this->assertEquals( count($aLangIdentsDE), count($aLangIdentsEN), 'ident count does not match');
         //$this->assertEquals( $aLangIdentsDE, $aLangIdentsEN,'ident order match');
     }
@@ -113,9 +113,9 @@ class Unit_Maintenance_langFileIntegrityTest extends OxidTestCase
         $aLangIdentsDE = array_keys( $this->_getLanguageArray( 'admin', 1, 'de') );
         $aLangIdentsEN = array_keys( $this->_getLanguageArray( 'admin', 1, 'en') );
 
-        $this->assertEquals( array(), array_diff($aLangIdentsDE, $aLangIdentsEN), 'ident does not match EN misses');
-        $this->assertEquals( array(), array_diff($aLangIdentsEN, $aLangIdentsDE), 'ident does not match DE misses');
         $this->assertEquals( count($aLangIdentsDE), count($aLangIdentsEN), 'ident count does not match');
+        $this->assertEquals( array(), array_diff($aLangIdentsDE, $aLangIdentsEN), 'ident does not match');
+        $this->assertEquals( array(), array_diff($aLangIdentsEN, $aLangIdentsDE), 'ident does not match');
         //$this->assertEquals( $aLangIdentsDE, $aLangIdentsEN,'ident order match');
     }
 
@@ -442,7 +442,7 @@ class Unit_Maintenance_langFileIntegrityTest extends OxidTestCase
      */
     private function _getLanguageConst( $sTheme, $sLang, $sFileName = "lang.php" )
     {
-        $aSkip = array();
+        $aSkip = array('SYSREQ_MEMORY_LIMIT');
         $aLang = array();
         $sFile = oxConfig::getInstance()->getConfigParam( 'sShopDir' )."out";
         if ($sTheme != '') {

@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxadminviewTest.php 44275 2012-04-24 13:50:08Z linas.kukulskis $
+ * @version   SVN: $Id: oxadminviewTest.php 38563 2011-09-05 11:23:30Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -58,7 +58,6 @@ class Unit_Admin_oxAdminViewTest extends OxidTestCase
         $myDB->execute("delete from oxseo where oxobjectid = '_testArt'");
         $myDB->execute("delete from oxnewssubscribed where oxuserid = '_testUser'");
         testAdminView::cleanup();
-        modSession::getInstance()->cleanup();
 
         //resetting cached testing values
         $_GET["testReset"] = null;
@@ -104,24 +103,25 @@ class Unit_Admin_oxAdminViewTest extends OxidTestCase
             $sPref = 'CE';
 
         // no lang abbr
-        $this->getProxyClass( "oxadminview" );
-        $oAdminView = $this->getMock( "oxadminviewPROXY", array( "_getServiceProtocol", "_getCountryByCode", "_getShopVersionNr" ), array(), '', false );
-        $oAdminView->expects( $this->any() )->method( '_getServiceProtocol' )->will( $this->returnValue( "testprotocol" ) );
-        $oAdminView->expects( $this->any() )->method( '_getCountryByCode' )->will( $this->returnValue( "testcountrycode" ) );
-        $oAdminView->expects( $this->any() )->method( '_getShopVersionNr' )->will( $this->returnValue( "testshopversion" ) );
+        $oAdminView = $this->getMock( "oxadminview", array( "_getServiceProtocol", "_getCountryByCode", "_getShopVersionNr" ), array(), '', false );
+        $oAdminView->expects( $this->once() )->method( '_getServiceProtocol' )->will( $this->returnValue( "testprotocol" ) );
+        $oAdminView->expects( $this->once() )->method( '_getCountryByCode' )->will( $this->returnValue( "testcountrycode" ) );
+        $oAdminView->expects( $this->once() )->method( '_getShopVersionNr' )->will( $this->returnValue( "testshopversion" ) );
 
-        modSession::getInstance()->setVar( 'tpllanguage', 'de' );
+        $oLang = oxLang::getInstance();
+        $sLangAbbr = $oLang->getLanguageAbbr( $oLang->getTplLanguage() );
 
-        $sTestUrl = "testprotocol://admin.oxid-esales.com/$sPref/testshopversion/testcountrycode/de/";
+        $sTestUrl = "testprotocol://admin.oxid-esales.com/$sPref/testshopversion/testcountrycode/{$sLangAbbr}/";
         $this->assertEquals( $sTestUrl, $oAdminView->getServiceUrl() );
 
-        $oAdminView->setNonPublicVar( '_sServiceUrl', null );
-        $sTestUrl = "testprotocol://admin.oxid-esales.com/$sPref/testshopversion/testcountrycode/en/";
-        $this->assertEquals( $sTestUrl, $oAdminView->getServiceUrl('fr') );
+        // passing lang abbr
+        $oAdminView = $this->getMock( "oxadminview", array( "_getServiceProtocol", "_getCountryByCode", "_getShopVersionNr" ), array(), '', false );
+        $oAdminView->expects( $this->once() )->method( '_getServiceProtocol' )->will( $this->returnValue( "testprotocol" ) );
+        $oAdminView->expects( $this->once() )->method( '_getCountryByCode' )->will( $this->returnValue( "testcountrycode" ) );
+        $oAdminView->expects( $this->once() )->method( '_getShopVersionNr' )->will( $this->returnValue( "testshopversion" ) );
 
-        $oAdminView->setNonPublicVar( '_sServiceUrl', null );
         $sTestUrl = "testprotocol://admin.oxid-esales.com/$sPref/testshopversion/testcountrycode/en/";
-        $this->assertEquals( $sTestUrl, $oAdminView->getServiceUrl( "en" ) );
+        $this->assertEquals( $sTestUrl, $oAdminView->getServiceUrl( "testlangabbr" ) );
     }
 
     /**
@@ -351,8 +351,8 @@ class Unit_Admin_oxAdminViewTest extends OxidTestCase
     public function testGetCountryByCode()
     {
         $oSubj = $this->getProxyClass("oxadminView");
-        $sTestCode = "en";
-        $this->assertEquals("international", $oSubj->UNITgetCountryByCode($sTestCode));
+        $sTestCode = "de";
+        $this->assertEquals("germany", $oSubj->UNITgetCountryByCode($sTestCode));
     }
 
     /**

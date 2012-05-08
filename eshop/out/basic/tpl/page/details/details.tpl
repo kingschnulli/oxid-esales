@@ -51,13 +51,7 @@
     [{/if}]
 
     [{if $product->oxarticles__oxexturl->value}]
-        <a id="product_exturl" class="details" href="http://[{ $product->oxarticles__oxexturl->value }]"><b>[>]
-        [{if $product->oxarticles__oxurldesc->value }]
-            [{$product->oxarticles__oxurldesc->value }]
-        [{else}]
-            [{$product->oxarticles__oxexturl->value }]
-        [{/if}]
-        </b></a>
+        <a id="product_exturl" class="details" href="http://[{ $product->oxarticles__oxexturl->value }]"><b>[>] [{ $product->oxarticles__oxurldesc->value }]</b></a>
         [{oxscript add="oxid.blank('product_exturl');"}]
     [{/if}]
 
@@ -68,8 +62,6 @@
         <div id="test_product_shortdesc" class="desc description">[{ $product->oxarticles__oxshortdesc->value }]</div>
     [{/oxhasrights}]
 
-
-[{if $oView->ratingIsActive()}]
     [{ if !$oxcmp_user}]
       [{assign var="_star_title" value="DETAILS_LOGGIN"|oxmultilangassign }]
     [{ elseif !$oView->canRate() }]
@@ -92,7 +84,6 @@
     [{else}]
       <a id="star_rating_text" rel="nofollow" href="#review" onclick="oxid.review.show();" class="fs10 link2">[{ oxmultilang ident="DETAILS_NORATINGS" }]</a>
     [{/if}]
-[{/if}]
 
     <div class="cats">
         [{ assign var="oManufacturer" value=$oView->getManufacturer()}]
@@ -222,7 +213,7 @@
 
     [{if $product->getPricePerUnit()}]
     <div id="test_product_price_unit" class="pperunit">
-        ([{$product->getPricePerUnit()}] [{ $currency->sign}]/[{$product->getUnitName()}])
+        ([{$product->getPricePerUnit()}] [{ $currency->sign}]/[{$product->oxarticles__oxunitname->value}])
     </div>
     [{/if}]
 
@@ -309,28 +300,8 @@
 
     [{include file="inc/bookmarks.tpl"}]
 
-
-     [{if ( $oView->isActive('FbShare') || $oView->isActive('FbLike') && $oViewConf->getFbAppId() ) }]
-                        [{ if $oView->isActive('FacebookConfirm') && !$oView->isFbWidgetVisible()  }]
-                            <div class="socialButton" id="productFbShare">
-                                [{include file="inc/facebook/fb_enable.tpl" source="inc/facebook/fb_share.tpl" ident="#productFbShare"}]
-                                [{include file=inc/facebook/fb_like.tpl assign="fbfile"}]
-                                [{assign var='fbfile' value=$fbfile|strip|escape:'url'}]
-                                [{oxscript add="oxFacebook.buttons['#productFbLike']={html:'`$fbfile`',script:''};"}]
-                            </div>
-                            <div class="socialButton" id="productFbLike"></div>
-                        [{else}]
-                            <div class="socialButton" id="productFbShare">
-                                [{include file="inc/facebook/fb_enable.tpl" source="inc/facebook/fb_share.tpl" ident="#productFbShare"}]
-                            </div>
-                            <div class="socialButton" id="productFbLike">
-                                [{include file="inc/facebook/fb_enable.tpl" source="inc/facebook/fb_like.tpl" ident="#productFbLike"}]
-                            </div>
-                        [{/if}]
-                    [{/if}]
-
-
-
+    [{ include file="inc/facebook/fb_share.tpl" }]
+    [{ include file="inc/facebook/fb_like.tpl" }]
 
 
 </div>
@@ -348,7 +319,7 @@
     <div class="longdesc">
         <strong class="h3" id="test_productFullTitle">[{ $product->oxarticles__oxtitle->value }][{if $product->oxarticles__oxvarselect->value}] [{ $product->oxarticles__oxvarselect->value }][{/if}]</strong>
         [{oxhasrights ident="SHOWLONGDESCRIPTION"}]
-            <div id="test_product_longdesc">[{oxeval var=$product->getLongDescription()}]</div>
+            <div id="test_product_longdesc">[{oxeval var=$product->getArticleLongDesc()}]</div>
         [{/oxhasrights}]
 
         <div class="question">
@@ -378,22 +349,7 @@
 
 [{include file="inc/facebook/fb_invite.tpl"}]
 
-    [{if $oView->isActive('FbComments') && $oViewConf->getFbAppId()}]
-        [{assign var='_fbScript' value="http://connect.facebook.net/en_US/all.js#appId="|cat:$oViewConf->getFbAppId()|cat:"&amp;xfbml=1"}]
-        <strong id="test_facebookCommentsHead" class="boxhead">[{ oxmultilang ident="FACEBOOK_COMMENTS" }]</strong>
-        <div class="box" id="productFbComments">
-            [{include file="inc/facebook/fb_enable.tpl" source="inc/facebook/fb_comments.tpl" ident="#productFbComments" script=$_fbScript type="text"}]
-        </div>
-    [{/if}]
-
-    [{if $oView->isActive('FbInvite') && $oViewConf->getFbAppId()}]
-        <strong id="test_facebookInviteHead" class="boxhead">[{ oxmultilang ident="FACEBOOK_INVITE" }]</strong>
-        <div class="box" id="productFbInvite">
-            <fb:serverfbml width="560px" id="productFbInviteFbml">
-                    [{include file="inc/facebook/fb_enable.tpl" source="inc/facebook/fb_invite.tpl" ident="#productFbInviteFbml" type="text"}]
-            </fb:serverfbml>
-        </div>
-    [{/if}]
+[{include file="inc/facebook/fb_live_stream.tpl"}]
 
 [{include file="inc/media.tpl"}]
 
@@ -498,7 +454,6 @@
 
 [{/if}]
 
-[{if $oView->isReviewActive() }]
 <strong id="test_reviewHeader" class="boxhead">[{ oxmultilang ident="DETAILS_PRODUCTREVIEW" }]</strong>
 <div id="review" class="box info">
   [{ if $oxcmp_user }]
@@ -557,7 +512,6 @@
     [{ oxmultilang ident="DETAILS_REVIEWNOTAVAILABLE" }]
   [{/if}]
 </div>
-[{/if}]
 
 
 [{ include file="inc/product.tpl" product=$product size="thin" head="DETAILS_CURRENTPRODUCT"|oxmultilangassign testid="current"}]

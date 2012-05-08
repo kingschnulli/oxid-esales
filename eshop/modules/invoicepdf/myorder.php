@@ -19,7 +19,7 @@
  * @package   modules
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: myorder.php 43676 2012-04-10 13:25:25Z linas.kukulskis $
+ * @version   SVN: $Id: myorder.php 43571 2012-04-06 08:04:20Z mindaugas.rimgaila $
  */
 
 /**
@@ -1185,12 +1185,7 @@ class MyOrder extends MyOrder_parent
         // so this part must be enabled. Now it works with html references like &#123;
         if ($blReverse) {
             // replace now
-            if (version_compare(PHP_VERSION, '5.3.4') >= 0) {
-                $aTransTbl = get_html_translation_table (HTML_ENTITIES, ENT_COMPAT, 'ISO-8859-1');
-            } else {
-                $aTransTbl = get_html_translation_table (HTML_ENTITIES, ENT_COMPAT);
-            }
-
+            $aTransTbl = get_html_translation_table (HTML_ENTITIES);
             $aTransTbl = array_flip ($aTransTbl) + array_flip ($aReplace);
             $sValue = strtr($sValue, $aTransTbl);
             $sValue = getStr()->preg_replace('/\&\#([0-9]+)\;/me', "chr('\\1')", $sValue);
@@ -1231,5 +1226,30 @@ class MyOrder extends MyOrder_parent
     public function getSelectedLang()
     {
         return $this->_iSelectedLang;
+    }
+
+    /**
+     * Assigns data, stored in oxorderarticles to oxorder object .
+     *
+     * @param bool $blStorno Include canceled articles
+     *
+     * @return null
+     */
+    public function getOrderArticles( $blStorno = false )
+    {
+        if ( $this->_oArticles == null ) {
+            // order articles
+            $this->_oArticles = oxNew( 'oxlist' );
+            $this->_oArticles->init( 'oxorderarticle' );
+
+            $sSelect = 'select oxorderarticles.* from oxorderarticles where oxorderarticles.oxorderid="'.$this->getId().'"';
+            if ( $blStorno ) {
+                $sSelect.= ' and oxstorno = 0';
+            }
+            $sSelect.= ' order by oxorderarticles.oxartid';
+            $this->_oArticles->selectString( $sSelect );
+        }
+
+        return $this->_oArticles;
     }
 }

@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxsessionTest.php 44276 2012-04-24 13:50:19Z linas.kukulskis $
+ * @version   SVN: $Id: oxsessionTest.php 43979 2012-04-16 16:45:39Z mindaugas.rimgaila $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -808,8 +808,8 @@ class Unit_Core_oxsessionTest extends OxidTestCase
         $this->assertFalse( $this->oSession->UNITcheckCookies( "oxid", null) );
         $aSessCookSet = $this->oSession->getVar( "sessioncookieisset");
         $this->assertEquals( "ox_true", $aSessCookSet[$myConfig->getCurrentShopURL()] );
-        $this->assertFalse( $this->oSession->UNITcheckCookies( "oxid", $aSessCookSet ) );
-        $this->assertTrue( $this->oSession->UNITcheckCookies( null, $aSessCookSet ) );
+        $this->assertFalse( $this->oSession->UNITcheckCookies( "oxid", "ox_true" ) );
+        $this->assertTrue( $this->oSession->UNITcheckCookies( null, "ox_true" ) );
         $this->assertEquals( "oxid", oxUtilsServer::getInstance()->getOxCookie( 'sid_key' ) );
 
         modConfig::getInstance()->setConfigParam('blSessionUseCookies', 1);
@@ -1235,19 +1235,6 @@ class Unit_Core_oxsessionTest extends OxidTestCase
     {
         oxConfig::getInstance()->setConfigParam( 'blMallSharedBasket', 1 );
         $this->assertEquals( 'basket', $this->oSession->UNITgetBasketName());
-    }
-
-    /**
-     *  oxsession::getBasket() bad instance
-     */
-    function testGetBasket_badInstance()
-    {
-        $oArticle = oxNew( 'oxarticle' );
-        $oSession = $this->getMock( 'oxsession', array( '_getBasketName' ) );
-        $oSession->expects( $this->once() )->method( '_getBasketName')->will( $this->returnValue( serialize($oArticle)) );
-
-        $oSessionBasket = $oSession->getBasket();
-        $this->assertTrue($oSessionBasket instanceof oxbasket, "oSessionBasket is instance of oxbasket (found ".get_class($oSessionBasket).")");
     }
 
     /**

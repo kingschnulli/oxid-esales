@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   admin
- * @copyright (C) OXID eSales AG 2003-2012
+ * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: list_order.php 44135 2012-04-20 15:06:35Z linas.kukulskis $
+ * @version   SVN: $Id: list_order.php 32331 2011-01-03 14:30:01Z arvydas $
  */
 
 /**
@@ -110,7 +110,7 @@ class List_Order extends Order_List
         $sSql = $oStr->preg_replace( '/order by .*$/', '', $sSql );
 
         // con of list items which fits current search conditions
-        $this->_iListSize = oxDb::getDb()->getOne( "select count(*) from ( $sSql ) as test", false, false );
+        $this->_iListSize = oxDb::getDb()->getOne( "select count(*) from ( $sSql ) as test" );
 
         // set it into session that other frames know about size of DB
         oxSession::setVar( 'iArtCnt', $this->_iListSize );
@@ -139,7 +139,7 @@ class List_Order extends Order_List
     {
         // calculating sum
         $sSumQ = getStr()->preg_replace( array( "/select .*? from/", "/group by oxorderarticles.oxartnum/" ), array( "select round( sum(oxorderarticles.oxbrutprice*oxorder.oxcurrate),2) from", "" ), $sSql );
-        $this->_aViewData["sumresult"] = oxDb::getDb()->getOne( $sSumQ, false, false );
+        $this->_aViewData["sumresult"] = oxDb::getDb()->getOne( $sSumQ );
         return parent::_prepareOrderByQuery( $sSql );
     }
 }

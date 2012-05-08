@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxubase.php 44342 2012-04-25 10:59:43Z linas.kukulskis $
+ * @version   SVN: $Id: oxubase.php 44123 2012-04-20 12:41:37Z tomas $
  */
 
 /**
@@ -1099,7 +1099,7 @@ class oxUBase extends oxView
                 $this->_sListOrderDir = $sSortDir;
 
                 // caching sorting config
-                $this->setItemSorting( $sCnid, $sSortBy, $sSortDir );
+                $this->setItemSorting( "category", $sSortBy, $sSortDir );
             }
         }
     }
@@ -3135,8 +3135,7 @@ class oxUBase extends oxView
     {
         if ( $this->_aDeliveryAddress == null ) {
             $aAddress = oxConfig::getParameter( 'deladr');
-            //do not show deladr if address was reloaded
-            if ( $aAddress && !oxConfig::getParameter( 'reloadaddress' )) {
+            if ( $aAddress ) {
                 $this->_aDeliveryAddress = $aAddress;
             }
         }
@@ -3258,25 +3257,18 @@ class oxUBase extends oxView
      *
      * @return boolean
      */
-    public function isFbWidgetVisible()
+    public function isFbWidgetWisible()
     {
         if ( $this->_blFbWidgetsOn === null ) {
             $oUtils = oxUtilsServer::getInstance();
 
             // reading ..
             $this->_blFbWidgetsOn = (bool) $oUtils->getOxCookie( "fbwidgetson" );
+
+            // .. and setting back
+            $oUtils->setOxCookie( "fbwidgetson", $this->_blFbWidgetsOn ? 1 : 0 );
         }
         return $this->_blFbWidgetsOn;
-    }
-
-    /**
-     * Checks if downloadable files are turned on
-     *
-     * @return bool
-     */
-    public function isEnabledDownloadableFiles()
-    {
-        return (bool) $this->getConfig()->getConfigParam( "blEnableDownloads" );
     }
 
     /**
@@ -3286,39 +3278,6 @@ class oxUBase extends oxView
      */
     public function showRememberMe()
     {
-        return (bool) $this->getConfig()->getConfigParam('blShowRememberMe');
+        return (bool)$this->getConfig()->getConfigParam('blShowRememberMe');
     }
-
-    /**
-     * Returns true if articles shown in shop with VAT.
-     * Checks users VAT and options.
-     *
-     * @return boolean
-     */
-    public function isVatIncluded()
-    {
-        $blResult = true;
-        $oUser = $this->getUser();
-        $oVatSelector = oxNew( 'oxVatSelector' );
-        $oConfig = $this->getConfig();
-
-        if ( $oConfig->getConfigParam( 'blEnterNetPrice' ) && $oConfig->getConfigParam( 'bl_perfCalcVatOnlyForBasketOrder' ) ) {
-            $blResult = false;
-        } elseif ( $oUser && !$oVatSelector->getUserVat( $oUser ) ) {
-            $blResult = false;
-        }
-
-        return $blResult;
-    }
-
-    /**
-     * Returns true if price calculation is activated
-     *
-     * @return boolean
-     */
-    public function isPriceCalculated()
-    {
-        return (bool) $this->getConfig()->getConfigParam( 'bl_perfLoadPrice' );
-    }
-
 }

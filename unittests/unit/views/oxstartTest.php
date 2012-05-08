@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxstartTest.php 43783 2012-04-11 14:34:24Z linas.kukulskis $
+ * @version   SVN: $Id: oxstartTest.php 32450 2011-01-10 07:36:02Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -72,8 +72,8 @@ class Unit_Views_oxstartTest extends OxidTestCase
         $myConfig = modConfig::getInstance();
 
         $this->aConfig = array();
-        $this->aConfig['blShopStopped'] = oxDb::getDb( oxDb::FETCH_MODE_ASSOC )->getRow("select * from oxconfig where oxvarname='blShopStopped'");
-        $this->aConfig['blBackTag']     = oxDb::getDb( oxDb::FETCH_MODE_ASSOC )->getRow("select * from oxconfig where oxvarname='blBackTag'");
+        $this->aConfig['blShopStopped'] = oxDb::getDb(1)->GetRow("select * from oxconfig where oxvarname='blShopStopped'");
+        $this->aConfig['blBackTag']     = oxDb::getDb(1)->GetRow("select * from oxconfig where oxvarname='blBackTag'");
 
         $myConfig->saveShopConfVar( 'bool', 'blShopStopped', 'false', $myConfig->getBaseShopId() );
         $myConfig->saveShopConfVar( 'bool', 'blBackTag', 'false', $myConfig->getBaseShopId() );

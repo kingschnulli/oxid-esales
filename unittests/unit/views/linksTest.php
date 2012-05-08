@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: linksTest.php 44251 2012-04-24 11:41:58Z linas.kukulskis $
+ * @version   SVN: $Id: linksTest.php 26841 2010-03-25 13:58:15Z arvydas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -40,24 +40,5 @@ class Unit_Views_linksTest extends OxidTestCase
         $oLinks = $this->getProxyClass( 'links' );
         $oLink = $oLinks->getLinksList()->current();
         $this->assertEquals( 'http://www.oxid-esales.com', $oLink->oxlinks__oxurl->value );
-    }
-
-    /**
-     * Testing Links::getBreadCrumb()
-     *
-     * @return null
-     */
-    public function testGetBreadCrumb()
-    {
-        $oLinks    = new Links();
-        $aResult  = array();
-        $aResults = array();
-
-        $aResult["title"] = oxLang::getInstance()->translateString( 'PAGE_INFO_LINKS_TITLE', oxLang::getInstance()->getBaseLanguage(), false );
-        $aResult["link"]  = $oLinks->getLink();
-
-        $aResults[] = $aResult;
-
-        $this->assertEquals( $aResults, $oLinks->getBreadCrumb() );
     }
 }

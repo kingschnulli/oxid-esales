@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: shopseoTest.php 40264 2011-11-24 14:04:45Z linas.kukulskis $
+ * @version   SVN: $Id: shopseoTest.php 33234 2011-02-14 12:45:37Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -74,7 +74,7 @@ class Unit_Admin_ShopSeoTest extends OxidTestCase
      */
     public function testLoadActiveUrl()
     {
-        $aData = oxDb::getDb( oxDB::FETCH_MODE_ASSOC )->getAll( "select oxseourl, oxlang, oxobjectid, oxshopid from oxseo limit 1" );
+        $aData = oxDb::getDb(true)->getAll( "select oxseourl, oxlang, oxobjectid, oxshopid from oxseo limit 1" );
 
         // defining parameters
         $sObjectId = $aData[0]['oxobjectid'];
