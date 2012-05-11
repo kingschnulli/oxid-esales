@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: OxidTestCase.php 34014 2011-03-25 14:06:07Z sarunas $
+ * @version   SVN: $Id: OxidTestCase.php 44829 2012-05-10 13:47:03Z linas.kukulskis $
  */
 
 
@@ -327,7 +327,7 @@ class OxidTestCase extends PHPUnit_Framework_TestCase
      * Converts a string to UTF format.
      *
      * @param string $sVal
-     *      
+     *
      * @return string
      */
     protected function _2Utf($sVal)
@@ -346,9 +346,10 @@ class OxidTestCase extends PHPUnit_Framework_TestCase
     {
         $myDB = oxDb::getDB();
         $myConfig = modConfig::getInstance();
-        $sSelect = 'select GROUP_CONCAT(DISTINCT t.TABLE_NAME) from INFORMATION_SCHEMA.tables as t where t.TABLE_SCHEMA = "'.$myConfig->getConfigParam( 'dbName' ).'" and t.TABLE_NAME not like "oxv_%"';
-        $rs = $myDB->execute($sSelect);
-        $sSelect = 'CHECKSUM TABLE '.$rs->fields[0];
+        $sSelect = 'select t.TABLE_NAME from INFORMATION_SCHEMA.tables as t where t.TABLE_SCHEMA = "'.$myConfig->getConfigParam( 'dbName' ).'" and t.TABLE_NAME not like "oxv_%"';
+        $aTables = $myDB->getCol($sSelect);
+        $sTableSet = implode(", ", $aTables);
+        $sSelect = 'CHECKSUM TABLE '.$sTableSet;
         $rs = $myDB->execute($sSelect);
         if ( $rs != false && $rs->RecordCount() > 0 ) {
             while ( !$rs->EOF ) {

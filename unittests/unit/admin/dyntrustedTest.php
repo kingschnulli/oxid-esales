@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: dyntrustedTest.php 28699 2010-06-29 11:37:31Z vilma $
+ * @version   SVN: $Id: dyntrustedTest.php 44707 2012-05-09 11:24:40Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -73,8 +73,8 @@ class Unit_Admin_dyntrustedTest extends OxidTestCase
         modConfig::setParameter( "aShopID_TrustedShops", array("test") );
         modConfig::setParameter( "aTsUser", 'testUser' );
         modConfig::setParameter( "aTsPassword", 'testPsw' );
-        modConfig::setParameter( "tsTestMode", false );
         modConfig::setParameter( "tsSealActive", true );
+        modConfig::setParameter( "tsTestMode", false );
 
         $oConfig = $this->getMock( "oxStdClass", array( "getShopId", "saveShopConfVar" ) );
         $oConfig->expects( $this->at(0) )->method( 'getShopId' )->will( $this->returnValue( "shopid" ) );

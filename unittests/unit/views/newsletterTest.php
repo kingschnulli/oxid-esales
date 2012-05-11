@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: newsletterTest.php 40264 2011-11-24 14:04:45Z linas.kukulskis $
+ * @version   SVN: $Id: newsletterTest.php 44704 2012-05-09 11:24:03Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -418,5 +418,24 @@ class Unit_Views_newsletterTest extends OxidTestCase
         $aErrors = oxSession::getVar( 'Errors' );
         $oErr = unserialize( $aErrors['default'][0] );
         $this->assertEquals( oxLang::getInstance()->translateString('NEWSLETTER_NOTABLETOSENDEMAIL'), $oErr->getOxMessage() ) ;
+    }
+    
+    /**
+     * Testing newsLetter::getBreadCrumb()
+     *
+     * @return null
+     */
+    public function testGetBreadCrumb()
+    {
+        $oNewsLetter = new Newsletter();
+        $aResults  = array();
+        $aResult   = array();
+
+        $aResult["title"] = "Lassen Sie sich informieren!";
+        $aResult["link"]  = $oNewsLetter->getLink();
+
+        $aResults[] = $aResult;
+
+        $this->assertEquals($aResults, $oNewsLetter->getBreadCrumb());
     }
 }

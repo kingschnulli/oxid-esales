@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcmpBasketTest.php 44319 2012-04-25 08:43:17Z mindaugas.rimgaila $
+ * @version   SVN: $Id: oxcmpBasketTest.php 44704 2012-05-09 11:24:03Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -879,6 +879,28 @@ class Unit_Views_oxcmpBasketTest extends OxidTestCase
         $oCmp = oxNew('oxcmp_basket');
         $this->assertFalse( $oCmp->isRootCatChanged() );
     }
+    
+    /**
+     * Testing oxcmp_categories::isRootCatChanged() test case used for bascet exclude
+     *
+     * @return null
+     */
+    public function testIsRootCatChanged_ShowCatChangeWarning()
+    {
+        $oB = $this->getMock('basket', array( 'showCatChangeWarning', 'setCatChangeWarningState'));        
+        $oB->expects($this->once())->method('showCatChangeWarning')->will($this->returnValue( true ));
+        $oB->expects($this->once())->method('setCatChangeWarningState')->will($this->returnValue( null ));
+        
+        $oS = $this->getMock('oxsession', array( 'getBasket'));
+        $oS->expects($this->once())->method('getBasket')->will($this->returnValue( $oB ));
+        
+        
+        $oCB = $this->getMock('oxcmp_basket', array('getSession',));
+        $oCB->expects($this->once())->method('getSession')->will($this->returnValue( $oS ));
+        
+        
+        $this->assertTrue( $oCB->isRootCatChanged() );
+    }
 
 
     public function testInitNormalShop()
@@ -944,6 +966,32 @@ class Unit_Views_oxcmpBasketTest extends OxidTestCase
         $o = new oxcmp_basket();
         $o->UNITsetLastCallFnc('tobasket');
         $this->assertEquals( 'tobasket', $o->UNITgetLastCallFnc() );
+    }
+    
+    public function testExecuteuserchoiceToBasket()
+    {
+        modConfig::setParameter( 'tobasket', true );
+        
+        $oCB = new oxcmp_basket();
+        $this->assertEquals( 'basket', $oCB->executeuserchoice() );
+    }
+    
+    public function testExecuteuserchoiceElseCase()
+    {        
+        $oB = $this->getMock('stdclass', array('deleteBasket'));
+        $oB->expects($this->once())->method('deleteBasket')->will($this->returnValue( null ));
+
+        $oS = $this->getMock('oxsession', array('getBasket'));
+        $oS->expects($this->once())->method('getBasket')->will($this->returnValue( $oB ));
+        
+        $oP = $this->getMock('stdclass', array('setRootCatChanged'));
+        $oP->expects($this->once())->method('setRootCatChanged')->will($this->returnValue( null ));
+
+        $oCB = $this->getMock('oxcmp_basket', array('getSession', 'getParent'));
+        $oCB->expects($this->any())->method('getSession')->will($this->returnValue( $oS ));
+        $oCB->expects($this->any())->method('getParent')->will($this->returnValue( $oP ));
+        
+        $this->assertNull( $oCB->executeuserchoice() );
     }
 
 }

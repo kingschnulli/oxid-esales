@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: accountTest.php 32932 2011-02-04 16:24:54Z vilma $
+ * @version   SVN: $Id: accountTest.php 44704 2012-05-09 11:24:03Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -73,6 +73,25 @@ class Unit_Views_accountTest extends OxidTestCase
         $oView = oxNew('account');
         modConfig::setParameter('term', '2');
         $this->assertEquals( '2', $oView->confirmTerms());
+    }
+    
+    /**
+     * Test confirmTerms().
+     *
+     * @return null
+     */
+    public function testConfirmTermsForPrivateSales()
+    {
+        modConfig::setParameter('term', false);
+        
+        $oView = $this->getMock( "account", array( "isEnabledPrivateSales", "getUser" ) );
+        $oUser = $this->getMock( "oxuser", array( "isTermsAccepted" ) );
+        
+        $oView->expects( $this->once() )->method( 'isEnabledPrivateSales' )->will( $this->returnValue( true ) );
+        $oUser->expects( $this->once() )->method( "isTermsAccepted" )->will( $this->returnValue( false ) );
+        $oView->expects( $this->once() )->method( "getUser" )->will( $this->returnValue( $oUser ) );
+        
+        $this->assertTrue( $oView->confirmTerms() );
     }
 
     /**
@@ -310,5 +329,48 @@ class Unit_Views_accountTest extends OxidTestCase
         $oView->expects( $this->any() )->method( 'isActive' )->will( $this->returnValue( true ) );
 
         $this->assertEquals( 'page/privatesales/login.tpl', $oView->render() );
+    }
+    
+    /**
+     * Test Account::getBreadCrumb()
+     *
+     * @return null
+     */
+    public function testGetBreadCrumb()
+    {   
+        $sUsername = 'Username';
+        $sLink = 'Link url';
+        $oUser = new oxuser();
+        $oUser->oxuser__oxusername = new oxField( $sUsername );
+        
+        $oView = $this->getMock( "account", array( 'getUser', 'getLink' ) );
+        $oView->expects( $this->once() )->method( 'getUser' )->will( $this->returnValue( $oUser ) );
+        $oView->expects( $this->once() )->method( 'getLink' )->will( $this->returnValue( $sLink ) );
+        
+        $aBreadCrumbs = $oView->getBreadCrumb();
+        
+        $this->assertTrue( is_array( $aBreadCrumbs ) );
+        $this->assertEquals( 1, count( $aBreadCrumbs ) );
+        $this->assertTrue( isset( $aBreadCrumbs[0]['title'] ) );
+        $this->assertTrue( isset( $aBreadCrumbs[0]['link'] ) );
+        $this->assertEquals( 'Mein Konto - '.$sUsername, $aBreadCrumbs[0]['title'] );
+        $this->assertEquals( $sLink, $aBreadCrumbs[0]['link'] );        
+    }
+    
+    /**
+     * Test Account::getBreadCrumb()
+     *
+     * @return null
+     */
+    public function testGetBreadCrumbNoUser()
+    {
+        $oAcc = new account();
+        $aBreadCrumbs = $oAcc->getBreadCrumb();
+        
+        $this->assertTrue( is_array( $aBreadCrumbs ) );
+        $this->assertEquals( 1, count( $aBreadCrumbs ) );
+        $this->assertTrue( isset( $aBreadCrumbs[0]['title'] ) );
+        $this->assertTrue( isset( $aBreadCrumbs[0]['link'] ) );        
+        $this->assertEquals( 'Anmeldung', $aBreadCrumbs[0]['title'] );
     }
 }

@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: suggestTest.php 39581 2011-10-26 13:35:01Z linas.kukulskis $
+ * @version   SVN: $Id: suggestTest.php 44707 2012-05-09 11:24:40Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -202,13 +202,14 @@ class Unit_Views_suggestTest extends OxidTestCase
         $oSuggest->expects( $this->once() )->method( 'getProduct')->will($this->returnValue( $oProduct ) );
         $oSuggest->expects( $this->once() )->method( 'getCaptcha')->will($this->returnValue( $oCaptcha ) );
 
-         modConfig::setParameter( 'searchparam', "searchparam&&A" );
-         modConfig::setParameter( 'searchcnid', "searchcnid&&A" );
-         modConfig::setParameter( 'searchvendor', "searchvendor&&A" );
-         modConfig::setParameter( 'searchmanufacturer', "searchmanufacturer&&A" );
-         modConfig::setParameter( 'listtype', "listtype&&A" );
+        modConfig::setParameter( 'searchparam', "searchparam&&A" );
+        modConfig::setParameter( 'searchcnid', "searchcnid&&A" );
+        modConfig::setParameter( 'searchvendor', "searchvendor&&A" );
+        modConfig::setParameter( 'searchmanufacturer', "searchmanufacturer&&A" );
+        modConfig::setParameter( 'listtype', "listtype&&A" );
 
-        $this->assertEquals( 'details?anid=XProduct&searchparam=searchparam%26%26A&searchcnid=searchcnid&&A&searchvendor=searchvendor&&A&searchmanufacturer=searchmanufacturer&&A&listtype=listtype&&A', $oSuggest->send() );
+        $sExpected = 'details?anid=XProduct&searchparam=searchparam%26%26A&searchcnid=searchcnid&amp;&amp;A&searchvendor=searchvendor&amp;&amp;A&searchmanufacturer=searchmanufacturer&amp;&amp;A&listtype=listtype&amp;&amp;A';
+        $this->assertEquals( $sExpected ,$oSuggest->send() );
     }
 
     public function testSendPassInvalidMail()

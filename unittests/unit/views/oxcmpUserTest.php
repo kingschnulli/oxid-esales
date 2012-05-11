@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcmpUserTest.php 42987 2012-03-19 08:54:54Z linas.kukulskis $
+ * @version   SVN: $Id: oxcmpUserTest.php 44707 2012-05-09 11:24:40Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -1160,10 +1160,10 @@ class Unit_Views_oxcmpUserTest extends OxidTestCase
         $oNewsSubscribed->oxnewssubscribed__oxuserid  = new oxField( '_test_oxuserid', oxField::T_RAW );
         $oNewsSubscribed->oxnewssubscribed__oxemail   = new oxField( '_test@oxid.de', oxField::T_RAW );
         $oNewsSubscribed->save();
-        
+
         $oUser->changeUserData( $sUser, $sPassword, $sPassword2, $aInvAddress, $aDelAddress );
         $oUser->setNewsSubscription( false, false );
-        
+
         $oNewsSubscribed->load( '_test_9191965231c39c27141aab0431' );
         $this->assertNotEquals( $oNewsSubscribed->oxnewssubscribed__oxunsubscribed->value, '0000-00-00 00:00:00' );
     }
@@ -1260,5 +1260,89 @@ class Unit_Views_oxcmpUserTest extends OxidTestCase
         $oView->UNITcheckPsState();
     }
 
-}
+    /**
+     * Test oxcmp_user::createUser() - try to save password with spec chars.
+     * #0003680
+     *
+     * @return null
+     */
+    public function testCreateUser_setPasswordWithSpecChars()
+    {
+        $this->setExpectedException( 'oxException', 'Create user test' );
 
+        $sPass = '&quot;&#34;"o?p[]XfdKvA=#3K8tQ%';
+        modConfig::setParameter( 'lgn_usr', 'test_username' );
+        modConfig::setParameter( 'lgn_pwd', $sPass );
+        modConfig::setParameter( 'lgn_pwd2', $sPass );
+        modConfig::setParameter( 'invadr', null );
+
+        $oUser = $this->getMock( 'oxStdClass', array( 'checkValues' ) );
+        $oUser->expects( $this->once() )
+            ->method( 'checkValues' )
+            ->with( $this->equalTo( 'test_username' ), $this->equalTo( $sPass ), $this->equalTo( $sPass ), $this->equalTo( null ), $this->equalTo( null ) )
+            ->will( $this->throwException( new oxException( 'Create user test' ) ) );
+        oxTestModules::addModuleObject( 'oxuser', $oUser );
+
+        $oParent = $this->getMock( 'oxStdClass', array( 'isEnabledPrivateSales' ) );
+
+        $oView = $this->getMock( 'oxcmp_user', array( '_getDelAddressData', 'getParent' ) );
+        $oView->expects( $this->once() )->method( 'getParent' )->will( $this->returnValue( $oParent ) );
+        $oView->createUser();
+    }
+
+    /**
+     * Test oxcmp_user::_changeUser_noRedirect() - try to save password with spec chars.
+     * #0003680
+     *
+     * @return null
+     */
+    public function testChangeUser_noRedirect_setPasswordWithSpecChars()
+    {
+        $this->setExpectedException( 'oxException', 'Change user test' );
+
+        $sPass = '&quot;&#34;"o?p[]XfdKvA=#3K8tQ%';
+        modConfig::setParameter( 'invadr', null );
+
+        $oSession = $this->getMock( 'oxStdClass', array( 'checkSessionChallenge' ) );
+        $oSession->expects( $this->once() )->method( 'checkSessionChallenge' )->will( $this->returnValue( true ) );
+
+        $oUser = $this->getMock( 'oxStdClass', array( 'changeUserData' ) );
+        $oUser->oxuser__oxusername = new oxField( 'test_username', oxField::T_RAW );
+        $oUser->oxuser__oxpassword = new oxField( $sPass, oxField::T_RAW );
+        $oUser->expects( $this->once() )
+            ->method( 'changeUserData' )
+            ->with( $this->equalTo( 'test_username' ), $this->equalTo( $sPass ), $this->equalTo( $sPass ), $this->equalTo( null ), $this->equalTo( null ) )
+            ->will( $this->throwException( new oxException( 'Change user test' ) ) );
+
+        $oView = $this->getMock( $this->getProxyClassName( 'oxcmp_user' ), array( '_getDelAddressData', 'getUser', 'getSession' ) );
+        $oView->expects( $this->once() )->method( 'getUser' )->will( $this->returnValue( $oUser ) );
+        $oView->expects( $this->once() )->method( 'getSession' )->will( $this->returnValue( $oSession ) );
+        $oView->UNITchangeUser_noRedirect();
+    }
+
+    /**
+     * Test oxcmp_user::login() - try to login with password with spec chars.
+     * #0003680
+     *
+     * @return null
+     */
+    public function testLogin_setPasswordWithSpecChars()
+    {
+        $this->setExpectedException( 'oxException', 'Login user test' );
+
+        $sPass = '&quot;&#34;"o?p[]XfdKvA=#3K8tQ%';
+        modConfig::setParameter( 'lgn_usr', 'test_username' );
+        modConfig::setParameter( 'lgn_pwd', $sPass );
+        modConfig::setParameter( 'lgn_cook', null );
+
+        $oUser = $this->getMock( 'oxStdClass', array( 'login' ) );
+        $oUser->expects( $this->once() )
+            ->method( 'login' )
+            ->with( $this->equalTo( 'test_username' ), $this->equalTo( $sPass ), $this->equalTo( null ) )
+            ->will( $this->throwException( new oxException( 'Login user test' ) ) );
+        oxTestModules::addModuleObject( 'oxuser', $oUser );
+
+        $oView = $this->getMock( 'oxcmp_user', array( 'setLoginStatus' ) );
+        $oView->login();
+    }
+}

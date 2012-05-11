@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxviewconfigTest.php 43905 2012-04-15 15:48:15Z alfonsas $
+ * @version   SVN: $Id: oxviewconfigTest.php 44704 2012-05-09 11:24:03Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -647,10 +647,39 @@ class Unit_Views_oxviewConfigTest extends OxidTestCase
      * @return null
      */
     public function testShowSelectListsInList()
+    {   
+        modConfig::getInstance()->setConfigParam('bl_perfLoadSelectListsInAList', true);
+        
+        $oVC = $this->getMock('oxviewconfig', array( 'showSelectLists' ));
+        $oVC->expects( $this->once() )->method( 'showSelectLists' )->will( $this->returnValue( true ) );
+        $this->assertTrue( $oVC->showSelectListsInList() );
+    }
+    
+    /**
+     * Test case for oxViewConfig::showSelectListsInList()
+     *
+     * @return null
+     */
+    public function testShowSelectListsInListFalse()
+    {   
+        $oCfg = new oxConfig();
+        $oVC = $this->getMock('oxviewconfig', array( 'showSelectLists' ));
+        $oVC->expects( $this->once() )->method( 'showSelectLists' )->will( $this->returnValue( false ) );
+        $this->assertFalse( $oVC->showSelectListsInList() );
+    }    
+    
+    /**
+     * Test case for oxViewConfig::showSelectListsInList()
+     *
+     * @return null
+     */
+    public function testShowSelectListsInListDifferent()
     {
-        $blExp = (bool) oxConfig::getINstance()->getConfigParam( 'bl_perfLoadSelectLists' ) && (bool) oxConfig::getINstance()->getConfigParam( 'bl_perfLoadSelectLists' );
-        $oVC = new oxViewConfig();
-        $this->assertEquals( $blExp, $oVC->showSelectLists() );
+        modConfig::getInstance()->setConfigParam('bl_perfLoadSelectListsInAList', false);
+        
+        $oVC = $this->getMock('oxviewconfig', array( 'showSelectLists' ));
+        $oVC->expects( $this->once() )->method( 'showSelectLists' )->will( $this->returnValue( true ) );
+        $this->assertFalse( $oVC->showSelectListsInList() );
     }
 
     /**

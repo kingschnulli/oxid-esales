@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxstrregularTest.php 34141 2011-04-01 14:59:12Z sarunas $
+ * @version   SVN: $Id: oxstrregularTest.php 44716 2012-05-09 11:28:31Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -194,7 +194,7 @@ class Unit_Core_oxstrRegularTest extends OxidTestCase
 
     public function testCleanStr()
     {
-        $this->assertEquals( '                      ', $this->_oSubj->cleanStr( " \" ".'\''." : ! ? \n \r \t \x95 \xa0 ;" ) );
+        $this->assertEquals( " \" ".'\''." : ! ?            ", $this->_oSubj->cleanStr( " \" ".'\''." : ! ? \n \r \t \x95 \xa0 ;" ) );
     }
 
     public function testCleanStrLeavsDots()

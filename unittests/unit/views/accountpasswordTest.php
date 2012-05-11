@@ -193,4 +193,35 @@ class Unit_Views_accountPasswordTest extends OxidTestCase
 
         $this->assertEquals(2, count($oAccPaswd->getBreadCrumb()));
     }
+
+    /**
+     * Test Account_Password::changePassword() - try to login with password with spec chars.
+     * #0003680
+     *
+     * @return null
+     */
+    public function testLogin_setPasswordWithSpecChars()
+    {
+        $this->setExpectedException( 'oxException', 'ChangePass user test' );
+
+        $sOldPass = '&quot;&#34;"o?p[]XfdKvA=#3K8tQ%_old';
+        $sPass = '&quot;&#34;"o?p[]XfdKvA=#3K8tQ%';
+        modConfig::setParameter( 'password_old', $sOldPass );
+        modConfig::setParameter( 'password_new', $sPass );
+        modConfig::setParameter( 'password_new_confirm', $sPass );
+
+        $oUser = $this->getMock( 'oxStdClass', array( 'checkPassword', 'isSamePassword' ) );
+        $oUser->expects( $this->once() )
+            ->method( 'checkPassword' )
+            ->with( $this->equalTo( $sPass ), $this->equalTo( $sPass ), $this->equalTo( true ) );
+
+        $oUser->expects( $this->once() )
+            ->method( 'isSamePassword' )
+            ->with( $this->equalTo( $sOldPass ) )
+            ->will( $this->throwException( new oxException( 'ChangePass user test' ) ) );
+
+        $oView = $this->getMock( 'Account_Password', array( 'getUser' ) );
+        $oView->expects( $this->once() )->method( 'getUser' )->will( $this->returnValue( $oUser ) );
+        $oView->changePassword();
+    }
 }

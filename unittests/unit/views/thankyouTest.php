@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: thankyouTest.php 35241 2011-05-10 06:47:09Z sarunas $
+ * @version   SVN: $Id: thankyouTest.php 44704 2012-05-09 11:24:03Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -219,6 +219,22 @@ class Unit_Views_thankyouTest extends OxidTestCase
         $oTh = new Thankyou();
 
         $this->assertEquals(1, count($oTh->getBreadCrumb()));
+    }
+    
+    /**
+     * Testing Thankyou::getCountryISO3()
+     *
+     * @return null
+     */
+    public function testGetCountryISO3()
+    {
+        $oOrder = new oxOrder();
+        $oOrder->oxorder__oxbillcountryid = new oxField( 'a7c40f631fc920687.20179984' );
+        
+        $oTh = $this->getMock( 'thankyou', array('getOrder') );
+        $oTh->expects($this->any())->method('getOrder')->will( $this->returnValue( $oOrder ) );
+
+        $this->assertEquals('DEU', $oTh->getCountryISO3());
     }
 
 }

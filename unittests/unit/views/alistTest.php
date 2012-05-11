@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: alistTest.php 44342 2012-04-25 10:59:43Z linas.kukulskis $
+ * @version   SVN: $Id: alistTest.php 44775 2012-05-10 07:45:40Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -99,7 +99,6 @@ class Unit_Views_alistTest extends OxidTestCase
     public function testGetMetaDescription()
     {
         $sCatId  = '8a142c3e60a535f16.78077188';
-
         $sPrefix = "Wohnen - Uhren. OXID eShop 4";
 
         $oCategory = new oxCategory();

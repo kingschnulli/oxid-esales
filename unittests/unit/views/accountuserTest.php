@@ -68,4 +68,20 @@ class Unit_Views_accountUserTest extends OxidTestCase
 
         $this->assertEquals(2, count($oAccUser->getBreadCrumb()));
     }
+    
+    /**
+     * Testing Account_User::showShipAddress()
+     *
+     * @return null
+     */
+    public function testShowShipAddress()
+    {
+        $oAccUser = new Account_User();
+        //check true
+        modSession::getInstance()->setVar( 'blshowshipaddress', true );
+        $this->assertTrue( $oAccUser->showShipAddress() );
+        //check false
+        modSession::getInstance()->setVar( 'blshowshipaddress', false );
+        $this->assertFalse( $oAccUser->showShipAddress() );
+    }
 }

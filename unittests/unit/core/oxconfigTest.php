@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxconfigTest.php 43279 2012-03-29 11:57:22Z vilma $
+ * @version   SVN: $Id: oxconfigTest.php 44729 2012-05-09 13:36:33Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -1311,6 +1311,21 @@ class Unit_Core_oxconfigTest extends OxidTestCase
         $this->assertFalse( $oConfig->isCurrentUrl( $sUrl ) );
 
         $sUrl = 'www.example.com.ru';
+        $oConfig = new oxConfig();
+        $oConfig->init();
+        $_SERVER['HTTP_HOST'] = 'www.example.com.ru';
+        $_SERVER['SCRIPT_NAME'] = '';
+        $this->assertTrue( $oConfig->isCurrentUrl( $sUrl ) );
+
+        $sUrl = 'http://www.example.com.ru';
+        $oConfig = new oxConfig();
+        $oConfig->init();
+        $_SERVER['HTTP_HOST'] = 'www.example.com.ru';
+        $_SERVER['SCRIPT_NAME'] = '';
+        $this->assertTrue( $oConfig->isCurrentUrl( $sUrl ) );
+
+        //#4010: force_sid added in https to every link
+        $sUrl = 'https://www.example.com.ru';
         $oConfig = new oxConfig();
         $oConfig->init();
         $_SERVER['HTTP_HOST'] = 'www.example.com.ru';

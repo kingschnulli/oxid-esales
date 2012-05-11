@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: searchTest.php 35355 2011-05-13 12:52:39Z alfonsas $
+ * @version   SVN: $Id: searchTest.php 44707 2012-05-09 11:24:40Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -250,7 +250,7 @@ class Unit_Views_searchTest extends OxidTestCase
         $oSearch = $this->getMock( "search", array( "_isSearchClass" ) );
         $oSearch->expects( $this->once() )->method( '_isSearchClass')->will($this->returnValue( true ) );
         modConfig::setParameter('searchmanufacturer', 'gsearchmanufacturer&');
-        $this->assertSame('gsearchmanufacturer&', $oSearch->getSearchManufacturer());
+        $this->assertSame('gsearchmanufacturer&amp;', $oSearch->getSearchManufacturer());
     }
 
     public function testGetSearchManufacturerNotInSearch()

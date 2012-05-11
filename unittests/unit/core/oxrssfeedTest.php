@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxrssfeedTest.php 43093 2012-03-22 13:07:26Z linas.kukulskis $
+ * @version   SVN: $Id: oxrssfeedTest.php 44713 2012-05-09 11:27:21Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -791,6 +791,7 @@ class Unit_Core_oxrssfeedTest extends OxidTestCase
         $this->assertEquals("cl=rss&amp;fnc=searchartsRSS_SEARCHARTICLES_URL%s?|a|", $oRss->getSearchArticlesUrl('a', '', '', ''));
         $this->assertEquals("cl=rss&amp;fnc=searchartsRSS_SEARCHARTICLES_URL%s?|abcd|", $oRss->getSearchArticlesUrl('a', 'b', 'c', 'd'));
     }
+
     public function testLoadSearchArticles()
     {
         oxTestModules::addFunction('oxrssfeed', '_getSearchParamsUrl', '{ return "klnk"; }');
