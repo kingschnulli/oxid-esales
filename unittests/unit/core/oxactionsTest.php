@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxactionsTest.php 43590 2012-04-06 13:34:41Z linas.kukulskis $
+ * @version   SVN: $Id: oxactionsTest.php 45166 2012-05-15 12:58:37Z edvardas.gineika $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -436,18 +436,37 @@ class Unit_Core_oxactionsTest extends OxidTestCase
      */
     public function testGetBannerLink()
     {
-        $oUtilsUrl = $this->getMock('oxUtilsUrl', array('processUrl'));
-
-        $oUtilsUrl->expects($this->once())->method('processUrl')
-                  ->with( $this->equalTo("http://www.oxid-esales.com") )
-                  ->will( $this->returnValue("http://www.oxid-esales.com/") );
-
-        oxTestModules::addModuleObject( 'oxUtilsUrl', $oUtilsUrl );
-
         $oPromo = new oxactions();
         $oPromo->oxactions__oxlink = new oxField( "http://www.oxid-esales.com" );
 
-        $this->assertEquals( "http://www.oxid-esales.com/", $oPromo->getBannerLink() );
+        $this->assertEquals( "http://www.oxid-esales.com", $oPromo->getBannerLink() );
+    }
+    
+    /**
+     * test
+     */
+    public function testGetBannerLinkHttps()
+    {
+        $oPromo = new oxactions();
+        $oPromo->oxactions__oxlink = new oxField( "https://www.oxid-esales.com" );
+
+        $this->assertEquals( "https://www.oxid-esales.com", $oPromo->getBannerLink() );
+    }    
+    
+    /**
+     * test
+     */
+    public function testGetBannerLinkNoHttp()
+    {
+        $oConfig = $this->getMock('oxConfig',array('getShopUrl'), array(), '', false);
+        $oConfig->expects( $this->once() )->method( 'getShopUrl' )->will( $this->returnValue( "http://myeshop/" ) );
+       
+        $oActions = $this->getMock( 'oxActions', array( 'getConfig' ), array(), '', false );
+        $oActions->expects( $this->once() )->method( 'getConfig' )->will( $this->returnValue( $oConfig ) );
+
+        $oActions->oxactions__oxlink = new oxField( "wakeboarding/wakeboards" );
+
+        $this->assertEquals( "http://myeshop/wakeboarding/wakeboards", $oActions->getBannerLink() );
     }
 
     /**
