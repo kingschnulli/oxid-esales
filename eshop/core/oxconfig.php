@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxconfig.php 44808 2012-05-10 12:09:25Z vilma $
+ * @version   SVN: $Id: oxconfig.php 45354 2012-05-17 14:47:51Z vaidas.matulevicius $
  */
 
 define( 'MAX_64BIT_INTEGER', '18446744073709551615' );
@@ -808,7 +808,8 @@ class oxConfig extends oxSuperCfg
                 // "1&1" hoster provides "1"
                 $this->_blIsSsl = ($this->getConfigParam('sSSLShopURL') || $this->getConfigParam('sMallSSLShopURL'));
                 if ($this->isAdmin() && !$this->_blIsSsl) {
-                    $this->_blIsSsl = $this->getConfigParam('sAdminSSLURL');
+                    //#4026
+                    $this->_blIsSsl = !is_null($this->getConfigParam('sAdminSSLURL')) ? true : false;
                 }
             }
 

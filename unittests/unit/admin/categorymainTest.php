@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: categorymainTest.php 41256 2012-01-12 13:34:23Z mindaugas.rimgaila $
+ * @version   SVN: $Id: categorymainTest.php 45260 2012-05-17 11:51:05Z vaidas.matulevicius $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -30,6 +30,7 @@ require_once realpath( "." ).'/unit/test_config.inc.php';
  */
 class Unit_Admin_CategoryMainTest extends OxidTestCase
 {
+
     /**
      * Initialize the fixture.
      *
@@ -53,6 +54,7 @@ class Unit_Admin_CategoryMainTest extends OxidTestCase
     protected function tearDown()
     {
         $this->cleanUpTable( 'oxcategories' );
+        oxDb::getDb()->execute( "DELETE FROM oxcategories WHERE OXTITLE = 'Test category title for unit' " );
 
         parent::tearDown();
     }
@@ -91,6 +93,27 @@ class Unit_Admin_CategoryMainTest extends OxidTestCase
         $this->assertTrue( isset( $aViewData['oxid'] ) );
         $this->assertEquals( "-1", $aViewData['oxid'] );
     }
+    
+    /**
+     * Category_Main::Save() test case when oxactive = 0
+     *
+     * @return null
+     */
+    public function testSaveActiveSet0()
+    {
+        $aParams = array( "oxcategories__oxactive" => 0, 
+                          "oxcategories__oxparentid" => "oxrootid",
+                          "oxcategories__oxtitle" => "Test category title for unit" );
+        
+        modConfig::setParameter( "oxid", -1 );
+        modConfig::setParameter( "editval", $aParams );
+        
+        $oView = new Category_Main();
+        $oView->save();
+        
+        $sActive = oxDb::getDb()->getOne("SELECT OXACTIVE FROM oxcategories WHERE OXTITLE='Test category title for unit'");
+        $this->assertEquals( 0, $sActive );
+    }
 
     /**
      * Category_Main::Save() test case
@@ -105,7 +128,7 @@ class Unit_Admin_CategoryMainTest extends OxidTestCase
         // testing..
         $oView = new Category_Main();
         $oView->save();
-
+                      
         $this->assertEquals( "1", $oView->getViewDataElement( "updatelist" ) );
     }
 
