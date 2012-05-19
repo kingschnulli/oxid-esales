@@ -495,6 +495,25 @@ class Unit_Core_oxmoduleTest extends OxidTestCase
 
         $this->assertTrue( $oModule->deactivate() );
     }
+    
+    /**
+     * oxmodule::deactivate() test case, when disabling two identical modules
+     *
+     * @return null
+     */
+    public function testDeactivateDuplicate()
+    {
+        $oConfig = $this->getMock( 'oxConfig', array('saveShopConfVar', 'setConfigParam') );
+        $oConfig->expects( $this->once() )->method('saveShopConfVar')->with($this->equalTo("arr"), $this->equalTo("aDisabledModules"), $this->equalTo(array("testId1")) );
+        $oConfig->expects( $this->once() )->method('setConfigParam')->with($this->equalTo("aDisabledModules"), $this->equalTo(array("testId1")) );
+
+        $oModule = $this->getMock( 'oxModule', array('getId', 'getDisabledModules', 'getConfig'), array(), "", false );
+        $oModule->expects( $this->any() )->method('getId')->will( $this->returnValue( "testId1" ) );
+        $oModule->expects( $this->once() )->method('getDisabledModules')->will( $this->returnValue( array("testId1") ) );
+        $oModule->expects( $this->any() )->method('getConfig')->will( $this->returnValue( $oConfig ) );
+
+        $this->assertTrue( $oModule->deactivate() );
+    }
 
     /**
      * oxmodule::buildModuleChains() test case, empty
