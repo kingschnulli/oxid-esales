@@ -1191,6 +1191,7 @@ class UnitUtf8_utf8Test extends OxidTestCase
     {
         $sValue = 'agentūrų Литовские für';
         oxTestModules::addFunction('oxutilsurl', 'prepareUrlForNoSession', '{return $aA[0]."extra";}');
+        modConfig::getInstance()->setConfigParam( "bl_perfParseLongDescinSmarty", false );
         $oCfg = $this->getMock( 'oxconfig', array( 'getActShopCurrencyObject' ) );
 
         $oActCur = new stdClass();

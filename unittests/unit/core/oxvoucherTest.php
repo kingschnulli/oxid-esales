@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxvoucherTest.php 44115 2012-04-20 11:58:43Z linas.kukulskis $
+ * @version   SVN: $Id: oxvoucherTest.php 45402 2012-05-18 14:02:18Z edvardas.gineika $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -495,11 +495,12 @@ class Unit_Core_oxvoucherTest extends OxidTestCase
         try{
             $aErrors = $oNewVoucher->checkVoucherAvailability( $aVouchers, $dInitPrice );
         }catch (oxVoucherException $e) {
-            $this->assertEquals('EXCEPTION_VOUCHER_ISNOTVALIDDATE', $e->getMessage());
+            $this->assertEquals('ERROR_MESSAGE_VOUCHER_NOVOUCHER', $e->getMessage());
             return ;
         }
         $this->fail();
     }
+    
     public function testCheckVoucherAvailability1()
     {
         $sOXID = $this->_aVoucherOxid[$this->_aSerieOxid[0]][0];
@@ -798,8 +799,9 @@ class Unit_Core_oxvoucherTest extends OxidTestCase
 
         $this->assertEquals( true, $oNewVoucher->UNITisValidDate() );
     }
-    public function testIsValidDate3()
+    public function testIsValidDate_WhenDateIsInFuture()
     {
+        $this->setExpectedException('oxVoucherException','ERROR_MESSAGE_VOUCHER_NOVOUCHER');
         $oSerie = oxNew( 'oxvoucherserie' );
         $oSerie->load($this->_aSerieOxid[0]);
         $oSerie->oxvoucherseries__oxbegindate = new oxField( date( 'Y-m-d H:i:s', time() + 3600) , oxField::T_RAW );
@@ -813,16 +815,12 @@ class Unit_Core_oxvoucherTest extends OxidTestCase
             return;
         }
         
-        try {
-            $oNewVoucher->UNITisValidDate();
-        } catch ( oxVoucherException $oException ) {
-            $this->assertEquals( 'EXCEPTION_VOUCHER_ISNOTVALIDDATE', $oException->getMessage() );
-            return;
-        }
-        $this->fail( 'Expected EXCEPTION_VOUCHER_ISNOTVALIDDATE' );
+        $oNewVoucher->UNITisValidDate();
     }
-    public function testIsValidDate3_1()
+    
+    public function testIsValidDate_WhenEndDateIsAutoSetInFuture()
     {
+        $this->setExpectedException('oxVoucherException','ERROR_MESSAGE_VOUCHER_NOVOUCHER');
         $oSerie = oxNew( 'oxvoucherserie' );
         $oSerie->load($this->_aSerieOxid[0]);
         $oSerie->oxvoucherseries__oxbegindate = new oxField( date( 'Y-m-d H:i:s', time() + 3600) , oxField::T_RAW );
@@ -836,14 +834,9 @@ class Unit_Core_oxvoucherTest extends OxidTestCase
             return;
         }
         
-        try {
-            $oNewVoucher->UNITisValidDate();
-        } catch ( oxVoucherException $oException ) {
-            $this->assertEquals( 'EXCEPTION_VOUCHER_ISNOTVALIDDATE', $oException->getMessage() );
-            return;
-        }
-        $this->fail( 'Expected EXCEPTION_VOUCHER_ISNOTVALIDDATE' );
+        $oNewVoucher->UNITisValidDate();
     }
+    
     public function testIsValidDate3_2()
     {
         $oSerie = oxNew( 'oxvoucherserie' );

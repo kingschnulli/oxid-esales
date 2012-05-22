@@ -19,11 +19,17 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxsessionTest.php 44276 2012-04-24 13:50:19Z linas.kukulskis $
+ * @version   SVN: $Id: oxsessionTest.php 45399 2012-05-18 13:38:14Z alfonsas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
 require_once realpath( "." ).'/unit/test_config.inc.php';
+
+class fake_basket extends oxBasket {
+    public function iAmFake() {
+        return true;
+    }
+}
 
 class Unit_oxsessionTest_oxUtilsServer extends oxUtilsServer
 {
@@ -1238,13 +1244,26 @@ class Unit_Core_oxsessionTest extends OxidTestCase
     }
 
     /**
-     *  oxsession::getBasket() bad instance
+     *  oxsession::getBasket() not basket instance
      */
-    function testGetBasket_badInstance()
+    function testGetBasket_notBasketInstance()
     {
-        $oArticle = oxNew( 'oxarticle' );
+        $oClass = oxNew( '__PHP_Incomplete_Class' );
         $oSession = $this->getMock( 'oxsession', array( '_getBasketName' ) );
-        $oSession->expects( $this->once() )->method( '_getBasketName')->will( $this->returnValue( serialize($oArticle)) );
+        $oSession->expects( $this->once() )->method( '_getBasketName')->will( $this->returnValue( serialize($oClass)) );
+
+        $oSessionBasket = $oSession->getBasket();
+        $this->assertTrue($oSessionBasket instanceof oxbasket, "oSessionBasket is instance of oxbasket (found ".get_class($oSessionBasket).")");
+    }
+
+    /**
+     *  oxsession::getBasket() wrong basket instance
+     */
+    function testGetBasket_notWrongBasketInstance()
+    {
+        $oFakeBasket = oxNew( 'fake_basket' );
+        $oSession = $this->getMock( 'oxsession', array( '_getBasketName' ) );
+        $oSession->expects( $this->once() )->method( '_getBasketName')->will( $this->returnValue( serialize($oFakeBasket)) );
 
         $oSessionBasket = $oSession->getBasket();
         $this->assertTrue($oSessionBasket instanceof oxbasket, "oSessionBasket is instance of oxbasket (found ".get_class($oSessionBasket).")");

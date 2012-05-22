@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxrssfeedTest.php 44713 2012-05-09 11:27:21Z linas.kukulskis $
+ * @version   SVN: $Id: oxrssfeedTest.php 45470 2012-05-21 10:54:02Z vaidas.matulevicius $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -199,6 +199,7 @@ class Unit_Core_oxrssfeedTest extends OxidTestCase
     public function testGetArticleItems()
     {
         oxTestModules::addFunction('oxutilsurl', 'prepareUrlForNoSession', '{return $aA[0]."extra";}');
+        modConfig::getInstance()->setConfigParam( "bl_perfParseLongDescinSmarty", false );
 
         $oCfg = $this->getMock( 'oxconfig', array( 'getActShopCurrencyObject' ) );
         $oActCur = new stdClass();
@@ -206,7 +207,7 @@ class Unit_Core_oxrssfeedTest extends OxidTestCase
         $oActCur->sign = 'EUR';
         $oCfg->expects($this->any())->method( 'getActShopCurrencyObject')->will( $this->returnValue( $oActCur ) );
         $oRss = oxNew('oxrssfeed');
-        $oRss->setConfig($oCfg);
+        $oRss->setConfig($oCfg);        
 
         $oLongDesc = new Oxstdclass();
         $oLongDesc->value = "artlogndesc";
@@ -250,10 +251,67 @@ class Unit_Core_oxrssfeedTest extends OxidTestCase
 
         $this->assertEquals(array($oSAr1, $oSAr2), $oRss->UNITgetArticleItems($oArr));
     }
+    
+    public function testGetArticleItemsDescriptionParsedWithSmarty()
+    {
+        oxTestModules::addFunction('oxutilsurl', 'prepareUrlForNoSession', '{return $aA[0]."extra";}');
+        modConfig::getInstance()->setConfigParam( "bl_perfParseLongDescinSmarty", true );
+
+        $oCfg = $this->getMock( 'oxconfig', array( 'getActShopCurrencyObject' ) );
+        $oActCur = new stdClass();
+        $oActCur->decimal = 1;
+        $oActCur->sign = 'EUR';
+        $oCfg->expects($this->any())->method( 'getActShopCurrencyObject')->will( $this->returnValue( $oActCur ) );
+        $oRss = oxNew('oxrssfeed');
+        $oRss->setConfig($oCfg);        
+
+        $oLongDesc = new Oxstdclass();
+        $oLongDesc->value = "[{$desc}]";
+
+        $oArt1 = $this->getMock( 'oxarticle', array( "getLink", "getLongDesc" ));
+        $oArt1->expects($this->any())->method( 'getLink')->will( $this->returnValue( "artlink" ) );
+        $oArt1->expects($this->any())->method( 'getLongDesc')->will( $this->returnValue( "artlogndesc" ) );
+        $oArt1->oxarticles__oxtitle = new oxField('title1');
+        $oArt1->oxarticles__oxprice = new oxField(20);
+        $oArt1->oxarticles__oxtimestamp = new oxField('2011-09-06 09:46:42');
+
+        $oLongDesc2 = new Oxstdclass();
+        $oLongDesc2->value = "[{$desc}]";
+
+        $oArt2 = oxNew('oxarticle');
+        $oArt2 = $this->getMock( 'oxarticle', array( "getLink", "getLongDesc" ));
+        $oArt2->expects($this->any())->method( 'getLink')->will( $this->returnValue( "artlink" ) );
+        $oArt2->expects($this->any())->method( 'getLongDesc')->will( $this->returnValue( " &nbsp;<div>" ) );
+        $oArt2->oxarticles__oxtitle = new oxField('title2');
+        $oArt2->oxarticles__oxprice = new oxField(10);
+        $oArt2->oxarticles__oxshortdesc = new oxField('shortdesc');
+        $oArt2->oxarticles__oxtimestamp = new oxField('2011-09-06 09:46:42');
+        $oArr = new oxarticlelist();
+        $oArr->assign( array( $oArt1, $oArt2 ) );
+
+        $oSAr1 = new oxStdClass();
+        $oSAr1->title = 'title1 20.0 EUR';
+        $oSAr1->link  = 'artlinkextra';
+        $oSAr1->guid  = 'artlinkextra';
+        $oSAr1->isGuidPermalink = true;
+        $oSAr1->description = "&lt;img src=&#039;".$oArt1->getThumbnailUrl()."&#039; border=0 align=&#039;left&#039; hspace=5&gt;artlogndesc";
+        $oSAr1->date = "Tue, 06 Sep 2011 09:46:42 +0200";
+
+        $oSAr2 = new oxStdClass();
+        $oSAr2->title = 'title2 10.0 EUR';
+        $oSAr2->link  = 'artlinkextra';
+        $oSAr2->guid  = 'artlinkextra';
+        $oSAr2->isGuidPermalink = true;
+        $oSAr2->description = "&lt;img src=&#039;".$oArt2->getThumbnailUrl()."&#039; border=0 align=&#039;left&#039; hspace=5&gt;shortdesc";
+        $oSAr2->date = "Tue, 06 Sep 2011 09:46:42 +0200";
+
+        $this->assertEquals(array($oSAr1, $oSAr2), $oRss->UNITgetArticleItems($oArr));
+    }
 
     public function testGetArticleItemsWithNoArticlePrice()
     {
         oxTestModules::addFunction('oxutilsurl', 'prepareUrlForNoSession', '{return $aA[0]."extra";}');
+        modConfig::getInstance()->setConfigParam( "bl_perfParseLongDescinSmarty", false );
 
         $oActCur = new stdClass();
         $oActCur->decimal = 1;
@@ -313,6 +371,7 @@ class Unit_Core_oxrssfeedTest extends OxidTestCase
     public function testGetArticleItemsDiffCurrency()
     {
         oxTestModules::addFunction('oxutilsurl', 'prepareUrlForNoSession', '{return $aA[0]."extra";}');
+        modConfig::getInstance()->setConfigParam( "bl_perfParseLongDescinSmarty", false );
 
         $oActCur = new stdClass();
         $oActCur->decimal = 1.47;
