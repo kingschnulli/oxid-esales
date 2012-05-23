@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxconfigTest.php 44729 2012-05-09 13:36:33Z linas.kukulskis $
+ * @version   SVN: $Id: oxconfigTest.php 45566 2012-05-22 16:22:30Z alfonsas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -33,22 +33,16 @@ class modForTestGetBaseTplDirExpectsDefault extends oxConfig
     }
 }
 
-class modForTestInitNoConnection extends oxConfig
-{
-    public function _loadVarsFromDb($sShopID, $aOnlyVars = null, $sModule = '')
-    {
-        $oEx = oxNew('oxConnectionException');
-        throw $oEx;
-    }
-}
 
 class modForTestInitLoadingPriority extends oxConfig
 {
     public $iDebug;
 
-    public function _loadVarsFromDb($sShopID, $aOnlyVars = null, $sModule = '')
+    protected function _loadVarsFromDb($sShopID, $aOnlyVars = null, $sModule = '')
     {
         $this->iDebug = 33;
+
+        return true;
     }
 }
 
@@ -322,11 +316,36 @@ class Unit_Core_oxconfigTest extends OxidTestCase
     }
 
     /**
+     * Testing config init - no connection to DB
+     */
+    public function testInit_noConnection()
+    {
+        $oConfig = $this->getMock( "oxconfig", array( "_loadVarsFromDb" ) );
+        $oEx = $oEx = oxNew( "oxConnectionException" );
+        $oConfig->expects( $this->once() )->method( '_loadVarsFromDb')->will( $this->throwException( $oEx ) );
+
+        $this->assertFalse( $oConfig->init() );
+    }
+
+    /**
+     * Testing config init - loading config vars returns no result
+     */
+    public function testInit_noValuesFromConfig()
+    {
+        $oConfig = $this->getMock( "oxconfig", array( "_loadVarsFromDb" ) );
+        $oConfig->expects( $this->once() )->method( '_loadVarsFromDb')->will( $this->returnValue( false ) );
+
+        $this->assertFalse( $oConfig->init() );
+    }
+
+    /**
      * Testing config parameters getter
      */
-    public function testInitNoConnection()
+    public function testInit_noShopId()
     {
-        $oConfig = new modForTestInitNoConnection();
+        $oConfig = $this->getMock( "oxconfig", array( "getShopId" ) );
+        $oConfig->expects( $this->once() )->method( 'getShopId')->will( $this->returnValue( false ) );
+
         $this->assertFalse( $oConfig->init() );
     }
 
