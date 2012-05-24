@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxactions.php 45164 2012-05-15 12:57:21Z edvardas.gineika $
+ * @version   SVN: $Id: oxactions.php 45583 2012-05-23 10:11:42Z edvardas.gineika $
  */
 
 /**
@@ -254,7 +254,7 @@ class oxActions extends oxI18n
     {
         if ( isset( $this->oxactions__oxlink ) && $this->oxactions__oxlink->value ) {
            $sUrl = $this->oxactions__oxlink->value ;
-            if ( ( strpos( $sUrl, "http://" ) === false ) && ( strpos( $sUrl, "https://" ) === false ) ) {
+            if ( !preg_match( "#^https?://#i", $sUrl) ) {
                  $sUrl =  $this->getConfig()->getShopUrl() . $sUrl ;
             }
             return  oxUtilsUrl::getInstance()->processUrl( $sUrl );
