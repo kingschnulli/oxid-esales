@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxorderTest.php 43674 2012-04-10 13:24:00Z linas.kukulskis $
+ * @version   SVN: $Id: oxorderTest.php 45716 2012-05-29 14:43:29Z vaidas.matulevicius $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -924,7 +924,7 @@ class Unit_Core_oxorderTest extends OxidTestCase
 
         $oOrder->recalculateOrder();// $oOrderArticles );
 
-        $this->assertEquals( $sOrderDate, oxUtilsDate::getInstance()->formatDBDate( $oOrder->oxorder__oxorderdate->value ) );
+        $this->assertEquals( date( 'Y-m-d h', $sOrderDate ), date( 'Y-m-d h', oxUtilsDate::getInstance()->formatDBDate( $oOrder->oxorder__oxorderdate->value ) ) );
         $this->assertEquals( $sOrderFolder, $oOrder->oxorder__oxfolder->value );
         $this->assertEquals( $sOrderIp, $oOrder->oxorder__oxip->value );
         $this->assertEquals( $sOrderRemark, $oOrder->oxorder__oxremark->value );
@@ -1759,7 +1759,8 @@ class Unit_Core_oxorderTest extends OxidTestCase
                            '_updateWishlist',
                            '_updateNoticeList',
                            '_markVouchers',
-                           '_sendOrderByEmail'
+                           '_sendOrderByEmail',
+                           '_updateOrderDate'
                          );
 
         $aTestMethods   = array_unique( $aMethods );
@@ -1777,6 +1778,7 @@ class Unit_Core_oxorderTest extends OxidTestCase
         $oOrder->expects($this->atLeastOnce())->method( '_setUser' );
         $oOrder->expects($this->atLeastOnce())->method( '_setOrderStatus' );
         $oOrder->expects($this->once())->method( 'validateOrder' );
+        $oOrder->expects($this->once())->method( '_updateOrderDate' );
 
         $oOrder->finalizeOrder( $oBasket, null );
     }
@@ -1800,8 +1802,9 @@ class Unit_Core_oxorderTest extends OxidTestCase
                            '_updateWishlist',
                            '_updateNoticeList',
                          );
-
-        $oOrder = $this->getMock( 'oxorder', array_unique( $aMethods ) );
+        $aTestMethods   = array_unique( $aMethods );
+        $aTestMethods[] = '_updateOrderDate';
+        $oOrder = $this->getMock( 'oxorder', $aTestMethods );
 
 
         foreach ( $aMethods AS $iKey => $sMethod ) {
@@ -1809,6 +1812,8 @@ class Unit_Core_oxorderTest extends OxidTestCase
                  ->method($sMethod)
                    ->will($this->returnValue(true) );
         }
+        
+         $oOrder->expects($this->never())->method( '_updateOrderDate' );
 
         $oOrder->finalizeOrder( $oBasket, null, true );
     }
@@ -1893,7 +1898,10 @@ class Unit_Core_oxorderTest extends OxidTestCase
 
         $oOrder = $this->getProxyClass( "oxOrder" );
         $oOrder->load( "_testOrderId" );
-
+        
+        $sSql = "select oxorderdate from oxorder where oxid='_testOrderId'";
+        $sOldDate = oxDb::getDb()->getOne( $sSql );
+        
         $oOrder->UNITsetOrderStatus( "OK" );
 
         $sSql = "select oxtransstatus from oxorder where oxid='_testOrderId'";
@@ -1904,6 +1912,28 @@ class Unit_Core_oxorderTest extends OxidTestCase
         //checking if order object also has this status (M:1300)
         $this->assertEquals( "OK", $oOrder->oxorder__oxtransstatus->value );
     }
+    
+    public function testUpdateOrderDate()
+    {
+        $this->_insertTestOrder();
+        
+        oxAddClassModule( 'modOxUtilsDate', 'oxUtilsDate' );
+        oxUtilsDate::getInstance()->UNITSetTime(100);
+        
+        $sQ = "select oxorderdate from oxorder where oxid='_testOrderId' ";
+        $sDate = oxDb::getDb()->getOne( $sQ );
+        
+        $oOrder = $this->getProxyClass( "oxOrder" );
+        $oOrder->load( "_testOrderId" );
+        $oOrder->UNITupdateOrderDate();
+        
+        $sQ = "select oxorderdate from oxorder where oxid='_testOrderId' ";
+        $sDateNew = oxDb::getDb()->getOne( $sQ );
+        
+        $this->assertNotEquals( $sDate, $sDateNew );
+        $this->assertEquals( date( 'Y-m-d h:i:s', 100 ), $sDateNew );
+    }
+
 
     public function testLoadFromBasket()
     {
