@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: actions_main.php 45813 2012-06-04 07:45:24Z vaidas.matulevicius $
+ * @version   SVN: $Id: actions_main.php 45996 2012-06-07 14:53:22Z vaidas.matulevicius $
  */
 
 /**
@@ -75,8 +75,8 @@ class Actions_Main extends oxAdminDetails
             $sChosenArtCat = oxConfig::getParameter( "artcat");
             $sChosenArtCat = $this->_getCategoryTree( "artcattree", $sChosenArtCat, $soxId);
             
-            $oActionsArticleAjax = oxNew( 'actions_article_ajax' );
-            $this->_aViewData['oxajax'] = $oActionsArticleAjax->getColumns();
+            $oActionsMainAjax = oxNew( 'actions_main_ajax' );
+            $this->_aViewData['oxajax'] = $oActionsMainAjax->getColumns();
 
             return "popups/actions_main.tpl";
         }
@@ -104,15 +104,12 @@ class Actions_Main extends oxAdminDetails
                             break;
                     }
 
-                    /*if ( $sPopup ) {
+                    if ( $sPopup ) {
                         $aColumns = array();
-                        echo "aaaa";
-                        //include_once "inc/{$sPopup}.inc.php";
                         $oActionsArticleAjax = oxNew( $sPopup.'_ajax' );
-                        //$this->_aViewData['oxajax'] = $aColumns;
                         $this->_aViewData['oxajax'] = $oActionsArticleAjax->getColumns();
                         return "popups/{$sPopup}.tpl";
-                    }*/
+                    }
                 } else {
                     if ( $oPromotion->oxactions__oxtype->value == 2) {
                         $this->_aViewData["editor"] = $this->_generateTextEditor( "100%", 300, $oPromotion, "oxactions__oxlongdesc", "details.tpl.css" );
