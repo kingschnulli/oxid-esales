@@ -109,7 +109,32 @@ class Unit_Admin_ArticleFilesTest extends OxidTestCase
         $oView->deletefile();
         $this->assertFalse( $oDb->getOne( "select oxid from oxfiles where oxid='_testFileId'" ) );
     }
-
+    
+    /**
+     * Article_Files::deletefile() test case when demoShop = true
+     *
+     * @return null
+     */
+    public function testDeletefileDemoShop()
+    {
+        oxTestModules::addFunction( 'oxfile', '_deleteFile', '{ return true; }');
+        $oDb = oxDb::getDb();
+        $oDb->execute( "insert into oxfiles set oxid='_testFileId', oxartid='2000'" );
+        modConfig::setParameter( "oxid", 2000 );
+        modConfig::setParameter( "fileid", "_testFileId" );
+        
+        $oConfig = $this->getMock( "oxStdClass", array( "isDemoShop" ) );
+        $oConfig->expects( $this->once() )->method( 'isDemoShop' )->will( $this->returnValue( true ) );
+        
+        $oView = $this->getMock( "Article_Files", array( "getConfig" ), array(), '', false );
+        $oView->expects( $this->any() )->method( 'getConfig' )->will( $this->returnValue( $oConfig ) );
+        $oView->deletefile();
+        
+        $aErr = oxSession::getVar( 'Errors' );
+        $oErr = unserialize($aErr['default'][0]);
+        $this->assertEquals( 'ARTICLE_EXTEND_UPLOADISDISABLED', $oErr->getOxMessage());
+    }
+    
     /**
      * Article_Files::deletefile() test case
      *
@@ -169,11 +194,12 @@ class Unit_Admin_ArticleFilesTest extends OxidTestCase
         modConfig::setParameter( "oxid", '2000' );
         modConfig::setParameter( "newfile", array("oxfiles__oxid" => "_testFileId", "oxfiles__oxpurchasedonly" => 1) );
 
-        $oConfig = $this->getMock( "oxStdClass", array( "getUploadedFile" ) );
+        $oConfig = $this->getMock( "oxStdClass", array( "getUploadedFile", "isDemoShop" ) );
         $oConfig->expects( $this->once() )->method( 'getUploadedFile' )->will( $this->returnValue( array( "name" => "testName" ) ) );
-
+        $oConfig->expects( $this->once() )->method( 'isDemoShop' )->will( $this->returnValue( false ) );
+        
         $oView = $this->getMock( "Article_Files", array( "getConfig" ), array(), '', false );
-        $oView->expects( $this->once() )->method( 'getConfig' )->will( $this->returnValue( $oConfig ) );
+        $oView->expects( $this->any() )->method( 'getConfig' )->will( $this->returnValue( $oConfig ) );
         $oView->upload();
 
         $oFile = oxNew("oxFile");
@@ -181,6 +207,25 @@ class Unit_Admin_ArticleFilesTest extends OxidTestCase
         $this->assertEquals( 1, $oFile->oxfiles__oxpurchasedonly->value );
         $this->assertEquals( '2000', $oFile->oxfiles__oxartid->value );
         $this->assertEquals( "testName", $oFile->oxfiles__oxfilename->value );
+    }
+     
+    /**
+     * Article_Files::upload() test case when demoShop is true
+     *
+     * @return null
+     */
+    public function testUploadDemoShop()
+    {
+        $oConfig = $this->getMock( "oxStdClass", array( "isDemoShop" ) );
+        $oConfig->expects( $this->once() )->method( 'isDemoShop' )->will( $this->returnValue( true ) );
+        
+        $oView = $this->getMock( "Article_Files", array( "getConfig" ), array(), '', false );
+        $oView->expects( $this->any() )->method( 'getConfig' )->will( $this->returnValue( $oConfig ) );
+        $oView->upload();
+        
+        $aErr = oxSession::getVar( 'Errors' );
+        $oErr = unserialize($aErr['default'][0]);
+        $this->assertEquals( 'ARTICLE_EXTEND_UPLOADISDISABLED', $oErr->getOxMessage());
     }
 
     /**
@@ -212,11 +257,12 @@ class Unit_Admin_ArticleFilesTest extends OxidTestCase
         modConfig::setParameter( "oxid", '2000' );
         modConfig::setParameter( "newfile", array("oxfiles__oxid" => "_testFileId", "oxfiles__oxpurchasedonly" => 1) );
 
-        $oConfig = $this->getMock( "oxStdClass", array( "getUploadedFile" ) );
+        $oConfig = $this->getMock( "oxStdClass", array( "getUploadedFile", "isDemoShop" ) );
         $oConfig->expects( $this->once() )->method( 'getUploadedFile' )->will( $this->returnValue( array( "name" => "testName" ) ) );
-
+        $oConfig->expects( $this->once() )->method( 'isDemoShop' )->will( $this->returnValue( false ) );
+        
         $oView = $this->getMock( "Article_Files", array( "getConfig" ), array(), '', false );
-        $oView->expects( $this->once() )->method( 'getConfig' )->will( $this->returnValue( $oConfig ) );
+        $oView->expects( $this->any() )->method( 'getConfig' )->will( $this->returnValue( $oConfig ) );
         $oView->upload();
 
         $aErr = oxSession::getVar( 'Errors' );

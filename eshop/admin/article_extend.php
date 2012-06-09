@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: article_extend.php 45813 2012-06-04 07:45:24Z vaidas.matulevicius $
+ * @version   SVN: $Id: article_extend.php 46040 2012-06-08 15:32:56Z edvardas.gineika $
  */
 
 /**
@@ -137,6 +137,21 @@ class Article_Extend extends oxAdminDetails
     public function save()
     {
         parent::save();
+        
+        $aMyFile = $this->getConfig()->getUploadedFile( "myfile" );
+        $aMediaFile = $this->getConfig()->getUploadedFile( "mediaFile" );
+        
+        if ( $aMyFile['name']['FL@oxarticles__oxfile'] || $aMediaFile['name'] ) {
+            $myConfig = $this->getConfig();
+
+            if ( $myConfig->isDemoShop() ) {
+                $oEx = oxNew( "oxExceptionToDisplay" );
+                $oEx->setMessage( 'ARTICLE_EXTEND_UPLOADISDISABLED' );
+                oxUtilsView::getInstance()->addErrorToDisplay( $oEx, false );
+
+                return;
+            }
+        }
 
         $soxId = $this->getEditObjectId();
         $aParams = oxConfig::getParameter( "editval");
@@ -173,7 +188,6 @@ class Article_Extend extends oxAdminDetails
         //saving media file
         $sMediaUrl  = oxConfig::getParameter( "mediaUrl");
         $sMediaDesc = oxConfig::getParameter( "mediaDesc");
-        $aMediaFile = $this->getConfig()->getUploadedFile( "mediaFile");
 
         if ( ( $sMediaUrl && $sMediaUrl != 'http://' ) || $aMediaFile['name'] || $sMediaDesc ) {
 

@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 44757 2012-05-09 14:04:15Z saulius.stasiukaitis $
+ * @version   SVN: $Id: lang.php 46040 2012-06-08 15:32:56Z edvardas.gineika $
  */
 
 /*
@@ -418,6 +418,7 @@ $aLang = array(
 'ARTICLE_EXTEND_UPDATEPRICEC'                              => 'C:',
 'ARTICLE_EXTEND_UPDATEPRICETIME'                           => 'Start time:',
 'ARTICLE_EXTEND_UPDATEPRICES'                              => 'Update price on defined time',
+'ARTICLE_EXTEND_UPLOADISDISABLED'                          => 'This is a demoshop. Uploading files has been switched off due to security reasons.',
 'ARTICLE_LIST_ALLPRODUCTS'                                 => 'all Products',
 'ARTICLE_LIST_MENUSUBITEM'                                 => 'Product',
 'ARTICLE_MAIN_ERRORSAVINGARTICLE'                          => 'Attention: Product already exists!',
@@ -864,7 +865,7 @@ $aLang = array(
 'EXCEPTION_THEME_NOT_LOADED'                               => 'Theme could not be loaded',
 'EXCEPTION_MODULE_NOT_LOADED'                              => 'Module could not be loaded',
 'EXCEPTION_PARENT_VERSION_UNSPECIFIED'                     => 'Parent theme did not specify version',
-'EXCEPTION_UNSPECIFIED_PARENT_VERSIONS'                    => 'Compatible parent theme versions not specified',
+'EXCEPTION_UNSPECIFIED_PARENT_VERSIONS'                    => 'Compatible parent theme version not specified',
 'EXCEPTION_PARENT_VERSION_MISMATCH'                        => 'Parent theme version is not compatible',
 'EXCEPTION_PARENT_THEME_NOT_FOUND'                         => 'Cannot find parent theme',
 'NO_PICTURES_CHANGES'                                      => 'No pictures changes',
@@ -2087,7 +2088,7 @@ $aLang = array(
 
 'SHOP_PERF_SEO_CACHE'                                      => 'Enable SEO cache',
 'INFO_MODULES_MOVED_TO_EXTENSIONS'                         => 'Themes and modules handling moved to new menu "Extensions"',
-'EXCEPTION_THEME_SHOULD_BE_ONLY_IN_DATABASE'               => '[TR]Theme config should not be in config file',
+'EXCEPTION_THEME_SHOULD_BE_ONLY_IN_DATABASE'               => 'Theme should not be defined in config.inc.php',
 
 );
 
