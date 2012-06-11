@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxconfig.php 44640 2012-05-08 08:46:23Z vilma $
+ * @version   SVN: $Id: oxconfig.php 45507 2012-05-21 15:26:15Z rimvydas.paskevicius $
  */
 
 define( 'MAX_64BIT_INTEGER', '18446744073709551615' );
@@ -428,9 +428,15 @@ class oxConfig extends oxSuperCfg
 
         try {
             $sShopID = $this->getShopId();
+            $blConfigLoaded = $this->_loadVarsFromDb( $sShopID );
 
             // load now
-            $this->_loadVarsFromDb( $sShopID );
+            if ( empty($sShopID) || !$blConfigLoaded ) {
+                // if no config values where loaded (some problmems with DB), throwing an exception
+                $oEx = oxNew( "oxConnectionException" );
+                $oEx->setMessage( "Unable to load shop config values from database" );
+                throw $oEx;
+            }
 
             // loading theme config options
             $this->_loadVarsFromDb( $sShopID, null, oxConfig::OXMODULE_THEME_PREFIX . $this->getConfigParam('sTheme') );
@@ -445,7 +451,9 @@ class oxConfig extends oxSuperCfg
 
             //starting up the session
             $this->getSession()->start();
+
         } catch ( oxConnectionException $oEx ) {
+
             $oEx->debugOut();
             if ( defined( 'OXID_PHP_UNIT' ) ) {
                 return false;
@@ -504,7 +512,7 @@ class oxConfig extends oxSuperCfg
      * @param array  $aOnlyVars array of params to load (optional)
      * @param string $sModule   module vars to load, empty for base options
      *
-     * @return null
+     * @return bool
      */
     protected function _loadVarsFromDb( $sShopID, $aOnlyVars = null, $sModule = '' )
     {
@@ -526,6 +534,7 @@ class oxConfig extends oxSuperCfg
         }
 
         $oRs = $oDb->execute( $sQ );
+
         if ( $oRs != false && $oRs->recordCount() > 0 ) {
             while ( !$oRs->EOF ) {
                 $sVarName = $oRs->fields[0];
@@ -548,6 +557,10 @@ class oxConfig extends oxSuperCfg
 
                 $oRs->moveNext();
             }
+
+            return true;
+        } else {
+            return false;
         }
     }
 

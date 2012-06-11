@@ -19,7 +19,7 @@
  * @package   modules
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: myorder.php 44655 2012-05-08 10:33:14Z mindaugas.rimgaila $
+ * @version   SVN: $Id: myorder.php 45644 2012-05-24 08:39:05Z vaidas.matulevicius $
  */
 
 /**
@@ -1193,7 +1193,6 @@ class MyOrder extends MyOrder_parent
 
             $aTransTbl = array_flip ($aTransTbl) + array_flip ($aReplace);
             $sValue = strtr($sValue, $aTransTbl);
-            var_dump($sValue);
             $sValue = getStr()->preg_replace('/\&\#([0-9]+)\;/me', "chr('\\1')", $sValue);
         }
 

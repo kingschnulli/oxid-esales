@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: categorymainTest.php 33254 2011-02-15 07:50:24Z sarunas $
+ * @version   SVN: $Id: categorymainTest.php 45231 2012-05-16 12:18:19Z vaidas.matulevicius $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -30,6 +30,13 @@ require_once realpath( "." ).'/unit/test_config.inc.php';
  */
 class Unit_Admin_CategoryMainTest extends OxidTestCase
 {
+    
+    public function tearDown() {
+        parent::tearDown();
+        
+        oxDb::getDb()->execute( "DELETE FROM oxcategories WHERE OXTITLE = 'Test category title for unit' " );        
+    }
+
     /**
      * Category_Main::Render() test case
      *
@@ -64,6 +71,27 @@ class Unit_Admin_CategoryMainTest extends OxidTestCase
         $this->assertTrue( isset( $aViewData['oxid'] ) );
         $this->assertEquals( "-1", $aViewData['oxid'] );
     }
+    
+    /**
+     * Category_Main::Save() test case when oxactive = 0
+     *
+     * @return null
+     */
+    public function testSaveActiveSet0()
+    {
+        $aParams = array( "oxcategories__oxactive" => 0, 
+                          "oxcategories__oxparentid" => "oxrootid",
+                          "oxcategories__oxtitle" => "Test category title for unit" );
+        
+        modConfig::setParameter( "oxid", -1 );
+        modConfig::setParameter( "editval", $aParams );
+        
+        $oView = new Category_Main();
+        $oView->save();
+        
+        $sActive = oxDb::getDb()->getOne("SELECT OXACTIVE FROM oxcategories WHERE OXTITLE='Test category title for unit'");
+        $this->assertEquals( 0, $sActive );
+    }
 
     /**
      * Category_Main::Save() test case
@@ -78,7 +106,7 @@ class Unit_Admin_CategoryMainTest extends OxidTestCase
         // testing..
         $oView = new Category_Main();
         $oView->save();
-
+                      
         $this->assertEquals( "1", $oView->getViewDataElement( "updatelist" ) );
     }
 

@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticleTest.php 42945 2012-03-16 13:47:11Z linas.kukulskis $
+ * @version   SVN: $Id: oxarticleTest.php 45764 2012-05-31 07:01:10Z edvardas.gineika $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -4346,7 +4346,47 @@ class Unit_Core_oxarticleTest extends OxidTestCase
         $oArticle->load( $this->oArticle->getId() );
         $this->assertEquals( 'aaaad', $oArticle->getArticleLongDesc()->value);
     }
+    
+    /**
+     *  Test get variant long description from self in admin.
+     *
+     * @return null
+     */
+    public function testGetArticleLongDescVariantSelfInAdmin()
+    {
+        oxDb::getDb()->execute("insert into oxartextends (oxid, oxlongdesc) values ( '_testArt', 'aaaad')");
 
+        $oVariant = new oxarticle;
+        $oVariant->setEnableMultilang(false);
+        $oVariant->setAdminMode( true );
+        $oVariant->load('_testVar2');
+        $oVariant->setId('_testVar2');
+        $oVariant->oxarticles__oxprice = new oxField(12.2, oxField::T_RAW);
+        $oVariant->oxarticles__oxshopid = new oxField(oxConfig::getInstance()->getBaseShopId(), oxField::T_RAW);
+        $oVariant->oxarticles__oxshopincl = new oxField(oxConfig::getInstance()->getBaseShopId(), oxField::T_RAW);
+        $oVariant->oxarticles__oxparentid = new oxField($this->oArticle->oxarticles__oxid->value, oxField::T_RAW);
+        $oVariant->oxarticles__oxtitle    = new oxField("test", oxField::T_RAW);
+
+        $oVariant->save();
+        $this->assertEquals( '', $oVariant->getArticleLongDesc()->value);
+    }
+    
+    /**
+     *  Test get variant long description from variant parent.
+     *
+     * @return null
+     */
+    public function testGetArticleLongDescVariantParent()
+    {
+        oxDb::getDB()->execute("delete from oxartextends where oxid = '_testVar'");
+        oxDb::getDb()->execute("insert into oxartextends (oxid, oxlongdesc) values ( '_testArt', '----d')");
+        oxDb::getDb()->execute("insert into oxartextends (oxid, oxlongdesc) values ( '_testVar', '')");
+        
+        $oVariant = new oxArticle();
+        $oVariant->load( $this->oArticle2->getId() );
+        $this->assertEquals( '----d', $oVariant->getArticleLongDesc()->value);
+    }   
+    
     /**
      * Test get attributes.
      *
