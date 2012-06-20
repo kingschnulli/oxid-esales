@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxsysrequirementsTest.php 42554 2012-03-01 07:40:25Z saulius.stasiukaitis $
+ * @version   SVN: $Id: oxsysrequirementsTest.php 46262 2012-06-18 14:08:29Z edvardas.gineika $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -422,19 +422,33 @@ class Unit_Core_oxSysRequirementsTest extends OxidTestCase
     }
 
     /**
-     * Test case for oxSysRequirements::checkBug53632()
+     * Test case for oxSysRequirements::checkBug53632() when php 32bit
      *
      * @return null
      */
-    public function testcheckBug53632()
+    public function testcheckBug53632_32bits()
     {
-        $iState = 1;
+        $iState = 1; 
         if ( version_compare( PHP_VERSION, "5.3", ">=" ) ) {
             $iState = version_compare( PHP_VERSION, "5.3.5", ">=" ) ? 2 : $iState;
         } elseif ( version_compare( PHP_VERSION, '5.2', ">=" ) ) {
             $iState = version_compare( PHP_VERSION, "5.2.17", ">=" ) ? 2 : $iState;
         }
-        $oSysReq = new oxSysRequirements();
-        $this->assertEquals( $iState, $oSysReq->checkBug53632() );
+        $oSysReq = $this->getMock('oxSysRequirements', array('_getPhpIntSize'));
+        $oSysReq->expects($this->once())->method('_getPhpIntSize')->will($this->returnValue(4));
+        $this->assertEquals( $iState, $oSysReq->checkBug53632() ); 
+    }
+    
+    /**
+     * Test case for oxSysRequirements::checkBug53632() when php 64bit
+     *
+     * @return null
+     */
+    public function testcheckBug53632_64bits()
+    {
+        $iState = 2; 
+        $oSysReq = $this->getMock('oxSysRequirements', array('_getPhpIntSize'));
+        $oSysReq->expects($this->once())->method('_getPhpIntSize')->will($this->returnValue(8));
+        $this->assertEquals( $iState, $oSysReq->checkBug53632() ); 
     }
 }

@@ -246,6 +246,9 @@ class Unit_Core_oxuserTest extends OxidTestCase
         }
 
         oxSession::deleteVar('deladrid');
+        
+        $oGroup = new oxgroups();
+        $oGroup->delete( '_testGroup' );
 
         parent::tearDown();
     }
@@ -3732,10 +3735,13 @@ class Unit_Core_oxuserTest extends OxidTestCase
         $oUser->expects( $this->any() )->method( 'inGroup')->will( $this->returnValue( false ) );
         $oUser->load( $sUserId );
 
-        $sQ = "select oxgroups.oxid from oxgroups left join oxobject2group on oxobject2group.oxgroupsid = oxgroups.oxid "
-              ."where oxobject2group.oxobjectid is null";
+        $oGroup = new oxGroups();
+        $oGroup->setId( '_testGroup' );
+        $oGroup->oxgroups__oxtitle  = new oxfield( '_testGroup' );
+        $oGroup->oxgroups__oxactive = new oxfield( 1 );
+        $oGroup->save();
 
-        $this->assertTrue( $oUser->addToGroup( oxDb::getDb()->getOne( $sQ ) ) );
+        $this->assertTrue( $oUser->addToGroup( "_testGroup" ) );
         $this->assertFalse( $oUser->addToGroup( "nonsense" ) );
     }
 
