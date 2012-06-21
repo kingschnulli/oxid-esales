@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: attribute_order_ajax.php 45812 2012-06-04 07:35:10Z vaidas.matulevicius $
+ * @version   SVN: $Id: attribute_order_ajax.php 46304 2012-06-19 12:46:26Z vaidas.matulevicius $
  */
 
 /**
@@ -82,17 +82,14 @@ class attribute_order_ajax extends ajaxListComponent
         $iSelCnt = 0;
         $aIdx2Id = array();
         foreach ( $oList as $sKey => $oSel ) {
-
             if ( $oSel->oxcategory2attribute__oxsort->value != $iSelCnt ) {
                 $oSel->oxcategory2attribute__oxsort->setValue($iSelCnt);
-
                 // saving new index
                 $oSel->save();
             }
             $aIdx2Id[$iSelCnt] = $sKey;
             $iSelCnt++;
         }
-
         //
         if ( ( $iKey = array_search( oxConfig::getParameter( 'sortoxid' ), $aIdx2Id ) ) !== false ) {
             $iDir = (oxConfig::getParameter( 'direction' ) == 'up')?($iKey-1):($iKey+1);
@@ -104,7 +101,6 @@ class attribute_order_ajax extends ajaxListComponent
                 $iCopy = $oDir1->oxcategory2attribute__oxsort->value;
                 $oDir1->oxcategory2attribute__oxsort->setValue($oDir2->oxcategory2attribute__oxsort->value);
                 $oDir2->oxcategory2attribute__oxsort->setValue($iCopy);
-
                 $oDir1->save();
                 $oDir2->save();
             }

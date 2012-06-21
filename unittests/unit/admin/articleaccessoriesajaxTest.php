@@ -239,6 +239,7 @@ class Unit_Admin_ArticleAccessoriesAjaxTest extends OxidTestCase
         
         $oView->expects( $this->any() )->method( '_getActionIds')->will( $this->returnValue( array( '_testGroupAdd1', '_testGroupAdd2' ) ) );
         
+        $this->assertGreaterThan( 0, $iCount );
         $this->assertEquals( 0, oxDb::getDb()->getOne( "select count(oxid) from oxaccessoire2article where oxarticlenid='_testArticle1'" ) );
         $oView->addarticleacc();
         $this->assertEquals( $iCount, oxDb::getDb()->getOne( "select count(oxid) from oxaccessoire2article where oxarticlenid='_testArticle1'" ) );

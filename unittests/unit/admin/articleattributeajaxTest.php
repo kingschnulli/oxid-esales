@@ -193,6 +193,7 @@ class Unit_Admin_ArticleAttributeAjaxTest extends OxidTestCase
         modConfig::setParameter( "all", true );
         
         $iCount = oxDb::getDb()->getOne( "select count(oxid) from ".$this->getAttributeViewTable()." where ".$this->getAttributeViewTable().".oxid not in ( select ".$this->getObject2AttributeViewTable().".oxattrid from ".$this->getObject2AttributeViewTable()." left join ".$this->getAttributeViewTable()." on ".$this->getAttributeViewTable().".oxid=".$this->getObject2AttributeViewTable().".oxattrid  where ".$this->getObject2AttributeViewTable().".oxobjectid = '$sSynchOxid' )" );
+        $this->assertGreaterThan( 0, $iCount );
         $this->assertEquals( 0, oxDb::getDb()->getOne( "select count(oxid) from oxobject2attribute where oxobjectid='$sSynchOxid'" ) );
         $oView = oxNew( 'article_attribute_ajax' );
         $oView->addAttr();

@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: attribute_main_ajax.php 45812 2012-06-04 07:35:10Z vaidas.matulevicius $
+ * @version   SVN: $Id: attribute_main_ajax.php 46304 2012-06-19 12:46:26Z vaidas.matulevicius $
  */
 
 /**
@@ -81,16 +81,14 @@ class attribute_main_ajax extends ajaxListComponent
             // dodger performance
             $sQAdd  = " from $sArticleTable where 1 ";
             $sQAdd .= $myConfig->getConfigParam( 'blVariantsSelection' )?'':" and $sArticleTable.oxparentid = '' ";
-        } else {
+        } elseif ( $sSynchDelId && $sDelId != $sSynchDelId ) {
             // selected category ?
-            if ( $sSynchDelId && $sDelId != $sSynchDelId ) {
-                $sQAdd  = " from $sO2CategoryView as oxobject2category left join $sArticleTable on ";
-                $sQAdd .= $myConfig->getConfigParam( 'blVariantsSelection' )?" ( $sArticleTable.oxid=oxobject2category.oxobjectid or $sArticleTable.oxparentid=oxobject2category.oxobjectid)":" $sArticleTable.oxid=oxobject2category.oxobjectid ";
-                $sQAdd .= " where oxobject2category.oxcatnid = " . $oDb->quote( $sDelId ) . " ";
-            } else {
-                $sQAdd  = " from $sO2AttributeView left join $sArticleTable on $sArticleTable.oxid=$sO2AttributeView.oxobjectid ";
-                $sQAdd .= " where $sO2AttributeView.oxattrid = " . $oDb->quote( $sDelId ) . " and $sArticleTable.oxid is not null ";
-            }
+            $sQAdd  = " from $sO2CategoryView as oxobject2category left join $sArticleTable on ";
+            $sQAdd .= $myConfig->getConfigParam( 'blVariantsSelection' )?" ( $sArticleTable.oxid=oxobject2category.oxobjectid or $sArticleTable.oxparentid=oxobject2category.oxobjectid)":" $sArticleTable.oxid=oxobject2category.oxobjectid ";
+            $sQAdd .= " where oxobject2category.oxcatnid = " . $oDb->quote( $sDelId ) . " ";
+        } else {
+            $sQAdd  = " from $sO2AttributeView left join $sArticleTable on $sArticleTable.oxid=$sO2AttributeView.oxobjectid ";
+            $sQAdd .= " where $sO2AttributeView.oxattrid = " . $oDb->quote( $sDelId ) . " and $sArticleTable.oxid is not null ";
         }
 
         if ( $sSynchDelId && $sSynchDelId != $sDelId ) {
@@ -136,7 +134,6 @@ class attribute_main_ajax extends ajaxListComponent
 
             $sQ = parent::_addFilter( "delete $sO2AttributeView.* ".$this->_getQuery() );
             oxDb::getDb()->Execute( $sQ );
-
         } elseif ( is_array( $aChosenCat ) ) {
             $sQ = "delete from oxobject2attribute where oxobject2attribute.oxid in (" . implode( ", ", oxDb::getInstance()->quoteArray( $aChosenCat ) ) . ") ";
             oxDb::getDb()->Execute( $sQ );
@@ -159,16 +156,16 @@ class attribute_main_ajax extends ajaxListComponent
             $aAddArticle = $this->_getAll( $this->_addFilter( "select $sArticleTable.oxid ".$this->_getQuery() ) );
         }
 
-        $oCategory = oxNew( "oxattribute" );
+        $oAttribute = oxNew( "oxattribute" );
 
-
-        if ( $oCategory->load( $soxId) && is_array( $aAddArticle ) ) {
-            foreach ($aAddArticle as $sAdd) {
+        if ( $oAttribute->load( $soxId) && is_array( $aAddArticle ) ) {
+            foreach ( $aAddArticle as $sAdd ) {
                 $oNewGroup = oxNew( "oxbase" );
                 $oNewGroup->init( "oxobject2attribute" );
-                $oNewGroup->oxobject2attribute__oxobjectid = new oxField($sAdd);
-                $oNewGroup->oxobject2attribute__oxattrid   = new oxField($oCategory->oxattribute__oxid->value);
+                $oNewGroup->oxobject2attribute__oxobjectid = new oxField( $sAdd );
+                $oNewGroup->oxobject2attribute__oxattrid   = new oxField( $oAttribute->oxattribute__oxid->value );
                 $oNewGroup->save();
+                
             }
         }
     }

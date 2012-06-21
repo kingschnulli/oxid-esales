@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: article_extend.php 46040 2012-06-08 15:32:56Z edvardas.gineika $
+ * @version   SVN: $Id: article_extend.php 46249 2012-06-18 07:54:39Z edvardas.gineika $
  */
 
 /**
@@ -140,10 +140,8 @@ class Article_Extend extends oxAdminDetails
         
         $aMyFile = $this->getConfig()->getUploadedFile( "myfile" );
         $aMediaFile = $this->getConfig()->getUploadedFile( "mediaFile" );
-        
-        if ( $aMyFile['name']['FL@oxarticles__oxfile'] || $aMediaFile['name'] ) {
+        if ( is_array( $aMyFile['name'] ) && reset( $aMyFile['name'] ) || $aMediaFile['name'] ) {
             $myConfig = $this->getConfig();
-
             if ( $myConfig->isDemoShop() ) {
                 $oEx = oxNew( "oxExceptionToDisplay" );
                 $oEx->setMessage( 'ARTICLE_EXTEND_UPLOADISDISABLED' );

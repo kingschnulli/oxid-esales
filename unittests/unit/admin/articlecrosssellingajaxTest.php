@@ -263,7 +263,7 @@ class Unit_Admin_ArticleCrosssellingAjaxTest extends OxidTestCase
         
         //count how much articles gets filtered
         $iCount = oxDb::getDb()->getOne( "select count(".$this->getArticleViewTable().".oxid)  from ".$this->getArticleViewTable()." where 1  and ".$this->getArticleViewTable().".oxparentid = ''  and ".$this->getArticleViewTable().".oxid not in ( select ".$this->getArticleViewTable().".oxid from oxobject2article left join ".$this->getArticleViewTable()." on oxobject2article.oxobjectid=".$this->getArticleViewTable().".oxid where oxobject2article.oxarticlenid = '$sSynchoxid'  and ".$this->getArticleViewTable().".oxid IS NOT NULL  )  and ".$this->getArticleViewTable().".oxid IS NOT NULL  and ".$this->getArticleViewTable().".oxid != '$sSynchoxid'" );
-        
+        $this->assertGreaterThan( 0, $iCount );
         $this->assertEquals( 0, oxDb::getDb()->getOne( "select count(oxid) from oxobject2article where oxarticlenid='$sSynchoxid'" ) );
         
         $oView = oxNew( 'article_crossselling_ajax' );

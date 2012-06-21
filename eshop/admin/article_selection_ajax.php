@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: article_selection_ajax.php 45812 2012-06-04 07:35:10Z vaidas.matulevicius $
+ * @version   SVN: $Id: article_selection_ajax.php 46304 2012-06-19 12:46:26Z vaidas.matulevicius $
  */
 
 /**
@@ -91,7 +91,6 @@ class article_selection_ajax extends ajaxListComponent
 
             $sQ = $this->_addFilter( "delete oxobject2selectlist.* ".$this->_getQuery() );
             oxDb::getDb()->Execute( $sQ );
-
         } elseif ( is_array( $aChosenArt ) ) {
             $sQ = "delete from oxobject2selectlist where oxobject2selectlist.oxid in (" . implode( ", ", oxDb::getInstance()->quoteArray( $aChosenArt ) ) . ") ";
             oxDb::getDb()->Execute( $sQ );

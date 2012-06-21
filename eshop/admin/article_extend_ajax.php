@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: article_extend_ajax.php 45812 2012-06-04 07:35:10Z vaidas.matulevicius $
+ * @version   SVN: $Id: article_extend_ajax.php 46304 2012-06-19 12:46:26Z vaidas.matulevicius $
  */
 
 /**
@@ -134,6 +134,7 @@ class article_extend_ajax extends ajaxListComponent
         if ( oxConfig::getParameter( 'all' ) ) {
             $sCategoriesTable = $this->_getViewName( 'oxcategories' );
             $aRemoveCat = $this->_getAll( $this->_addFilter( "select {$sCategoriesTable}.oxid ".$this->_getQuery() ) );
+            //echo "\n".$this->_addFilter( "select {$sCategoriesTable}.oxid ".$this->_getQuery() )."\n____<<<>>>____";
         }
 
         // removing all
@@ -142,6 +143,7 @@ class article_extend_ajax extends ajaxListComponent
             $sQ = "delete from oxobject2category where oxobject2category.oxobjectid= " . oxDb::getDb()->quote( $soxId ) . " and ";
             $sQ .= " oxcatnid in (" . implode( ', ', oxDb::getInstance()->quoteArray( $aRemoveCat ) ) . ')';
             $oDb->Execute( $sQ );
+            //echo "\n$sQ\n___________________";
 
 
             // updating oxtime values
@@ -247,6 +249,7 @@ class article_extend_ajax extends ajaxListComponent
         // set main category for active shop
         $sQ = "update oxobject2category set oxtime = 0 where oxobjectid = " . $oDb->quote( $soxId ) . " and oxcatnid = " . $oDb->quote( $sDefCat ) . " $sShopCheck ";
         oxDb::getInstance()->getDb()->Execute($sQ);
+        //echo "\n$sQ\n";
 
         // #0003366: invalidate article SEO for all shops
         oxSeoEncoder::getInstance()->markAsExpired( $soxId, null, 1, null, "oxtype='oxarticle'" );

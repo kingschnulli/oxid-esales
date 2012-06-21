@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: attribute_category_ajax.php 45812 2012-06-04 07:35:10Z vaidas.matulevicius $
+ * @version   SVN: $Id: attribute_category_ajax.php 46304 2012-06-19 12:46:26Z vaidas.matulevicius $
  */
 
 /**
@@ -94,10 +94,8 @@ class attribute_category_ajax extends ajaxListComponent
     {
         $aChosenCat = $this->_getActionIds( 'oxcategory2attribute.oxid' );
         if ( oxConfig::getParameter( 'all' ) ) {
-
             $sQ = $this->_addFilter( "delete oxcategory2attribute.* ".$this->_getQuery() );
             oxDb::getDb()->Execute( $sQ );
-
         } elseif ( is_array( $aChosenCat ) ) {
             $sQ = "delete from oxcategory2attribute where oxcategory2attribute.oxid in (" . implode( ", ", oxDb::getInstance()->quoteArray( $aChosenCat ) ) . ") ";
             oxDb::getDb()->Execute( $sQ );

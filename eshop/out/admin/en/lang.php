@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 46040 2012-06-08 15:32:56Z edvardas.gineika $
+ * @version   SVN: $Id: lang.php 46484 2012-06-20 15:03:31Z arturas.sevcenko $
  */
 
 /*
@@ -1646,7 +1646,8 @@ $aLang = array(
 'WRAPPING_MAIN_PRESENTPACKUNG'                             => 'Gift Wrapping',
 'WRAPPING_MAIN_PICUPLOAD'                                  => 'Upload Picture',
 'WRAPPING_MAIN_TITLE'                                      => '[OXID Wrapping]',
-'SHOP_PERF_CALCVATONLYFORBASKETORDER'                      => 'Calculate specific VAT for countries only in Shopping Cart and Checkout',
+'SHOP_PERF_CALCVATONLYFORBASKETORDER'                      => '[tr] Change: Calculate specific VAT for countries only in Shopping Cart and Checkout',
+'HELP_SHOP_PERF_CALCVATONLYFORBASKETORDER'                 => '[tr] Help for: "Calculate specific VAT for countries only in Shopping Cart and Checkout"',
 'MANUFACTURER_MAIN_ICONUPLOAD'                             => 'Upload Icon',
 'MANUFACTURER_MAIN_ITEMSWITHMANUFACTURER'                  => 'Products from this Manufacturer',
 'MANUFACTURER_MAIN_ALLITEMS'                               => 'All Products',

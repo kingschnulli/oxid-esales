@@ -103,7 +103,6 @@ class Unit_Admin_ActionsMainAjaxTest extends OxidTestCase
     {
         return $this->_sShopId;
     }
-
     
     /**
      * ActionsMainAjax::_getQuery() test case
@@ -325,6 +324,7 @@ class Unit_Admin_ActionsMainAjaxTest extends OxidTestCase
         //count how much articles gets filtered
         $iCount = oxDb::getDb()->getOne( "select count(".$this->getArticleViewTable().".oxid)  from ".$this->getArticleViewTable()." where 1  and ".$this->getArticleViewTable().".oxparentid = ''  and ".$this->getArticleViewTable().".oxid not in ( select oxactions2article.oxartid from oxactions2article  where oxactions2article.oxactionid = '$sSynchoxid' and oxactions2article.oxshopid = '".$this->getShopId()."' )" );
         
+        $this->assertGreaterThan( 0, $iCount );
         $this->assertEquals( 0, oxDb::getDb()->getOne( "select count(oxid) from oxactions2article where oxactionid='$sSynchoxid'" ) );
         
         $oView = oxNew( 'actions_main_ajax' );
@@ -339,8 +339,6 @@ class Unit_Admin_ActionsMainAjaxTest extends OxidTestCase
      */
     public function testSetSorting()
     {
-        //count how much articles gets filtered
-        $iCount = (int) oxDb::getDb()->getOne( "select count(".$this->getArticleViewTable().".oxid)  from ".$this->getArticleViewTable()." where 1  and ".$this->getArticleViewTable().".oxparentid = ''  and ".$this->getArticleViewTable().".oxid not in ( select oxactions2article.oxartid from oxactions2article  where oxactions2article.oxactionid = '$sSynchoxid' and oxactions2article.oxshopid = '".$this->getShopId()."' )" );
         $aData = array( 'startIndex' => 0, 'sort' => _0, 'dir' => asc, 'countsql' => "select count( * )  from ".$this->getArticleViewTable()." left join oxactions2article on ".$this->getArticleViewTable().".oxid=oxactions2article.oxartid  where oxactions2article.oxactionid = '_testSetSorting' and oxactions2article.oxshopid = '".$this->getShopId()."' " , 'records' =>array(), 'totalRecords' => 0);
 
         modconfig::getInstance()->setConfigParam( "iDebug", 1 );

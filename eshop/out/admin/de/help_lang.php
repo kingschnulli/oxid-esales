@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: help_lang.php 44174 2012-04-23 09:40:11Z juergen.busch $
+ * @version   SVN: $Id: help_lang.php 46470 2012-06-20 12:20:58Z arturas.sevcenko $
  */
 
 /**
@@ -531,13 +531,13 @@ $aLang =  array(
 'HELP_SELECTLIST_MAIN_FIELDS'                 => 'In der Liste <span class="navipath_or_inputname">Felder</span> werden alle vorhandenen Ausführungen der Auswahlliste angezeigt. Mit den Eingabefeldern rechts neben <span class="navipath_or_inputname">Felder</span> können Sie neue Ausführungen anlegen.<br>' .
                                                  'Weitere Informationen finden Sie im <a href="http://www.oxid-esales.com/de/resources/help-faq/eshop-manual/einfache-varianten-mit-auswahllisten-umsetzen" target="_blank">Auswahllisten-Kapitel im Handbuch</a>.',
 
-
-
 'HELP_USER_MAIN_HASPASSWORD'                  => 'Hier wird angezeigt, ob der Benutzer ein Passwort hat. Daran können Sie unterscheiden, ob sich der Benutzer bei der Bestellung registriert hat:' .
                                                  '<ul><li>Wenn ein Passwort vorhanden ist, hat sich der Benutzer registriert.</li>' .
                                                  '<li>Wenn kein Passwort vorhanden ist, hat der Benutzer bestellt ohne sich zu registrieren.</li></ul>',
 
-
+'HELP_USER_PAYMENT_METHODS'                   => '[tr] Here you can:'.
+                                                 '<ul><li>Browse and manage existing user payment methods.'.
+                                                 '<li>Create new payment methods.</li></ul>',
 
 'HELP_USER_EXTEND_NEWSLETTER'                 => 'Diese Einstellung zeigt an, ob der Benutzer den Newsletter abonniert hat oder nicht.',
 
