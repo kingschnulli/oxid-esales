@@ -896,7 +896,7 @@ class UnitUtf8_utf8Test extends OxidTestCase
         $oMedia->load( '_testMan' );
         $this->assertEquals( $sValue, $oMedia->oxmediaurls__oxdesc->value );
         $oMedia->load( '_testMan2' );
-        $sExpt = $sValue.'<br><object type="application/x-shockwave-flash" data="http://www.youtube.com/v/ZN239G6aJZo" width="425" height="344"><param name="movie" value="http://www.youtube.com/v/ZN239G6aJZo"></object>';
+        $sExpt = $sValue.'<br><iframe width="425" height="344" src="http://www.youtube.com/embed/ZN239G6aJZo" frameborder="0" allowfullscreen></iframe>';
         $this->assertEquals($sExpt, $oMedia->getHtml());
     }
 

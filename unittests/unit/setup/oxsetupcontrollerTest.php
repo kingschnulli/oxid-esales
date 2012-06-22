@@ -496,7 +496,7 @@ class Unit_Setup_oxSetupControllerTest extends OxidTestCase
 
         $oSession = $this->getMock( "oxStdClass", array( "getSessionParam" ) );
         $oSession->expects( $this->at( 0 ) )->method( "getSessionParam" )->with( $this->equalTo( "aDB" ) )->will( $this->returnValue( array( "dbiDemoData" => 1 ) ) );
-        $oSession->expects( $this->at( 1 ) )->method( "getSessionParam" )->with( $this->equalTo( "sShopLang" ) )->will( $this->returnValue( "en" ) );
+        $oSession->expects( $this->at( 1 ) )->method( "getSessionParam" )->with( $this->equalTo( "location_lang" ) )->will( $this->returnValue( "en" ) );
 
         $oView = $this->getMock( "oxStdClass", array( "setTitle", "setMessage" ) );
         $oView->expects( $this->once() )->method( "setTitle" )->with( $this->equalTo( "STEP_3_2_TITLE" ) );
@@ -576,7 +576,7 @@ class Unit_Setup_oxSetupControllerTest extends OxidTestCase
 
         $oSession = $this->getMock( "oxStdClass", array( "getSessionParam" ) );
         $oSession->expects( $this->at( 0 ) )->method( "getSessionParam" )->with( $this->equalTo( "aDB" ) )->will( $this->returnValue( array( "dbiDemoData" => 1, "iUtfMode" => 1 ) ) );
-        $oSession->expects( $this->at( 1 ) )->method( "getSessionParam" )->with( $this->equalTo( "sShopLang" ) )->will( $this->returnValue( "en" ) );
+        $oSession->expects( $this->at( 1 ) )->method( "getSessionParam" )->with( $this->equalTo( "location_lang" ) )->will( $this->returnValue( "en" ) );
 
         $oView = $this->getMock( "oxStdClass", array( "setTitle", "setMessage" ) );
         $oView->expects( $this->once() )->method( "setTitle" )->with( $this->equalTo( "STEP_3_2_TITLE" ) );

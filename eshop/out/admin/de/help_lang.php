@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: help_lang.php 46470 2012-06-20 12:20:58Z arturas.sevcenko $
+ * @version   SVN: $Id: help_lang.php 46494 2012-06-21 06:45:38Z arturas.sevcenko $
  */
 
 /**
@@ -481,6 +481,7 @@ $aLang =  array(
                                                  '<ul>' .
                                                  '<li><span class="userinput_or_code">abs</span>: Der Rabatt ist absolut, z. B. 5 Euro.</li>' .
                                                  '<li><span class="userinput_or_code">%</span>: Der Rabatt ist prozentual, z. B. 10 Prozent vom Einkaufswert.</li>' .
+                                                 '<li><span class="userinput_or_code">itm</span>: [tr] need to add description about itm discount.</li>'.
                                                  '</ul>',
 
 

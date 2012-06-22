@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxmediaurlTest.php 39003 2011-10-04 07:34:31Z vilma $
+ * @version   SVN: $Id: oxmediaurlTest.php 46513 2012-06-21 10:34:22Z arturas.sevcenko $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -45,6 +45,9 @@ class Unit_Core_oxmediaurlTest extends OxidTestCase
         oxDb::getDb()->execute($sQ);
         $sQ = "insert into oxmediaurls (oxid, oxobjectid, oxurl, oxdesc, oxisuploaded) values ('_test4', '1436', 'http://www.site.com/watch?v=ZN239G6aJZo', 'test4', 0)";
         oxDb::getDb()->execute($sQ);
+        $sQ = "insert into oxmediaurls (oxid, oxobjectid, oxurl, oxdesc, oxisuploaded) values ('_test5', '1436', 'http://www.youtube.com/watch?v=GQ3AcPEPbH0&loop=1&rel=0', 'test5', 0)";
+        oxDb::getDb()->execute($sQ);
+        
     }
 
     /**
@@ -83,7 +86,7 @@ class Unit_Core_oxmediaurlTest extends OxidTestCase
         $oMediaUrl->oxmediaurls__oxurl = new oxField('http://www.youtube.com/watch?v=ZN239G6aJZo', oxField::T_RAW);
         $oMediaUrl->oxmediaurls__oxdesc = new oxField('test2', oxField::T_RAW);
         $oMediaUrl->oxmediaurls__oxisuploaded = new oxField(0, oxField::T_RAW);
-        $sExpt = 'test2<br><object type="application/x-shockwave-flash" data="http://www.youtube.com/v/ZN239G6aJZo" width="425" height="344"><param name="movie" value="http://www.youtube.com/v/ZN239G6aJZo"></object>';
+        $sExpt = 'test2<br><iframe width="425" height="344" src="http://www.youtube.com/embed/ZN239G6aJZo" frameborder="0" allowfullscreen></iframe>';
         $this->assertEquals($sExpt, $oMediaUrl->getHtml());
 
         // simple link
@@ -114,7 +117,7 @@ class Unit_Core_oxmediaurlTest extends OxidTestCase
         $oMediaUrl->oxmediaurls__oxurl = new oxField('http://www.youtube.com/watch?v=ZN239G6aJZo', oxField::T_RAW);
         $oMediaUrl->oxmediaurls__oxdesc = new oxField('test2', oxField::T_RAW);
         $oMediaUrl->oxmediaurls__oxisuploaded = new oxField(0, oxField::T_RAW);
-        $sExpt = 'test2<br><object type="application/x-shockwave-flash" data="http://www.youtube.com/v/ZN239G6aJZo" width="425" height="344"><param name="movie" value="http://www.youtube.com/v/ZN239G6aJZo"></object>';
+        $sExpt = 'test2<br><iframe width="425" height="344" src="http://www.youtube.com/embed/ZN239G6aJZo" frameborder="0" allowfullscreen></iframe>';
         $this->assertEquals($sExpt, $oMediaUrl->getHtml());
 
         // simple link
@@ -311,8 +314,16 @@ class Unit_Core_oxmediaurlTest extends OxidTestCase
     {
         $oMediaUrl = $this->getProxyClass('oxMediaUrl');
         $oMediaUrl->load('_test2');
-        $sExpt = 'test2<br><object type="application/x-shockwave-flash" data="http://www.youtube.com/v/ZN239G6aJZo" width="425" height="344"><param name="movie" value="http://www.youtube.com/v/ZN239G6aJZo"></object>';
+        $sExpt = 'test2<br><iframe width="425" height="344" src="http://www.youtube.com/embed/ZN239G6aJZo" frameborder="0" allowfullscreen></iframe>';
         $this->assertEquals($sExpt, $oMediaUrl->UNITgetYoutubeHtml());
+    }
+    
+    public function testGetYoutubeHtmlWithParams()
+    {
+    	$oMediaUrl = $this->getProxyClass('oxMediaUrl');
+    	$oMediaUrl->load('_test5');
+    	$sExpt = 'test5<br><iframe width="425" height="344" src="http://www.youtube.com/embed/GQ3AcPEPbH0?loop=1&amp;rel=0" frameborder="0" allowfullscreen></iframe>';
+    	$this->assertEquals($sExpt, $oMediaUrl->UNITgetYoutubeHtml());
     }
 
 }
