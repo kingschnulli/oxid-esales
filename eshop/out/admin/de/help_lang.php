@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: help_lang.php 46494 2012-06-21 06:45:38Z arturas.sevcenko $
+ * @version   SVN: $Id: help_lang.php 46594 2012-06-22 13:30:18Z juergen.busch $
  */
 
 /**
@@ -481,7 +481,7 @@ $aLang =  array(
                                                  '<ul>' .
                                                  '<li><span class="userinput_or_code">abs</span>: Der Rabatt ist absolut, z. B. 5 Euro.</li>' .
                                                  '<li><span class="userinput_or_code">%</span>: Der Rabatt ist prozentual, z. B. 10 Prozent vom Einkaufswert.</li>' .
-                                                 '<li><span class="userinput_or_code">itm</span>: [tr] need to add description about itm discount.</li>'.
+                                                 '<li><span class="userinput_or_code">itm</span>: Rabatt in Form eines kostenfreien Artikels (Dreingabe). Legen Sie die Menge für diesen Artikel fest. Wählen Sie "Multiplizieren", wenn die Menge des rabattierten Artikels im Warenkorb mit der Menge des kostenlosen Artikels multipliziert werden soll.</li>'.
                                                  '</ul>',
 
 
@@ -536,9 +536,9 @@ $aLang =  array(
                                                  '<ul><li>Wenn ein Passwort vorhanden ist, hat sich der Benutzer registriert.</li>' .
                                                  '<li>Wenn kein Passwort vorhanden ist, hat der Benutzer bestellt ohne sich zu registrieren.</li></ul>',
 
-'HELP_USER_PAYMENT_METHODS'                   => '[tr] Here you can:'.
-                                                 '<ul><li>Browse and manage existing user payment methods.'.
-                                                 '<li>Create new payment methods.</li></ul>',
+'HELP_USER_PAYMENT_METHODS'                   => 'Auf dieser Registerkarte können Sie:'.
+                                                 '<ul><li>Zahlungsarten des Benutzers anzeigen und verwalten.'.
+                                                 '<li>Neue Zahlungsarten anlegen und Default-Werte eintragen, beispielsweise Bankeinzug/Lastschrift.</li></ul>',
 
 'HELP_USER_EXTEND_NEWSLETTER'                 => 'Diese Einstellung zeigt an, ob der Benutzer den Newsletter abonniert hat oder nicht.',
 

@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: help_lang.php 46494 2012-06-21 06:45:38Z arturas.sevcenko $
+ * @version   SVN: $Id: help_lang.php 46597 2012-06-22 13:44:03Z juergen.busch $
  */
 
 /**
@@ -481,7 +481,7 @@ $aLang =  array(
                                                  '<ul>' .
                                                  '<li><span class="userinput_or_code">abs</span>: The discount is an absolute discount, e.g. EUR 5.</li>' .
                                                  '<li><span class="userinput_or_code">%</span>: The discount is a percentage discount, e.g. 10 percent of the purchase price.</li>' .
-                                                 '<li><span class="userinput_or_code">itm</span>: [tr] need to add description about itm discount.</li>'.
+                                                 '<li><span class="userinput_or_code">itm</span>: Discount in the form of a free product. Set the amount of this product. Choose "Multiply" if the amount of discounted product in shopping cart should be multiplied with the amount of the free product.</li>'.
                                                  '</ul>',
 
 
@@ -529,9 +529,9 @@ $aLang =  array(
                                                  '<ul><li>If a password is set, the user registered.</li>' .
                                                  '<li>If no password is set, the user ordered without registering.</li></ul>',
 
-'HELP_USER_PAYMENT_METHODS'                   => '[tr] Here you can:'.
+'HELP_USER_PAYMENT_METHODS'                   => 'On this tab you can:'.
                                                  '<ul><li>Browse and manage existing user payment methods.'.
-                                                 '<li>Create new payment methods.</li></ul>',
+                                                 '<li>Create new payment methods and set default values, for example direct debit.</li></ul>',
 
 'HELP_USER_EXTEND_NEWSLETTER'                 => 'This setting shows if the user subscribed to the newsletter.',
 

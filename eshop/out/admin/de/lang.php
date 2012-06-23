@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 46484 2012-06-20 15:03:31Z arturas.sevcenko $
+ * @version   SVN: $Id: lang.php 46600 2012-06-22 13:57:37Z juergen.busch $
  */
 
 $sLangName  = 'Deutsch';
@@ -1655,8 +1655,8 @@ $aLang = array(
 'MANUFACTURER_LIST_TITLE'                                  => 'Herstellerliste',
 'MANUFACTURER_LIST_MENUITEM'                               => 'Stammdaten',
 'MANUFACTURER_LIST_MENUSUBITEM'                            => 'Hersteller',
-'SHOP_PERF_CALCVATONLYFORBASKETORDER'                      => '[tr] Länderspezifische Mehrwertsteuer nur im Warenkorb und im Bestellprozess berechnen',
-'HELP_SHOP_PERF_CALCVATONLYFORBASKETORDER'                 => '[tr] Help for: "Calculate specific VAT for countries only in Shopping Cart and Checkout"',
+'SHOP_PERF_CALCVATONLYFORBASKETORDER'                      => 'MwSt. nur im Warenkorb und Bestellprozess berechnen',
+'HELP_SHOP_PERF_CALCVATONLYFORBASKETORDER'                 => 'Wenn Artikelpreise netto eingepflegt werden, wird die Mehrwertsteuer ausschließlich im Warenkorb und Bestellprozess berechnet und angezeigt.',
 'SHOP_PERF_CHECKIFTPLCOMPILE'                              => 'Überprüfen ob Templates neu kompiliert werden müssen. Schalten Sie diese Einstellung aus, wenn der eShop in den Live-Betrieb geht.',
 'SHOP_PERF_COMPARE'                                        => 'Artikelvergleiche einschalten',
 'SHOP_PERF_DONTSHOWEMTYCATEGORIES'                         => 'Leere Kategorien (keine Unterkategorien, keine Artikel) <strong>nicht</strong> anzeigen',

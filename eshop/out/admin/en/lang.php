@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 46484 2012-06-20 15:03:31Z arturas.sevcenko $
+ * @version   SVN: $Id: lang.php 46601 2012-06-22 13:58:02Z juergen.busch $
  */
 
 /*
@@ -1279,7 +1279,7 @@ $aLang = array(
 'SHOP_CONFIG_DEFAULTVAT'                                   => 'Default VAT for all Products',
 'SHOP_CONFIG_DEFAULTLANGUAGE'                              => 'Default Language (0, 1, 2 ...) - 0 for German, 1 for English',
 'SHOP_CONFIG_EXCLUDENONMATERIALPRODUCTS'                   => "Don't consider intangible Products (e.g. Gift Certificates) in Shipping Costs Calculation",
-'SHOP_CONFIG_ENTERNETPRICE'                                => 'Product and Gift Wrapping prices entered/displayed in Admin are Net Prices',
+'SHOP_CONFIG_ENTERNETPRICE'                                => 'Enter Product Prices as Net Prices (plus VAT)',
 'SHOP_CONFIG_INLANDCUSTOMERS'                              => 'Domestic Customers - Customers living in the <b>selected</b> Countries are assigned to the User Group "Domestic Customers". For multiple selections use CTRL key.',
 'SHOP_CONFIG_LARGECUSTOMERPRICE'                           => 'Purchase Price Threshold from which Users are assigned to User Group "Huge Turnover"',
 'SHOP_CONFIG_MAXGBENTRIESPERDAY'                           => 'Number of Guestbook Entries each User is allowed to enter per Day',
@@ -1646,8 +1646,8 @@ $aLang = array(
 'WRAPPING_MAIN_PRESENTPACKUNG'                             => 'Gift Wrapping',
 'WRAPPING_MAIN_PICUPLOAD'                                  => 'Upload Picture',
 'WRAPPING_MAIN_TITLE'                                      => '[OXID Wrapping]',
-'SHOP_PERF_CALCVATONLYFORBASKETORDER'                      => '[tr] Change: Calculate specific VAT for countries only in Shopping Cart and Checkout',
-'HELP_SHOP_PERF_CALCVATONLYFORBASKETORDER'                 => '[tr] Help for: "Calculate specific VAT for countries only in Shopping Cart and Checkout"',
+'SHOP_PERF_CALCVATONLYFORBASKETORDER'                      => 'Calculate VAT only in Shopping Cart and Checkout',
+'HELP_SHOP_PERF_CALCVATONLYFORBASKETORDER'                 => 'If product prices are entered as net prices, the VAT is exclusively calculated and displayed in shopping cart and checkout.',
 'MANUFACTURER_MAIN_ICONUPLOAD'                             => 'Upload Icon',
 'MANUFACTURER_MAIN_ITEMSWITHMANUFACTURER'                  => 'Products from this Manufacturer',
 'MANUFACTURER_MAIN_ALLITEMS'                               => 'All Products',
