@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 46600 2012-06-22 13:57:37Z juergen.busch $
+ * @version   SVN: $Id: lang.php 46704 2012-06-27 08:27:25Z arturas.sevcenko $
  */
 
 $sLangName  = 'Deutsch';
@@ -324,7 +324,7 @@ $aLang = array(
 'GENERAL_STANDARD'                                         => 'Standard',
 'GENERAL_STARTLISTING'                                     => 'Ausgabe der Liste starten',
 'GENERAL_STATE'                                            => 'Bundesland',
-'GENERAL_STREET'                                           => 'Staße',
+'GENERAL_STREET'                                           => 'Straße',
 'GENERAL_STREETNUM'                                        => 'Straße, Nr.',
 'GENERAL_SUM'                                              => 'Anzahl',
 'GENERAL_SUMTOTAL'                                         => 'Summe total',
@@ -452,6 +452,9 @@ $aLang = array(
 'ARTICLE_MAIN_DISTEAN'                                     => 'Hersteller EAN',
 'ARTICLE_MAIN_MPN'                                         => 'Hersteller-Artikelnummer (MPN)',
 'ARTICLE_MAIN_MANUFACTURERID'                              => 'Hersteller',
+'HELP_ARTICLE_MAIN_PRICE' 								   => '[tr] This price is inherited by variant products'.
+                                                              '<ul><li>Netto or brutto price showing as main (depending on shop settings).</li>'.
+                                                              '<li>In parentheses brutto price is always showed.</li></ul>',
 'ARTICLE_OVERVIEW_ARTMADEON'                               => 'Art. erstellt am',
 'ARTICLE_OVERVIEW_LASTCHANGE'                              => 'Letzte Änderung am',
 'ARTICLE_OVERVIEW_SALEPOSITION'                            => 'Verkaufsrang Position ',
@@ -904,6 +907,8 @@ $aLang = array(
 'LANGUAGE_LANGUAGEID'                                      => 'Sprach-ID',
 'LANGUAGE_BASEURL'                                         => 'Basis URL',
 'LANGUAGE_BASESSLURL'                                      => 'Basis SSL URL',
+'LANGUAGE_FRONTEND_NOTRANSLATIONS_WARNING'                 => '[tr] Attention: No translations files were found in selected theme or out dir for selected language!',
+'LANGUAGE_BACKEND_NOTRANSLATIONS_WARNING'                  => '[tr] Attention: No translations files were found in admin dir for selected language!',
 'LANGUAGE_NOTRANSLATIONS_WARNING'                          => 'Warnung: Es wurden keine Sprachdateien für die ausgewählte Sprache gefunden!',
 'LANGUAGE_ERROR_ADDING_MULTILANG_FIELDS'                   => 'Warnung: Beim anlegen der neuen Datenbankfelder ist ein Fehler aufgetreten',
 'LANGUAGE_ERROR_RESETING_MULTILANG_FIELDS'                 => 'Achtung: Während des Löschens einer Sprache ist beim Zurücksetzens der Multisprachen-Felder ein Fehler aufgetreten!',

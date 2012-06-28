@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxconfigTest.php 45566 2012-05-22 16:22:30Z alfonsas $
+ * @version   SVN: $Id: oxconfigTest.php 46714 2012-06-27 09:02:56Z arturas.sevcenko $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -169,7 +169,12 @@ class Unit_Core_oxconfigTest extends OxidTestCase
         if (is_dir(realpath($sDir))) {
             oxUtilsFile::getInstance()->deleteDir($sDir);
         }
-
+        
+        $sCustConfigPath = getShopBasePath() . "/cust_config.inc.php";
+        if ( file_exists( $sCustConfigPath ) ) {
+            unlink($sCustConfigPath);
+        }
+        
         $this->cleanUpTable('oxconfig');
         parent::tearDown();
     }
@@ -2331,5 +2336,27 @@ class Unit_Core_oxconfigTest extends OxidTestCase
         $aModulesArray  = array('oxtest' => array('test/mytest','test1/mytest1'));
         $this->assertEquals($aModulesArray, $oConfig->parseModuleChains($aModules));
     }
+    
+    /**
+     * Tests that custom config is being set and variables from it are reachable
+     *
+     */
+    public function testLoadCustomConfig()
+    {
+        $sDir = getShopBasePath();
+        $sCustConfig = $sDir . "/cust_config.inc.php";
+        
+        $handle = fopen( $sCustConfig, "w" );
+        chmod($sCustConfig, 0777);
 
+        $data = '<?php $this->custVar = test;';
+        fwrite( $handle, $data );
+    
+        $oConfig = $this->getProxyClass( 'oxconfig' );
+        $oConfig->_loadVarsFromFile();
+        $sVar = $oConfig->getConfigParam( "custVar" );
+        
+        $this->assertSame("test", $sVar);
+    }
+    
 }

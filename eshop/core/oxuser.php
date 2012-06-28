@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxuser.php 43753 2012-04-11 08:34:18Z linas.kukulskis $
+ * @version   SVN: $Id: oxuser.php 46724 2012-06-27 09:51:56Z arturas.sevcenko $
  */
 
 /**
@@ -1077,7 +1077,7 @@ class oxUser extends oxBase
 
 
         // throwing first validation error
-        if ( $oError = oxInputValidator::getInstance()->getFirstValidationError( $this->getId() ) ) {
+        if ( $oError = oxInputValidator::getInstance()->getFirstValidationError() ) {
             throw $oError;
         }
     }

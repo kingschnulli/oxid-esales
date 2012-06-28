@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 46601 2012-06-22 13:58:02Z juergen.busch $
+ * @version   SVN: $Id: lang.php 46706 2012-06-27 08:28:51Z arturas.sevcenko $
  */
 
 /*
@@ -449,6 +449,9 @@ $aLang = array(
 'ARTICLE_MAIN_DISTEAN'                                     => 'Man. EAN',
 'ARTICLE_MAIN_MPN'                                         => 'MPN',
 'ARTICLE_MAIN_MANUFACTURERID'                              => 'Manufacturer',
+'HELP_ARTICLE_MAIN_PRICE' 								   => '[tr] This price is inherited by variant products'.
+                                                              '<ul><li>Netto or brutto price showing as main (depending on shop settings).</li>'.
+                                                              '<li>In parentheses brutto price is always showed.</li></ul>',
 'ARTICLE_OVERVIEW_ARTMADEON'                               => 'Product created on',
 'ARTICLE_OVERVIEW_LASTCHANGE'                              => 'Last Modification on',
 'ARTICLE_OVERVIEW_SALEPOSITION'                            => 'Position Sales Rating ',
@@ -901,6 +904,8 @@ $aLang = array(
 'LANGUAGE_LANGUAGEID'                                      => 'Language ID',
 'LANGUAGE_BASEURL'                                         => 'Base URL',
 'LANGUAGE_BASESSLURL'                                      => 'Base SSL URL',
+'LANGUAGE_FRONTEND_NOTRANSLATIONS_WARNING'                 => '[tr] Attention: No translations files were found in selected theme or out dir for selected language!',
+'LANGUAGE_BACKEND_NOTRANSLATIONS_WARNING'                  => '[tr] Attention: No translations files were found in admin dir for selected language!',
 'LANGUAGE_NOTRANSLATIONS_WARNING'                          => 'Attention: No translations files were found in templates dir for selected language!',
 'LANGUAGE_ERROR_ADDING_MULTILANG_FIELDS'                   => 'Attention: Error occured while adding new multilanguage fields to tables!',
 'LANGUAGE_ERROR_RESETING_MULTILANG_FIELDS'                 => 'Attention: Error occured while reseting multilanguage fields after language delete!',
