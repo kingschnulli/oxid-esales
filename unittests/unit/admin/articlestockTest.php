@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: articlestockTest.php 45749 2012-05-30 13:47:57Z edvardas.gineika $
+ * @version   SVN: $Id: articlestockTest.php 46859 2012-07-02 12:33:24Z edvardas.gineika $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -134,12 +134,13 @@ class Unit_Admin_ArticleStockTest extends OxidTestCase
         }
         $this->fail( "error in Article_Stock::save()" );
     }
+    
     /**
      * Article_Stock::Addprice() test case with passed params and saving in DB
      *
      * @return null
      */
-    public function testAddpriceSaveDb()
+    public function testAddPriceSaveDb()
     {
         //set default params witch will be overriden
         modConfig::setParameter( "editval", array( "oxprice2article__oxamountto" => 9,
@@ -162,11 +163,50 @@ class Unit_Admin_ArticleStockTest extends OxidTestCase
         $aParams = array("oxprice2article__oxamountto" => 100);
         $oView->addprice($sOXID,$aParams);
         $this->assertEquals( "100", $oDb->getOne("select oxamountto from oxprice2article where oxid='_testId'" ) );
-        
     }
     
     /**
-     * Article_Stock::Addprice() test case with passed params and saving in DB
+     * Article_stock::addprice test case when updating existing stock prices in subshop
+     * 
+     * @return null
+     */
+    public function testAddPriceShopMall()
+    {
+        //set default params for first save
+        modConfig::setParameter( "editval", array( "oxprice2article__oxamountto" => 123,
+                                    "pricetype" => "oxaddabs", "price" => 9 ) );
+        //set oxid
+        $sOXID = "_testId";
+        
+        //expected shop id
+        $sShopId = "oxbaseshop";
+        
+            $oView = new Article_Stock();
+        
+        
+        //init db
+        $oDb = oxDb::getDb();
+
+        //first add new stock price
+        $oView->addprice($sOXID);
+        $this->assertEquals( "123", $oDb->getOne("select oxamountto from oxprice2article where oxid='_testId'" ) );
+        
+        //pass update params
+        $aParams = array("oxprice2article__oxamountto" => 777, "pricetype" => "oxaddabs", "price" => 20);
+        $oView->addprice($sOXID,$aParams);
+        $this->assertEquals( "777", $oDb->getOne("select oxamountto from oxprice2article where oxid='_testId'" ) );
+        $this->assertEquals( $sShopId, $oDb->getOne("select oxshopid from oxprice2article where oxid='_testId'" ) );
+        
+        //update only amountto
+        $aParams = array("oxprice2article__oxamountto" => 10101);
+        $oView->addprice($sOXID,$aParams); 
+        $this->assertEquals( "10101", $oDb->getOne("select oxamountto from oxprice2article where oxid='_testId'" ) );
+        $this->assertEquals( $sShopId, $oDb->getOne("select oxshopid from oxprice2article where oxid='_testId'" ) );
+   
+    }
+    
+    /**
+     * Article_Stock::updateprices() test case when updating existing stock prices
      *
      * @return null
      */
