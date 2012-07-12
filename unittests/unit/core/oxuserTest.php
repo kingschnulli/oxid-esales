@@ -3561,6 +3561,32 @@ class Unit_Core_oxuserTest extends OxidTestCase
         $this->assertFalse( $testUser->loadActiveUser() );
     }
 
+    
+    /**
+     * Testing getLoginQuery to return correct shop select sql for admin
+     *
+     * @return null
+     */
+    public function testGetLoginQueryShopSelectAdmin()
+    {
+        $sShopID   = "shopid";
+        $oDb       = oxDb::getDb();
+        $oUser = new oxUser();
+        // case if mall users set to true should not change shopselect
+        modConfig::getInstance()->setConfigParam( "blMallUsers", true ); 
+        $blAdmin = true;
+        
+        $sWhat = "oxid";
+        
+        $sShopSelect = " and ( oxrights != 'user' ) ";
+        
+        $sLoginQuery  = "select {$sWhat} from oxuser where oxuser.oxactive = 1 and  ";
+        $sLoginQuery .= "oxuser.oxpassword = MD5( CONCAT( ".$oDb->quote( oxADMIN_PASSWD ).", UNHEX( oxuser.oxpasssalt ) ) )  and ";
+        $sLoginQuery .= "oxuser.oxusername = " . $oDb->quote( oxADMIN_LOGIN ) . " ";
+        $sLoginQuery .= "$sShopSelect ";
+        
+        $this->assertEquals( $sLoginQuery, $oUser->UNITgetLoginQuery( oxADMIN_LOGIN, oxADMIN_PASSWD, $sShopID, $blAdmin ) );
+    }
 
     public function testGetWishListId()
     {
