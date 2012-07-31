@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxorderTest.php 45716 2012-05-29 14:43:29Z vaidas.matulevicius $
+ * @version   SVN: $Id: oxorderTest.php 47289 2012-07-12 13:36:41Z rimvydas.paskevicius $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -2863,12 +2863,19 @@ class Unit_Core_oxorderTest extends OxidTestCase
 
     }
 
-    public function testInsert()
+    /**
+     * Tests order insert with cfg opt blStoreOrderNrInFinalize not set
+     */
+    public function testInsertStoreOrderNr()
     {
+        $oOrder = $this->getProxyClass( "oxOrder" );
+        
+        $myConfig = modConfig::getInstance();
+        $myConfig->setConfigParam( 'blStoreOrderNrInFinalize', false );
+        
         $oDb = oxDb::getDb( oxDB::FETCH_MODE_ASSOC );
         $oDb->Execute("truncate table `oxcounters`");
 
-        $oOrder = $this->getProxyClass( "oxOrder" );
         $oOrder->setId( '_testOrderId2' );
         $oOrder->oxorder__oxuserid = new oxField('_testUserId', oxField::T_RAW);
         $oOrder->oxorder__oxtotalnetsum = new oxField('100', oxField::T_RAW);
@@ -2880,17 +2887,52 @@ class Unit_Core_oxorderTest extends OxidTestCase
         $sSql = "select * from oxorder where oxid = '_testOrderId2'";
         $aRes = $oDB->getRow( $sSql );
 
-
         $this->assertEquals( '_testOrderId2', $aRes['OXID'] );
         $this->assertEquals( '_testUserId', $aRes['OXUSERID'] );
         $this->assertEquals( '100', $aRes['OXTOTALNETSUM'] );
 
-        $myConfig = $oOrder->getConfig();
-
         $this->assertTrue( $aRes['OXORDERDATE'] >= $sTestDate );
         $this->assertEquals( $myConfig->getShopId(), $aRes['OXSHOPID'] );
 
+        
         $this->assertEquals( 1, $aRes['OXORDERNR'] );
+    }
+    
+    /**
+     * Tests order insert with cfg opt blStoreOrderNrInFinalize set
+     */
+    public function testInsertNotStoreOrderNr()
+    {
+        $oOrder = $this->getProxyClass( "oxOrder" );
+        
+        $myConfig = modConfig::getInstance();
+        $myConfig->setConfigParam( 'blStoreOrderNrInFinalize', true );
+        
+        $oDb = oxDb::getDb( oxDB::FETCH_MODE_ASSOC );
+        $oDb->Execute("truncate table `oxcounters`");
+       
+        $oOrder->setId( '_testOrderId2' );
+        $oOrder->oxorder__oxuserid = new oxField('_testUserId', oxField::T_RAW);
+        $oOrder->oxorder__oxtotalnetsum = new oxField('100', oxField::T_RAW);
+    
+        $sTestDate = date( 'Y-m-d H:i:s');
+        $this->assertTrue( $oOrder->UNITinsert() );
+    
+        $oDB = oxDb::getDb( oxDB::FETCH_MODE_ASSOC );
+        $sSql = "select * from oxorder where oxid = '_testOrderId2'";
+        $aRes = $oDB->getRow( $sSql );
+    
+    
+        $this->assertEquals( '_testOrderId2', $aRes['OXID'] );
+        $this->assertEquals( '_testUserId', $aRes['OXUSERID'] );
+        $this->assertEquals( '100', $aRes['OXTOTALNETSUM'] );
+    
+        $myConfig = $oOrder->getConfig();
+    
+        $this->assertTrue( $aRes['OXORDERDATE'] >= $sTestDate );
+        $this->assertEquals( $myConfig->getShopId(), $aRes['OXSHOPID'] );
+    
+        $this->assertEquals( 0, $aRes['OXORDERNR'] );
     }
 
     public function testInsertSetsOrderNumberForDifferentShops()
@@ -2898,7 +2940,6 @@ class Unit_Core_oxorderTest extends OxidTestCase
         $oDB = oxDb::getDb();
         $sSql = "insert into oxorder (oxid, oxshopid, oxordernr) values('_testOrderId', '123', '1') ";
         $oDB->execute( $sSql );
-
 
         $oOrder = oxNew( 'oxOrder' );
         $oOrder->setId( '_testOrderId2' );

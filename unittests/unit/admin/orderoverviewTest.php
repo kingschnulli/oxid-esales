@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: orderoverviewTest.php 43251 2012-03-28 12:19:42Z vilma $
+ * @version   SVN: $Id: orderoverviewTest.php 47317 2012-07-13 07:59:49Z rimvydas.paskevicius $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -142,6 +142,7 @@ class Unit_Admin_OrderOverviewTest extends OxidTestCase
         $oOrder->oxorder__oxcurrency      = new oxField( "EUR" );
         $oOrder->oxorder__oxcurrate       = new oxField( 1 );
         $oOrder->oxorder__oxdeltype       = new oxField( "oxidstandard" );
+        $oOrder->oxorder__oxordernr       = new oxField( 1 );
         $oOrder->save();
         modConfig::setParameter( "oxid", $soxId );
         oxTestModules::addFunction( 'oxUtils', 'setHeader', '{ if ( !isset( $this->_aHeaderData ) ) { $this->_aHeaderData = array();} $this->_aHeaderData[] = $aA[0]; }');
@@ -197,6 +198,7 @@ class Unit_Admin_OrderOverviewTest extends OxidTestCase
         $oOrder->oxorder__oxcurrency      = new oxField( "EUR" );
         $oOrder->oxorder__oxcurrate       = new oxField( 1 );
         $oOrder->oxorder__oxdeltype       = new oxField( "oxidstandard" );
+        $oOrder->oxorder__oxordernr       = new oxField( 1 );
         $oOrder->save();
         modConfig::setParameter( "ordernr", 1 );
         oxTestModules::addFunction( 'oxUtils', 'setHeader', '{ if ( !isset( $this->_aHeaderData ) ) { $this->_aHeaderData = array();} $this->_aHeaderData[] = $aA[0]; }');
