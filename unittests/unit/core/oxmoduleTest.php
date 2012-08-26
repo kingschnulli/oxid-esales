@@ -958,6 +958,8 @@ class Unit_Core_oxmoduleTest extends OxidTestCase
 
     /**
      * oxmodule::_addModuleSettings() test case
+	 * 
+	 * related to @ticket 4255
      *
      * @return null
      */
@@ -975,9 +977,10 @@ class Unit_Core_oxmoduleTest extends OxidTestCase
         modInstances::addMod( 'oxUtilsObject', $oUtilsObject );
 
         $sModuleId       = 'testmodule';
+        // test different constraints for #4255
         $aModuleSettings = array(
-            array('group' => 'test1',  'name' => 'test_var_1', 'type' => 'str', 'value' => 'A', 'position' => '1'),
-            array('group' => 'test2',  'name' => 'test_var_2', 'type' => 'str', 'value' => 'B', 'position' => '2'),
+            array( 'group' => 'test1',  'name' => 'test_var_1', 'type' => 'str', 'value' => 'A', 'position' => '1', 'constrains' => 'compatibility1' ),
+            array( 'group' => 'test2',  'name' => 'test_var_2', 'type' => 'str', 'value' => 'B', 'position' => '2', 'constraints' => 'compatibility2' ),
         );
 
         $oModule = $this->getMock( 'oxModule', array('getId') );
@@ -986,8 +989,8 @@ class Unit_Core_oxmoduleTest extends OxidTestCase
         $oModule->_addModuleSettings( $aModuleSettings );
 
         // checking result
-        $aRes[] = array( "OXID"=>"_testId1", "OXCFGMODULE"=>"module:".$sModuleId, "OXCFGVARNAME"=>"test_var_1", "OXGROUPING"=>"test1", "OXPOS"=>"1", "OXVARCONSTRAINT"=>"") ;
-        $aRes[] = array( "OXID"=>"_testId2", "OXCFGMODULE"=>"module:".$sModuleId, "OXCFGVARNAME"=>"test_var_2", "OXGROUPING"=>"test2", "OXPOS"=>"2", "OXVARCONSTRAINT"=>"") ;
+        $aRes[] = array( "OXID" => "_testId1", "OXCFGMODULE" => "module:".$sModuleId, "OXCFGVARNAME" => "test_var_1", "OXGROUPING" => "test1", "OXPOS" => "1", "OXVARCONSTRAINT" => "compatibility1" ) ;
+        $aRes[] = array( "OXID" => "_testId2", "OXCFGMODULE" => "module:".$sModuleId, "OXCFGVARNAME" => "test_var_2", "OXGROUPING" => "test2", "OXPOS" => "2", "OXVARCONSTRAINT" => "compatibility2" ) ;
 
         $aSettings = oxDb::getDb(oxDb::FETCH_MODE_ASSOC)->getAll( "SELECT * FROM oxconfigdisplay WHERE oxcfgvarname IN ('test_var_1','test_var_2') ORDER BY oxid" );
 

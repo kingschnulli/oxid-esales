@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxbasketTest.php 44183 2012-04-23 10:52:54Z linas.kukulskis $
+ * @version   SVN: $Id: oxbasketTest.php 48926 2012-08-22 13:42:31Z tomas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -4898,5 +4898,24 @@ class Unit_Core_oxbasketTest extends OxidTestCase
         $oBasket = $this->getProxyClass( "oxbasket" );
         $oBasket->setNonPublicVar( "_aBasketContents", array($oOrderArticle) );
         $this->assertTrue( $oBasket->hasDownloadableProducts() );
+    }
+
+    /**
+     * testing #4411 fix
+     */
+    public function testHasDownloadableProductsException()
+    {
+        $oException = new Exception("Non existing article.");
+        $oOrderArticle = $this->getMock( 'oxorderarticle', array( 'getArticle' ) );
+        $oOrderArticle->expects( $this->any() )->method( 'getArticle' )->will( $this->throwException  ( $oException ) );
+        $oBasket = $this->getProxyClass( "oxbasket" );
+        $oBasket->setNonPublicVar( "_aBasketContents", array($oOrderArticle) );
+        try {
+            $blRes =  $oBasket->hasDownloadableProducts();
+        } catch (Exception $oE) {
+            $this->fail("Exceptions within hasDownloadableProducts() should be catched.");
+        }
+
+        $this->assertFalse( $blRes);
     }
 }

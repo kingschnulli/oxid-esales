@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxemosadapterTest.php 38228 2011-08-19 11:19:04Z linas.kukulskis $
+ * @version   SVN: $Id: oxemosadapterTest.php 49000 2012-08-24 11:52:35Z tomas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -41,15 +41,82 @@ class Unit_Maintenance_oxemosadapterTest extends OxidTestCase
         oxDb::getDb()->execute( "delete from oxuserbaskets" );
         parent::tearDown();
     }
+    
+    /**
+     * Test for function _convProd2EmosItem. testing with umlauts
+     */
+    public function testConvProd2EmosItem() 
+    {
+        $oCurr = new oxStdClass;
+        $oCurr->rate = 2;
+        
+        $oPrice = $this->getMock( 'oxPrice', array ( 'getBruttoPrice' ) );
+        $oPrice->expects( $this->once() )->method( 'getBruttoPrice')->will( $this->returnValue( 10 ) );
 
+        $oProduct = $this->getMock( 'oxPrice', array( 'getPrice', 'getVendor', 'getManufacturer', 'getId' ) );
+        $oProduct->expects( $this->once() )->method( 'getPrice')->will( $this->returnValue( $oPrice ) );
+        $oProduct->expects( $this->once() )->method( 'getVendor')->will( $this->returnValue( false ) );
+        $oProduct->expects( $this->once() )->method( 'getManufacturer')->will( $this->returnValue( false ) );
+        $oProduct->expects( $this->once() )->method( 'getId')->will( $this->returnValue( 1 ) );
+        $oProduct->oxarticles__oxartnum = new oxField( '123' );
+        $oProduct->oxarticles__oxtitle = new oxField( 'oxütitle' );
+        $oProduct->oxarticles__oxvarselect = new oxField( 'oxüvarselect' );
+        
+        $sContent = "SHOP/oxütitle";
+        $sCharset = oxLang::getInstance()->translateString( 'charset' );
+        $sResult = iconv( $sCharset, 'UTF-8', $sContent );
+        
+        $oConfig = $this->getMock( 'oxConfig', array( 'isUtf', 'getActShopCurrencyObject' ) );
+        $oConfig->expects( $this->any() )->method( 'isUtf')->will( $this->returnValue( false ) );
+        $oConfig->expects( $this->once() )->method( 'getActShopCurrencyObject')->will( $this->returnValue( $oCurr ) );
+        
+        $oEmosAdapter = $this->getMock( 'oxEmosAdapter', array( 'getConfig' ) );
+        $oEmosAdapter->expects( $this->any() )->method( 'getConfig' )->will( $this->returnValue( $oConfig ) );
+        $oEmosItem = $oEmosAdapter->UNITconvProd2EmosItem( $oProduct, 'SHOP' );
+      
+        $this->assertEquals( $sResult, $oEmosItem->productGroup );
+        $this->assertEquals( 5, $oEmosItem->price );
+    }
+    
     public function testPrepareProductTitle()
     {
         $oProduct = new oxStdClass;
-        $oProduct->oxarticles__oxtitle = new oxField( 'oxtitle' );
-        $oProduct->oxarticles__oxvarselect = new oxField( 'oxvarselect' );
+        $oProduct->oxarticles__oxtitle = new oxField( 'oxütitle' );
+        $oProduct->oxarticles__oxvarselect = new oxField( 'oxüvarselect' );
+        
+        $sContent = "oxütitle oxüvarselect";
+        $sCharset = oxLang::getInstance()->translateString( 'charset' );
+        $sConverted = iconv( $sCharset, 'UTF-8', $sContent );
+        
+        $oConfig = $this->getMock( 'oxConfig', array( 'isUtf' ) );
+        $oConfig->expects( $this->once() )->method( 'isUtf')->will( $this->returnValue( false ) );
 
-        $oEmosAdapter = new oxEmosAdapter;
-        $this->assertEquals( 'oxtitle oxvarselect', $oEmosAdapter->UNITprepareProductTitle( $oProduct ) );
+        $oEmosAdapter = $this->getMock( 'oxEmosAdapter', array( 'getConfig' ) );
+        $oEmosAdapter->expects( $this->any() )->method( 'getConfig' )->will( $this->returnValue( $oConfig ) );
+        
+        $this->assertEquals( $sConverted, $oEmosAdapter->UNITprepareProductTitle( $oProduct ) );
+    }
+    
+    /**
+     * Test for function _convertToUtf - check wether this function 
+     * returns string converted to Utf8, when shop is not in Utf mode
+     */
+    public function testConvertToUtf()
+    {
+        $oConfig = $this->getMock( 'oxConfig', array( 'isUtf' ) );
+        $oConfig->expects( $this->once() )->method( 'isUtf')->will( $this->returnValue( false ) );
+
+        $oEmosAdapter = $this->getMock( 'oxEmosAdapter', array( 'getConfig' ) );
+        $oEmosAdapter->expects( $this->any() )->method( 'getConfig' )->will( $this->returnValue( $oConfig ) );
+       
+        $sContent = "Zurück zum Shop";
+        $sCharset = oxLang::getInstance()->translateString( 'charset' );
+        
+        $sConverted = iconv( $sCharset, 'UTF-8', $sContent );
+        $sResult = $oEmosAdapter->UNITconvertToUtf( $sContent );
+        
+        $this->assertNotEquals( $sContent, $sResult );
+        $this->assertEquals( $sConverted, $sResult );
     }
 
     //
@@ -108,25 +175,26 @@ class Unit_Maintenance_oxemosadapterTest extends OxidTestCase
 
     public function testGetEmosCatPath()
     {
-        $oCat1 = new oxcategory();
-        $oCat1->oxcategories__oxtitle = new oxfield( '1' );
+        $aCat1 = array( 'title' => '1ü', 'link' => 'http://one' );
+        $aCat2 = array( 'title' => '2ü', 'link' => 'http://two' );
+        $aCat3 = array( 'title' => '3ü', 'link' => 'http://three' );
 
-        $oCat2 = new oxcategory();
-        $oCat2->oxcategories__oxtitle = new oxfield( '2' );
+        $oActiveView = $this->getMock( 'oxview', array( 'getBreadCrumb' ) );
+        $oActiveView->expects( $this->once() )->method( 'getBreadCrumb')->will( $this->returnValue( array( $aCat1, $aCat2, $aCat3 ) ) );
 
-        $oCat3 = new oxcategory();
-        $oCat3->oxcategories__oxtitle = new oxfield( '3' );
-
-        $oActiveView = $this->getMock( 'oxview', array( 'getCatTreePath' ) );
-        $oActiveView->expects( $this->once() )->method( 'getCatTreePath')->will( $this->returnValue( array( $oCat1, $oCat2, $oCat3 ) ) );
-
-        $oConfig = $this->getMock( 'oxConfig', array( 'getActiveView' ) );
-        $oConfig->expects( $this->once() )->method( 'getActiveView')->will( $this->returnValue( $oActiveView ) );
+        $oConfig = $this->getMock( 'oxConfig', array( 'getActiveView', 'isUtf' ) );
+        $oConfig->expects( $this->once() )->method( 'getActiveView' )->will( $this->returnValue( $oActiveView ) );
+        $oConfig->expects( $this->once() )->method( 'isUtf')->will( $this->returnValue( false ) );
 
         $oEmosCode = $this->getMock( 'oxEmosAdapter', array( 'getConfig' ) );
-        $oEmosCode->expects( $this->once() )->method( 'getConfig')->will( $this->returnValue( $oConfig ) );
+        $oEmosCode->expects( $this->any() )->method( 'getConfig')->will( $this->returnValue( $oConfig ) );
 
-        $this->assertEquals( '1/2/3', $oEmosCode->UNITgetEmosCatPath() );
+        $sContent = "1ü/2ü/3ü";
+        $sCharset = oxLang::getInstance()->translateString( 'charset' );
+        
+        $sConverted = iconv( $sCharset, 'UTF-8', $sContent );
+        
+        $this->assertEquals( $sConverted, $oEmosCode->UNITgetEmosCatPath() );
     }
 
     public function testGetTplNameSetInRequest()
@@ -399,11 +467,11 @@ class Unit_Maintenance_oxemosadapterTest extends OxidTestCase
         $oFormatter->expects( $this->once() )->method( 'addContent')->with( $this->equalTo( 'Shop/Bar-Equipment/Bar-Set ABSINTH' ) );
         $oFormatter->expects( $this->once() )->method( 'addDetailView')->with( $this->equalTo( $oEmosItem ) );
 
-        $oEmos = $this->getMock( 'oxEmosAdapter', array( 'getEmos', '_getEmosCl', '_convProd2EmosItem', '_getEmosCatPath' ) );
+        $oEmos = $this->getMock( 'oxEmosAdapter', array( 'getEmos', '_getEmosCl', '_convProd2EmosItem', '_getBasketProductCatPath' ) );
         $oEmos->expects( $this->once() )->method( 'getEmos')->will( $this->returnValue( $oFormatter ) );
         $oEmos->expects( $this->once() )->method( '_getEmosCl')->will( $this->returnValue( 'details' ) );
         $oEmos->expects( $this->once() )->method( '_convProd2EmosItem')->will( $this->returnValue( $oEmosItem ) );
-        $oEmos->expects( $this->once() )->method( '_getEmosCatPath')->will( $this->returnValue( 'Bar-Equipment' ) );
+        $oEmos->expects( $this->once() )->method( '_getBasketProductCatPath')->will( $this->returnValue( 'Bar-Equipment' ) );
         $oEmos->getCode( $aParams, $oSmarty );
     }
 
