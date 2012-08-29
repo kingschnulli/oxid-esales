@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: compareTest.php 35563 2011-05-24 08:39:56Z arunas.paskevicius $
+ * @version   SVN: $Id: compareTest.php 48916 2012-08-22 07:59:30Z tomas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -324,6 +324,24 @@ class Unit_Views_compareTest extends OxidTestCase
         $aResult[] = $aCatPath;
         
         $this->assertEquals( $aResult, $oCompare->getBreadCrumb() );
+    }
+
+    /**
+     * Testing #4391 fix
+     */
+    public function testChangeArtListOrderWithNotExistingProduct()
+    {
+        $oSubj = $this->getProxyClass("Compare");
+        $aItems = array("1126" => true, "nonExistingVal" => true, "1127" => true);
+        $oArtList = new oxArticleList();
+        $oArtList->loadIds( array_keys( $aItems) );
+
+        $oResList = $oSubj->UNITchangeArtListOrder($aItems, $oArtList);
+
+        $this->assertArrayHasKey("1126", $oResList);
+        $this->assertArrayNotHasKey("nonExistingVal", $oResList);
+        $this->assertArrayHasKey("1127", $oResList);
+
     }
 
 }
