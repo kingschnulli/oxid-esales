@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxI18nTest.php 43053 2012-03-21 07:30:03Z linas.kukulskis $
+ * @version   SVN: $Id: oxI18nTest.php 49684 2012-09-21 11:20:48Z tomas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -1012,4 +1012,7 @@ class Unit_Core_oxi18ntest extends OxidTestCase
             $this->assertFalse( (bool) $oDb->getOne( "select 1 from {$sTableName}_set1 where oxid = '{$sId}'" ), "Not cleaned {$sTableName}_set1 table" );
         }
     }
+
+
+
 }

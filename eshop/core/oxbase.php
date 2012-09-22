@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxbase.php 43707 2012-04-11 06:27:11Z linas.kukulskis $
+ * @version   SVN: $Id: oxbase.php 49672 2012-09-21 08:31:43Z tomas $
  */
 
 /**
@@ -621,6 +621,8 @@ class oxBase extends oxSuperCfg
             $oEx->setObject($this);
             throw $oEx;
         }*/
+
+        $this->_blForceCoreTableUsage = true;
 
         //getting at least one field before lazy loading the object
         $this->_addField('oxid', 0);
