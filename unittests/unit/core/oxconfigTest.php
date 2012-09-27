@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxconfigTest.php 46714 2012-06-27 09:02:56Z arturas.sevcenko $
+ * @version   SVN: $Id: oxconfigTest.php 49808 2012-09-26 15:10:33Z tomas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -326,7 +326,7 @@ class Unit_Core_oxconfigTest extends OxidTestCase
     public function testInit_noConnection()
     {
         $oConfig = $this->getMock( "oxconfig", array( "_loadVarsFromDb" ) );
-        $oEx = $oEx = oxNew( "oxConnectionException" );
+        $oEx = oxNew( "oxConnectionException" );
         $oConfig->expects( $this->once() )->method( '_loadVarsFromDb')->will( $this->throwException( $oEx ) );
 
         $this->assertFalse( $oConfig->init() );
@@ -2358,5 +2358,6 @@ class Unit_Core_oxconfigTest extends OxidTestCase
         
         $this->assertSame("test", $sVar);
     }
-    
+
+
 }

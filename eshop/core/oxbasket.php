@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxbasket.php 49697 2012-09-21 14:30:21Z tomas $
+ * @version   SVN: $Id: oxbasket.php 49802 2012-09-26 13:10:58Z tomas $
  */
 
 /**
