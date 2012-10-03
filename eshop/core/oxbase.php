@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxbase.php 49672 2012-09-21 08:31:43Z tomas $
+ * @version   SVN: $Id: oxbase.php 49943 2012-10-01 14:17:18Z tomas $
  */
 
 /**
@@ -622,13 +622,18 @@ class oxBase extends oxSuperCfg
             throw $oEx;
         }*/
 
+        $blExistingOldForceCoreTable = $this->_blForceCoreTableUsage;
+
         $this->_blForceCoreTableUsage = true;
 
         //getting at least one field before lazy loading the object
         $this->_addField('oxid', 0);
         $sSelect = $this->buildSelectString( array( $this->getViewName().".oxid" => $sOXID));
 
-        return $this->_isLoaded = $this->assignRecord( $sSelect );
+        $this->_isLoaded = $this->assignRecord( $sSelect );
+        $this->_blForceCoreTableUsage = $blExistingOldForceCoreTable;
+
+        return $this->_isLoaded;
     }
 
     /**
