@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 49797 2012-09-26 12:36:58Z juergen.busch $
+ * @version   SVN: $Id: lang.php 50506 2012-10-15 12:31:18Z juergen.busch $
  */
 
 /*
@@ -803,13 +803,13 @@ $aLang = array(
 'EDITOR_PLAINTEXT_HINT'                                    => '<b>Note:</b> If you need to preserve text line breaks (e.g. plaintext e-mails), please use tab "html CODE" instead of "Design".',
 'ALTERNATIVE_IMAGE_SERVER_NOTE'                            => '<b>Note:</b> Alternative image server configuration detected, files will not be uploaded to remote location. Please take care about synchronization manually.',
 //eFire related contents will appear only for users located in Germany
-'EFIRE_USERNAME'                                           => 'eFire External Transaction username',
-'EFIRE_PASSWORD'                                           => 'eFire External Transaction password',
+'EFIRE_USERNAME'                                           => 'Externer Transaktions Login (user name)',
+'EFIRE_PASSWORD'                                           => 'Externes Transaktions Passwort (password)',
 'EFIRE_DOWNLOADER'                                         => 'Downloader',
-'EFIRE_DOWNLOADER_ERROR'                                   => 'Error downloading eFire connector: %s',
-'EFIRE_DOWNLOADER_SUCCESS'                                 => 'Connector downloaded successfully',
-'EFIRE_GETCONNECTOR'                                       => 'If you have registered for OXID eFire you can get your personalized Shop-Connector right here.',
-'EFIRE_CONNECTORINSTRUCTION'                               => 'Fill in your "Externer Transaktions Login" and "Externer Transaktions Login" which you have previously entered in OXID eFire and press "Download" button to get OXID eFire Shop-Connector.',
+'EFIRE_DOWNLOADER_ERROR'                                   => 'Error downloading shop connector: %s',
+'EFIRE_DOWNLOADER_SUCCESS'                                 => 'Shop connector downloaded successfully',
+'EFIRE_GETCONNECTOR'                                       => 'Once you are registered with OXID eFire you\'ll be able to download your personalized copy of the shop connector and install it directly to the right shop location.',
+'EFIRE_CONNECTORINSTRUCTION'                               => 'Please enter "Externer Transaktions Login" and "Externes Transaktions Passwort" that you previously have entered in OXID eFire options ("Einstellungen").',
 'EFIRE_SAVECREDENTIALS'                                    => 'Save your credentials for future use',
 'EFIRE_USERDETAILS'                                        => 'User',
 'EFIRE_USERPASSHASH'                                       => 'Password hash',

@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: shop_config.php 45813 2012-06-04 07:45:24Z vaidas.matulevicius $
+ * @version   SVN: $Id: shop_config.php 50563 2012-10-16 10:36:57Z aurimas.gladutis $
  */
 
 /**
@@ -293,10 +293,10 @@ class Shop_Config extends oxAdminDetails
             case "str":
             case "select":
             case "int":
+                $mData = $oStr->htmlentities( $sValue );
                 if (in_array($sName, $this->_aParseFloat)) {
                     $mData = str_replace( ',', '.', $mData );
                 }
-                $mData = $oStr->htmlentities( $sValue );
                 break;
 
             case "arr":
@@ -329,24 +329,21 @@ class Shop_Config extends oxAdminDetails
      */
     public function _serializeConfVar($sType, $sName, $mValue)
     {
-        $sData = '';
+        $sData = $mValue;
 
         switch ($sType) {
             case "bool":
-                $sData = $mValue;
                 break;
 
             case "str":
             case "select":
             case "int":
                 if (in_array($sName, $this->_aParseFloat)) {
-                    $mData = str_replace( ',', '.', $mData );
+                    $sData = str_replace( ',', '.', $sData );
                 }
-                $sData = $mValue;
                 break;
 
             case "arr":
-                $sData = $mValue;
                 if ( !is_array( $mValue ) ) {
                     $sData = $this->_multilineToArray( $mValue );
                 }

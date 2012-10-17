@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxemailTest.php 42784 2012-03-13 14:32:22Z linas.kukulskis $
+ * @version   SVN: $Id: oxemailTest.php 50568 2012-10-16 11:33:06Z aurimas.gladutis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -921,6 +921,43 @@ class Unit_Core_oxemailTest extends OxidTestCase
     public function testGetShopWhenShopIsNotSet()
     {
         $this->assertEquals( oxConfig::getInstance()->getActiveShop(), $this->_oEmail->UNITgetShop() );
+    }
+
+    /*
+     * Test getting shop when only shop id is given
+     */
+    public function testGetShopWithShopId()
+    {
+            $iShopId = 'oxbaseshop';
+
+        $oShop = $this->_oEmail->UNITgetShop(null, $iShopId);
+        $this->assertEquals( $iShopId, $oShop->getShopId() );
+        $this->assertEquals( oxLang::getInstance()->getBaseLanguage(), $oShop->getLanguage() );
+    }
+
+    /*
+     * Test getting shop when only language id is given
+     */
+    public function testGetShopWithLanguageId()
+    {
+        $oShop = $this->_oEmail->UNITgetShop(1);
+        $this->assertEquals( 1, $oShop->getLanguage() );
+        $this->assertEquals( oxConfig::getInstance()->getShopId(), $oShop->getShopId() );
+    }
+
+     /*
+     * Test getting active shop when both language id and shop id is given
+     */
+    public function testGetShopWithLanguageIdAndShopId()
+    {
+        $this->_oEmail->setShop($this->_oShop);
+
+            $iShopId = 'oxbaseshop';
+
+        $oShop = $this->_oEmail->UNITgetShop(1, $iShopId);
+        $this->assertEquals( 1, $oShop->getLanguage() );
+        $this->assertEquals( $iShopId, $oShop->getShopId() );
+        $this->assertEquals( $this->_oShop, $this->_oEmail->UNITgetShop() );
     }
 
     /*

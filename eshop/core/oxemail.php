@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxemail.php 43724 2012-04-11 07:22:33Z linas.kukulskis $
+ * @version   SVN: $Id: oxemail.php 50561 2012-10-16 10:28:26Z aurimas.gladutis $
  */
 /**
  * Includes PHP mailer class.
@@ -2019,21 +2019,26 @@ class oxEmail extends PHPMailer
      */
     protected function _getShop( $iLangId = null, $iShopId = null )
     {
-
-        if ( isset( $this->_oShop ) ) {
-            return $this->_oShop;
+        if ( $iLangId === null && $iShopId === null ) {
+            if ( isset( $this->_oShop ) ) {
+                return $this->_oShop;
+            } else {
+                return $this->_oShop = $this->getConfig()->getActiveShop();
+            }
         }
 
         $myConfig = $this->getConfig();
 
-        if ( $iLangId === null ) {
-            $oShop = $myConfig->getActiveShop();
-        } else {
-            $oShop = oxNew( 'oxshop' );
-            $oShop->loadInLang( $iLangId, $myConfig->getShopId() );
+        $oShop = oxNew( 'oxshop' );
+        if ( $iShopId !== null ) {
+            $oShop->setShopId($iShopId);
         }
+        if ( $iLangId !== null ) {
+            $oShop->setLanguage($iLangId);
+        }
+        $oShop->load($myConfig->getShopId());
 
-        return $this->_oShop = $oShop;
+        return $oShop;
     }
 
     /**

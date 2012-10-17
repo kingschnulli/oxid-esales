@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticle.php 49951 2012-10-01 19:56:16Z tomas $
+ * @version   SVN: $Id: oxarticle.php 50566 2012-10-16 10:52:21Z vilma $
  */
 
 // defining supported link types
@@ -1206,11 +1206,8 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
         if ( !isset( $this->_aVariantSelections[$iLimit] ) ) {
             $this->_aVariantSelections[$iLimit] = false;
 
-
-
             if ( $this->oxarticles__oxvarcount->value ) {
-
-                $this->_aVariantSelections[$iLimit] = oxNew( "oxVariantHandler" )->buildVariantSelections( $this->oxarticles__oxvarname->getRawValue(), $this->getVariants(), $aFilterIds, $sActVariantId, $iLimit );
+                $this->_aVariantSelections[$iLimit] = oxNew( "oxVariantHandler" )->buildVariantSelections( $this->oxarticles__oxvarname->getRawValue(), $this->getVariants( false ), $aFilterIds, $sActVariantId, $iLimit );
             }
         }
 
@@ -3233,7 +3230,6 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
                 $oLowestPrice = $oItemPrice;
             }
 
-            $oAmPriceList[$sId]->oxprice2article__oxaddabs = new oxField( $oLang->formatCurrency( $myUtils->fRound( $oItemPrice->getBruttoPrice(), $oCur ) ) );
             $oAmPriceList[$sId]->fnetprice  = $oLang->formatCurrency( $myUtils->fRound($oItemPrice->getNettoPrice(), $oCur ) );
             $oAmPriceList[$sId]->fbrutprice = $oLang->formatCurrency( $myUtils->fRound($oItemPrice->getBruttoPrice(), $oCur ) );
         }
@@ -3957,10 +3953,9 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
     protected function _insert()
     {
         // set oxinsert
-        $iInsertTime = time();
-        $now = date('Y-m-d H:i:s', $iInsertTime);
-        $this->oxarticles__oxinsert    = new oxField( $now );
-        $this->oxarticles__oxtimestamp = new oxField( $now );
+        $sNow = date('Y-m-d H:i:s', oxUtilsDate::getInstance()->getTime());
+        $this->oxarticles__oxinsert    = new oxField( $sNow );
+        $this->oxarticles__oxtimestamp = new oxField( $sNow );
         if ( !is_object($this->oxarticles__oxsubclass) || $this->oxarticles__oxsubclass->value == '') {
             $this->oxarticles__oxsubclass = new oxField('oxarticle');
         }
