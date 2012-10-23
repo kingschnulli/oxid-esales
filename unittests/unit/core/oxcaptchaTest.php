@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcaptchaTest.php 42990 2012-03-19 08:55:27Z linas.kukulskis $
+ * @version   SVN: $Id: oxcaptchaTest.php 50814 2012-10-22 11:29:15Z rimvydas.paskevicius $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -74,7 +74,7 @@ class Unit_Core_oxcaptchaTest extends OxidTestCase
         $oCaptcha->expects( $this->once() )->method( 'getSession' )->will( $this->returnValue( $oSession ) );
 
         $sHash = $oCaptcha->getHash( 'test' );
-        $this->assertEquals( oxDb::getDb()->getOne( "select LAST_INSERT_ID()" ), $sHash );
+        $this->assertEquals( oxDb::getDb()->getOne( "select LAST_INSERT_ID()", false, false ), $sHash );
     }
 
     /**
@@ -138,8 +138,12 @@ class Unit_Core_oxcaptchaTest extends OxidTestCase
         $oCaptcha = $this->getMock( "oxCaptcha", array( "_passFromSession" ) );
         $oCaptcha->expects( $this->once() )->method( '_passFromSession' )->will( $this->returnValue( null ) );
 
+        // reseting session
+        $oSession = new oxSession();
+        $oCaptcha->setSession( $oSession );
+
         $oCaptcha->getHash( '3at8u' );
-        $sHash = oxDb::getDb()->getOne( "select LAST_INSERT_ID()" );
+        $sHash = oxDb::getDb()->getOne( "select LAST_INSERT_ID()", false, false );
         $this->assertTrue( $oCaptcha->pass('3at8u', $sHash ) );
     }
 

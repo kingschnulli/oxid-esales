@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxdbmetadatahandlerTest.php 44345 2012-04-25 11:00:14Z linas.kukulskis $
+ * @version   SVN: $Id: oxdbmetadatahandlerTest.php 50768 2012-10-22 07:11:33Z rimvydas.paskevicius $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -68,7 +68,7 @@ class Unit_Core_oxDbMetaDataHandlerTest extends OxidTestCase
                      KEY `OXTITLE_1` (`OXTITLE_1`),
                      FULLTEXT KEY `OXLONGDESC` (`OXLONGDESC`),
                      FULLTEXT KEY `OXLONGDESC_1` (`OXLONGDESC_1`)
-                  )";
+                  ) ENGINE = MyISAM";
 
         oxDb::getDb()->execute( $sSql );
     }

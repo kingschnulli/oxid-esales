@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxconfigTest.php 49808 2012-09-26 15:10:33Z tomas $
+ * @version   SVN: $Id: oxconfigTest.php 50814 2012-10-22 11:29:15Z rimvydas.paskevicius $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -169,12 +169,12 @@ class Unit_Core_oxconfigTest extends OxidTestCase
         if (is_dir(realpath($sDir))) {
             oxUtilsFile::getInstance()->deleteDir($sDir);
         }
-        
+
         $sCustConfigPath = getShopBasePath() . "/cust_config.inc.php";
         if ( file_exists( $sCustConfigPath ) ) {
             unlink($sCustConfigPath);
         }
-        
+
         $this->cleanUpTable('oxconfig');
         parent::tearDown();
     }
@@ -1566,15 +1566,14 @@ class Unit_Core_oxconfigTest extends OxidTestCase
         $oConfig = new modForTestGetBaseTemplateDirAdminSsl();
         $oConfig->init();
         $oConfig->setConfigParam( 'sSSLShopURL', 'https://www.example.com/' );
-        $this->assertEquals( 'https://www.example.com/index.php?', $oConfig->getShopCurrentUrl() );
+        $this->assertEquals( 0, strpos( $oConfig->getShopCurrentUrl(), 'https://www.example.com/index.php?') );
     }
     public function testGetShopCurrentUrlNoSsl()
     {
         $oConfig = new modForTestGetBaseTemplateDirNonAdminNonSsl();
         $oConfig->init();
         $oConfig->setConfigParam( 'sShopURL', 'http://www.example.com/' );
-        $this->assertEquals( 'http://www.example.com/index.php?', $oConfig->getShopCurrentUrl() );
-
+        $this->assertEquals( 0, strpos( $oConfig->getShopCurrentUrl(), 'http://www.example.com/index.php?') );
     }
 
 
@@ -2336,7 +2335,7 @@ class Unit_Core_oxconfigTest extends OxidTestCase
         $aModulesArray  = array('oxtest' => array('test/mytest','test1/mytest1'));
         $this->assertEquals($aModulesArray, $oConfig->parseModuleChains($aModules));
     }
-    
+
     /**
      * Tests that custom config is being set and variables from it are reachable
      *
@@ -2345,17 +2344,17 @@ class Unit_Core_oxconfigTest extends OxidTestCase
     {
         $sDir = getShopBasePath();
         $sCustConfig = $sDir . "/cust_config.inc.php";
-        
+
         $handle = fopen( $sCustConfig, "w" );
         chmod($sCustConfig, 0777);
 
         $data = '<?php $this->custVar = test;';
         fwrite( $handle, $data );
-    
+
         $oConfig = $this->getProxyClass( 'oxconfig' );
         $oConfig->_loadVarsFromFile();
         $sVar = $oConfig->getConfigParam( "custVar" );
-        
+
         $this->assertSame("test", $sVar);
     }
 

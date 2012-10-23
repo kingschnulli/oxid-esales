@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxuserbasketitemTest.php 40616 2011-12-14 14:09:53Z arvydas.vapsva $#
+ * @version   SVN: $Id: oxuserbasketitemTest.php 50684 2012-10-18 10:12:24Z aurimas.gladutis $#
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -218,7 +218,8 @@ class Unit_Core_oxuserbasketitemTest extends OxidTestCase
 
         // if thi line one day will faile, probebly becaus these parameters are not public any more :)
         $this->assertTrue( $oArticle->getClassVar('_blSkipAbPrice') );
-        $this->assertFalse( $oArticle->getClassVar('_blLoadVariants') );
+        // removed due to #4178
+        //$this->assertFalse( $oArticle->getClassVar('_blLoadVariants') );
 
         //$this->assertTrue( $oArticle->getNonPublicVar('_blForceSkipAbPrice') );
         //$this->assertTrue( $oArticle->getNonPublicVar('_blDoNotLoadVariants') );

@@ -795,8 +795,9 @@ class Unit_Core_oxemailBasicTplTest extends OxidTestCase
         $oOrder->oxorder__oxbilllname = new oxField('testOrderBillLName', oxField::T_RAW);
         $oOrder->oxorder__oxuserid = new oxField($this->_oUser->getId(), oxField::T_RAW);
 
-        $oOrderFile = $this->getMock( 'oxOrderFile', array( "getId" ) );
+        $oOrderFile = $this->getMock( 'oxOrderFile', array( "getId", "getFileSize" ) );
         $oOrderFile->expects( $this->any() )->method( 'getId')->will( $this->returnValue( '_testOrder' ));
+        $oOrderFile->expects( $this->any() )->method( 'getFileSize')->will( $this->returnValue( '5000' ));
         $oOrderFile->oxorderfiles__oxfilename = new oxField('testFileName', oxField::T_RAW);
 
         $oEmail = $this->getMock( 'oxEmail', array( "_sendMail", "_getShop", "_getUseInlineImages", 'getOrderFileList' ) );
