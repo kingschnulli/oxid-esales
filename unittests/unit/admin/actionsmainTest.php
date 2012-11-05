@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: actionsmainTest.php 33187 2011-02-10 15:54:30Z arvydas.vapsva $
+ * @version   SVN: $Id: actionsmainTest.php 48555 2012-08-11 19:42:45Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -37,7 +37,7 @@ class Unit_Admin_ActionsMainTest extends OxidTestCase
      */
     public function testRender()
     {
-        modConfig::setParameter( "oxid", -1 );
+        $this->setRequestParam( "oxid", -1 );
 
         // testing..
         $oView = new Actions_Main();
@@ -56,7 +56,7 @@ class Unit_Admin_ActionsMainTest extends OxidTestCase
      */
     public function testRenderWithExistingAction()
     {
-        modConfig::setParameter( "oxid", oxDb::getDb()->getOne( "select oxid from oxactions" ) );
+        $this->setRequestParam( "oxid", oxDb::getDb()->getOne( "select oxid from oxactions" ) );
 
         // testing..
         $oView = $this->getMock( "Actions_Main", array( "_getCategoryTree" ) );
@@ -79,9 +79,9 @@ class Unit_Admin_ActionsMainTest extends OxidTestCase
         oxTestModules::addFunction('oxactions', 'load', '{ return true; }');
         oxTestModules::addFunction('oxactions', 'save', '{ return true; }');
 
-        modConfig::setParameter( "oxid", "xxx" );
-        modConfig::setParameter( "editval", array( "xxx" ) );
-        modConfig::getInstance()->setConfigParam( "blAllowSharedEdit", true );
+        $this->setRequestParam( "oxid", "xxx" );
+        $this->setRequestParam( "editval", array( "xxx" ) );
+        $this->setConfigParam( "blAllowSharedEdit", true );
 
         $oView = new Actions_Main();
         $oView->save();
@@ -111,10 +111,10 @@ class Unit_Admin_ActionsMainTest extends OxidTestCase
      */
     public function testPromotionsRender()
     {
-        modConfig::setParameter( "oxid", -1 );
-        modConfig::setParameter( "saved_oxid", -1 );
+        $this->setRequestParam( "oxid", -1 );
+        $this->setRequestParam( "saved_oxid", -1 );
 
-        $oPromotion = new oxStdClass();
+        $oPromotion = new oxActions();
         $oPromotion->oxactions__oxtype = new oxField( 2 );
 
         // testing..
@@ -140,9 +140,9 @@ class Unit_Admin_ActionsMainTest extends OxidTestCase
         oxTestModules::addFunction('oxactions', 'load', '{ return true; }');
         oxTestModules::addFunction('oxactions', 'save', '{ return true; }');
 
-        modConfig::setParameter( "oxid", "xxx" );
-        modConfig::setParameter( "editval", array( "xxx" ) );
-        modConfig::getInstance()->setConfigParam( "blAllowSharedEdit", true );
+        $this->setRequestParam( "oxid", "xxx" );
+        $this->setRequestParam( "editval", array( "xxx" ) );
+        $this->setConfigParam( "blAllowSharedEdit", true );
 
         $oView = new Actions_Main();
         $oView->save();
@@ -164,9 +164,9 @@ class Unit_Admin_ActionsMainTest extends OxidTestCase
         oxTestModules::addFunction('oxactions', 'save', '{ return true; }');
         oxTestModules::addFunction('oxactions', 'getId', '{ return "testId"; }');
 
-        modConfig::setParameter( "oxid", "-1" );
-        modConfig::setParameter( "editval", array( "xxx" ) );
-        modConfig::getInstance()->setConfigParam( "blAllowSharedEdit", true );
+        $this->setRequestParam( "oxid", "-1" );
+        $this->setRequestParam( "editval", array( "xxx" ) );
+        $this->setConfigParam( "blAllowSharedEdit", true );
 
         $oView = new Actions_Main();
         $oView->save();

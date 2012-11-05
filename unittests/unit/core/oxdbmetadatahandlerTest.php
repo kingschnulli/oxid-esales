@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxdbmetadatahandlerTest.php 50768 2012-10-22 07:11:33Z rimvydas.paskevicius $
+ * @version   SVN: $Id: oxdbmetadatahandlerTest.php 50770 2012-10-22 07:19:49Z rimvydas.paskevicius $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';

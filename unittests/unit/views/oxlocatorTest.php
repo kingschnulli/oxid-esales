@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxlocatorTest.php 44342 2012-04-25 10:59:43Z linas.kukulskis $
+ * @version   SVN: $Id: oxlocatorTest.php 47956 2012-07-30 14:21:33Z vilma $
  */
 
 
@@ -437,7 +437,7 @@ class Unit_Views_oxlocatorTest extends OxidTestCase
 
             $this->assertEquals( 1, $oManufacturer->iProductPos );
             $this->assertEquals( 1, $oManufacturer->iCntOfProd );
-            $sToListLink   = $sShopUrl . 'Nach-Marke/Bush/';
+            $sToListLink   = $sShopUrl . 'Nach-Hersteller/Bush/';
             $sPrevProdLink = null;
             $sNextProdLink = null;
 
@@ -620,17 +620,18 @@ class Unit_Views_oxlocatorTest extends OxidTestCase
     public function testSetRecommListLocatorData()
     {
         oxTestModules::addFunction('oxarticlelist', 'loadRecommArticleIds', '{parent::loadRecommArticleIds($aA[0], " order by oxobject2list.oxobjectid asc" );}');
-        $myConfig = oxConfig::getInstance();
+        $myConfig = $this->getConfig();
 
         // seo off
-        modConfig::getInstance()->setConfigParam( 'blSeoMode', false );
+        $this->setConfigParam( 'blSeoMode', false );
+        oxUtils::getInstance()->seoIsActive( true );
 
         $myDB = oxDb::getDB();
         $sShopId = $myConfig->getShopId();
         // adding article to recommendlist
-        $sQ = 'insert into oxrecommlists ( oxid, oxuserid, oxtitle, oxdesc, oxshopid ) values ( "testlist", "oxdefaultadmin", "oxtest", "oxtest", "'.$sShopId.'" ) ';
+        $sQ = 'replace into oxrecommlists ( oxid, oxuserid, oxtitle, oxdesc, oxshopid ) values ( "testlist", "oxdefaultadmin", "oxtest", "oxtest", "'.$sShopId.'" ) ';
         $myDB->Execute( $sQ );
-        $sQ = 'insert into oxobject2list ( oxid, oxobjectid, oxlistid, oxdesc ) values ( "testlist", "1651", "testlist", "test" ),' .
+        $sQ = 'replace into oxobject2list ( oxid, oxobjectid, oxlistid, oxdesc ) values ( "testlist", "1651", "testlist", "test" ),' .
                 ' ( "testlist2", "2000", "testlist", "test" ), ( "testlist3", "1126", "testlist", "test" ) ';
         $myDB->Execute( $sQ );
 
@@ -668,14 +669,15 @@ class Unit_Views_oxlocatorTest extends OxidTestCase
         $myConfig = oxConfig::getInstance();
 
         // seo off
-        modConfig::getInstance()->setConfigParam( 'blSeoMode', false );
+        $this->setConfigParam( 'blSeoMode', false );
+        oxUtils::getInstance()->seoIsActive( true );
 
         $myDB = oxDb::getDB();
         $sShopId = $myConfig->getShopId();
         // adding article to recommendlist
-        $sQ = 'insert into oxrecommlists ( oxid, oxuserid, oxtitle, oxdesc, oxshopid ) values ( "testlist", "oxdefaultadmin", "oxtest", "oxtest", "'.$sShopId.'" ) ';
+        $sQ = 'replace into oxrecommlists ( oxid, oxuserid, oxtitle, oxdesc, oxshopid ) values ( "testlist", "oxdefaultadmin", "oxtest", "oxtest", "'.$sShopId.'" ) ';
         $myDB->Execute( $sQ );
-        $sQ = 'insert into oxobject2list ( oxid, oxobjectid, oxlistid, oxdesc ) values ( "testlist", "1651", "testlist", "test" ),' .
+        $sQ = 'replace into oxobject2list ( oxid, oxobjectid, oxlistid, oxdesc ) values ( "testlist", "1651", "testlist", "test" ),' .
                 ' ( "testlist2", "2000", "testlist", "test" ), ( "testlist3", "1126", "testlist", "test" ) ';
         $myDB->Execute( $sQ );
 

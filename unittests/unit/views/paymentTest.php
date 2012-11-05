@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: paymentTest.php 45770 2012-05-31 11:55:04Z edvardas.gineika $
+ * @version   SVN: $Id: paymentTest.php 51171 2012-10-31 15:09:42Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -306,7 +306,7 @@ class Unit_Views_paymentTest extends OxidTestCase
         $sQ = "INSERT INTO `oxorder`
                    (`OXID`, `OXSHOPID`, `OXUSERID`, `OXORDERDATE`, `OXORDERNR`, `OXBILLCOMPANY`, `OXBILLEMAIL`, `OXBILLFNAME`, `OXBILLLNAME`, `OXBILLSTREET`, `OXBILLSTREETNR`, `OXBILLADDINFO`, `OXBILLUSTID`, `OXBILLCITY`, `OXBILLCOUNTRYID`, `OXBILLSTATEID`, `OXBILLZIP`, `OXBILLFON`, `OXBILLFAX`, `OXBILLSAL`, `OXDELCOMPANY`, `OXDELFNAME`, `OXDELLNAME`, `OXDELSTREET`, `OXDELSTREETNR`, `OXDELADDINFO`, `OXDELCITY`, `OXDELCOUNTRYID`, `OXDELSTATEID`, `OXDELZIP`, `OXDELFON`, `OXDELFAX`, `OXDELSAL`, `OXPAYMENTID`, `OXPAYMENTTYPE`, `OXTOTALNETSUM`, `OXTOTALBRUTSUM`, `OXTOTALORDERSUM`, `OXARTVAT1`, `OXARTVATPRICE1`, `OXARTVAT2`, `OXARTVATPRICE2`, `OXDELCOST`, `OXDELVAT`, `OXPAYCOST`, `OXPAYVAT`, `OXWRAPCOST`, `OXWRAPVAT`, `OXCARDID`, `OXCARDTEXT`, `OXDISCOUNT`, `OXEXPORT`, `OXBILLNR`, `OXTRACKCODE`, `OXSENDDATE`, `OXREMARK`, `OXVOUCHERDISCOUNT`, `OXCURRENCY`, `OXCURRATE`, `OXFOLDER`, `OXTRANSID`, `OXPAYID`, `OXXID`, `OXPAID`, `OXSTORNO`, `OXIP`, `OXTRANSSTATUS`, `OXLANG`, `OXINVOICENR`, `OXDELTYPE`)
                VALUES
-                   (?, ?, ?, ?, ?, '', 'info@oxid-esales.com', 'Marc', 'Muster', 'Hauptstr.', '13', '', '', 'Freiburg', 'a7c40f631fc920687.20179984', 'BW', '79098', '', '', 'MR', '', '', '', '', '', '', '', '', '', '', '', '', '', ?, 'oxiddebitnote', 1639.15, 2108.39, 1950.59, 19, 311.44, 0, 0, 0, 19, 0, 0, 0, 0, '', '', 157.8, 0, '', '', '0000-00-00 00:00:00', 'Hier können Sie uns noch etwas mitteilen.', 0, 'EUR', 1, 'ORDERFOLDER_NEW', '', '', '', '0000-00-00 00:00:00', 0, '', 'OK', 0, 0, 'oxidstandard')";
+                   (?, ?, ?, ?, ?, '', 'info@oxid-esales.com', 'Marc', 'Muster', 'Hauptstr.', '13', '', '', 'Freiburg', 'a7c40f631fc920687.20179984', 'BW', '79098', '', '', 'MR', '', '', '', '', '', '', '', '', '', '', '', '', '', ?, 'oxiddebitnote', 1639.15, 2108.39, 1950.59, 19, 311.44, 0, 0, 0, 19, 0, 0, 0, 0, '', '', 157.8, 0, '', '', '0000-00-00 00:00:00', 'Hier kï¿½nnen Sie uns noch etwas mitteilen.', 0, 'EUR', 1, 'ORDERFOLDER_NEW', '', '', '', '0000-00-00 00:00:00', 0, '', 'OK', 0, 0, 'oxidstandard')";
 
         $sShopId = oxConfig::getInstance()->GetBaseShopId();
         foreach ( $aUserPaymentId as $iCnt => $sUserPaymentId ) {
@@ -610,7 +610,7 @@ class Unit_Views_paymentTest extends OxidTestCase
         $this->assertNull( $_GET["dynvalue[kkpruef]"]);
 
     }
-    
+
     protected function _checkInArrayRecursive($needle, $haystack)
     {
         foreach ($haystack as $v) {
@@ -732,26 +732,6 @@ class Unit_Views_paymentTest extends OxidTestCase
         $oO->render();
     }
 
-    public function testGetTsProtections()
-    {
-        modConfig::getInstance()->setConfigParam( 'blEnterNetPrice', false );
-        $oP = $this->getMock('oxprice', array('getBruttoPrice'));
-        $oP->expects($this->once())->method('getBruttoPrice')->will($this->returnValue(50));
-        $oB = $this->getMock('oxbasket', array('getPrice'));
-        $oB->expects($this->once())->method('getPrice')->will($this->returnValue($oP));
-        $oS = $this->getMock('oxsession', array('getBasket'));
-        $oS->expects($this->any())->method('getBasket')->will($this->returnValue($oB));
-        $oPayment = $this->getMock('payment', array('getSession'));
-        $oPayment->expects($this->any())->method('getSession')->will($this->returnValue($oS));
-
-        $oProducts = $oPayment->getTsProtections();
-        $oProduct = current($oProducts);
-
-        $this->assertEquals( "0,98", $oProduct->getFPrice() );
-        $this->assertEquals( 'TS080501_500_30_EUR', $oProduct->getTsId() );
-        $this->assertEquals( 500, $oProduct->getAmount() );
-    }
-
     public function testGetCheckedTsProductId()
     {
         modConfig::setParameter('stsprotection', 'testId');
@@ -773,17 +753,17 @@ class Unit_Views_paymentTest extends OxidTestCase
     }
 
     /**
-     * Testing Payment::getDynDataFiltered() against false on creation 
-     * 
-     * @return null 
+     * Testing Payment::getDynDataFiltered() against false on creation
+     *
+     * @return null
      */
-    public function testGetDynDataFilteredFalse() 
+    public function testGetDynDataFilteredFalse()
     {
         $oPayment = new Payment();
-        
+
         $this->assertFalse($oPayment->getDynDataFiltered());
     }
-    
+
     /**
      * Testing Payment::getDynDataFiltered() against false after payment->init()
      * when credit card fields are not populated
@@ -795,7 +775,7 @@ class Unit_Views_paymentTest extends OxidTestCase
         $oPayment->init();
         $this->assertFalse($oPayment->getDynDataFiltered());
     }
-    
+
     /**
      * Testing Payment::getDynDataFiltered() against true after payment->init()
      * when credit card fields are populated with session data
@@ -824,11 +804,11 @@ class Unit_Views_paymentTest extends OxidTestCase
         $oPayment->init();
         $this->assertTrue($oPayment->getDynDataFiltered());
     }
-    
+
     /**
      * Testing Payment::getDynDataFiltered() against true after payment->init()
      * when credit card fields are populated with request data
-     * 
+     *
      * @return null
      */
     public function testGetDynDataFilteredTrueReqDataInit()
@@ -843,7 +823,7 @@ class Unit_Views_paymentTest extends OxidTestCase
         $sTProof = "tstProof";
         $sTType = "tstType";
 
-       
+
         $_REQUEST["dynvalue"]["kktype"] = $sTType;
         $_REQUEST["dynvalue"]["kknumber"] = $sTNumber;
         $_REQUEST["dynvalue"]["kkname"] = $sTName;
@@ -868,11 +848,11 @@ class Unit_Views_paymentTest extends OxidTestCase
         $oPayment->init();
         $this->assertTrue($oPayment->getDynDataFiltered());
     }
-    
+
     /**
      * Testing Payment::ValidatePayment() when we use creditcard payment
      * and do not store CC data, using session saved CC entered data
-     * 
+     *
      * @return null
      */
     public function testValidatePayment_NoStoreCardInfoSession()
@@ -892,10 +872,10 @@ class Unit_Views_paymentTest extends OxidTestCase
         $oPayment = $this->getMock( 'Payment', array( 'getUser', 'getSession' ) );
         $oPayment->expects( $this->any() )->method( 'getUser')->will( $this->returnValue( $oUser ) );
         $oPayment->expects( $this->any() )->method( 'getSession')->will( $this->returnValue( $oSession ) );
-       
+
         modConfig::setParameter( "paymentid", 'oxidcreditcard' );
         modConfig::getInstance()->setConfigParam("blStoreCreditCardInfo", 0);
-       
+
         $sTNumber = "4111111111111111";
         $sTName = "Hans Mustermann";
         $sTMonth = "01";
@@ -916,11 +896,11 @@ class Unit_Views_paymentTest extends OxidTestCase
         $sRetVal = $oPayment->validatePayment();
         $this->assertEquals( null, $sRetVal );
     }
-    
+
     /**
      * Testing Payment::ValidatePayment() when we use creditcard payment
      * and do not store CC data, using CC entered data from $_REQUEST, $_POST or $_GET
-     * 
+     *
      * @return null
      */
     public function testValidatePayment_NoStoreCardInfoRequest()
@@ -940,10 +920,10 @@ class Unit_Views_paymentTest extends OxidTestCase
         $oPayment = $this->getMock( 'Payment', array( 'getUser', 'getSession' ) );
         $oPayment->expects( $this->any() )->method( 'getUser')->will( $this->returnValue( $oUser ) );
         $oPayment->expects( $this->any() )->method( 'getSession')->will( $this->returnValue( $oSession ) );
-       
+
         modConfig::setParameter( "paymentid", 'oxidcreditcard' );
         modConfig::getInstance()->setConfigParam("blStoreCreditCardInfo", 0);
-       
+
         $sTNumber = "4111111111111111";
         $sTName = "Hans Mustermann";
         $sTMonth = "01";
@@ -976,13 +956,13 @@ class Unit_Views_paymentTest extends OxidTestCase
         $sRetVal = $oPayment->validatePayment();
         $this->assertEquals( null, $sRetVal );
     }
-    
+
     /**
      * Testing Payment::_CheckArrValuesEmpty() when checked array is empty
-     * 
+     *
      * @return null
      */
-    public function test_CheckArrValuesEmptyWithoutData() 
+    public function test_CheckArrValuesEmptyWithoutData()
     {
          $oPayment = $this->getProxyClass("payment");
          $aData = array ("kktype"=>null,"kknumber"=>null);
@@ -990,13 +970,13 @@ class Unit_Views_paymentTest extends OxidTestCase
 
          $this->assertTrue($oPayment->UNITcheckArrValuesEmpty($aData,$aKeys));
     }
-    
+
     /**
      * Testing Payment::_CheckArrValuesEmpty() when checked array is populated with good data
-     * 
+     *
      * @return null
-     */  
-    public function test_CheckArrValuesEmptyWithData() 
+     */
+    public function test_CheckArrValuesEmptyWithData()
     {
          $oPayment = $this->getProxyClass("payment");
          $aData = array ( "kktype"=>"vis", "kknumber"=>"42222222" );
@@ -1004,13 +984,13 @@ class Unit_Views_paymentTest extends OxidTestCase
 
          $this->assertFalse( $oPayment->UNITcheckArrValuesEmpty( $aData, $aKeys ) );
     }
-    
+
     /**
      * Testing Payment::_CheckArrValuesEmpty() when checked array is populated with bad data
-     * 
+     *
      * @return null
      */
-    public function test_CheckArrValuesEmptyWithBadData() 
+    public function test_CheckArrValuesEmptyWithBadData()
     {
          $oPayment = $this->getProxyClass( "payment" );
          $aKeys = array ( "kktype", "kknumber" );

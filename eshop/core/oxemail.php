@@ -19,12 +19,12 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxemail.php 50561 2012-10-16 10:28:26Z aurimas.gladutis $
+ * @version   SVN: $Id: oxemail.php 50562 2012-10-16 10:34:10Z aurimas.gladutis $
  */
 /**
  * Includes PHP mailer class.
  */
-require oxConfig::getInstance()->getConfigParam( 'sCoreDir' ) . "/phpmailer/class.phpmailer.php";
+require oxRegistry::getConfig()->getConfigParam( 'sCoreDir' ) . "/phpmailer/class.phpmailer.php";
 
 
 /**
@@ -337,7 +337,7 @@ class oxEmail extends PHPMailer
     public function getConfig()
     {
         if ( $this->_oConfig == null ) {
-            $this->_oConfig = oxConfig::getInstance();
+            $this->_oConfig = oxRegistry::getConfig();
         }
 
         return $this->_oConfig;
@@ -364,7 +364,7 @@ class oxEmail extends PHPMailer
     protected function _getSmarty()
     {
         if ( $this->_oSmarty === null ) {
-            $this->_oSmarty = oxUtilsView::getInstance()->getSmarty();
+            $this->_oSmarty = oxRegistry::get("oxUtilsView")->getSmarty();
         }
 
         //setting default view
@@ -596,7 +596,7 @@ class oxEmail extends PHPMailer
         // send not pretending from order user, as different email domain rise spam filters
         $this->setFrom( $oShop->oxshops__oxowneremail->value );
 
-        $oLang = oxLang::getInstance();
+        $oLang = oxRegistry::getLang();
         $iOrderLang = $oLang->getObjectTplLanguage();
 
         // if running shop language is different from admin lang. set in config
@@ -645,7 +645,7 @@ class oxEmail extends PHPMailer
 
 
         if ( $myConfig->getConfigParam( 'iDebug' ) == 6) {
-            oxUtils::getInstance()->showMessageAndExit( "" );
+            oxRegistry::getUtils()->showMessageAndExit( "" );
         }
 
         return $blSuccess;
@@ -814,7 +814,7 @@ class oxEmail extends PHPMailer
      */
     public function sendNewsletterDbOptInMail( $oUser, $sSubject = null )
     {
-        $oLang = oxLang::getInstance();
+        $oLang = oxRegistry::getLang();
 
         // add user defined stuff if there is any
         $oUser = $this->_addNewsletterDbOptInMail( $oUser );
@@ -835,7 +835,7 @@ class oxEmail extends PHPMailer
 
         $this->setBody( $oSmarty->fetch( $this->_sNewsletterOptInTemplate ) );
         $this->setAltBody( $oSmarty->fetch( $this->_sNewsletterOptInTemplatePlain ) );
-        $this->setSubject( ( $sSubject !== null ) ? $sSubject : oxLang::getInstance()->translateString("EMAIL_NEWSLETTERDBOPTINMAIL_SUBJECT") . " " . $oShop->oxshops__oxname->getRawValue() );
+        $this->setSubject( ( $sSubject !== null ) ? $sSubject : oxRegistry::getLang()->translateString("EMAIL_NEWSLETTERDBOPTINMAIL_SUBJECT") . " " . $oShop->oxshops__oxname->getRawValue() );
 
         $sFullName = $oUser->oxuser__oxfname->getRawValue() . " " . $oUser->oxuser__oxlname->getRawValue();
 
@@ -939,7 +939,7 @@ class oxEmail extends PHPMailer
 
         //setting recommended user id
         if ( $myConfig->getActiveView()->isActive('Invitations') && $oActiveUser = $oShop->getUser() ) {
-            $sArticleUrl  = oxUtilsUrl::getInstance()->appendParamSeparator( $sArticleUrl );
+            $sArticleUrl  = oxRegistry::get("oxUtilsUrl")->appendParamSeparator( $sArticleUrl );
             $sArticleUrl .= "su=" . $oActiveUser->getId();
         }
 
@@ -981,21 +981,21 @@ class oxEmail extends PHPMailer
         $this->setSMTP();
 
         // create messages
-        $oSmarty = oxUtilsView::getInstance()->getSmarty();
+        $oSmarty = oxRegistry::get("oxUtilsView")->getSmarty();
         $this->setUser( $oParams );
 
         $sHomeUrl = $this->getViewConfig()->getHomeLink();
 
         //setting recommended user id
         if ( $myConfig->getActiveView()->isActive('Invitations') && $oActiveUser = $oShop->getUser() ) {
-            $sHomeUrl  = oxUtilsUrl::getInstance()->appendParamSeparator( $sHomeUrl );
+            $sHomeUrl  = oxRegistry::get("oxUtilsUrl")->appendParamSeparator( $sHomeUrl );
             $sHomeUrl .= "su=" . $oActiveUser->getId();
         }
 
         if ( is_array($oParams->rec_email) && count($oParams->rec_email) > 0  ) {
             foreach ( $oParams->rec_email as $sEmail ) {
                 if ( !empty( $sEmail ) ) {
-                    $sRegisterUrl  = oxUtilsUrl::getInstance()->appendParamSeparator( $sHomeUrl );
+                    $sRegisterUrl  = oxRegistry::get("oxUtilsUrl")->appendParamSeparator( $sHomeUrl );
                     //setting recipient user email
                     $sRegisterUrl .= "re=" . md5($sEmail);
                     $this->setViewData( "sHomeUrl", $sRegisterUrl );
@@ -1042,14 +1042,13 @@ class oxEmail extends PHPMailer
         $this->_setMailParams( $oShop );
 
         //create messages
-        $oLang = oxLang::getInstance();
+        $oLang = oxRegistry::getLang();
         $oSmarty = $this->_getSmarty();
         $this->setViewData( "order", $oOrder );
         $this->setViewData( "shopTemplateDir", $myConfig->getTemplateDir(false) );
 
         if ( $myConfig->getConfigParam( "bl_perfLoadReviews" ) ) {
             $this->setViewData( "blShowReviewLink", true );
-            //deprecated var
             $oUser = oxNew( 'oxuser' );
             $this->setViewData( "reviewuserhash", $oUser->getReviewUserHash($oOrder->oxorder__oxuserid->value) );
         }
@@ -1109,12 +1108,11 @@ class oxEmail extends PHPMailer
         $this->_setMailParams( $oShop );
 
         //create messages
-        $oLang = oxLang::getInstance();
+        $oLang = oxRegistry::getLang();
         $oSmarty = $this->_getSmarty();
         $this->setViewData( "order", $oOrder );
         $this->setViewData( "shopTemplateDir", $myConfig->getTemplateDir(false) );
 
-        //deprecated var
         $oUser = oxNew( 'oxuser' );
         $this->setViewData( "reviewuserhash", $oUser->getReviewUserHash($oOrder->oxorder__oxuserid->value) );
 
@@ -1184,7 +1182,7 @@ class oxEmail extends PHPMailer
 
         //attaching files
         $blAttashSucc = true;
-        $sAttPath = oxUtilsFile::getInstance()->normalizeDir($sAttPath);
+        $sAttPath = oxRegistry::get("oxUtilsFile")->normalizeDir($sAttPath);
         foreach ( $aAttFiles as $iNum => $sAttFile ) {
             $sFullPath = $sAttPath . $sAttFile;
             if ( @is_readable( $sFullPath ) && @is_file( $sFullPath ) ) {
@@ -1214,7 +1212,7 @@ class oxEmail extends PHPMailer
      *
      * @param mixed  $sTo      Recipient or an array of the recipients
      * @param string $sSubject Mail subject
-     * @param string $sBody    Mmail body
+     * @param string $sBody    Mail body
      *
      * @return bool
      */
@@ -1263,7 +1261,7 @@ class oxEmail extends PHPMailer
 
             //set mail params (from, fromName, smtp... )
             $this->_setMailParams( $oShop );
-            $oLang = oxLang::getInstance();
+            $oLang = oxRegistry::getLang();
 
             $oSmarty = $this->_getSmarty();
             $this->setViewData( "articles", $oArticleList );
@@ -1342,9 +1340,9 @@ class oxEmail extends PHPMailer
         $iAlarmLang = $oAlarm->oxpricealarm__oxlang->value;
 
         $oArticle = oxNew( "oxarticle" );
-        $oArticle->setSkipAbPrice( true );
+        //$oArticle->setSkipAbPrice( true );
         $oArticle->loadInLang( $iAlarmLang, $aParams['aid'] );
-        $oLang = oxLang::getInstance();
+        $oLang = oxRegistry::getLang();
 
         // create messages
         $oSmarty = $this->_getSmarty();
@@ -1436,7 +1434,7 @@ class oxEmail extends PHPMailer
         $sBody = $this->getBody();
         if (preg_match_all('/<\s*img\s+[^>]*?src[\s]*=[\s]*[\'"]?([^[\'">]]+|.*?)?[\'">]/i', $sBody, $matches, PREG_SET_ORDER)) {
 
-            $oFileUtils = oxUtilsFile::getInstance();
+            $oFileUtils = oxRegistry::get("oxUtilsFile");
             $blReSetBody = false;
 
             // preparing imput
@@ -1446,7 +1444,7 @@ class oxEmail extends PHPMailer
 
             if (is_array($matches) && count($matches)) {
                 $aImageCache = array();
-                $myUtils = oxUtils::getInstance();
+                $myUtils = oxRegistry::getUtils();
                 $myUtilsObject = oxUtilsObject::getInstance();
                 $oImgGenerator = oxNew( "oxDynImgGenerator" );
 
@@ -1637,7 +1635,7 @@ class oxEmail extends PHPMailer
      */
     public function setReplyTo( $sEmail = null, $sName = null )
     {
-        if ( !oxUtils::getInstance()->isValidEmail( $sEmail ) ) {
+        if ( !oxRegistry::getUtils()->isValidEmail( $sEmail ) ) {
             $sEmail = $this->_getShop()->oxshops__oxorderemail->value;
         }
 
@@ -1725,7 +1723,7 @@ class oxEmail extends PHPMailer
         if ( $sCharSet ) {
             $this->_sCharSet = $sCharSet;
         } else {
-            $this->_sCharSet = oxLang::getInstance()->translateString( "charset" );
+            $this->_sCharSet = oxRegistry::getLang()->translateString( "charset" );
         }
         $this->set( "CharSet", $this->_sCharSet );
     }
@@ -2101,10 +2099,15 @@ class oxEmail extends PHPMailer
     {
         $blResult = false;
         try {
-             $blResult = parent::send();
-        } catch( Exception $oEx ) {
+            $blResult = parent::send();
+        } catch( Exception $oException ) {
+            $oEx = oxNew( "oxException" );
+            $oEx->setMessage($oException->getMessage());
+            $oEx->debugOut();
+            if ( $this->getConfig()->getConfigParam( 'iDebug' ) != 0 ) {
+                throw $oEx;
+            }
         }
-
         return $blResult;
     }
 
@@ -2140,7 +2143,7 @@ class oxEmail extends PHPMailer
     public function getCharset()
     {
         if ( !$this->_sCharSet ) {
-            return oxLang::getInstance()->translateString("charset");
+            return oxRegistry::getLang()->translateString("charset");
         } else {
             return $this->CharSet;
         }
@@ -2195,7 +2198,7 @@ class oxEmail extends PHPMailer
      */
     public function getCurrency()
     {
-        $oConfig = oxConfig::getInstance();
+        $oConfig = oxRegistry::getConfig();
 
         return $oConfig->getActShopCurrencyObject();
     }
@@ -2271,7 +2274,11 @@ class oxEmail extends PHPMailer
         $oOrderList = oxNew('oxOrderFileList');
         $oOrderList->loadOrderFiles( $sOrderId );
 
-        return $oOrderList;
+        if ( count($oOrderList) > 0 ) {
+            return $oOrderList;
+        }
+
+        return false;
     }
 
 }

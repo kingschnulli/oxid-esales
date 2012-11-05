@@ -19,11 +19,16 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticleTest.php 50151 2012-10-04 15:24:44Z linas.kukulskis $
+ * @version   SVN: $Id: oxarticleTest.php 50313 2012-10-09 15:33:19Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
 require_once realpath( "." ).'/unit/test_config.inc.php';
+
+if ( !defined( 'OX_IS_ADMIN' ) ) {
+    define( 'OX_IS_ADMIN', false );
+}
+
 
 /**
  * Test oxUtils module
@@ -261,6 +266,8 @@ class Unit_Core_oxarticleTest extends OxidTestCase
         $myDB = oxDb::getDB();
         $myDB->execute( 'delete from oxaccessoire2article where oxarticlenid="_testArt" ' );
 
+        $myDB->execute( "update oxattribute set oxdisplayinbasket = 0 where oxid = '8a142c3f0b9527634.96987022' " );
+
         if ( $this->oArticle ) {
             $this->oArticle->delete();
         }
@@ -296,19 +303,6 @@ class Unit_Core_oxarticleTest extends OxidTestCase
         }
 
         parent::tearDown();
-    }
-
-    /**
-     * Testing if deprecated oxlongdesc setting still works
-     */
-    public function testDeprecatedLongDescSetting()
-    {
-        $oArticle = new oxArticle();
-        $oArticle->oxarticles__oxlongdesc = new oxField( "test" );
-
-        $oDesc = $oArticle->getLongDescription();
-        $this->assertTrue( $oDesc instanceof oxField );
-        $this->assertEquals( "test", $oDesc->value );
     }
 
 
@@ -846,11 +840,12 @@ class Unit_Core_oxarticleTest extends OxidTestCase
      *
      * @return null
      */
-    public function testGetProductParentId()
+    public function testGetParentId()
     {
         $oArticle = new oxArticle();
         $oArticle->oxarticles__oxparentid = new oxField( 'sTestParentId' );
         $this->assertEquals( 'sTestParentId', $oArticle->getProductParentId() );
+        $this->assertEquals( 'sTestParentId', $oArticle->getParentId() );
     }
 
     /**
@@ -863,20 +858,6 @@ class Unit_Core_oxarticleTest extends OxidTestCase
         $oArticle = new oxArticle();
         $oArticle->setId( "someArticleId" );
         $this->assertEquals( "someArticleId", $oArticle->getProductId() );
-    }
-
-    /**
-     * Test set long description.
-     *
-     * @return null
-     */
-    public function testsetOxLongDesc()
-    {
-        $oArticle = $this->getMock( 'oxarticle', array( '_addField' ) );
-        $oArticle->expects( $this->once() )->method( '_addField' );
-        $oArticle->oxarticles__oxid = 'addcalled';
-        $oArticle->oxarticles__oxlongdesc = 'asd';
-        $this->assertEquals( 'asd', $oArticle->oxarticles__oxlongdesc->value );
     }
 
 
@@ -966,7 +947,7 @@ class Unit_Core_oxarticleTest extends OxidTestCase
      */
     public function testPriceAfterGlobalDiscountApplied()
     {
-        oxDiscountList::getInstance()->forceReload();
+        oxRegistry::get("oxDiscountList")->forceReload();
 
         // creating discount for test
         $oDiscount = new oxdiscount();
@@ -1133,13 +1114,13 @@ class Unit_Core_oxarticleTest extends OxidTestCase
         $oP2A = new oxbase();
         $oP2A->setId( '_test_1' );
         $oP2A->init( 'oxprice2article' );
-        $oP2A->oxprice2article__oxaddabs  = new oxField( '5' );
+        $oP2A->oxprice2article__oxaddabs  = new oxField( '6' );
         $oAmPriceList[$oP2A->getId()] = $oP2A;
 
         $oP2A = new oxbase();
         $oP2A->setId( '_test_2' );
         $oP2A->init( 'oxprice2article' );
-        $oP2A->oxprice2article__oxaddperc = new oxField( '5' );
+        $oP2A->oxprice2article__oxaddperc = new oxField( '7' );
         $oAmPriceList[$oP2A->getId()] = $oP2A;
 
         $oArticle = new oxArticle();
@@ -1149,12 +1130,14 @@ class Unit_Core_oxarticleTest extends OxidTestCase
         $oAmPriceList = $oArticle->UNITfillAmountPriceList( $oAmPriceList );
 
         $oP2A = reset( $oAmPriceList );
-        $this->assertEquals( oxLang::getInstance()->formatCurrency( 5 / ( 1 + 19 / 100 ) ), $oP2A->fnetprice );
-        $this->assertEquals( oxLang::getInstance()->formatCurrency( 5 ), $oP2A->fbrutprice );
+        //$this->assertEquals( oxLang::getInstance()->formatCurrency( 5 ), $oP2A->oxprice2article__oxaddabs->value );
+        //$this->assertEquals( oxLang::getInstance()->formatCurrency( 5 / ( 1 + 19 / 100 ) ), $oP2A->fnetprice );
+        $this->assertEquals( oxLang::getInstance()->formatCurrency( 6 ), $oP2A->fbrutprice );
 
         $oP2A = next( $oAmPriceList );
-        $dPrice = oxUtils::getInstance()->fRound($dArticlePrice - $dArticlePrice / 100 * 5 ); 
-        $this->assertEquals( oxLang::getInstance()->formatCurrency( $dPrice / ( 1 + 19 / 100 ) ), $oP2A->fnetprice );
+        $dPrice = oxUtils::getInstance()->fRound($dArticlePrice - $dArticlePrice / 100 * 7 );
+        //$this->assertEquals( oxLang::getInstance()->formatCurrency( $dPrice), $oP2A->oxprice2article__oxaddabs->value );
+        //$this->assertEquals( oxLang::getInstance()->formatCurrency( $dPrice / ( 1 + 19 / 100 ) ), $oP2A->fnetprice );
         $this->assertEquals( oxLang::getInstance()->formatCurrency( $dPrice ), $oP2A->fbrutprice );
     }
 
@@ -1184,7 +1167,7 @@ class Unit_Core_oxarticleTest extends OxidTestCase
 
         $oArticle = $this->getMock( 'oxarticle', array( '_applyVAT' )/*, array(), '', false*/ );
         // one for main, two for am prices
-        $oArticle->expects( $this->exactly(2) )->method( '_applyVAT' );
+        $oArticle->expects( $this->exactly(1) )->method( '_applyVAT' );
         $oArticle->getConfig()->setConfigParam( 'bl_perfCalcVatOnlyForBasketOrder', 0 );
         $oArticle->load( '1126' );
 
@@ -1221,11 +1204,13 @@ class Unit_Core_oxarticleTest extends OxidTestCase
         $oAmPriceList = $oArticle->UNITfillAmountPriceList( $oAmPriceList );
 
         $oP2A = reset( $oAmPriceList );
-        $this->assertEquals( oxLang::getInstance()->formatCurrency( 5 ), $oP2A->fnetprice );
+        //$this->assertEquals( oxLang::getInstance()->formatCurrency( 5 ), $oP2A->oxprice2article__oxaddabs->value );
+        //$this->assertEquals( oxLang::getInstance()->formatCurrency( 5 ), $oP2A->fnetprice );
         $this->assertEquals( oxLang::getInstance()->formatCurrency( 5 ), $oP2A->fbrutprice );
 
         $oP2A = next( $oAmPriceList );
-        $this->assertEquals( oxLang::getInstance()->formatCurrency( $dArticlePrice - $dArticlePrice / 100 * 5 ), $oP2A->fnetprice );
+        //$this->assertEquals( oxLang::getInstance()->formatCurrency( $dArticlePrice - $dArticlePrice / 100 * 5 ), $oP2A->oxprice2article__oxaddabs->value );
+        //$this->assertEquals( oxLang::getInstance()->formatCurrency( $dArticlePrice - $dArticlePrice / 100 * 5 ), $oP2A->fnetprice );
         $this->assertEquals( oxLang::getInstance()->formatCurrency( $dArticlePrice - $dArticlePrice / 100 * 5 ), $oP2A->fbrutprice );
     }
 
@@ -1267,12 +1252,14 @@ class Unit_Core_oxarticleTest extends OxidTestCase
         $oAmPriceList = $oArticle->UNITfillAmountPriceList( $oAmPriceList );
 
         $oP2A = reset( $oAmPriceList );
-        $this->assertEquals( oxLang::getInstance()->formatCurrency( $dArticlePrice - $dArticlePrice / 100 * 10 ), $oP2A->fnetprice );
+        //$this->assertEquals( oxLang::getInstance()->formatCurrency( $dArticlePrice - $dArticlePrice / 100 * 10 ), $oP2A->oxprice2article__oxaddabs->value );
+        //$this->assertEquals( oxLang::getInstance()->formatCurrency( $dArticlePrice - $dArticlePrice / 100 * 10 ), $oP2A->fnetprice );
         $this->assertEquals( oxLang::getInstance()->formatCurrency( $dArticlePrice - $dArticlePrice / 100 * 10 ), $oP2A->fbrutprice );
 
 
         $oP2A = next( $oAmPriceList );
-        $this->assertEquals( oxLang::getInstance()->formatCurrency( $dArticlePrice - $dArticlePrice / 100 * 5 ), $oP2A->fnetprice );
+        //$this->assertEquals( oxLang::getInstance()->formatCurrency( $dArticlePrice - $dArticlePrice / 100 * 5 ), $oP2A->oxprice2article__oxaddabs->value );
+        //$this->assertEquals( oxLang::getInstance()->formatCurrency( $dArticlePrice - $dArticlePrice / 100 * 5 ), $oP2A->fnetprice );
         $this->assertEquals( oxLang::getInstance()->formatCurrency( $dArticlePrice - $dArticlePrice / 100 * 5 ), $oP2A->fbrutprice );
     }
 
@@ -1314,11 +1301,13 @@ class Unit_Core_oxarticleTest extends OxidTestCase
         $oAmPriceList = $oArticle->UNITfillAmountPriceList( $oAmPriceList );
 
         $oP2A = reset( $oAmPriceList );
-        $this->assertEquals( oxLang::getInstance()->formatCurrency( $dArticlePrice - $dArticlePrice / 100 * 5 ), $oP2A->fnetprice );
+        //$this->assertEquals( oxLang::getInstance()->formatCurrency( $dArticlePrice - $dArticlePrice / 100 * 5 ), $oP2A->oxprice2article__oxaddabs->value );
+        //$this->assertEquals( oxLang::getInstance()->formatCurrency( $dArticlePrice - $dArticlePrice / 100 * 5 ), $oP2A->fnetprice );
         $this->assertEquals( oxLang::getInstance()->formatCurrency( $dArticlePrice - $dArticlePrice / 100 * 5 ), $oP2A->fbrutprice );
 
         $oP2A = next( $oAmPriceList );
-        $this->assertEquals( oxLang::getInstance()->formatCurrency( $dArticlePrice - $dArticlePrice / 100 * 10 ), $oP2A->fnetprice );
+        //$this->assertEquals( oxLang::getInstance()->formatCurrency( $dArticlePrice - $dArticlePrice / 100 * 10 ), $oP2A->oxprice2article__oxaddabs->value );
+        //$this->assertEquals( oxLang::getInstance()->formatCurrency( $dArticlePrice - $dArticlePrice / 100 * 10 ), $oP2A->fnetprice );
         $this->assertEquals( oxLang::getInstance()->formatCurrency( $dArticlePrice - $dArticlePrice / 100 * 10 ), $oP2A->fbrutprice );
     }
 
@@ -1411,20 +1400,6 @@ class Unit_Core_oxarticleTest extends OxidTestCase
         oxSession::setVar( 'persparam', $aParam);
         $this->oArticle->UNITassignPersistentParam();
         $this->assertEquals('test1', $this->oArticle->getPersParams());
-    }
-
-    /**
-     * Test get searchable fields.
-     *
-     * @return null
-     */
-    public function testGetSearchableFields()
-    {
-        $this->oArticle->UNITaddField("oxblfixedprice", 1);
-        $this->oArticle->UNITaddField("oxtitle", 1);
-        $aFields = $this->oArticle->getSearchableFields();
-        $this->assertTrue(in_array( 'oxtitle', $aFields));
-        $this->assertFalse(in_array( 'oxblfixedprice', $aFields));
     }
 
     /**
@@ -2335,7 +2310,8 @@ class Unit_Core_oxarticleTest extends OxidTestCase
         $this->oArticle2->oxarticles__oxstockflag = new oxField( 3, oxField::T_RAW );
         $this->oArticle2->save();
 
-        $oParent = new oxarticle();
+        $oParent = new oxArticle();
+
         $oParent->load( $this->oArticle2->oxarticles__oxparentid->value );
         $oVarList = $oParent->getVariants( false );
 
@@ -2536,7 +2512,6 @@ class Unit_Core_oxarticleTest extends OxidTestCase
     {
         $sVendId = '68342e2955d7401e6.18967838';
 
-        modConfig::getInstance()->setConfigParam( 'bl_perfLoadVendorTree', false );
         $oArticle = $this->getMock( 'oxarticle', array( 'getVendorId' ) );
         $oArticle->expects( $this->any() )->method( 'getVendorId')->will( $this->returnValue( false ) );
         $oArticle->oxarticles__oxvendorid = new oxField( $sVendId );
@@ -2995,8 +2970,8 @@ class Unit_Core_oxarticleTest extends OxidTestCase
         $oCategory->oxcategories__oxskipdiscounts = new oxField('1', oxField::T_RAW);
         $oCategory->save();
 
-        oxDiscountList::getInstance()->forceReload();
-        $this->assertTrue( oxDiscountList::getInstance()->hasSkipDiscountCategories() );
+        oxRegistry::get("oxDiscountList")->forceReload();
+        $this->assertTrue( oxRegistry::get("oxDiscountList")->hasSkipDiscountCategories() );
 
         // assigning article to category
         $oArt2Cat = oxNew( "oxbase" );
@@ -3039,8 +3014,8 @@ class Unit_Core_oxarticleTest extends OxidTestCase
             $oCategory->oxcategories__oxskipdiscounts = new oxField('1', oxField::T_RAW);
             $oCategory->save();
 
-            oxDiscountList::getInstance()->forceReload();
-            $this->assertTrue( oxDiscountList::getInstance()->hasSkipDiscountCategories(), 'we have skip dicounts' );
+            oxRegistry::get("oxDiscountList")->forceReload();
+            $this->assertTrue( oxRegistry::get("oxDiscountList")->hasSkipDiscountCategories(), 'we have skip dicounts' );
 
             // assigning article to category
             $oArt2Cat = oxNew( "oxbase" );
@@ -3254,7 +3229,10 @@ class Unit_Core_oxarticleTest extends OxidTestCase
         $aDiscounts = array($oDiscount);
         $oPrice = oxNew( 'oxPrice' );
         $oPrice->setPrice(123);
-        $this->oArticle->UNITapplyDiscounts( $oPrice, $aDiscounts);
+
+        $oDiscountList = new oxDiscountList();
+        $oDiscountList->applyDiscounts( $oPrice, $aDiscounts );
+
         $this->assertEquals( 110, $oPrice->getBruttoPrice());
     }
 
@@ -3265,7 +3243,7 @@ class Unit_Core_oxarticleTest extends OxidTestCase
      */
     public function testApplyDiscountsForVariant()
     {
-        oxDiscountList::getInstance()->forceReload();
+        oxRegistry::get("oxDiscountList")->forceReload();
 
         $oDiscount = oxNew('oxDiscount');
         $oDiscount->setId("_testDiscount");
@@ -3357,7 +3335,7 @@ class Unit_Core_oxarticleTest extends OxidTestCase
      */
     public function testGetBasketPriceWithDiscount()
     {
-        oxDiscountList::getInstance()->forceReload();
+        oxRegistry::get("oxDiscountList")->forceReload();
         $oArticle = $this->getMock( 'oxarticle', array( 'getBasePrice', '_applyVAT', 'skipDiscounts' ) );
         $oArticle->expects( $this->any() )->method( 'getBasePrice')->will( $this->returnValue( 90 ) );
         $oArticle->expects( $this->any() )->method( '_applyVAT');
@@ -3373,7 +3351,7 @@ class Unit_Core_oxarticleTest extends OxidTestCase
      */
     public function testGetBasketPriceWithTheSameDiscount()
     {
-        oxDiscountList::getInstance()->forceReload();
+        oxRegistry::get("oxDiscountList")->forceReload();
         $oArticle = $this->getMock( 'oxarticle', array( 'getBasePrice', '_applyVAT', 'skipDiscounts' ) );
         $oArticle->expects( $this->any() )->method( 'getBasePrice')->will( $this->returnValue( 90 ) );
         $oArticle->expects( $this->any() )->method( '_applyVAT');
@@ -3590,7 +3568,7 @@ class Unit_Core_oxarticleTest extends OxidTestCase
             $sQ = 'insert into oxselectlist (oxid, oxshopid, oxtitle, oxident, oxvaldesc) values ("oxsellisttest", "'.$sShopId.'", "oxsellisttest", "oxsellisttest", "'.$sVal.'")';
         $myDB->Execute( $sQ );
 
-        $sQ = 'insert into oxobject2selectlist values ("oxsellisttest", "1651", "oxsellisttest", 1) ';
+        $sQ = 'insert into oxobject2selectlist (oxid, oxobjectid, oxselnid, oxsort) values ("oxsellisttest", "1651", "oxsellisttest", 1) ';
         $myDB->Execute( $sQ );
 
         modConfig::getInstance()->setConfigParam( 'bl_perfLoadSelectLists', true );
@@ -3781,20 +3759,6 @@ class Unit_Core_oxarticleTest extends OxidTestCase
         $this->oArticle->oxarticles__oxtitle = new oxField("newTitle", oxField::T_RAW);
         $this->oArticle->save();
         $this->assertEquals( "newTitle", oxDb::getDB()->getOne("select oxtitle from oxarticles where oxid = '_testArt'") );
-    }
-
-    /**
-     * Test save if picture folder is removed.
-     *
-     * FS#2580
-     *
-     * @return null
-     */
-    public function testSaveIfRemovedFoldersForPics()
-    {
-        $this->oArticle->oxarticles__oxpic1  = new oxField("http:/shopurl/p1/pic.jpg", oxField::T_RAW);
-        $this->oArticle->save();
-        $this->assertEquals( "pic.jpg", oxDb::getDB()->getOne("select oxpic1 from oxarticles where oxid = '_testArt'") );
     }
 
     /**
@@ -4314,11 +4278,11 @@ class Unit_Core_oxarticleTest extends OxidTestCase
         oxDb::getDb()->execute("insert into oxartextends (oxid, oxlongdesc) values ( '_testArt', 'test &amp;')");
         $oArticle = new oxArticle();
         $oArticle->load( '_testArt' );
-        $this->assertEquals( 'test &amp;', $oArticle->getArticleLongDesc()->value);
+        $this->assertEquals( 'test &amp;', $oArticle->getLongDescription()->value);
 
         $oArticleVar = new oxArticle();
         $oArticleVar->load( '_testVar' );
-        $this->assertEquals( 'test &amp;', $oArticleVar->getArticleLongDesc()->value );
+        $this->assertEquals( 'test &amp;', $oArticleVar->getLongDescription()->value );
 
     }
 
@@ -4472,6 +4436,36 @@ class Unit_Core_oxarticleTest extends OxidTestCase
     }
 
     /**
+     * Test get displayable in basket/order attributes, when all are not dispayable.
+     *
+     * @return null
+     */
+    public function testGetAttributesDisplayableInBasket()
+    {
+        $sSelect = "update oxattribute set oxdisplayinbasket = 1 where oxid = '8a142c3f0b9527634.96987022' ";
+        $rs = oxDb::getDB()->execute($sSelect);
+
+        $oArticle = new oxarticle();
+        $oArticle->load('1672');
+        $aAttrList = $oArticle->getAttributesDisplayableInBasket();
+        $sAttribValue = $aAttrList['8a142c3f0c0baa3f4.54955953']->oxattribute__oxvalue->rawValue;
+        $this->assertEquals( '25 cm', $sAttribValue );
+    }
+
+    /**
+     * Test get displayable in basket/order attributes, when all are not dispayable.
+     *
+     * @return null
+     */
+    public function testGetAttributesDisplayableInBasketNoAttributes()
+    {
+        $oArticle = new oxarticle();
+        $oArticle->load('1672');
+        $aAttrList = $oArticle->getAttributesDisplayableInBasket();
+        $this->assertEquals( 0, count( $aAttrList ) );
+    }
+
+    /**
      * Test teg pric "from" prefix.
      *
      * @return null
@@ -4479,7 +4473,11 @@ class Unit_Core_oxarticleTest extends OxidTestCase
     public function testGetPriceFromPrefix()
     {
         $oArticle = new _oxArticle();
+
         $this->assertEquals('', $oArticle->getPriceFromPrefix());
+
+        $oArticle->oxarticles__oxvarminprice = new oxField(5);
+        $oArticle->oxarticles__oxprice = new oxField(10);
 
         $oArticle->setVar( 'blIsRangePrice', true);
         $sPricePrefics = oxLang::getInstance()->translateString('priceFrom').' ';
@@ -4728,7 +4726,6 @@ class Unit_Core_oxarticleTest extends OxidTestCase
         $oArticle->oxarticles__oxunitname = new oxField('l', oxField::T_RAW);
         $oArticle->UNITassignPrices();
         $this->assertEquals( 10, $oArticle->getPrice()->getBruttoPrice());
-        $this->assertEquals( '2,00', $oArticle->_fPricePerUnit);
     }
 
     /**
@@ -4745,32 +4742,6 @@ class Unit_Core_oxarticleTest extends OxidTestCase
         $this->assertEquals( $myConfig->getPictureDir(false), $this->oArticle->dabsimagedir);
         $this->assertEquals( $myConfig->getPictureUrl( null, false, false, null, 1), $this->oArticle->nossl_dimagedir);
         $this->assertEquals( $myConfig->getPictureUrl( null, false, true, null ), $this->oArticle->ssl_dimagedir);
-    }
-
-    /**
-     * Test assign attributes.
-     *
-     * @return null
-     */
-    public function testAssignAttributes()
-    {
-        modConfig::getInstance()->setConfigParam( 'bl_perfLoadAttributes', true);
-        $oArticle = $this->getMock( 'oxarticle', array( 'getAttributes') );
-        $oArticle->expects( $this->once() )->method( 'getAttributes');
-        $oArticle->UNITassignAttributes();
-    }
-
-    /**
-     * Test assign attributes when loading is disabled in config.
-     *
-     * @return null
-     */
-    public function testAssignAttributesPerformance()
-    {
-        modConfig::getInstance()->setConfigParam( 'bl_perfLoadAttributes', false);
-        $oArticle = $this->getMock( 'oxarticle', array( 'getAttributes') );
-        $oArticle->expects( $this->never() )->method( 'getAttributes');
-        $oArticle->UNITassignAttributes();
     }
 
 
@@ -4950,115 +4921,7 @@ class Unit_Core_oxarticleTest extends OxidTestCase
         $oArticle->oxarticles__oxvarminprice = new oxField(9, oxField::T_RAW);
         $oArticle->UNITapplyRangePrice();
         $this->assertTrue( $oArticle->_blIsRangePrice);
-        $this->assertEquals( 10.71, $oArticle->getPrice()->getBruttoPrice());
-    }
-
-    /**
-     * Testing apply basket discounts.
-     *
-     * @return null
-     */
-    public function testApplyBasketDiscounts()
-    {
-        $oDiscount = oxNew( 'oxDiscount' );
-        $oDiscount->setId( '_testDiscountId' );
-        $oDiscount->oxdiscount__oxtitle = new oxField('testDiscountTitle', oxField::T_RAW);
-        $oDiscount->oxdiscount__oxaddsum = new oxField(5, oxField::T_RAW);
-        $oDiscount->oxdiscount__oxaddsumtype = new oxField('abs', oxField::T_RAW);
-        $aDiscounts[] = $oDiscount;
-
-        $oPrice = oxNew( 'oxPrice' );
-        $oPrice->setPrice( 25 );
-
-        $oArticle = $this->getProxyClass( "oxArticle" );
-        $aResult = $oArticle->applyBasketDiscounts( $oPrice, $aDiscounts );
-
-        $oResDiscount = reset( $aResult );
-        $aResDiscountKeys = array_keys( $aResult );
-
-        $this->assertEquals( 1, count($oResDiscount) );
-        $this->assertEquals( '_testDiscountId', $aResDiscountKeys[0] );
-        $this->assertEquals( '_testDiscountId', $oResDiscount->sOXID );
-        $this->assertEquals( 'testDiscountTitle', $oResDiscount->sDiscount );
-        $this->assertEquals( 5, $oResDiscount->dDiscount );
-        $this->assertEquals( 20, $oPrice->getBruttoPrice());
-    }
-
-    /**
-     * Testing apply basket discounts.
-     *
-     * @return null
-     */
-    public function testApplyBasketDiscountsWithAmount()
-    {
-        $oDiscount = oxNew( 'oxDiscount' );
-        $oDiscount->setId( '_testDiscountId' );
-        $oDiscount->oxdiscount__oxtitle = new oxField('testDiscountTitle', oxField::T_RAW);
-        $oDiscount->oxdiscount__oxaddsumtype = new oxField('%', oxField::T_RAW);
-        $oDiscount->oxdiscount__oxaddsum = new oxField(5, oxField::T_RAW);
-        $aDiscounts[] = $oDiscount;
-
-        $oPrice = oxNew( 'oxPrice' );
-        $oPrice->setPrice( 25 );
-
-        $oArticle = $this->getProxyClass( "oxArticle" );
-        $aResult = $oArticle->applyBasketDiscounts( $oPrice, $aDiscounts, 2 );
-
-        $oResDiscount = reset( $aResult );
-        $aResDiscountKeys = array_keys( $aResult );
-
-        $this->assertEquals( 1, count($oResDiscount) );
-        $this->assertEquals( '_testDiscountId', $aResDiscountKeys[0] );
-        $this->assertEquals( '_testDiscountId', $oResDiscount->sOXID );
-        $this->assertEquals( 'testDiscountTitle', $oResDiscount->sDiscount );
-        $this->assertEquals( 2.5, $oResDiscount->dDiscount );
-        $this->assertEquals( 23.75, $oPrice->getBruttoPrice());
-    }
-
-    /**
-     * Testing applaying basket discounts does not affects price parameter.
-     *
-     * @return null
-     */
-    public function testApplyBasketDiscountsDoesNotAffectsPriceParam()
-    {
-        $oDiscount = oxNew( 'oxDiscount' );
-        $oDiscount->setId( '_testDiscountId' );
-        $oDiscount->oxdiscount__oxtitle = new oxField('testDiscountTitle', oxField::T_RAW);
-        $oDiscount->oxdiscount__oxaddsumtype = new oxField('%', oxField::T_RAW);
-        $oDiscount->oxdiscount__oxaddsum = new oxField(5, oxField::T_RAW);
-        $aDiscounts[] = $oDiscount;
-
-        $oPrice = oxNew( 'oxPrice' );
-        $oPrice->setPrice( 25 );
-
-        $oArticle = $this->getProxyClass( "oxArticle" );
-        $oArticle->applyBasketDiscounts( $oPrice, $aDiscounts );
-
-        $this->assertEquals( 23.75, $oPrice->getBruttoPrice() );
-    }
-
-    /**
-     * Testing applaying basket discounts (abs with amount).
-     *
-     * @return null
-     */
-    public function testApplyBasketDiscountsAbsWithAmount()
-    {
-        $oPrice = new oxPrice();
-        $oPrice->setPrice( 100 );
-
-        $oDiscount = new oxDiscount();
-        $oDiscount->setId( 'xxx' );
-        $oDiscount->oxdiscount__oxaddsumtype = new oxField('abs', oxField::T_RAW);
-        $oDiscount->oxdiscount__oxaddsum = new oxField(5, oxField::T_RAW);
-
-        $oArticle = new oxArticle();
-        $aUsedDiscounts = $oArticle->applyBasketDiscounts( $oPrice, array( $oDiscount ), 5 );
-
-        $this->assertTrue( isset( $aUsedDiscounts['xxx'] ) );
-        $this->assertEquals( 25, $aUsedDiscounts['xxx']->dDiscount );
-        $this->assertEquals( 95, $oPrice->getBruttoPrice());
+        $this->assertEquals( 10.71, $oArticle->getPrice()->getPrice());
     }
 
 
@@ -5200,113 +5063,6 @@ class Unit_Core_oxarticleTest extends OxidTestCase
         $this->assertFalse($oArticle->isBuyable());
     }
 
-    /**
-     * Test "from" price loading.
-     *
-     * Ddo not load "from" price for simple articles.
-     *
-     * @return null
-     */
-    public function testAbPriceLoadingNormal()
-    {
-        $oArticle = new _oxArticle();
-        $oArticle->load(1849);
-        $this->assertFalse(strpos($oArticle->getFPrice(), "ab"));
-
-    }
-
-    /**
-     * Test "from" price loading.
-     *
-     * DO NOT skip "from" price for parent articles
-     *
-     * @return null
-     */
-    public function testAbPriceLoadingNonBuayableParentDefault()
-    {
-        modConfig::getInstance()->setConfigParam( 'blVariantParentBuyable', false);
-
-            $sParentArticleId = 2077;
-            $sOxid = oxDb::getDb()->getOne("select oxid from oxarticles where oxparentid = '$sParentArticleId'");
-            $oVariant = new oxarticle();
-            $oVariant->load( $sOxid );
-            $oVariant->oxarticles__oxprice = new oxField($oVariant->oxarticles__oxprice->value + 1, oxField::T_RAW);
-            $oVariant->setId( '_testVariantFor'.$sParentArticleId );
-            $oVariant->save();
-
-        $oArticle = new _oxArticle();
-        //$oArticle->setSkipAbPrice(true);
-        $oArticle->load($sParentArticleId);
-        $this->assertTrue((bool)strpos($oArticle->getFPrice(), "ab"));
-    }
-
-    /**
-     * Test "from" price loading.
-     *
-     * Still DO NOT skip "from" price for parent articles
-     *
-     * @return null
-     */
-    public function testAbPriceLoadingNonBuayableParentForceSkip()
-    {
-        modConfig::getInstance()->setConfigParam( 'blVariantParentBuyable', false);
-
-            $sParentArticleId = 2077;
-            $sOxid = oxDb::getDb()->getOne("select oxid from oxarticles where oxparentid = '$sParentArticleId'");
-            $oVariant = new oxarticle();
-            $oVariant->load( $sOxid );
-            $oVariant->oxarticles__oxprice = new oxField($oVariant->oxarticles__oxprice->value + 1, oxField::T_RAW);
-            $oVariant->setId( '_testVariantFor'.$sParentArticleId );
-            $oVariant->save();
-
-        $oArticle = new _oxArticle();
-        $oArticle->setSkipAbPrice(false);
-        $oArticle->load($sParentArticleId);
-        $this->assertTrue((bool)strpos($oArticle->getFPrice(), "ab"));
-    }
-
-    /**
-     * Test "from" price loading.
-     *
-     * DO NOT skip "from" price for buayble parent articles.
-     *
-     * @return null
-     */
-    public function testAbPriceLoadingBuayableParentDefault()
-    {
-        modConfig::getInstance()->setConfigParam( 'blVariantParentBuyable', true);
-
-            $sParentArticleId = 2077;
-            $sOxid = oxDb::getDb()->getOne("select oxid from oxarticles where oxparentid = '$sParentArticleId'");
-            $oVariant = new oxarticle();
-            $oVariant->load( $sOxid );
-            $oVariant->oxarticles__oxprice = new oxField($oVariant->oxarticles__oxprice->value + 1, oxField::T_RAW);
-            $oVariant->setId( '_testVariantFor'.$sParentArticleId );
-            $oVariant->save();
-
-        $oArticle = new _oxArticle();
-        $oArticle->load($sParentArticleId);
-        $this->assertFalse( strpos( $oArticle->getFPrice(), "ab" ) );
-    }
-
-    /**
-     * Test "from" price loading.
-     *
-     * But DO skip "from" price for buayble parent articles when forced.
-     *
-     * @return null
-     */
-    public function testAbPriceLoadingBuayableParentForcedSkip()
-    {
-        modConfig::getInstance()->setConfigParam( 'blVariantParentBuyable', true);
-
-            $sParentArticleId = 2077;
-
-        $oArticle = new _oxArticle();
-        $oArticle->setSkipAbPrice(true);
-        $oArticle->load($sParentArticleId);
-        $this->assertFalse((bool)strpos($oArticle->getFPrice(), "ab"));
-    }
 
     /**
      * Testing standard link getter
@@ -5579,13 +5335,13 @@ class Unit_Core_oxarticleTest extends OxidTestCase
             $sQ = 'insert into oxselectlist (oxid, oxshopid, oxtitle, oxident, oxvaldesc) values ("oxsellisttest", "'.$sShopId.'", "oxsellisttest", "oxsellisttest", "'.$sVal.'")';
         $myDB->Execute( $sQ );
 
-        $sQ = 'insert into oxobject2selectlist values ("oxsellisttest", "1651", "oxsellisttest", 1) ';
+        $sQ = 'insert into oxobject2selectlist (oxid, oxobjectid, oxselnid, oxsort) values ("oxsellisttest", "1651", "oxsellisttest", 1) ';
         $myDB->Execute( $sQ );
 
         modConfig::getInstance()->setConfigParam( 'bl_perfLoadSelectLists', true );
         modConfig::getInstance()->setConfigParam( 'bl_perfUseSelectlistPrice', true );
 
-        $oObject = new OxstdClass();
+        $oObject = new stdClass();
         $oObject->price  = '-5.99';
         $oObject->fprice = '-5,99';
         $oObject->priceUnit = 'abs';
@@ -6124,18 +5880,6 @@ class Unit_Core_oxarticleTest extends OxidTestCase
     }
 
     /**
-     * Test get variant list.
-     *
-     * @return null
-     */
-    public function testGetVariantList()
-    {
-        $oArticle = $this->getMock( "oxarticle", array('getVariants') );
-        $oArticle->expects($this->once())->method('getVariants')->will($this->returnValue( 'variantlist'));
-        $this->assertEquals( 'variantlist', $oArticle->getVariantList() );
-    }
-
-    /**
      * Test get picture url.
      *
      * @return null
@@ -6144,7 +5888,8 @@ class Unit_Core_oxarticleTest extends OxidTestCase
     {
         $oPH = $this->getMock( 'oxPictureHandler', array( 'getPicUrl' ) );
         $oPH->expects( $this->once() )->method( 'getPicUrl' )->with( $this->equalTo( 'product/1/' ), $this->equalTo( 'nopic.jpg' ) )->will( $this->returnValue( 'testPic1Url' ) );
-        modInstances::addMod('oxPictureHandler', $oPH);
+
+        oxTestModules::addModuleObject( 'oxPictureHandler', $oPH );
 
         $oArticle = new oxarticle();
 
@@ -6543,14 +6288,19 @@ class Unit_Core_oxarticleTest extends OxidTestCase
     public function testLongDescSavingIfMultilingualIsFalse()
     {
         // insert article
-        $oArticle = oxNew("oxarticle");
-        $oArticle->setEnableMultilang(false);
-        $oArticle->setId("_testArt");
-        $oArticle->oxarticles__oxlongdesc = new oxField('[de] lalaal&!<b><', oxField::T_RAW);
+        $oArticle = oxNew( "oxarticle" );
+        $oArticle->setEnableMultilang( false );
+        $oArticle->setId( "_testArt" );
+
+        $oArticle->setArticleLongDesc( '[de] lalaal&!<b><' );
+        $this->assertEquals( "[de] lalaal&!<b><", $oArticle->getLongDescription()->value );
+
+        // if _blEmployMultilanguage is false it is possible to set more languages only over fields. Not over setter/getter.
         $oArticle->oxarticles__oxlongdesc_1 = new oxField('[en] lalaal&!<b><', oxField::T_RAW);
-        $this->assertEquals( "[de] lalaal&!<b><",$oArticle->oxarticles__oxlongdesc->value);
-        $this->assertEquals( "[en] lalaal&!<b><",$oArticle->oxarticles__oxlongdesc_1->value);
-        $oArticle->UNITsaveArtLongDesc();
+        $this->assertEquals( "[en] lalaal&!<b><", $oArticle->oxarticles__oxlongdesc_1->value);
+
+        $oArticle->setLanguage(0);
+        $oArticle->save();
 
         $this->assertEquals( "[de] lalaal&!<b><", oxDb::getDB()->getOne("select oxlongdesc from oxartextends where oxid = '_testArt'") );
         $this->assertEquals( "[en] lalaal&!<b><", oxDb::getDB()->getOne("select oxlongdesc_1 from oxartextends where oxid = '_testArt'") );
@@ -6567,8 +6317,8 @@ class Unit_Core_oxarticleTest extends OxidTestCase
         $oArticle = $this->getProxyClass( "oxarticle" );
         $oArticle->setNonPublicVar('_aSkipSaveFields', array("oxlongdesc"));
         $oArticle->setId("_testArt");
-        $oArticle->oxarticles__oxlongdesc = new oxField('[de] lalaal&!<b><', oxField::T_RAW);
-        $this->assertEquals( "[de] lalaal&!<b><",$oArticle->oxarticles__oxlongdesc->value);
+        $oArticle->setArticleLongDesc( '[de] lalaal&!<b><' );
+        $this->assertEquals( "[de] lalaal&!<b><", $oArticle->getLongDescription()->value );
         $oArticle->UNITsaveArtLongDesc();
 
         $this->assertEquals( "", oxDb::getDB()->getOne("select oxlongdesc from oxartextends where oxid = '_testArt'") );
@@ -7273,13 +7023,13 @@ class Unit_Core_oxarticleTest extends OxidTestCase
     public function testSetRating()
     {
         $oProduct = new oxArticle();
-        $oProduct->load( "1126" );
+        $oProduct->load( "_testArt" );
         $oProduct->setRatingAverage( 4 );
         $oProduct->setRatingCount( 13 );
         $oProduct->save();
 
         $oP = new oxArticle();
-        $oP->load( "1126" );
+        $oP->load( "_testArt" );
 
         $this->assertEquals( 4, $oP->oxarticles__oxrating->value );
         $this->assertEquals( 13, $oP->oxarticles__oxratingcnt->value );

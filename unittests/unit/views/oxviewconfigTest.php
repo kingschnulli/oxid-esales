@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxviewconfigTest.php 44704 2012-05-09 11:24:03Z linas.kukulskis $
+ * @version   SVN: $Id: oxviewconfigTest.php 48989 2012-08-24 10:46:46Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -46,8 +46,6 @@ class Unit_Views_oxviewConfigTest extends OxidTestCase
      */
     protected function tearDown()
     {
-        overrideGetShopBasePath(null);
-
 
         parent::tearDown();
     }
@@ -185,10 +183,8 @@ class Unit_Views_oxviewConfigTest extends OxidTestCase
      */
     public function testGetHelpPageLinkInactiveContents()
     {
-        modDB::getInstance()->addClassFunction( 'getOne', create_function('$x', 'return false;' ) );
-
-        $oViewConfig = $this->getMock( "oxviewconfig", array( "getActiveClassName", "getHelpLink" ) );
-        $oViewConfig->expects( $this->once() )->method( "getActiveClassName" )->will( $this->returnValue( "start" ) );
+        $oViewConfig = $this->getMock( "oxviewconfig", array( "getHelpLink", '_getHelpContentIdents' ) );
+        $oViewConfig->expects( $this->once() )->method( "_getHelpContentIdents" )->will( $this->returnValue( array("none") ) );
         $oViewConfig->expects( $this->once() )->method( "getHelpLink" );
         $oViewConfig->getHelpPageLink();
     }
@@ -392,14 +388,14 @@ class Unit_Views_oxviewConfigTest extends OxidTestCase
              ->will($this->returnValue('shopHomeUrl/'));
 
         $oVC = $this->getMock('oxviewconfig'
-            , array('getConfig', 'getActionClassName', 'getActCatId', 'getActTplName'
-            , 'getActArticleId', 'getActSearchParam', 'getActSearchTag', 'getActListType'));
+            , array('getConfig', 'getTopActionClassName', 'getActCatId', 'getActTplName', 'getActContentLoadId'
+            , 'getActArticleId', 'getActSearchParam', 'getActSearchTag', 'getActListType', 'getActRecommendationId'));
 
-        $oVC->expects($this->once())
+        $oVC->expects($this->any())
              ->method('getConfig')
              ->will($this->returnValue($oCfg));
         $oVC->expects($this->once())
-             ->method('getActionClassName')
+             ->method('getTopActionClassName')
              ->will($this->returnValue('actionclass'));
         $oVC->expects($this->once())
              ->method('getActCatId')
@@ -407,6 +403,9 @@ class Unit_Views_oxviewConfigTest extends OxidTestCase
         $oVC->expects($this->once())
              ->method('getActTplName')
              ->will($this->returnValue('tpl'));
+        $oVC->expects($this->once())
+             ->method('getActContentLoadId')
+             ->will($this->returnValue('oxloadid'));
         $oVC->expects($this->once())
              ->method('getActArticleId')
              ->will($this->returnValue('anid'));
@@ -417,10 +416,13 @@ class Unit_Views_oxviewConfigTest extends OxidTestCase
              ->method('getActSearchTag')
              ->will($this->returnValue('searchtag'));
         $oVC->expects($this->once())
+             ->method('getActRecommendationId')
+             ->will($this->returnValue('testrecomm'));
+        $oVC->expects($this->once())
              ->method('getActListType')
              ->will($this->returnValue('listtype'));
 
-        $this->assertEquals('shopHomeUrl/cl=actionclass&amp;cnid=catid&amp;anid=anid&amp;searchparam=searchparam&amp;searchtag=searchtag&amp;listtype=listtype&amp;fnc=logout&amp;tpl=tpl&amp;redirect=1', $oVC->getLogoutLink());
+        $this->assertEquals('shopHomeUrl/cl=actionclass&amp;cnid=catid&amp;anid=anid&amp;searchparam=searchparam&amp;searchtag=searchtag&amp;recommid=testrecomm&amp;listtype=listtype&amp;fnc=logout&amp;tpl=tpl&amp;oxloadid=oxloadid&amp;redirect=1', $oVC->getLogoutLink());
 
     }
 
@@ -442,6 +444,25 @@ class Unit_Views_oxviewConfigTest extends OxidTestCase
              ->method('getConfig')
              ->will($this->returnValue($oCfg));
         $this->assertEquals('lalala', $oVC->getActionClassName());
+    }
+
+    /**
+     * oxViewConfig::getTopActionClassName() test case
+     *
+     * @return null
+     */
+    public function testGetTopActionClassName()
+    {
+        $oView = $this->getMock( "oxView", array( "getClassName" ) );
+        $oView->expects( $this->once() )->method( "getClassName" )->will( $this->returnValue( "testViewClass" ) );
+
+        $oConfig = $this->getMock( "oxConfig", array( "getTopActiveView" ) );
+        $oConfig->expects( $this->once() )->method( "getTopActiveView" )->will( $this->returnValue( $oView ) );
+
+        $oViewConfig = $this->getMock( "oxViewConfig", array( "getConfig" ) );
+        $oViewConfig->expects( $this->once() )->method( "getConfig" )->will( $this->returnValue( $oConfig ) );
+
+        $this->assertEquals( "testViewClass", $oViewConfig->getTopActiveClassName() );
     }
 
     public function testGetShowBasketTimeoutWhenFunctionalityIsOnAndTimeLeft()
@@ -647,27 +668,27 @@ class Unit_Views_oxviewConfigTest extends OxidTestCase
      * @return null
      */
     public function testShowSelectListsInList()
-    {   
+    {
         modConfig::getInstance()->setConfigParam('bl_perfLoadSelectListsInAList', true);
-        
+
         $oVC = $this->getMock('oxviewconfig', array( 'showSelectLists' ));
         $oVC->expects( $this->once() )->method( 'showSelectLists' )->will( $this->returnValue( true ) );
         $this->assertTrue( $oVC->showSelectListsInList() );
     }
-    
+
     /**
      * Test case for oxViewConfig::showSelectListsInList()
      *
      * @return null
      */
     public function testShowSelectListsInListFalse()
-    {   
+    {
         $oCfg = new oxConfig();
         $oVC = $this->getMock('oxviewconfig', array( 'showSelectLists' ));
         $oVC->expects( $this->once() )->method( 'showSelectLists' )->will( $this->returnValue( false ) );
         $this->assertFalse( $oVC->showSelectListsInList() );
-    }    
-    
+    }
+
     /**
      * Test case for oxViewConfig::showSelectListsInList()
      *
@@ -676,7 +697,7 @@ class Unit_Views_oxviewConfigTest extends OxidTestCase
     public function testShowSelectListsInListDifferent()
     {
         modConfig::getInstance()->setConfigParam('bl_perfLoadSelectListsInAList', false);
-        
+
         $oVC = $this->getMock('oxviewconfig', array( 'showSelectLists' ));
         $oVC->expects( $this->once() )->method( 'showSelectLists' )->will( $this->returnValue( true ) );
         $this->assertFalse( $oVC->showSelectListsInList() );
@@ -833,4 +854,110 @@ class Unit_Views_oxviewConfigTest extends OxidTestCase
 
         $this->assertTrue( $oViewConfig->isAltImageServerConfigured() );
     }
+
+    /**
+     * oxViewConfig::getTopActiveClassName() test case
+     *
+     * @return null
+     */
+    public function testGetTopActiveClassName()
+    {
+        $oView = $this->getMock( "oxView", array( "getClassName" ) );
+        $oView->expects( $this->once() )->method( "getClassName" )->will( $this->returnValue( "testViewClass" ) );
+
+        $oConfig = $this->getMock( "oxConfig", array( "getTopActiveView" ) );
+        $oConfig->expects( $this->once() )->method( "getTopActiveView" )->will( $this->returnValue( $oView ) );
+
+        $oViewConfig = $this->getMock( "oxViewConfig", array( "getConfig" ) );
+        $oViewConfig->expects( $this->once() )->method( "getConfig" )->will( $this->returnValue( $oConfig ) );
+
+        $this->assertEquals( "testViewClass", $oViewConfig->getTopActiveClassName() );
+    }
+
+    public function testIsFunctionalityEnabled()
+    {
+        $oConfig = $this->getMock( "oxConfig", array( "getConfigParam" ) );
+        $oConfig->expects( $this->once() )->method( "getConfigParam" )->with( $this->equalTo( 'bl_showWishlist' ) )->will( $this->returnValue( "will" ) );
+
+        $oVieConfig = $this->getMock( "oxViewConfig", array( "getConfig" ) );
+        $oVieConfig->expects( $this->once() )->method( "getConfig" )->will( $this->returnValue( $oConfig ) );
+
+        $this->assertEquals( 'will', $oVieConfig->isFunctionalityEnabled( 'bl_showWishlist' ) );
+    }
+
+    /**
+     * oxViewconfig::getActTplName() test case
+     *
+     * @return null
+     */
+    public function testGetActTplName()
+    {
+        modConfig::setParameter( "tpl", 123 );
+
+        $oViewConf = new oxViewConfig();
+        $this->assertEquals( 123, $oViewConf->getActTplName() );
+    }
+
+    /**
+     * oxViewconfig::getActCurrency() test case
+     *
+     * @return null
+     */
+    public function testGetActCurrency()
+    {
+        $this->setRequestParam( "cur", 1 );
+
+        $oViewConf = new oxViewConfig();
+        $this->assertEquals( 1, $oViewConf->getActCurrency() );
+    }
+
+    /**
+     * oxViewconfig::getActContentLoadId() test case
+     *
+     * @return null
+     */
+    public function testGetActContentLoadId()
+    {
+        $this->setRequestParam( "oxloadid", 123 );
+
+        $oViewConf = new oxViewConfig();
+        $this->assertEquals( 123, $oViewConf->getActContentLoadId() );
+
+        $this->setRequestParam( "oxloadid", null );
+        $oViewConf->setViewConfigParam( 'oxloadid', 234 );
+        $this->assertNull( $oViewConf->getActContentLoadId() );
+    }
+
+    /**
+     * oxViewconfig::getActContentLoadId() test case
+     *
+     * @return null
+     */
+    public function testGetActContentLoadIdFromActView()
+    {
+        $oView = new content();
+        $oViewConf = $oView->getViewConfig();
+        $oViewConf->setViewConfigParam( 'oxloadid', 234 );
+
+        $oConfig = $this->getMock( "oxConfig", array( "getTopActiveView" ) );
+        $oConfig->expects( $this->any() )->method( "getTopActiveView" )->will( $this->returnValue( $oView ) );
+
+        $oViewConfig = $this->getMock( "oxViewConfig", array( "getConfig" ) );
+        $oViewConfig->expects( $this->any() )->method( "getConfig" )->will( $this->returnValue( $oConfig ) );
+        $this->assertEquals( 234, $oViewConfig->getActContentLoadId() );
+    }
+
+    /**
+     * oxViewconfig::getActRecommendationId() test case
+     *
+     * @return null
+     */
+    public function testGetActRecommendationId()
+    {
+        $this->setRequestParam( "recommid", 1 );
+
+        $oViewConf = new oxViewConfig();
+        $this->assertEquals( 1, $oViewConf->getActRecommendationId() );
+    }
+
 }

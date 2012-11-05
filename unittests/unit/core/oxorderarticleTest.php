@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxorderarticleTest.php 43558 2012-04-05 12:50:10Z vilma $
+ * @version   SVN: $Id: oxorderarticleTest.php 45866 2012-06-04 19:02:41Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -403,8 +403,8 @@ class Unit_Core_oxorderarticleTest extends OxidTestCase
         $oSelList->oxselectlist__oxvaldesc = new oxField('big!P!10__@@middle!P!10__@@small!P!10__@@', oxField::T_RAW);
         $oSelList->save();
 
-        $sQ1 = 'insert into oxobject2selectlist values ("_testO2SlId1", "1126", "_testSelListId1", 1); ';
-        $sQ2 = 'insert into oxobject2selectlist values ("_testO2SlId2", "1126", "_testSelListId2", 2); ';
+        $sQ1 = 'insert into oxobject2selectlist (OXID,OXOBJECTID,OXSELNID,OXSORT) values ("_testO2SlId1", "1126", "_testSelListId1", 1); ';
+        $sQ2 = 'insert into oxobject2selectlist (OXID,OXOBJECTID,OXSELNID,OXSORT) values ("_testO2SlId2", "1126", "_testSelListId2", 2); ';
         $myDB->Execute( $sQ1 );
         $myDB->Execute( $sQ2 );
 
@@ -439,8 +439,8 @@ class Unit_Core_oxorderarticleTest extends OxidTestCase
         $oSelList->oxselectlist__oxvaldesc = new oxField('big!P!10__@@middle!P!10__@@small!P!10__@@', oxField::T_RAW);
         $oSelList->save();
 
-        $sQ1 = 'insert into oxobject2selectlist values ("_testO2SlId3", "1126", "_testSelListId3", 1); ';
-        $sQ2 = 'insert into oxobject2selectlist values ("_testO2SlId4", "1126", "_testSelListId4", 2); ';
+        $sQ1 = 'insert into oxobject2selectlist (OXID,OXOBJECTID,OXSELNID,OXSORT) values ("_testO2SlId3", "1126", "_testSelListId3", 1); ';
+        $sQ2 = 'insert into oxobject2selectlist (OXID,OXOBJECTID,OXSELNID,OXSORT) values ("_testO2SlId4", "1126", "_testSelListId4", 2); ';
         $myDB->Execute( $sQ1 );
         $myDB->Execute( $sQ2 );
 

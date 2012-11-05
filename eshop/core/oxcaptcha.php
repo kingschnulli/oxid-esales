@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcaptcha.php 43712 2012-04-11 06:51:26Z linas.kukulskis $
+ * @version   SVN: $Id: oxcaptcha.php 48727 2012-08-16 09:09:02Z tomas $
  */
 
 /**
@@ -125,7 +125,7 @@ class oxCaptcha extends oxSuperCfg
     public function getImageUrl()
     {
         $sUrl = $this->getConfig()->getCoreUtilsURL() . "verificationimg.php?e_mac=";
-        $sUrl .= oxUtils::getInstance()->strMan( $this->getText() );
+        $sUrl .= oxRegistry::getUtils()->strMan( $this->getText() );
 
         return $sUrl;
     }

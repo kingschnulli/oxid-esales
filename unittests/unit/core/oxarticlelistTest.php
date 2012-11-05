@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticlelistTest.php 43613 2012-04-06 14:41:31Z linas.kukulskis $
+ * @version   SVN: $Id: oxarticlelistTest.php 50489 2012-10-15 09:02:17Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -37,7 +37,7 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
      */
     protected function tearDown()
     {
-        $myDB = oxDb::getDB();
+        $myDB = $this->getDb();
         $myDB->execute( 'update oxactions set oxactive="1"' );
         $myDB->execute( 'delete from oxaccessoire2article where oxarticlenid="_testArt" ' );
         $myDB->execute( 'delete from oxorderarticles where oxid="_testId" or oxid="_testId2"' );
@@ -118,7 +118,7 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
         $oArticle->oxarticles__oxremindamount = new oxField( 10, oxField::T_RAW );
         $oArticle->oxarticles__oxtitle        = new oxField( 'testArticle', oxField::T_RAW );
         $oArticle->oxarticles__oxartnum       = new oxField( '123456789', oxField::T_RAW );
-        $oArticle->oxarticles__oxshopid       = new oxField( oxConfig::getInstance()->getShopId(), oxField::T_RAW );
+        $oArticle->oxarticles__oxshopid       = new oxField( $this->getConfig()->getShopId(), oxField::T_RAW );
         $oArticle->oxarticles__oxprice        = new oxField( '256', oxField::T_RAW );
         $oArticle->save();
 
@@ -171,7 +171,7 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
         $sCatId = "testcatid";
         $aSessionFilter["'\"\"'"] = "'\"\"'";
 
-        $oDb = oxDb::getDb();
+        $oDb = $this->getDb();
 
         $sExpQ  = "select oc.oxobjectid as oxobjectid, count(*) as cnt from ";
         $sExpQ .= "(SELECT * FROM {$sO2CView} WHERE {$sO2CView}.oxcatnid ";
@@ -192,7 +192,7 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
     {
         $oArticle = new oxArticle();
         $oArticle->setId( "_testArticle" );
-        $oArticle->oxarticles__oxshopid = new oxField( oxConfig::getInstance()->getBaseShopId() );
+        $oArticle->oxarticles__oxshopid = new oxField( $this->getConfig()->getBaseShopId() );
         $oArticle->oxarticles__oxactive = new oxField( 1 );
         $oArticle->oxarticles__oxprice  = new oxField( 0 );
         $oArticle->save();
@@ -220,7 +220,7 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
                  WHERE $sArticleTable.oxid is not null
                  GROUP BY oxactionid";
 
-        $aTotalCnt = oxDb::getDb( oxDB::FETCH_MODE_ASSOC )->getAll( $sSql );
+        $aTotalCnt = $this->getDb(2)->getAll( $sSql );
 
         $oList = oxNew( "oxarticlelist");
 
@@ -241,7 +241,7 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
      */
     public function testLoadAktionArticlesIfAllNotActive()
     {
-        $myDB = oxDb::getDB();
+        $myDB = $this->getDb();
         $myDB->execute( 'update oxactions set oxactive=0' );
         $sArticleTable = getViewName('oxarticles');
 
@@ -250,11 +250,12 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
                  WHERE $sArticleTable.oxid is not null
                  GROUP BY oxactionid";
 
-        $aTotalCnt = oxDb::getDb( oxDB::FETCH_MODE_ASSOC )->getAll( $sSql );
+        $aTotalCnt = $this->getDb(2)->getAll( $sSql );
 
         $oList = oxNew( "oxarticlelist");
 
         foreach ( $aTotalCnt as $aData) {
+            $this->assertArrayHasKey( 'oxactionid', $aData );
             $oList->loadAktionArticles( $aData['oxactionid'] );
             $this->assertEquals( 0, $oList->count() );
             $oList->clear();
@@ -285,7 +286,7 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
      */
     public function testSetCustomSortingIfOtherLang()
     {
-        oxLang::getInstance()->setBaseLanguage( 1 );
+        $this->setLanguage( 1 );
         $oTestList = $this->getProxyClass('oxArticleList');
         $oTestList->setCustomSorting('oxtitle desc');
         $this->assertEquals('oxtitle desc', $oTestList->getNonPublicVar('_sCustomSorting'));
@@ -296,11 +297,11 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
 
 
     /**
-     * Test load aktion articles pe.
+     * Test load action articles pe.
      *
      * @return null
      */
-    public function testLoadAktionArticlesPE()
+    public function testLoadActionArticlesPE()
     {
 
         $oTest = $this->getProxyClass( 'oxArticleList' );
@@ -333,7 +334,7 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
      */
     public function testLoadArticleCrossSellLimit()
     {
-        modConfig::getInstance()->setConfigParam( 'iNrofCrossellArticles', 1 );
+        $this->setConfigParam( 'iNrofCrossellArticles', 1 );
         $oTest = $this->getProxyClass('oxArticleList');
         $oTest->loadArticleCrossSell("1849");
         $iCount = 1;
@@ -347,7 +348,7 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
      */
     public function testLoadArticleCrossSellNone()
     {
-        modConfig::getInstance()->setConfigParam( 'bl_perfLoadCrossselling', 0 );
+        $this->setConfigParam( 'bl_perfLoadCrossselling', 0 );
         $oTest = $this->getProxyClass('oxArticleList');
         $oTest->loadArticleCrossSell("1849");
         $this->assertEquals( 0, $oTest->count() );
@@ -360,8 +361,8 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
      */
     public function testLoadRecommArticles()
     {
-        $myDB = oxDb::getDB();
-        $sShopId = oxConfig::getInstance()->getShopId();
+        $myDB = $this->getDb();
+        $sShopId = $this->getConfig()->getShopId();
         // adding article to recommendlist
         $sQ = 'insert into oxrecommlists ( oxid, oxuserid, oxtitle, oxdesc, oxshopid ) values ( "testlist", "oxdefaultadmin", "oxtest", "oxtest", "'.$sShopId.'" ) ';
         $myDB->Execute( $sQ );
@@ -380,8 +381,8 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
      */
     public function testLoadRecommArticleIds()
     {
-        $myDB = oxDb::getDB();
-        $sShopId = oxConfig::getInstance()->getShopId();
+        $myDB = $this->getDb();
+        $sShopId = $this->getConfig()->getShopId();
         // adding article to recommendlist
         $sQ = 'insert into oxrecommlists ( oxid, oxuserid, oxtitle, oxdesc, oxshopid ) values ( "testlist", "oxdefaultadmin", "oxtest", "oxtest", "'.$sShopId.'" ) ';
         $myDB->Execute( $sQ );
@@ -402,7 +403,7 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
      */
     public function testLoadArticleBidirectCross()
     {
-        modConfig::getInstance()->setConfigParam( 'blBidirectCross', true );
+        $this->setConfigParam( 'blBidirectCross', true );
         $oTest = $this->getProxyClass('oxArticleList');
         $oTest->loadArticleCrossSell("1849");
         $this->assertEquals( count($oTest), 4 );
@@ -435,7 +436,7 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
      */
     public function testLoadArticleAccessoiresNone()
     {
-        modConfig::getInstance()->setConfigParam( 'bl_perfLoadAccessoires', 0 );
+        $this->setConfigParam( 'bl_perfLoadAccessoires', 0 );
         $oNewGroup = oxNew( "oxbase" );
         $oNewGroup->init( "oxaccessoire2article" );
         $oNewGroup->oxaccessoire2article__oxobjectid = new oxField("1651", oxField::T_RAW);
@@ -457,8 +458,8 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
     public function testGetCategorySelect()
     {
         $oTest = $this->getProxyClass('oxArticleList');
-        oxAddClassModule( 'modOxUtilsDate', 'oxUtilsDate' );
-        oxUtilsDate::getInstance()->UNITSetTime(100);
+
+        $this->setTime(100);
 
         $sArticleTable = $this->_getArticleTable();
         $sO2CTable = $this->_getO2CTable();
@@ -489,8 +490,8 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
             $sCatId = '8a142c3e60a535f16.78077188';
 
         $oTest = $this->getProxyClass('oxArticleList');
-        oxAddClassModule( 'modOxUtilsDate', 'oxUtilsDate' );
-        oxUtilsDate::getInstance()->UNITSetTime( 100 );
+
+        $this->setTime( 100 );
 
         $sArticleTable = $this->_getArticleTable();
         $sO2CTable = $this->_getO2CTable();
@@ -516,8 +517,8 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
     {
         $oTest = $this->getProxyClass('oxArticleList');
         $oTest->setCustomSorting( 'oxtitle desc' );
-        oxAddClassModule( 'modOxUtilsDate', 'oxUtilsDate' );
-        oxUtilsDate::getInstance()->UNITSetTime(100);
+
+        $this->setTime(100);
 
         $sArticleTable = $this->_getArticleTable();
         $sO2CTable = $this->_getO2CTable();
@@ -552,7 +553,7 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
         } catch (Exception $e) {
             $sRes = $e->getMessage();
         }
-        oxLang::getInstance()->setBaseLanguage(0);
+        $this->setLanguage(0);
         modDB::getInstance()->cleanup();
 
         $sO2CView      = getViewName( 'oxobject2category' );
@@ -727,7 +728,7 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
      */
     public function testGetSearchSelectUseAND()
     {
-        modConfig::getInstance()->setConfigParam( 'blSearchUseAND', 1 );
+        $this->setConfigParam( 'blSearchUseAND', 1 );
         $oTest = $this->getProxyClass('oxArticleList');
 
         $sArticleTable = $this->_getArticleTable();
@@ -755,7 +756,7 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
      */
     public function testGetSearchSelectWithGermanChars()
     {
-        modConfig::getInstance()->setConfigParam( 'blSearchUseAND', 1 );
+        $this->setConfigParam( 'blSearchUseAND', 1 );
         $oTest = $this->getProxyClass('oxArticleList');
 
         $sArticleTable = $this->_getArticleTable();
@@ -782,9 +783,9 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
      */
     public function testLoadSearchIds()
     {
-        oxAddClassModule( 'modOxUtilsDate', 'oxUtilsDate' );
-        modConfig::getInstance()->setConfigParam( 'aSearchCols', array( 'oxtitle', 'oxshortdesc', 'oxsearchkeys', 'oxartnum' ) );
-        oxUtilsDate::getInstance()->UNITSetTime(100);
+
+        $this->setConfigParam( 'aSearchCols', array( 'oxtitle', 'oxshortdesc', 'oxsearchkeys', 'oxartnum' ) );
+        $this->setTime(100);
 
         $sArticleTable = $this->_getArticleTable();
         $oArticle = new oxarticle();
@@ -810,10 +811,10 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
      */
     public function testLoadSearchIdsInEngLangWithSort()
     {
-        oxAddClassModule( 'modOxUtilsDate', 'oxUtilsDate' );
-        modConfig::getInstance()->setConfigParam( 'aSearchCols', array( 'oxtitle', 'oxshortdesc', 'oxsearchkeys', 'oxartnum' ) );
-        oxUtilsDate::getInstance()->UNITSetTime(100);
-        oxLang::getInstance()->setBaseLanguage( 1 );
+
+        $this->setConfigParam( 'aSearchCols', array( 'oxtitle', 'oxshortdesc', 'oxsearchkeys', 'oxartnum' ) );
+        $this->setTime(100);
+        $this->setLanguage( 1 );
         $sArticleTable = $this->_getArticleTable();
         $oArticle = new oxarticle();
 
@@ -839,9 +840,9 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
      */
     public function testLoadSearchIdsCategory()
     {
-        oxAddClassModule( 'modOxUtilsDate', 'oxUtilsDate' );
-        modConfig::getInstance()->setConfigParam( 'aSearchCols', array( 'oxtitle', 'oxshortdesc', 'oxsearchkeys', 'oxartnum' ) );
-        oxUtilsDate::getInstance()->UNITSetTime(100);
+
+        $this->setConfigParam( 'aSearchCols', array( 'oxtitle', 'oxshortdesc', 'oxsearchkeys', 'oxartnum' ) );
+        $this->setTime(100);
 
         $sArticleTable = $this->_getArticleTable();
         $sO2CTable = $this->_getO2CTable();
@@ -868,9 +869,9 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
      */
     public function testLoadSearchIdsVendor()
     {
-        oxAddClassModule( 'modOxUtilsDate', 'oxUtilsDate' );
-        modConfig::getInstance()->setConfigParam( 'aSearchCols', array( 'oxtitle', 'oxshortdesc', 'oxsearchkeys', 'oxartnum' ) );
-        oxUtilsDate::getInstance()->UNITSetTime(100);
+
+        $this->setConfigParam( 'aSearchCols', array( 'oxtitle', 'oxshortdesc', 'oxsearchkeys', 'oxartnum' ) );
+        $this->setTime(100);
 
         $sArticleTable = $this->_getArticleTable();
         $oArticle = new oxarticle();
@@ -895,9 +896,9 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
      */
     public function testLoadSearchIdsManufacturer()
     {
-        oxAddClassModule( 'modOxUtilsDate', 'oxUtilsDate' );
-        modConfig::getInstance()->setConfigParam( 'aSearchCols', array( 'oxtitle', 'oxshortdesc', 'oxsearchkeys', 'oxartnum' ) );
-        oxUtilsDate::getInstance()->UNITSetTime(100);
+
+        $this->setConfigParam( 'aSearchCols', array( 'oxtitle', 'oxshortdesc', 'oxsearchkeys', 'oxartnum' ) );
+        $this->setTime(100);
 
         $sArticleTable = $this->_getArticleTable();
         $oArticle = new oxarticle();
@@ -922,9 +923,9 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
      */
     public function testLoadSearchIdsCategoryVendorManufacturer()
     {
-        oxAddClassModule( 'modOxUtilsDate', 'oxUtilsDate' );
-        modConfig::getInstance()->setConfigParam( 'aSearchCols', array( 'oxtitle', 'oxshortdesc', 'oxsearchkeys', 'oxartnum' ) );
-        oxUtilsDate::getInstance()->UNITSetTime(100);
+
+        $this->setConfigParam( 'aSearchCols', array( 'oxtitle', 'oxshortdesc', 'oxsearchkeys', 'oxartnum' ) );
+        $this->setTime(100);
 
         $sArticleTable = $this->_getArticleTable();
         $sO2CTable = $this->_getO2CTable();
@@ -952,9 +953,9 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
      */
     public function testLoadSearchIdsWithSearchInTags()
     {
-        oxAddClassModule( 'modOxUtilsDate', 'oxUtilsDate' );
-        oxUtilsDate::getInstance()->UNITSetTime(100);
-        modConfig::getInstance()->setConfigParam( 'aSearchCols', array( 'oxtags' ) );
+
+        $this->setTime(100);
+        $this->setConfigParam( 'aSearchCols', array( 'oxtags' ) );
 
         $sArticleTable = $this->_getArticleTable();
         $oArticle = new oxarticle();
@@ -980,9 +981,9 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
      */
     public function testLoadSearchIdsWithSearchInLongDesc()
     {
-        oxAddClassModule( 'modOxUtilsDate', 'oxUtilsDate' );
-        oxUtilsDate::getInstance()->UNITSetTime(100);
-        modConfig::getInstance()->setConfigParam( 'aSearchCols', array( 'oxlongdesc' ) );
+
+        $this->setTime(100);
+        $this->setConfigParam( 'aSearchCols', array( 'oxlongdesc' ) );
 
         $sArticleTable = $this->_getArticleTable();
         $oArticle = new oxarticle();
@@ -1023,8 +1024,8 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
     public function testGetPriceSelect()
     {
         $oTest = $this->getProxyClass('oxArticleList');
-        oxAddClassModule( 'modOxUtilsDate', 'oxUtilsDate' );
-        oxUtilsDate::getInstance()->UNITSetTime(100);
+
+        $this->setTime(100);
 
         $iPrice1 = 12;
         $iPrice2 = 15;
@@ -1051,8 +1052,8 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
     {
         $oTest = $this->getProxyClass('oxArticleList');
         $oTest->setCustomSorting( 'oxtitle desc' );
-        oxAddClassModule( 'modOxUtilsDate', 'oxUtilsDate' );
-        oxUtilsDate::getInstance()->UNITSetTime(100);
+
+        $this->setTime(100);
 
         $iPrice1 = 12;
         $iPrice2 = 15;
@@ -1103,7 +1104,7 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
         $iPrice2 = 10;
         $sQ = "select * from oxarticles where oxid in (select if(oxparentid='',oxid,oxparentid) as id from oxarticles where oxprice>0 and oxprice <= $iPrice2 group by id having min(oxprice)>=$iPrice1)";
         $sQCount = "select count(*) from oxarticles where oxid in (select if(oxparentid='',oxid,oxparentid) as id from oxarticles where oxprice>0 and oxprice <= $iPrice2 group by id having min(oxprice)>=$iPrice1)";
-        $sCount = oxDb::getDb()->getOne($sQCount);
+        $sCount = $this->getDb()->getOne($sQCount);
 
         $oTest = new oxArticleList();
         $iRes = $oTest->loadPriceArticles( $iPrice1, $iPrice2);
@@ -1133,7 +1134,7 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
 
         $sQ = "select * from oxarticles where oxid in (select if(oxparentid='',oxid,oxparentid) as id from oxarticles where oxprice>0 and oxprice <= $iPrice2 group by id having min(oxprice)>=$iPrice1)";
         $sQCount = "select count(*) from oxarticles where oxid in (select if(oxparentid='',oxid,oxparentid) as id from oxarticles where oxprice>0 and oxprice <= $iPrice2 group by id having min(oxprice)>=$iPrice1)";
-        $sCount = oxDb::getDb()->getOne($sQCount);
+        $sCount = $this->getDb()->getOne($sQCount);
 
             $sCatId = '8a142c3e4143562a5.46426637';
 
@@ -1202,7 +1203,7 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
     public function testLoadNewestArticlesNone()
     {
         $oTest = new oxArticleList();
-        modConfig::getInstance()->setConfigParam( 'iNewestArticlesMode', 0 );
+        $this->setConfigParam( 'iNewestArticlesMode', 0 );
         $oTest->loadNewestArticles();
         $this->assertEquals(0, $oTest->count());
     }
@@ -1214,8 +1215,8 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
      */
     public function testLoadNewestArticlesNoneDoNotLoadPrice()
     {
-        modConfig::getInstance()->setConfigParam( 'bl_perfLoadPriceForAddList', 0 );
-        modConfig::getInstance()->setConfigParam( 'iNewestArticlesMode', 0 );
+        $this->setConfigParam( 'bl_perfLoadPriceForAddList', 0 );
+        $this->setConfigParam( 'iNewestArticlesMode', 0 );
         $oTest = new oxArticleList();
         $oTest->loadNewestArticles();
         $this->assertEquals( 0, $oTest->count() );
@@ -1236,7 +1237,7 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
         $oTest->expects($this->once())->method('loadAktionArticles')
                                       ->with('oxnewest');
 
-        modConfig::getInstance()->setConfigParam( 'iNewestArticlesMode', 1 );
+        $this->setConfigParam( 'iNewestArticlesMode', 1 );
         $oTest->loadNewestArticles();
     }
 
@@ -1247,14 +1248,14 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
      */
     public function testLoadNewestArticlesSelect()
     {
-        oxAddClassModule( 'modOxUtilsDate', 'oxUtilsDate' );
-        oxUtilsDate::getInstance()->UNITSetTime(100);
+
+        $this->setTime(100);
 
         $sArticleTable = $this->_getArticleTable();
         $oArticle = new oxarticle();
 
-        modConfig::getInstance()->setConfigParam( 'iNrofNewcomerArticles', 4 );
-        modConfig::getInstance()->setConfigParam( 'blNewArtByInsert', 0 );
+        $this->setConfigParam( 'iNrofNewcomerArticles', 4 );
+        $this->setConfigParam( 'blNewArtByInsert', 0 );
 
         $sExpt  = "select * from $sArticleTable where oxparentid = ''";
         $sExpt .= " and ".$oArticle->getSqlActiveSnippet()." and oxissearch = 1";
@@ -1264,7 +1265,7 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
         $oTest = $this->getMock('oxArticleList', array('selectString'));
         $oTest->expects($this->once())->method('selectString')
                                       ->with($sExpt);
-        modConfig::getInstance()->setConfigParam( 'iNewestArticlesMode', 2 );
+        $this->setConfigParam( 'iNewestArticlesMode', 2 );
         $oTest->loadNewestArticles();
 
         $sExpt  = "select * from $sArticleTable where oxparentid = ''";
@@ -1274,7 +1275,7 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
         $oTest = $this->getMock('oxArticleList', array('selectString'));
         $oTest->expects($this->once())->method('selectString')
                                       ->with($sExpt);
-        modConfig::getInstance()->setConfigParam( 'iNewestArticlesMode', 2 );
+        $this->setConfigParam( 'iNewestArticlesMode', 2 );
         $oTest->loadNewestArticles(5);
 
         $sExpt  = "select * from $sArticleTable where oxparentid = ''";
@@ -1284,7 +1285,7 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
         $oTest = $this->getMock('oxArticleList', array('selectString'));
         $oTest->expects($this->once())->method('selectString')
                                       ->with($sExpt);
-        modConfig::getInstance()->setConfigParam( 'iNewestArticlesMode', 2 );
+        $this->setConfigParam( 'iNewestArticlesMode', 2 );
         $oTest->loadNewestArticles('spiderP');
     }
 
@@ -1295,14 +1296,14 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
      */
     public function testLoadNewestArticlesSelectByInsert()
     {
-        oxAddClassModule( 'modOxUtilsDate', 'oxUtilsDate' );
-        oxUtilsDate::getInstance()->UNITSetTime(100);
+
+        $this->setTime(100);
 
         $sArticleTable = $this->_getArticleTable();
         $oArticle = new oxarticle();
 
-        modConfig::getInstance()->setConfigParam( 'iNrofNewcomerArticles', 4 );
-        modConfig::getInstance()->setConfigParam( 'blNewArtByInsert', 1 );
+        $this->setConfigParam( 'iNrofNewcomerArticles', 4 );
+        $this->setConfigParam( 'blNewArtByInsert', 1 );
 
         $sExpt  = "select * from $sArticleTable where oxparentid = ''";
         $sExpt .= " and ".$oArticle->getSqlActiveSnippet()." and oxissearch = 1";
@@ -1312,7 +1313,7 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
         $oTest = $this->getMock('oxArticleList', array('selectString'));
         $oTest->expects($this->once())->method('selectString')
                                       ->with($sExpt);
-        modConfig::getInstance()->setConfigParam( 'iNewestArticlesMode', 2 );
+        $this->setConfigParam( 'iNewestArticlesMode', 2 );
         $oTest->loadNewestArticles();
     }
 
@@ -1324,7 +1325,7 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
     public function testLoadTop5ArticlesNoneDoNotLoadPrice()
     {
         $oTest = new oxArticleList();
-        modConfig::getInstance()->setConfigParam( 'iTop5Mode', 0 );
+        $this->setConfigParam( 'iTop5Mode', 0 );
         $oTest->loadTop5Articles();
         $this->assertEquals(0, $oTest->count());
     }
@@ -1336,8 +1337,8 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
      */
     public function testLoadTop5ArticlesNone()
     {
-        modConfig::getInstance()->setConfigParam( 'bl_perfLoadPriceForAddList', 0 );
-        modConfig::getInstance()->setConfigParam( 'iTop5Mode', 0 );
+        $this->setConfigParam( 'bl_perfLoadPriceForAddList', 0 );
+        $this->setConfigParam( 'iTop5Mode', 0 );
 
         $oTest = new oxArticleList();
         $oTest->loadTop5Articles();
@@ -1359,7 +1360,7 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
         $oTest->expects($this->once())->method('loadAktionArticles')
                                       ->with('oxtop5');
 
-        modConfig::getInstance()->setConfigParam( 'iTop5Mode', 1 );
+        $this->setConfigParam( 'iTop5Mode', 1 );
         $oTest->loadTop5Articles();
     }
 
@@ -1370,8 +1371,8 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
      */
     public function testLoadTop5ArticlesSelect()
     {
-        oxAddClassModule( 'modOxUtilsDate', 'oxUtilsDate' );
-        oxUtilsDate::getInstance()->UNITSetTime(100);
+
+        $this->setTime(100);
         $sArticleTable = $this->_getArticleTable();
         $oArticle = new oxarticle();
 
@@ -1385,7 +1386,7 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
         $oTest->expects($this->once())->method('selectString')
                                       ->with( $sExpt );
 
-        modConfig::getInstance()->setConfigParam( 'iTop5Mode', 2 );
+        $this->setConfigParam( 'iTop5Mode', 2 );
         $oTest->loadTop5Articles();
     }
 
@@ -1396,8 +1397,8 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
      */
     public function testLoadTop5ArticlesSelect10()
     {
-        oxAddClassModule( 'modOxUtilsDate', 'oxUtilsDate' );
-        oxUtilsDate::getInstance()->UNITSetTime(100);
+
+        $this->setTime(100);
         $sArticleTable = $this->_getArticleTable();
         $oArticle = new oxarticle();
 
@@ -1411,7 +1412,7 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
         $oTest->expects($this->once())->method('selectString')
                                       ->with( $sExpt );
 
-        modConfig::getInstance()->setConfigParam( 'iTop5Mode', 2 );
+        $this->setConfigParam( 'iTop5Mode', 2 );
         $oTest->loadTop5Articles( 10 );
     }
 
@@ -1422,8 +1423,8 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
      */
     public function testGetVendorSelect()
     {
-        oxAddClassModule( 'modOxUtilsDate', 'oxUtilsDate' );
-        oxUtilsDate::getInstance()->UNITSetTime(100);
+
+        $this->setTime(100);
 
         $sArticleTable = $this->_getArticleTable();
         $oArticle = new oxarticle();
@@ -1447,8 +1448,8 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
      */
     public function testGetManufacturerSelect()
     {
-        oxAddClassModule( 'modOxUtilsDate', 'oxUtilsDate' );
-        oxUtilsDate::getInstance()->UNITSetTime(100);
+
+        $this->setTime(100);
 
         $sArticleTable = $this->_getArticleTable();
         $oArticle = new oxarticle();
@@ -1554,7 +1555,7 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
      */
     public function testLoadHistoryArticlesSingleArticle()
     {
-        modSession::getInstance()->addClassFunction('getId', create_function('', 'return "ok";'));
+        $this->getSession()->addClassFunction('getId', create_function('', 'return "ok";'));
 
         $oTest = $this->getMock("oxArticleList", array('loadIds', 'sortByIds'));
         $oTest->expects($this->any())->method("loadIds")->will($this->returnValue(true));
@@ -1573,7 +1574,7 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
      */
     public function testLoadHistoryArticlesShortHistory()
     {
-        modSession::getInstance()->addClassFunction('getId', create_function('', 'return "ok";'));
+        $this->getSession()->setId('sessionId');
 
         $oTest = $this->getMock("oxArticleList", array('loadIds'));
         $oTest->expects($this->any())->method("loadIds")->will($this->returnValue(true));
@@ -1591,7 +1592,7 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
      */
     public function testLoadHistoryArticlesNotFullHistory()
     {
-        modSession::getInstance()->addClassFunction('getId', create_function('', 'return "ok";'));
+        $this->getSession()->setId('sessionId');
 
         $oTest = $this->getMock("oxArticleList", array('loadIds', 'sortByIds'));
         $oTest->expects($this->any())->method("loadIds")->will($this->returnValue(true));
@@ -1612,7 +1613,7 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
      */
     public function testLoadHistoryArticlesLongHistory()
     {
-        modSession::getInstance()->addClassFunction('getId', create_function('', 'return "ok";'));
+        $this->getSession()->setId('sessionId');
 
         $oTest = $this->getMock("oxArticleList", array('loadIds'));
         $oTest->expects($this->any())->method("loadIds")->will($this->returnValue(true));
@@ -1633,7 +1634,7 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
      */
     public function testLoadHistoryArticlesDublicate()
     {
-        modSession::getInstance()->addClassFunction('getId', create_function('', 'return "ok";'));
+        $this->getSession()->setId('sessionId');
 
         $oTest = $this->getMock("oxArticleList", array('loadIds'));
         $oTest->expects($this->any())->method("loadIds")->will($this->returnValue(true));
@@ -1658,8 +1659,8 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
         $sArticleTable = $this->_getArticleTable();
         $oArticle = new oxarticle();
 
-        oxAddClassModule( 'modOxUtilsDate', 'oxUtilsDate' );
-        oxUtilsDate::getInstance()->UNITSetTime(100);
+
+        $this->setTime(100);
 
         $sExpt = "select $sArticleTable.oxid from $sArticleTable where $sArticleTable.oxid in ( '1','a','3','a\'a' ) and ".$oArticle->getSqlActiveSnippet();
 
@@ -1675,8 +1676,7 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
      */
     public function testLoadIdsNone()
     {
-        oxAddClassModule( 'modOxUtilsDate', 'oxUtilsDate' );
-        oxUtilsDate::getInstance()->UNITSetTime(100);
+        $this->setTime(100);
 
         $oTest = $this->getMock("oxArticleList", array('selectString'));
         $oTest->expects($this->never())->method("selectString");
@@ -1691,27 +1691,27 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
     public function testSortByIdsAndSortByOrderMapCallback()
     {
         $oTest = new oxArticleList;
-        $oTest->UNITsortByIds(array('x', 'y'));
+        $oTest->sortByIds(array('x', 'y'));
         $this->assertSame(array(), $oTest->getArray());
 
         $oTest->assign(array('x'=>'asd', 'y'=>'dsa'));
-        $oTest->UNITsortByIds(array('x', 'y'));
+        $oTest->sortByIds(array('x', 'y'));
         $this->assertSame(array('x'=>'asd', 'y'=>'dsa'), $oTest->getArray());
 
         $oTest->assign(array('z'=>'dasds', 'x'=>'asd', 'y'=>'dsa'));
-        $oTest->UNITsortByIds(array('x', 'y'));
+        $oTest->sortByIds(array('x', 'y'));
         $this->assertSame(array('x'=>'asd', 'y'=>'dsa', 'z'=>'dasds'), $oTest->getArray());
 
         $oTest->assign(array('z'=>'dasds', 'x'=>'asd', 'y'=>'dsa'));
-        $oTest->UNITsortByIds(array('y', 'x'));
+        $oTest->sortByIds(array('y', 'x'));
         $this->assertSame(array('y'=>'dsa', 'x'=>'asd', 'z'=>'dasds'), $oTest->getArray());
 
         $oTest->assign(array('z'=>'dasds', 'x'=>'asd', 'y'=>'dsa'));
-        $oTest->UNITsortByIds(array('y', 'z'));
+        $oTest->sortByIds(array('y', 'z'));
         $this->assertSame(array('y'=>'dsa', 'z'=>'dasds', 'x'=>'asd'), $oTest->getArray());
 
         $oTest->assign(array('z'=>'dasds', 'y'=>'dsa'));
-        $oTest->UNITsortByIds(array('y', 'x'));
+        $oTest->sortByIds(array('y', 'x'));
         $this->assertSame(array('y'=>'dsa', 'z'=>'dasds'), $oTest->getArray());
     }
 
@@ -1790,7 +1790,7 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
     public function testLazyLoadAllObjectsInLangClean()
     {
         $oTest = $this->getProxyClass("oxArticleList");
-        oxLang::getInstance()->setBaseLanguage( 1 );
+        $this->setLanguage( 1 );
         $this->cleanTmpDir();
         $oTest->selectString("select oxid from oxarticles where oxid = '2000' or oxid = '1354' order by oxid");
         $this->assertEquals('2000', $oTest['2000']->getId());
@@ -1808,7 +1808,7 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
     public function testLazyLoadAllObjectsInLangCached()
     {
         $oTest = $this->getProxyClass("oxArticleList");
-        oxLang::getInstance()->setBaseLanguage( 1 );
+        $this->setLanguage( 1 );
         //$this->cleanTmpDir();
         $oTest->selectString("select oxid from oxarticles where oxid = '2000' or oxid = '1354' order by oxid");
         $this->assertEquals('2000', $oTest['2000']->getId());
@@ -1886,7 +1886,7 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
     public function testMultiLangLoading2()
     {
         $oTest = $this->getProxyClass("oxArticleList");
-        oxLang::getInstance()->setBaseLanguage( 1 );
+        $this->setLanguage( 1 );
         $sView = getViewName('oxarticles', 1);
         $oTest->selectString("select * from $sView where oxid = '2080'");
             $this->assertEquals("Champagne Pliers &amp; Bottle Opener", $oTest[2080]->oxarticles__oxtitle->value);
@@ -1992,7 +1992,7 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
         $sView = getViewName('oxartextends', 5);
         $sQ = "select yyy from $sView inner join xxx on ".
               "xxx.oxid = $sView.oxid where xxx.oxparentid = '' AND match ( $sView.oxtags ) ".
-              "against( ".oxDb::getDb()->quote('"zzz_"')." IN BOOLEAN MODE ) and 1";
+              "against( ".$this->getDb()->quote('"zzz_"')." IN BOOLEAN MODE ) and 1";
 
         $oBaseObject = $this->getMock( 'oxArticle', array( 'getViewName', 'getSelectFields', 'getSqlActiveSnippet' ) );
         $oBaseObject->expects( $this->once() )->method( 'getViewName' )->will( $this->returnValue( 'xxx' ) );
@@ -2155,24 +2155,24 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
     public function testCanUpdatePrices()
     {
         $oList = oxNew( "oxArticleList" );
-        modConfig::getInstance()->setConfigParam( "blUseCron", false );
-        $iCurrTime = oxUtilsDate::getInstance()->getTime();
+        $this->setConfigParam( "blUseCron", false );
+        $iCurrTime = $this->getTime();
 
         // cases
         // 1. start time is not set
-        modConfig::getInstance()->setConfigParam( "iTimeToUpdatePrices", null );
+        $this->setConfigParam( "iTimeToUpdatePrices", null );
         $this->assertTrue( $oList->UNITcanUpdatePrices() );
 
         // 2. start time > current time
-        modConfig::getInstance()->setConfigParam( "iTimeToUpdatePrices", $iCurrTime + 3600 * 24 );
+        $this->setConfigParam( "iTimeToUpdatePrices", $iCurrTime + 3600 * 24 );
         $this->assertFalse( $oList->UNITcanUpdatePrices() );
 
         // 3. start time < current time
-        modConfig::getInstance()->setConfigParam( "iTimeToUpdatePrices", $iCurrTime - 3600 * 24 );
+        $this->setConfigParam( "iTimeToUpdatePrices", $iCurrTime - 3600 * 24 );
         $this->assertTrue( $oList->UNITcanUpdatePrices() );
 
         // 4. crontab is on
-        modConfig::getInstance()->setConfigParam( "blUseCron", true );
+        $this->setConfigParam( "blUseCron", true );
         $this->assertFalse( $oList->UNITcanUpdatePrices() );
     }
 
@@ -2183,9 +2183,8 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
      */
     public function testRenewPriceUpdateTime()
     {
-        $oConfig = oxConfig::getInstance();
         $iTime = time();
-        oxTestModules::addFunction( "oxUtilsDate", "getTime", "{ return {$iTime}; }" );
+        $this->setTime( $iTime );
         $iTime += 3600 * 24;
 
         $oList = oxNew( "oxArticleList" );
@@ -2193,21 +2192,21 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
         // cases
         // 1. time in db is '0000-00-00 00:00:00'
         $this->assertEquals( $iTime, $oList->renewPriceUpdateTime() );
-        $this->assertEquals( $iTime, $oConfig->getConfigParam( "iTimeToUpdatePrices" ) );
+        $this->assertEquals( $iTime, $this->getConfigParam( "iTimeToUpdatePrices" ) );
 
         // 2. time in db < current time
 
         $this->assertEquals( $iTime, $oList->renewPriceUpdateTime() );
-        $this->assertEquals( $iTime, $oConfig->getConfigParam( "iTimeToUpdatePrices" ) );
+        $this->assertEquals( $iTime, $this->getConfigParam( "iTimeToUpdatePrices" ) );
 
         // 3. time in db > current time
         $this->assertEquals( $iTime, $oList->renewPriceUpdateTime() );
-        $this->assertEquals( $iTime, $oConfig->getConfigParam( "iTimeToUpdatePrices" ) );
+        $this->assertEquals( $iTime, $this->getConfigParam( "iTimeToUpdatePrices" ) );
 
         // 4. time in db > current time but < current time + 24 hours
-        oxDb::getDb()->execute( "update oxarticles set oxupdatepricetime = timestamp('".date( "Y-m-d H:i:s", $iTime - 3600 * 12 )."') limit 1" );
+        $this->getDb()->execute( "update oxarticles set oxupdatepricetime = timestamp('".date( "Y-m-d H:i:s", $iTime - 3600 * 12 )."') limit 1" );
         $this->assertNotEquals( $iTime, $oList->renewPriceUpdateTime() );
-        $this->assertNotEquals( $iTime, $oConfig->getConfigParam( "iTimeToUpdatePrices" ) );
+        $this->assertNotEquals( $iTime, $this->getConfigParam( "iTimeToUpdatePrices" ) );
     }
 
     /**
@@ -2312,15 +2311,15 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
     {
         $iTime = $this->_insertTestProducts();
 
-        modConfig::getInstance()->setConfigParam( "blUseCron", false );
-        modConfig::getInstance()->setConfigParam( "iTimeToUpdatePrices", false );
-        oxTestModules::addFunction( "oxUtilsDate", "getTime", "{ return {$iTime}; }" );
+        $this->setConfigParam( "blUseCron", false );
+        $this->setConfigParam( "iTimeToUpdatePrices", false );
+        $this->setTime( $iTime );
 
         $oList = oxNew( "oxArticleList" );
         $oList->updateUpcomingPrices();
 
         // testing changes
-        $oDb = oxDb::getDb();
+        $oDb = $this->getDb();
         $sQ  = "select oxprice + oxpricea + oxpriceb + oxpricec from oxarticles where oxid=?";
         $this->assertEquals( 100, (int) $oDb->getOne( $sQ, array( "_testProd1" ) ) );
         $this->assertEquals( 100, (int) $oDb->getOne( $sQ, array( "_testProd2" ) ) );
@@ -2334,31 +2333,10 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
         $this->assertEquals( 21, (int) $oDb->getOne( $sQ, array( "_testProd1" ) ) );
         $this->assertEquals( 5, (int) $oDb->getOne( $sQ, array( "_testProd2" ) ) );
 
-    }
-
-    /**
-     * Test case for oxArticleList::updateUpcomingPrices() database level test
-     *
-     * @return null
-     */
-    public function testupdateUpcomingPricesDbParentBuyable()
-    {
-        $iTime = $this->_insertTestProducts();
-
-        modConfig::getInstance()->setConfigParam( "blUseCron", false );
-        modConfig::getInstance()->setConfigParam( "iTimeToUpdatePrices", false );
-        modConfig::getInstance()->setConfigParam( "blVariantParentBuyable", true );
-        oxTestModules::addFunction( "oxUtilsDate", "getTime", "{ return {$iTime}; }" );
-
-        $oList = oxNew( "oxArticleList" );
-        $oList->updateUpcomingPrices();
-
-        // testing changes
-        $oDb = oxDb::getDb();
-
-        $sQ  = "select oxvarminprice from oxarticles where oxid=?";
-        $this->assertEquals( 10, (int) $oDb->getOne( $sQ, array( "_testProd1" ) ) );
-        $this->assertEquals( 5, (int) $oDb->getOne( $sQ, array( "_testProd2" ) ) );
+        // testing oxvarminprice changes
+        $sQ  = "select oxvarmaxprice from oxarticles where oxid=?";
+        $this->assertEquals( 30, (int) $oDb->getOne( $sQ, array( "_testProd1" ) ) );
+        $this->assertEquals( 15, (int) $oDb->getOne( $sQ, array( "_testProd2" ) ) );
 
     }
 
@@ -2371,15 +2349,15 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
     {
         $iTime = $this->_insertTestProducts();
 
-        modConfig::getInstance()->setConfigParam( "blUseCron", false );
-        modConfig::getInstance()->setConfigParam( "iTimeToUpdatePrices", null );
-        oxTestModules::addFunction( "oxUtilsDate", "getTime", "{ return {$iTime}; }" );
+        $this->setConfigParam( "blUseCron", false );
+        $this->setConfigParam( "iTimeToUpdatePrices", null );
+        $this->setTime( $iTime );
 
         $oList = oxNew( "oxArticleList" );
         $oList->updateUpcomingPrices( true );
 
         // testing changes
-        $oDb = oxDb::getDb();
+        $oDb = $this->getDb();
         $sQ  = "select oxprice + oxpricea + oxpriceb + oxpricec from oxarticles where oxid=?";
         $this->assertEquals( 100, (int) $oDb->getOne( $sQ, array( "_testProd1" ) ) );
         $this->assertEquals( 100, (int) $oDb->getOne( $sQ, array( "_testProd2" ) ) );
@@ -2393,32 +2371,10 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
         $this->assertEquals( 21, (int) $oDb->getOne( $sQ, array( "_testProd1" ) ) );
         $this->assertEquals( 5, (int) $oDb->getOne( $sQ, array( "_testProd2" ) ) );
 
-    }
-
-    /**
-     * Test case for oxArticleList::updateUpcomingPrices() database level test
-     *
-     * @return null
-     */
-    public function testupdateUpcomingPricesCronParentBuyable()
-    {
-        $iTime = $this->_insertTestProducts();
-
-        modConfig::getInstance()->setConfigParam( "blUseCron", false );
-        modConfig::getInstance()->setConfigParam( "iTimeToUpdatePrices", null );
-        modConfig::getInstance()->setConfigParam( "blVariantParentBuyable", true );
-
-        oxTestModules::addFunction( "oxUtilsDate", "getTime", "{ return {$iTime}; }" );
-
-        $oList = oxNew( "oxArticleList" );
-        $oList->updateUpcomingPrices( true );
-
-        // testing changes
-        $oDb = oxDb::getDb();
-
-        $sQ  = "select oxvarminprice from oxarticles where oxid=?";
-        $this->assertEquals( 10, (int) $oDb->getOne( $sQ, array( "_testProd1" ) ) );
-        $this->assertEquals( 5, (int) $oDb->getOne( $sQ, array( "_testProd2" ) ) );
+         // testing oxvarmaxprice changes
+        $sQ  = "select oxvarmaxprice from oxarticles where oxid=?";
+        $this->assertEquals( 30, (int) $oDb->getOne( $sQ, array( "_testProd1" ) ) );
+        $this->assertEquals( 15, (int) $oDb->getOne( $sQ, array( "_testProd2" ) ) );
 
     }
 }

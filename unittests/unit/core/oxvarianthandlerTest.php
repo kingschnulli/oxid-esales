@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxvarianthandlerTest.php 34401 2011-04-07 14:56:31Z arvydas.vapsva $
+ * @version   SVN: $Id: oxvarianthandlerTest.php 47937 2012-07-30 11:32:27Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -74,7 +74,7 @@ class Unit_Core_oxvarianthandlerTest extends OxidTestCase
     {
         oxConfig::getInstance()->setConfigParam( 'bl_perfUseSelectlistPrice', 1 );
         oxConfig::getInstance()->setConfigParam( 'bl_perfLoadSelectLists', 1 );
-        $oValue = new oxStdClass();
+        $oValue = new stdClass();
         $oValue->price = '10';
         $oValue->fprice = '10,00';
         $oValue->priceUnit = 'abs';
@@ -86,7 +86,7 @@ class Unit_Core_oxvarianthandlerTest extends OxidTestCase
         $oValue->priceUnit = '%';
         $this->assertEquals( 1, $oVariantHandler->UNITgetValuePrice( $oValue, 10 ));
 
-        $oValue = new oxStdClass();
+        $oValue = new stdClass();
         $oValue->price  = -10;
         $oValue->fprice = '10,00';
         $oValue->priceUnit = '%';
@@ -98,14 +98,14 @@ class Unit_Core_oxvarianthandlerTest extends OxidTestCase
     public function testAssignValues()
     {
         $myDB = oxDb::getDB();
-        $oValue = new oxStdClass();
+        $oValue = new stdClass();
         $oValue->price = '10';
         $oValue->fprice = '10,00';
         $oValue->priceUnit = 'abs';
         $oValue->name = 'red';
         $oValue->value = '';
         $aValues[0] = $oValue;
-        $oValue2 = new oxStdClass();
+        $oValue2 = new stdClass();
         $oValue2->price = '10';
         $oValue2->fprice = '10,00';
         $oValue2->priceUnit = 'abs';
@@ -211,7 +211,7 @@ class Unit_Core_oxvarianthandlerTest extends OxidTestCase
     {
         modConfig::getInstance()->setConfigParam( "blUseMultidimensionVariants", true );
 
-        $oArticle = new oxStdClass();
+        $oArticle = new oxArticle();
         $oArticle->oxarticles__oxvarselect = new oxField( " value | value ");
 
         $oVariantHandler = oxNew("oxVariantHandler");

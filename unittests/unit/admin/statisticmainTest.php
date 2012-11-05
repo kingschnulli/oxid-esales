@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: statisticmainTest.php 33190 2011-02-10 15:56:27Z arvydas.vapsva $
+ * @version   SVN: $Id: statisticmainTest.php 48094 2012-08-01 09:16:28Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -37,14 +37,21 @@ class Unit_Admin_StatisticMainTest extends OxidTestCase
      */
     public function testRender()
     {
-        modConfig::setParameter( "oxid", "testId" );
+        $this->setRequestParam( "oxid", "testId" );
 
         // testing..
-        $oView = $this->getProxyClass( "Statistic_Main" );
+        $oView = new Statistic_Main();
         $this->assertEquals( 'statistic_main.tpl', $oView->render() );
+
         $aViewData = $oView->getViewData();
         $this->assertTrue( isset( $aViewData['edit'] ) );
         $this->assertTrue( $aViewData['edit'] instanceof oxstatistic );
+
+        $sAllReports = $this->getSessionParam("allstat_reports");
+        $sReports    = $this->getSessionParam("stat_reports_testId");
+        $this->assertEquals( array(), $sAllReports );
+        $this->assertFalse( $sReports );
+        $this->assertNull( $aViewData['ireports'] );
     }
 
     /**
@@ -54,14 +61,59 @@ class Unit_Admin_StatisticMainTest extends OxidTestCase
      */
     public function testRenderNoRealObjectId()
     {
-        modConfig::setParameter( "oxid", "-1" );
+        $this->setRequestParam( "oxid", "-1" );
 
         // testing..
-        $oView = $this->getProxyClass( "Statistic_Main" );
+        $oView = new Statistic_Main();
         $this->assertEquals( 'statistic_main.tpl', $oView->render() );
         $aViewData = $oView->getViewData();
         $this->assertTrue( isset( $aViewData['oxid'] ) );
         $this->assertEquals( "-1", $aViewData['oxid'] );
+    }
+
+    public function testRenderWithSomeReports()
+    {
+        // testing..
+        $oView = new Statistic_Main();
+        $this->setRequestParam("oxid", "testId");
+
+        $oStatMock = $this->getMock("oxstatistic", array("load", "getReports"));
+        $oStatMock->expects($this->once())->method("load")->with("testId");
+        $oStatMock->expects($this->once())->method("getReports")->will($this->returnValue( array("testRes") ));
+        oxTestModules::addModuleObject( 'oxstatistic', $oStatMock );
+
+        $this->assertEquals( 'statistic_main.tpl', $oView->render() );
+
+        $aViewData = $oView->getViewData();
+        $this->assertTrue( isset( $aViewData['edit'] ) );
+        $this->assertTrue( $aViewData['edit'] instanceof oxstatistic );
+
+        $sAllReports = $this->getSessionParam("allstat_reports");
+        $sReports    = $this->getSessionParam("stat_reports_testId");
+        $this->assertEquals( array(), $sAllReports );
+        $this->assertEquals( array("testRes"), $sReports );
+        $this->assertEquals( 1, $aViewData['ireports'] );
+    }
+    /**
+     * Statistic_Main::Render() test case
+     *
+     * @return null
+     */
+    public function testRenderPopup()
+    {
+        $this->setRequestParam( "aoc", true );
+
+        $oStatMock = $this->getMock("statistic_main_ajax", array("getColumns"));
+        $oStatMock->expects($this->once())->method("getColumns")->will($this->returnValue( "testRes" ));
+        oxTestModules::addModuleObject( 'statistic_main_ajax', $oStatMock );
+
+        // testing..
+        $oView = new Statistic_Main();
+        $this->assertEquals( 'popups/statistic_main.tpl', $oView->render() );
+
+        $aViewData = $oView->getViewData();
+        $this->assertTrue( isset( $aViewData['oxajax'] ) );
+        $this->assertEquals( "testRes", $aViewData['oxajax'] );
     }
 
     /**
@@ -71,17 +123,27 @@ class Unit_Admin_StatisticMainTest extends OxidTestCase
      */
     public function testSave()
     {
-        oxTestModules::addFunction( 'oxstatistic', 'save', '{ throw new Exception( "save" ); }');
-
         // testing..
-        try {
-            $oView = new Statistic_Main();
-            $oView->save();
-        } catch ( Exception $oExcp ) {
-            $this->assertEquals( "save", $oExcp->getMessage(), "error in Statistic_Main::save()" );
-            return;
-        }
-        $this->fail( "error in Statistic_Main::save()" );
+        $oSubj = $this->getProxyClass("Statistic_Main");
+        $this->setRequestParam("oxid", "testId");
+
+        $aTestParams = array();
+        $aTestParams["testParam"] = "testValue";
+
+        $this->setRequestParam("editval", $aTestParams);
+
+        $aTestParams["oxstatistics__oxshopid"] = $this->getConfig()->getBaseShopId();
+
+        $oStatMock = $this->getMock("oxstatistic", array("load", "assign", "save"));
+        $oStatMock->expects($this->once())->method("load")->with("testId");
+        $oStatMock->expects($this->once())->method("assign")->with($aTestParams);
+        $oStatMock->expects($this->once())->method("save");
+        oxTestModules::addModuleObject( 'oxstatistic', $oStatMock );
+
+        $oSubj->save();
+
+        $aViewData = $oSubj->getNonPublicVar("_aViewData");
+        $this->assertEquals($aViewData["updatelist"], 1);
     }
 
     /**

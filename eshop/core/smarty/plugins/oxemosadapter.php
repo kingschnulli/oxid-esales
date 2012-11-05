@@ -34,14 +34,14 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- *  $Id: oxemosadapter.php 49000 2012-08-24 11:52:35Z tomas $
+ *  $Id: oxemosadapter.php 50060 2012-10-03 12:35:05Z tomas $
  */
 
 
 /**
  * Includes emos script formatter class
  */
-require_once oxConfig::getInstance()->getConfigParam( 'sCoreDir' ) . 'smarty/plugins/emos.php';
+require_once oxRegistry::getConfig()->getConfigParam( 'sCoreDir' ) . 'smarty/plugins/emos.php';
 
 /**
  * This class is a reference implementation of a PHP Function to include
@@ -74,16 +74,15 @@ class oxEmosAdapter extends oxSuperCfg
     private static $_instance = null;
 
     /**
-     * resturns a single instance of this class
+     * Return a single instance of this class
+     *
+     * @deprecated since v5.0 (2012-08-10); Use oxRegistry::get("oxEmosAdapter") instead.
      *
      * @return oxUtils
      */
     public static function getInstance()
     {
-        if ( !self::$_instance instanceof oxEmosAdapter ) {
-            self::$_instance = oxNew('oxEmosAdapter');
-        }
-        return self::$_instance;
+        return oxRegistry::get("oxEmosAdapter");
     }
 
     /**
@@ -125,7 +124,7 @@ class oxEmosAdapter extends oxSuperCfg
             $this->_oEmos->addPageId( $this->_getEmosPageId( $this->_getTplName() ) );
 
             // language id
-            $this->_oEmos->addLangId( oxLang::getInstance()->getBaseLanguage() );
+            $this->_oEmos->addLangId( oxRegistry::getLang()->getBaseLanguage() );
 
             // set site ID
             $this->_oEmos->addSiteId( $this->getConfig()->getShopId() );

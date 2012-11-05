@@ -45,13 +45,21 @@
  */
 function smarty_function_oxstyle($params, &$smarty)
 {
-    $myConfig = oxConfig::getInstance();
-    $sSufix   = ($smarty->_tpl_vars["__oxid_include_dynamic"])?'_dynamic':'';
+    $myConfig   = oxRegistry::getConfig();
+    $sSufix     = ($smarty->_tpl_vars["__oxid_include_dynamic"])?'_dynamic':'';
+    $sWidget    = ($params['widget']?$params['widget']:'');
+    $blInWidget = ($params['inWidget']?$params['inWidget']:false);
+
     $sCtyles  = 'conditional_styles'.$sSufix;
     $sStyles  = 'styles'.$sSufix;
 
     $aCtyles  = (array) $myConfig->getGlobalParameter($sCtyles);
     $aStyles  = (array) $myConfig->getGlobalParameter($sStyles);
+
+
+    if ( $sWidget && !$blInWidget ) {
+        return;
+    }
 
     $sOutput  = '';
     if ( $params['include'] ) {

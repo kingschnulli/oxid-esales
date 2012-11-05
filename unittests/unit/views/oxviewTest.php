@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxviewTest.php 44704 2012-05-09 11:24:03Z linas.kukulskis $
+ * @version   SVN: $Id: oxviewTest.php 49522 2012-09-13 14:13:29Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -109,6 +109,11 @@ class Unit_Views_oxviewTest extends OxidTestCase
         $oView = oxNew( 'oxView' );
         $oView->init();
         $this->assertEquals( "oxview", $oView->getThisAction() );
+
+        $oUtilsServer = $this->getMock( 'oxUtilsServer', array( 'setOxCookie' ) );
+        $oUtilsServer->expects( $this->never() )->method( 'setOxCookie');
+
+        modInstances::addMod( "oxUtilsServer", $oUtilsServer );
     }
 
     /*
@@ -189,10 +194,10 @@ class Unit_Views_oxviewTest extends OxidTestCase
     /*
      * Test getTemplateName()
      */
-    public function testGetTemplateName()
+    public function testSetGetTemplateName()
     {
-        $oView = $this->getProxyClass( "oxView" );
-        $oView->setNonPublicVar( "_sThisTemplate", "testTemplate" );
+        $oView = new oxView();
+        $oView->setTemplateName("testTemplate");
 
         $this->assertEquals( 'testTemplate', $oView->getTemplateName() );
     }
@@ -371,7 +376,7 @@ class Unit_Views_oxviewTest extends OxidTestCase
         $oConfig->expects( $this->once() )->method( 'isSsl')->will( $this->returnValue( true ) );
         $oConfig->expects( $this->once() )->method( 'getSslShopUrl' )->will( $this->returnValue( 'SSLshopurl/' ) );
         $oConfig->expects( $this->never() )->method( 'getShopUrl' );
-        $oConfig->setConfigParam( 'sAdminDir', 'admin' );
+        $this->setConfigParam( 'sAdminDir', 'admin' );
 
         $oView = $this->getMock( 'oxview', array( 'getConfig', 'isAdmin' ) );
         $oView->expects( $this->once() )->method( 'getConfig' )->will( $this->returnValue( $oConfig ) );
@@ -483,20 +488,6 @@ class Unit_Views_oxviewTest extends OxidTestCase
 
     }
 
-    public function testShowNewsletter()
-    {
-        $oView = $this->getProxyClass( 'oxview' );
-        $this->assertEquals( 1, $oView->showNewsletter() );
-    }
-
-    public function testSetShowNewsletter()
-    {
-        $oView = $this->getProxyClass( 'oxview' );
-        $oView->setShowNewsletter(0);
-
-        $this->assertEquals( 0, $oView->showNewsletter() );
-    }
-
     public function testSetGetShopLogo()
     {
         $oView = $this->getProxyClass( 'oxview' );
@@ -546,18 +537,32 @@ class Unit_Views_oxviewTest extends OxidTestCase
      */
     public function testIsConnectedWithFb()
     {
-        oxTestModules::addFunction( "oxFb", "isConnected", "{return true;}" );
-
-        $myConfig = modConfig::getInstance();
-        $myConfig->setConfigParam( "bl_showFbConnect", false );
-
+        $oFB = $this->getMock( "oxFb", array( "isConnected" ) );
+        $oFB->expects( $this->any() )->method( "isConnected" )->will( $this->returnValue( true ) );
+        oxTestModules::addModuleObject( 'oxFb', $oFB );
         $oView = new oxView();
-        $this->assertFalse( $oView->isConnectedWithFb() );
 
-        $myConfig->setConfigParam( "bl_showFbConnect", true );
+        $this->setConfigParam( "bl_showFbConnect", true );
         $this->assertTrue( $oView->isConnectedWithFb() );
 
-        oxTestModules::addFunction( "oxFb", "isConnected", "{return false;}" );
+        $this->setConfigParam( "bl_showFbConnect", false );
+        $this->assertFalse( $oView->isConnectedWithFb() );
+    }
+
+    /**
+     * Testing getter for checking if user is connected using Facebook connect
+     *
+     * return null
+     */
+    public function testIsNotConnectedWithFb()
+    {
+        $oFB = $this->getMock( "oxFb", array( "isConnected" ) );
+        $oFB->expects( $this->any() )->method( "isConnected" )->will( $this->returnValue( false ) );
+        oxTestModules::addModuleObject( 'oxFb', $oFB );
+
+        $this->setConfigParam( "bl_showFbConnect", true );
+
+        $oView = new oxView();
         $this->assertFalse( $oView->isConnectedWithFb() );
     }
 
@@ -647,22 +652,70 @@ class Unit_Views_oxviewTest extends OxidTestCase
         $oView->setIsCallForCache( '123456789' );
         $this->assertEquals( '123456789', $oView->getIsCallForCache() );
     }
-    
+
     /*
      * Testing oxview::getViewId()
-     * 
+     *
      * @return null
      */
     public function testgetViewId()
     {
         $oView = new oxView();
-        $this->assertNull( $oView->getViewId() );        
+        $this->assertNull( $oView->getViewId() );
     }
 
     public function testShowRdfa()
     {
         $oView = new oxview();
         $this->assertFalse( $oView->showRdfa() );
+    }
+
+    public function testSetGetViewParameters()
+    {
+        $oView = new oxview();
+
+        $oView->setViewParameters( array("testItem1"=>"testValue1", "testItem2"=>"testValue2") );
+
+        $this->assertEquals( "testValue1", $oView->getViewParameter("testItem1") );
+        $this->assertEquals( "testValue2", $oView->getViewParameter("testItem2") );
+        $this->assertNull( $oView->getViewParameter("testItem3") );
+    }
+
+    public function testIsCacheable()
+    {
+            return;
+        $oView = new oxview();
+        $this->assertTrue( $oView->isCacheable() );
+    }
+
+    public function testSetIsCacheable()
+    {
+            return;
+        $oView = new oxview();
+        $oView->setIsCacheable( false );
+        $this->assertFalse( $oView->isCacheable() );
+    }
+
+    public function testGetCacheLifeTime()
+    {
+            return;
+        $this->getConfig()->setConfigParam( "iLayoutCacheLifeTime", 10 );
+        $oView = new oxview();
+        $this->assertEquals( 10, $oView->getCacheLifeTime() );
+    }
+
+    public function testShowNewsletter()
+    {
+        $oView = $this->getProxyClass( 'oxview' );
+        $this->assertEquals( 1, $oView->showNewsletter() );
+    }
+
+    public function testSetShowNewsletter()
+    {
+        $oView = $this->getProxyClass( 'oxview' );
+        $oView->setShowNewsletter(0);
+
+        $this->assertEquals( 0, $oView->showNewsletter() );
     }
 
 }

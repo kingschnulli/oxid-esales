@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: contentUsageTest.php 34021 2011-03-25 15:46:51Z linas.kukulskis $
+ * @version   SVN: $Id: contentUsageTest.php 45490 2012-05-21 13:47:32Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -60,6 +60,7 @@ class Unit_Maintenance_contentUsageTest extends OxidTestCase
      */
     public function testContentUsage()
     {
+        $this->markTestSkipped('removing basic theme');
         $aConst = $this->_checkTemplates( $this->_sDir, $this->_aContents);
         $this->assertEquals( array(), $aConst);
     }
@@ -74,7 +75,7 @@ class Unit_Maintenance_contentUsageTest extends OxidTestCase
      */
     private function _checkTemplates( $dir, $aConst)
     {
-        $aDirs = array($dir."/out/basic/tpl", $dir."/out/azure/tpl");
+        $aDirs = array($dir."/out/azure/tpl");
         while ($aDirs) {
             $sPWD = array_pop($aDirs);
             foreach (glob($sPWD."/*") as $tpl) {

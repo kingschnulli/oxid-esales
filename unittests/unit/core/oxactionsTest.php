@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxactionsTest.php 45166 2012-05-15 12:58:37Z edvardas.gineika $
+ * @version   SVN: $Id: oxactionsTest.php 47600 2012-07-20 14:59:57Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -60,7 +60,7 @@ class Unit_Core_oxactionsTest extends OxidTestCase
         ));
         $this->oPromo->save();
 
-        oxTestModules::addFunction('oxStr', 'setH($h)', '{oxStr::$_oHandler = $h;}');
+     //   oxTestModules::addFunction('oxStr', 'setH($h)', '{oxStr::$_oHandler = $h;}');
     }
 
     /**
@@ -73,7 +73,7 @@ class Unit_Core_oxactionsTest extends OxidTestCase
         modDb::getInstance()->cleanup();
         $this->_oAction->delete();
         $this->oPromo->delete();
-        oxNew('oxStr')->setH(null);
+      //  oxNew('oxStr')->setH(null);
 
         parent::tearDown();
     }
@@ -441,7 +441,7 @@ class Unit_Core_oxactionsTest extends OxidTestCase
 
         $this->assertEquals( "http://www.oxid-esales.com", $oPromo->getBannerLink() );
     }
-    
+
     /**
      * test
      */
@@ -451,8 +451,8 @@ class Unit_Core_oxactionsTest extends OxidTestCase
         $oPromo->oxactions__oxlink = new oxField( "https://www.oxid-esales.com" );
 
         $this->assertEquals( "https://www.oxid-esales.com", $oPromo->getBannerLink() );
-    }    
-    
+    }
+
     /**
      * test
      */
@@ -460,7 +460,7 @@ class Unit_Core_oxactionsTest extends OxidTestCase
     {
         $oConfig = $this->getMock('oxConfig',array('getShopUrl'), array(), '', false);
         $oConfig->expects( $this->once() )->method( 'getShopUrl' )->will( $this->returnValue( "http://myeshop/" ) );
-       
+
         $oActions = $this->getMock( 'oxActions', array( 'getConfig' ), array(), '', false );
         $oActions->expects( $this->once() )->method( 'getConfig' )->will( $this->returnValue( $oConfig ) );
 

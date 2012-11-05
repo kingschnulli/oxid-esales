@@ -49,7 +49,7 @@ class Unit_Views_accountdownloadsTest extends OxidTestCase
      */
     public function testGetDownloadError()
     {
-        modConfig::setParameter( 'download_error', 'aaa' );
+        $this->setRequestParam( 'download_error', 'aaa' );
 
         $oAccDownloads = new Account_Downloads();
 

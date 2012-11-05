@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxadmindetailsTest.php 32926 2011-02-04 15:00:59Z alfonsas $
+ * @version   SVN: $Id: oxadmindetailsTest.php 47944 2012-07-30 12:41:30Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -131,7 +131,7 @@ class Unit_Admin_oxAdminDetailsTest extends OxidTestCase
      */
     public function testGetPlainEditor()
     {
-        $oObject = new oxStdClass;
+        $oObject = new stdClass;
         $sEditorHtml = "<textarea id='editor_sField' style='width:100px; height:100px;'>sEditObjectValue</textarea>";
 
         $oAdminDetails = $this->getMock( 'oxadmindetails', array( '_getEditValue' ) );
@@ -157,10 +157,10 @@ class Unit_Admin_oxAdminDetailsTest extends OxidTestCase
      */
     public function testGetEditValue()
     {
-        $oObject = new oxStdClass;
+        $oObject = new stdClass;
         $oObject->oField1 = new oxField( 'field1value' );
 
-        $oObject->oField2 = new oxStdClass;
+        $oObject->oField2 = new stdClass;
         $oObject->oField2->value = 'field2value';
 
         $oAdminDetails = new oxadmindetails();
@@ -176,7 +176,7 @@ class Unit_Admin_oxAdminDetailsTest extends OxidTestCase
      */
     public function testGetEditValue_parseIsOff()
     {
-        $oObject = new oxStdClass;
+        $oObject = new stdClass;
         $oObject->oField = new oxField( 'test [{$oViewConf->getCurrentHomeDir()}]' );
 
         $myConfig = modConfig::getInstance();

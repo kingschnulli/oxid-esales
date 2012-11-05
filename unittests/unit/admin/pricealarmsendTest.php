@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: pricealarmsendTest.php 34447 2011-04-08 11:38:33Z sarunas $
+ * @version   SVN: $Id: pricealarmsendTest.php 47944 2012-07-30 12:41:30Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -55,7 +55,7 @@ class Unit_Admin_PriceAlarmSendTest extends OxidTestCase
         modConfig::setParameter( "menu", $sNode );
         modConfig::setParameter( 'actedit', 1 );
 
-        $oNavigation = $this->getMock( "OxStdClass", array( "getTabs", "getActiveTab" ) );
+        $oNavigation = $this->getMock( "oxnavigationtree", array( "getTabs", "getActiveTab" ) );
         $oNavigation->expects( $this->any() )->method( 'getActiveTab' )->will( $this->returnValue( "testEdit" ) );
         $oNavigation->expects( $this->once() )->method( 'getTabs' )->with( $this->equalTo( $sNode ), $this->equalTo( 1 ) )->will( $this->returnValue( "editTabs" ) );
 

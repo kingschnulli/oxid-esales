@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxemosadapterTest.php 49000 2012-08-24 11:52:35Z tomas $
+ * @version   SVN: $Id: oxemosadapterTest.php 50060 2012-10-03 12:35:05Z tomas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -479,9 +479,9 @@ class Unit_Maintenance_oxemosadapterTest extends OxidTestCase
     {
         $this->markTestSkipped("Skipped as iArtCnt parameter is deprecated, getter should be tested here");
         $aParams = null;
-        $oSmarty = new oxstdclass();
+        $oSmarty = new stdClass();
 
-        $oSmarty->_tpl_vars['pageNavigation'] = new oxstdclass();
+        $oSmarty->_tpl_vars['pageNavigation'] = new stdClass();
         $oSmarty->_tpl_vars['pageNavigation']->iArtCnt = 100;
 
         modConfig::setParameter( 'searchparam', 'searchParam' );

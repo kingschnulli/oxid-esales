@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutilsdateTest.php 27809 2010-05-19 12:30:58Z rimvydas.paskevicius $
+ * @version   SVN: $Id: oxutilsdateTest.php 46082 2012-06-12 06:15:44Z mindaugas.rimgaila $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -64,12 +64,11 @@ class Unit_Core_oxUtilsDateTest extends OxidTestCase
 
     public function testGetTime()
     {
-        $myConfig = oxConfig::getInstance();
-        modConfig::getInstance()->setConfigParam('iServerTimeShift', null); //explicitly set timezone to null
+        $this->setConfigParam('iServerTimeShift', null); //explicitly set timezone to null
         $this->assertEquals(oxUtilsDate::getInstance()->getTime(), time());
         for ($iTimeZone = -12; $iTimeZone < 15; $iTimeZone++) {
-            modConfig::getInstance()->setConfigParam('iServerTimeShift', $iTimeZone);
-            $this->assertEquals(oxUtilsDate::getInstance()->getTime(), (time() + (modConfig::getInstance()->getConfigParam('iServerTimeShift') * 3600)));
+            $this->setConfigParam('iServerTimeShift', $iTimeZone);
+            $this->assertEquals(oxUtilsDate::getInstance()->getTime(), (time() + ($this->getConfigParam('iServerTimeShift') * 3600)));
         }
     }
 
@@ -115,4 +114,13 @@ class Unit_Core_oxUtilsDateTest extends OxidTestCase
         $this->assertTrue( oxUtilsDate::getInstance()->isEmptyDate( '0000-00-00 00:00:00' ) );
     }
 
+    /**
+     *  Test static time value
+     */
+    public function testGetTime_static()
+    {
+        $this->setTime( 157 );
+        $this->assertEquals( 157, $this->getTime() );
+        $this->assertEquals( 157, oxUtilsDate::getInstance()->getTime() );
+    }
 }

@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutilsserverTest.php 42118 2012-02-09 15:13:35Z linas.kukulskis $
+ * @version   SVN: $Id: oxutilsserverTest.php 45497 2012-05-21 14:26:54Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -179,25 +179,6 @@ class Unit_Core_oxUtilsServerTest extends OxidTestCase
         $oUtilsServer = new oxUtilsServer();
         $this->assertEquals( "xxx", $oUtilsServer->UNITgetCookiePath( "xxx" ) );
         $this->assertEquals( "", $oUtilsServer->UNITgetCookiePath( null ) );
-    }
-
-    public function testGetCookieDomain()
-    {
-        $oUtilsServer = new oxUtilsServer();
-        $this->assertEquals( "xxx", $oUtilsServer->UNITgetCookieDomain( "xxx" ) );
-        $this->assertEquals( "", $oUtilsServer->UNITgetCookieDomain( null ) );
-
-        modConfig::getInstance()->setConfigParam( "sCookieDomain", "yyy" );
-        $this->assertEquals( "yyy", $oUtilsServer->UNITgetCookieDomain( null ) );
-    }
-
-    public function testGetCookiePathUserDefinedPath()
-    {
-        $oUtilsServer = new oxUtilsServer();
-        $this->assertEquals( 'xxxpath', $oUtilsServer->UNITgetCookiePath( 'xxxpath' ) );
-
-        modConfig::getInstance()->setConfigParam( 'sCookiePath', 'yyypath' );
-        $this->assertEquals( 'yyypath', $oUtilsServer->UNITgetCookiePath( 'xxxpath' ) );
     }
 
     /**

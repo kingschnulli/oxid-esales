@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: vendorlistTest.php 44719 2012-05-09 11:29:11Z linas.kukulskis $
+ * @version   SVN: $Id: vendorlistTest.php 46825 2012-06-29 11:57:11Z saulius.stasiukaitis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -209,37 +209,18 @@ class Unit_Views_vendorlistTest extends OxidTestCase
 
         modConfig::setParameter( 'cnid', $sVendorId );
         modConfig::getInstance()->setConfigParam( 'iNrofCatArticles', 20 );
-        $oVendorTree = new oxvendorlist();
-        $oVendorTree->buildVendorTree( 'vendorlist', $sVendorId, oxConfig::getInstance()->getShopHomeURL() );
+       // $oVendorTree = new oxvendorlist();
+       // $oVendorTree->buildVendorTree( 'vendorlist', $sVendorId, oxConfig::getInstance()->getShopHomeURL() );
 
         $oVendor = new oxVendor();
-        $oVendor->load($sVendorId);
+        $oVendor->load( $sVendorId );
 
         $oVendorList = $this->getProxyClass( "vendorlist" );
-        $oVendorList->setVendorTree( $oVendorTree );
+       // $oVendorList->setVendorTree( $oVendorTree );
         $oVendorList->setNonPublicVar( "_oActVendor", $oVendor );
         $oArtList = $oVendorList->getArticleList();
 
         $this->assertEquals(oxUtilsCount::getInstance()->getVendorArticleCount( $sVendorId ), $oArtList->count());
-    }
-
-    // (buglist_322) if vendorlist view is opened vendortree must be opend too (aVendorlist)
-    public function testLoadVendorTreeInVendorlistView()
-    {
-        oxTestModules::addFunction('oxUtilsServer', 'getServerVar', '{ if ( $aA[0] == "HTTP_HOST") { return "shop.com/"; } else { return "test.php";} }');
-        modConfig::getInstance()->setConfigParam( 'bl_perfLoadVendorTree', 1 );
-
-        modConfig::setParameter( 'cnid', 'v_root' );
-        $oVendorTree = new oxvendorlist();
-        $oVendorTree->buildVendorTree( 'vendorlist', 'v_root', oxConfig::getInstance()->getShopHomeURL() );
-
-        $oVendor = $this->getProxyClass( "vendorlist" );
-        $oVendor->setVendorTree( $oVendorTree );
-        $oVendor->init();
-        $oVendor->render();
-        $aViewData = $oVendor->getNonPublicVar( '_aViewData' );
-
-        $this->assertEquals( 3, count($oVendor->getVendorlist()) );
     }
 
     public function testGetPageNavigation()
@@ -269,18 +250,6 @@ class Unit_Views_vendorlistTest extends OxidTestCase
         $oVendorList = $this->getProxyClass( "vendorlist" );
         $oVendorList->setNonPublicVar( "_oActVendor", $oVendor );
         $this->assertEquals( $oVendor->getLink(), $oVendorList->generatePageNavigationUrl() );
-    }
-
-    public function testGetRecommList()
-    {
-        oxTestModules::addFunction('oxRecommList', 'getRecommListsByIds', '{ return "testRecomm"; }');
-        $oArtList = new oxarticlelist();
-
-        $oVendor = $this->getProxyClass( "vendorlist" );
-        $oVendor->setNonPublicVar( "_aArticleList", $oArtList );
-        $oVendor->setNonPublicVar( "_iArticleCnt", 1 );
-
-        $this->assertEquals( "testRecomm", $oVendor->getSimilarRecommLists() );
     }
 
     public function testGetCatTitle()
@@ -358,9 +327,8 @@ class Unit_Views_vendorlistTest extends OxidTestCase
         $oCat = new oxcategory();
         $oCat->oxcategories__oxtitle = new oxField( 'you are here' );
 
-        $oListView = $this->getMock( "vendorlist", array( 'getActVendor', 'getVendorTree', 'getCatTreePath' ) );
+        $oListView = $this->getMock( "vendorlist", array( 'getActVendor', 'getCatTreePath' ) );
         $oListView->expects( $this->atLeastOnce() )->method( 'getActVendor')->will( $this->returnValue( $oVendor ) );
-        $oListView->expects( $this->atLeastOnce() )->method( 'getVendorTree' )->will( $this->returnValue( new oxvendorlist() ) );
         $oListView->expects( $this->atLeastOnce() )->method( 'getCatTreePath' )->will( $this->returnValue( array( $oCat ) ) );
 
         $this->assertEquals( $sRez, $oListView->getMetaKeywords() );
@@ -378,9 +346,8 @@ class Unit_Views_vendorlistTest extends OxidTestCase
         $oCat = new oxcategory();
         $oCat->oxcategories__oxtitle = new oxField( 'By Distributor' );
 
-        $oListView = $this->getMock( "vendorlist", array( 'getActVendor', 'getVendorTree', 'getCatTreePath' ) );
+        $oListView = $this->getMock( "vendorlist", array( 'getActVendor', 'getCatTreePath' ) );
         $oListView->expects( $this->atLeastOnce() )->method( 'getActVendor')->will( $this->returnValue( $oVendor ) );
-        $oListView->expects( $this->atLeastOnce() )->method( 'getVendorTree' )->will( $this->returnValue( new oxvendorlist() ) );
         $oListView->expects( $this->atLeastOnce() )->method( 'getCatTreePath' )->will( $this->returnValue( array( $oCat ) ) );
 
         $this->assertEquals( $sRez, $oListView->getMetaKeywords() );
@@ -398,9 +365,8 @@ class Unit_Views_vendorlistTest extends OxidTestCase
         $oCat = new oxcategory();
         $oCat->oxcategories__oxtitle = new oxField( 'By Distributor' );
 
-        $oListView = $this->getMock( "vendorlist", array( 'getActVendor', 'getVendorTree', 'getCatTreePath' ) );
+        $oListView = $this->getMock( "vendorlist", array( 'getActVendor', 'getCatTreePath' ) );
         $oListView->expects( $this->atLeastOnce() )->method( 'getActVendor')->will( $this->returnValue( $oVendor ) );
-        $oListView->expects( $this->atLeastOnce() )->method( 'getVendorTree' )->will( $this->returnValue( new oxvendorlist() ) );
         $oListView->expects( $this->atLeastOnce() )->method( 'getCatTreePath' )->will( $this->returnValue( array( $oCat ) ) );
 
         $this->assertEquals( $sRez, $oListView->getMetaDescription() );

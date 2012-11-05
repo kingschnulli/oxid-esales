@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: forgotpwdTest.php 44707 2012-05-09 11:24:40Z linas.kukulskis $
+ * @version   SVN: $Id: forgotpwdTest.php 47900 2012-07-30 07:26:09Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -217,7 +217,7 @@ class Unit_Views_forgotpwdTest extends OxidTestCase
         modConfig::setParameter( 'password_new', $sPass );
         modConfig::setParameter( 'password_new_confirm', $sPass );
 
-        $oUser = $this->getMock( 'oxStdClass', array( 'checkPassword' ) );
+        $oUser = $this->getMock( 'oxUser', array( 'checkPassword' ) );
         $oUser->expects( $this->once() )->method( 'checkPassword' )->with( $this->equalTo( $sPass ), $this->equalTo( $sPass ), $this->equalTo( true ) )->will( $this->returnValue( new oxException() ) );
         oxTestModules::addModuleObject( 'oxuser', $oUser );
 
