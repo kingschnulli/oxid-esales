@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxrssfeedTest.php 47952 2012-07-30 14:04:31Z linas.kukulskis $
+ * @version   SVN: $Id: oxrssfeedTest.php 51863 2012-11-15 12:42:59Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -111,11 +111,12 @@ class Unit_Core_oxrssfeedTest extends OxidTestCase
             'managingEditor' => 'emaiail.com',
             'generator' => 'OXID eShop oxversion',
             'image' => array(
-                'url' => 'http://homeurl/lalala/logo'.OXID_VERSION_SUFIX.'.png',
+                'url' => 'http://homeurl/lalala/logo.png',
                 'title' => 'name',
                 'link' => 'http://homeurl/extra',
             )
         );
+
 
         $this->assertEquals($expect, $oRss->getChannel());
     }
@@ -1156,7 +1157,7 @@ class Unit_Core_oxrssfeedTest extends OxidTestCase
         oxTestModules::addFunction('oxrssfeed', 'getBargainUrl', '{ return "bargainurl"; }');
         oxTestModules::addFunction('oxrssfeed', 'getBargainTitle', '{ return "bargaintitle"; }');
 
-        oxTestModules::addFunction('oxarticlelist', 'loadAktionArticles', '{ $this->load5 = "loadbargainart"; }');
+        oxTestModules::addFunction('oxarticlelist', 'loadActionArticles', '{ $this->load5 = "loadbargainart"; }');
         oxTestModules::addFunction('oxrssfeed', '_getArticleItems', '{ return $aA[0]->load5; }');
 
         $oRss = oxNew('oxrssfeed');

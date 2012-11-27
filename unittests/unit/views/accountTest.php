@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: accountTest.php 47900 2012-07-30 07:26:09Z linas.kukulskis $
+ * @version   SVN: $Id: accountTest.php 51853 2012-11-15 11:28:55Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -328,7 +328,7 @@ class Unit_Views_accountTest extends OxidTestCase
     {
         oxSession::setVar( 'aFiltcompproducts', array('1','2') );
 
-        $oServiceMenu = new oxwServiceMenu();
-        $this->assertEquals( 2, $oServiceMenu->getCompareItemsCnt() );
+        $oAcc = new account();
+        $this->assertEquals( 2, $oAcc->getCompareItemsCnt() );
     }
 }

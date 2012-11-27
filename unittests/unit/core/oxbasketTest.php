@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxbasketTest.php 50357 2012-10-10 12:17:54Z tomas $
+ * @version   SVN: $Id: oxbasketTest.php 51827 2012-11-14 15:52:12Z aurimas.gladutis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -1117,6 +1117,20 @@ class Unit_Core_oxbasketTest extends OxidTestCase
         $oBasket = $this->getMock( 'oxbasket', array( '_addItemToSavedBasket' ) );
         $oBasket->expects( $this->never() )->method( '_addItemToSavedBasket');
         $oBasket->addToBasket( $this->oArticle->getId(), 10 );
+    }
+
+    /**
+     * Testing adding bundled price to basket
+     *
+     * @return null
+     */
+    public function testAddToBasketBundle()
+    {
+        $oBasket = $this->getMock( 'oxbasket', array( '_addItemToSavedBasket' ) );
+        $oBasket->expects( $this->never() )->method( '_addItemToSavedBasket');
+        $this->assertFalse( $oBasket->isNewItemAdded() );
+        $oBasket->addToBasket( $this->oArticle->getId(), 10, null, false, true );
+        $this->assertFalse( $oBasket->isNewItemAdded() );
     }
 
     /**

@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxorderTest.php 50192 2012-10-05 09:59:47Z arturas.sevcenko $
+ * @version   SVN: $Id: oxorderTest.php 51916 2012-11-16 08:51:43Z saulius.stasiukaitis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -2765,28 +2765,6 @@ class Unit_Core_oxorderTest extends OxidTestCase
         $this->assertEquals( $myConfig->getShopId(), $aRes['OXSHOPID'] );
 
         $this->assertEquals( 0, $aRes['OXORDERNR'] );
-    }
-
-    public function testInsertSetsOrderNumberForDifferentShops()
-    {
-        $this->markTestSkipped("Temporary skipping test");
-
-        $oDB = oxDb::getDb();
-        $sSql = "insert into oxorder (oxid, oxshopid, oxordernr) values('_testOrderId', '123', '1') ";
-        $oDB->execute( $sSql );
-
-        $oOrder = oxNew( 'oxOrder' );
-        $oOrder->setId( '_testOrderId2' );
-        $oOrder->setSeparateNumbering( true );
-
-        $this->assertTrue( $oOrder->UNITinsert() );
-
-        $oDB = oxDb::getDb( oxDB::FETCH_MODE_ASSOC );
-        $sSql = "select oxordernr from oxorder where oxid = '_testOrderId' or oxid = '_testOrderId2' ";
-        $aRes = $oDB->getAll( $sSql );
-
-        $this->assertEquals( '1', $aRes[0]['oxordernr'] );
-        $this->assertEquals( '1', $aRes[1]['oxordernr'] );
     }
 
     public function testUpdate()

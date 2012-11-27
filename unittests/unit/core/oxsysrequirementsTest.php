@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxsysrequirementsTest.php 48049 2012-07-31 13:32:10Z vilma $
+ * @version   SVN: $Id: oxsysrequirementsTest.php 51578 2012-11-09 07:48:35Z alfonsas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';

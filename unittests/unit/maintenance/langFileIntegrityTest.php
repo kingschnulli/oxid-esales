@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: langFileIntegrityTest.php 48395 2012-08-08 13:34:59Z linas.kukulskis $
+ * @version   SVN: $Id: langFileIntegrityTest.php 51568 2012-11-08 15:37:32Z saulius.stasiukaitis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -39,8 +39,6 @@ class Unit_Maintenance_langFileIntegrityTest extends OxidTestCase
     protected function setUp()
     {
         parent::setUp();
-    //    $this->markTestSkipped("");
-
     }
 
     /**

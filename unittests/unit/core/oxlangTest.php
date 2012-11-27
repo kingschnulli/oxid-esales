@@ -19,25 +19,11 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxlangTest.php 50559 2012-10-16 10:20:47Z vilma $
+ * @version   SVN: $Id: oxlangTest.php 52070 2012-11-21 08:09:03Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
 require_once realpath( "." ).'/unit/test_config.inc.php';
-
-/*
-class oxConfig_for_Unit_oxLangTest extends oxconfig
-{
-    public function __construct( $iLang )
-    {
-        $this->_iLang = $iLang;
-    }
-    public function getShopLanguage()
-    {
-        return $this->_iLang;
-    }
-}
-*/
 
 class Unit_Core_oxLangTest extends OxidTestCase
 {
@@ -128,7 +114,7 @@ class Unit_Core_oxLangTest extends OxidTestCase
      */
     public function testGetFormLang()
     {
-        $sFormLang = "<input type=\"hidden\" name=\"lang\" value=\"9\">";
+        $sFormLang = "<input type=\"hidden\" name=\"lang\" value=\"9\" />";
 
         $oLang = $this->getMock( "oxLang", array( "getBaseLanguage" ));
         $oLang->expects( $this->any() )->method( 'getBaseLanguage' )->will( $this->returnValue( 9 ) );
@@ -152,22 +138,23 @@ class Unit_Core_oxLangTest extends OxidTestCase
     public function testGetLangFilesPathArrayCustom()
     {
         $sPath = oxConfig::getInstance()->getAppDir();
+
+        $aPathArray = array(
+              $sPath . "translations/de/lang.php"
+            , $sPath . "translations/de/translit_lang.php"
+            , $sPath . "views/azure/de/lang.php"
+            , $sPath . "views/azure/1/de/lang.php"
+            , $sPath . "views/azure/de/cust_lang.php"
+        );
+
         $aPathArray = array(
               $sPath . "translations/de/lang.php"
             , $sPath . "translations/de/translit_lang.php"
             , $sPath . "views/azure/de/lang.php"
             , $sPath . "views/azure/de/cust_lang.php"
-            , $sPath . "views/azure/1/de/lang.php" );
+        );
 
-        $oConfig = $this->getMock( "oxConfig", array( "getAppDir", "getConfigParam", "getShopId" ) );
-        $oConfig->expects( $this->at(0) )->method( 'getAppDir' )->will( $this->returnValue( $sPath ) );
-        $oConfig->expects( $this->at(1) )->method( 'getConfigParam' )->with( $this->equalTo( 'sTheme' ) )->will( $this->returnValue( 'azure' ) );
-        $oConfig->expects( $this->at(2) )->method( 'getConfigParam' )->with( $this->equalTo( 'sCustomTheme' ) )->will( $this->returnValue( '' ) );
-        $oConfig->expects( $this->at(3) )->method( 'getShopId' )->will( $this->returnValue( 1 ) );
-
-        $oLang = $this->getMock( "oxLang", array( "getConfig") );
-        $oLang->expects( $this->any() )->method( 'getConfig' )->will( $this->returnValue( $oConfig ) );
-
+        $oLang = new oxLang();
         $this->assertEquals( $aPathArray, $oLang->UNITgetLangFilesPathArray( 0 ) );
     }
 
@@ -187,20 +174,22 @@ class Unit_Core_oxLangTest extends OxidTestCase
               $sPath . "translations/de/lang.php"
             , $sPath . "translations/de/translit_lang.php"
             , $sPath . "views/azure/de/lang.php"
-            , $sPath . "views/azure/de/cust_lang.php"
             , $sPath . "views/azure/1/de/lang.php"
-            , $sShopPath . "modules/test1/out/lang/de/test_lang.php" );
+            , $sShopPath . "modules/test1/out/lang/de/test_lang.php"
+            , $sPath . "views/azure/de/cust_lang.php"
+        );
+
+        $aPathArray = array(
+              $sPath . "translations/de/lang.php"
+            , $sPath . "translations/de/translit_lang.php"
+            , $sPath . "views/azure/de/lang.php"
+            , $sShopPath . "modules/test1/out/lang/de/test_lang.php"
+            , $sPath . "views/azure/de/cust_lang.php"
+        );
+
         $aInfo = array( 'test1' => 'test1' );
 
-        $oConfig = $this->getMock( "oxConfig", array( "getAppDir", "getConfigParam", "getShopId", "getModulesDir" ) );
-        $oConfig->expects( $this->at(0) )->method( 'getAppDir' )->will( $this->returnValue( $sPath ) );
-        $oConfig->expects( $this->at(1) )->method( 'getConfigParam' )->with( $this->equalTo( 'sTheme' ) )->will( $this->returnValue( 'azure' ) );
-        $oConfig->expects( $this->at(2) )->method( 'getConfigParam' )->with( $this->equalTo( 'sCustomTheme' ) )->will( $this->returnValue( '' ) );
-        $oConfig->expects( $this->at(3) )->method( 'getShopId' )->will( $this->returnValue( 1 ) );
-        $oConfig->expects( $this->any() )->method( 'getModulesDir' )->will( $this->returnValue( oxConfig::getInstance()->getConfigParam('sShopDir') . "modules/" ) );
-
-        $oLang = $this->getMock( "oxLang", array( "getConfig", "_getActiveModuleInfo") );
-        $oLang->expects( $this->any() )->method( 'getConfig' )->will( $this->returnValue( $oConfig ) );
+        $oLang = $this->getMock( "oxLang", array( "_getActiveModuleInfo") );
         $oLang->expects( $this->any() )->method( '_getActiveModuleInfo' )->will( $this->returnValue( $aInfo ) );
 
         $this->assertEquals( $aPathArray, $oLang->UNITgetLangFilesPathArray( 0 ) );
@@ -230,20 +219,15 @@ class Unit_Core_oxLangTest extends OxidTestCase
         $aPathArray = array(
               $sPath . "views/admin/de/lang.php"
             , $sPath . "translations/de/translit_lang.php"
-            , $sPath . "views/admin/de/cust_lang.php"
             , $sPath . "views/admin/de/help_lang.php"
             , $sPath . "views/azure/de/theme_options.php"
             , $sShopPath . "modules/test1/out/admin/de/test1_lang.php"
             , $sShopPath . "modules/test1/out/admin/de/module_options.php"
+            , $sPath . "views/admin/de/cust_lang.php"
         );
         $aInfo = array( 'test1' => 'test1' );
 
-        $oConfig = $this->getMock( "oxConfig", array( "getAppDir", "getConfigParam", "getShopId", "getModulesDir" ) );
-        $oConfig->expects( $this->at(0) )->method( 'getAppDir' )->will( $this->returnValue( $sPath ) );
-        $oConfig->expects( $this->any() )->method( 'getModulesDir' )->will( $this->returnValue( oxConfig::getInstance()->getConfigParam('sShopDir') . "modules/" ) );
-
-        $oLang = $this->getMock( "oxLang", array( "getConfig", "_getActiveModuleInfo") );
-        $oLang->expects( $this->any() )->method( 'getConfig' )->will( $this->returnValue( $oConfig ) );
+        $oLang = $this->getMock( "oxLang", array( "_getActiveModuleInfo") );
         $oLang->expects( $this->any() )->method( '_getActiveModuleInfo' )->will( $this->returnValue( $aInfo ) );
 
         $this->assertEquals( $aPathArray, $oLang->UNITgetAdminLangFilesPathArray( 0 ) );
@@ -1203,29 +1187,6 @@ class Unit_Core_oxLangTest extends OxidTestCase
 
         oxUtils::getInstance()->toFileCache($sCacheKey, null);
 
-    }
-
-    public function testGetLangTranslationArrayCustumFile()
-    {
-        oxUtils::getInstance()->oxResetFileCache();
-        $oSubj = new oxLang();
-        $aTrArray = $oSubj->UNITgetLangTranslationArray( 1, 1 );
-        $this->assertTrue( isset( $aTrArray["EMAIL_PRICEALARM_CUSTOMER_HAVEPRICEALARM"] ) );
-        $this->assertEquals( "we have a Price Alert in", $aTrArray["EMAIL_PRICEALARM_CUSTOMER_HAVEPRICEALARM"] );
-    }
-
-    public function testCheckCustumFile()
-    {
-        $aLang = $this->_getLangArray( 'de', 'admin');
-        $this->assertTrue(isset($aLang["charset"]));
-        $this->assertTrue(isset($aLang["EMAIL_PRICEALARM_CUSTOMER_HAVEPRICEALARM"]));
-        $aLang = $this->_getLangArray( 'en', 'admin');
-        $this->assertTrue(isset($aLang["charset"]));
-        $this->assertEquals("we have a Price Alert in", $aLang["EMAIL_PRICEALARM_CUSTOMER_HAVEPRICEALARM"]);
-        $aLang = $this->_getLangArray( 'de', 'azure');
-        $this->assertTrue(isset($aLang["charset"]));
-        $aLang = $this->_getLangArray( 'en', 'azure');
-        $this->assertTrue(isset($aLang["charset"]));
     }
 
     /**

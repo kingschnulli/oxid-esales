@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticlelistTest.php 50489 2012-10-15 09:02:17Z linas.kukulskis $
+ * @version   SVN: $Id: oxarticlelistTest.php 52021 2012-11-19 16:22:29Z saulius.stasiukaitis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -134,31 +134,6 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
     }
 
     /**
-     * Test load stock remind products.
-     *
-     * @return string
-     */
-    public function testLoadStockRemindProducts()
-    {
-        $this->markTestIncomplete();
-        /*
-        //set params for stock reminder
-        $oArticle1->oxarticles__oxremindactive = new oxField( '0', oxField::T_RAW);
-        $oArticle1->oxarticles__oxstock        = new oxField( '9', oxField::T_RAW);
-        $oArticle1->oxarticles__oxremindamount = new oxField( '10', oxField::T_RAW);
-        $oArticle1->save();
-
-        $oBasketItem = oxNew( "modOxBasketItemEmail" );
-        //$oBasketItem->init('_testArticleId', 9, true);
-        $oBasketItem->setArticle('_testArticleId');
-        $aBasketContents[0] = $oBasketItem;
-
-        $blRet = $this->_oEmail->sendStockReminder( $aBasketContents );
-        $this->assertFalse( $blRet, 'No need to send stock remind mail' );
-        */
-    }
-
-    /**
      * Test get category select if all data is properly escaped.
      *
      * @return string
@@ -211,7 +186,7 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
      *
      * @return null
      */
-    public function testLoadAktionArticlesTotalAmount()
+    public function testLoadActionArticlesTotalAmount()
     {
         $sArticleTable = getViewName('oxarticles');
 
@@ -225,7 +200,7 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
         $oList = oxNew( "oxarticlelist");
 
         foreach ( $aTotalCnt as $aData) {
-            $oList->loadAktionArticles( $aData['oxactionid'] );
+            $oList->loadActionArticles( $aData['oxactionid'] );
             $this->assertEquals( $aData['cnt'], $oList->count() );
             $this->assertGreaterThan( 0, $oList->count() );
             $oList->clear();
@@ -239,7 +214,7 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
      *
      * @return null
      */
-    public function testLoadAktionArticlesIfAllNotActive()
+    public function testLoadActionArticlesIfAllNotActive()
     {
         $myDB = $this->getDb();
         $myDB->execute( 'update oxactions set oxactive=0' );
@@ -256,7 +231,7 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
 
         foreach ( $aTotalCnt as $aData) {
             $this->assertArrayHasKey( 'oxactionid', $aData );
-            $oList->loadAktionArticles( $aData['oxactionid'] );
+            $oList->loadActionArticles( $aData['oxactionid'] );
             $this->assertEquals( 0, $oList->count() );
             $oList->clear();
         }
@@ -305,7 +280,7 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
     {
 
         $oTest = $this->getProxyClass( 'oxArticleList' );
-        $oTest->loadAktionArticles( 'oxstart' );
+        $oTest->loadActionArticles( 'oxstart' );
         $this->assertEquals( 2, count($oTest) );
         $this->assertTrue( $oTest['2077'] instanceof oxArticle );
         $this->assertTrue( $oTest['943ed656e21971fb2f1827facbba9bec'] instanceof oxArticle );
@@ -404,9 +379,17 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
     public function testLoadArticleBidirectCross()
     {
         $this->setConfigParam( 'blBidirectCross', true );
-        $oTest = $this->getProxyClass('oxArticleList');
-        $oTest->loadArticleCrossSell("1849");
+        $oTest = new oxArticleList();
+        $oTest->loadArticleCrossSell( 1849 );
         $this->assertEquals( count($oTest), 4 );
+
+        $aExpect = array( 1126, 2036, 1876, 2080 );
+            $aExpect = array( 1126, 2036, 'd8842e3cbf9290351.59301740', 2080 );
+
+        foreach ($oTest as $oArticle){
+            $this->assertTrue( in_array($oArticle->oxarticles__oxid->value, $aExpect ) );
+        }
+
     }
 
     /**
@@ -652,7 +635,7 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
         $sArticleTable = $this->_getArticleTable();
 
         $oTest->expects( $this->once() )->method( '_getCategorySelect' )
-                                        ->with( $this->equalTo( "$sArticleTable.oxid" ), $this->equalTo( 'testCat' ), $this->equalTo( array( 1 ) ) )
+                                        ->with( $this->equalTo( "`$sArticleTable`.`oxid`" ), $this->equalTo( 'testCat' ), $this->equalTo( array( 1 ) ) )
                                         ->will( $this->returnValue( 'select * from oxcategories' ) );
         $oTest->expects( $this->once() )->method( 'selectString' )
                                         ->with( $this->equalTo( 'select * from oxcategories' ) );
@@ -673,7 +656,7 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
         $sArticleTable = $this->_getArticleTable();
 
         $oTest->expects( $this->once() )->method( '_getCategorySelect' )
-                                        ->with( $this->equalTo( "$sArticleTable.oxid" ), $this->equalTo( 'testCat' ), $this->equalTo( array( 1 ) ) )
+                                        ->with( $this->equalTo( "`$sArticleTable`.`oxid`" ), $this->equalTo( 'testCat' ), $this->equalTo( array( 1 ) ) )
                                         ->will( $this->returnValue( 'select * from oxcategories' ) );
         $oTest->expects( $this->once() )->method( 'selectString' )
                                         ->with( $this->equalTo( 'select * from oxcategories LIMIT 2' ) );
@@ -1033,7 +1016,7 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
         $sArticleTable = $this->_getArticleTable();
         $oArticle = new oxarticle();
 
-        $sExpt = "select$sArticleTable.oxidfrom{$sArticleTable}whereoxvarminprice>=0andoxvarminprice<=15andoxvarminprice>=12and";
+        $sExpt = "select`$sArticleTable`.`oxid`from{$sArticleTable}whereoxvarminprice>=0andoxvarminprice<=15andoxvarminprice>=12and";
         $sExpt.= $oArticle->getSqlActiveSnippet()."and$sArticleTable.oxissearch=1orderby";
         $sExpt.= "$sArticleTable.oxvarminpriceasc,$sArticleTable.oxid";
 
@@ -1061,7 +1044,7 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
         $sArticleTable = $this->_getArticleTable();
         $oArticle = new oxarticle();
 
-        $sExpt = "select$sArticleTable.oxidfrom{$sArticleTable}whereoxvarminprice>=0andoxvarminprice<=15andoxvarminprice>=12and";
+        $sExpt = "select`$sArticleTable`.`oxid`from{$sArticleTable}whereoxvarminprice>=0andoxvarminprice<=15andoxvarminprice>=12and";
         $sExpt.= $oArticle->getSqlActiveSnippet()."and$sArticleTable.oxissearch=1orderby";
         $sExpt.= "oxtitledesc,$sArticleTable.oxid";
 
@@ -1233,8 +1216,8 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
     public function testLoadNewestArticlesAktion()
     {
         //testing over mock
-        $oTest = $this->getMock('oxArticleList', array('loadAktionArticles'));
-        $oTest->expects($this->once())->method('loadAktionArticles')
+        $oTest = $this->getMock('oxArticleList', array('loadActionArticles'));
+        $oTest->expects($this->once())->method('loadActionArticles')
                                       ->with('oxnewest');
 
         $this->setConfigParam( 'iNewestArticlesMode', 1 );
@@ -1356,8 +1339,8 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
     public function testLoadTop5ArticlesAktion()
     {
         //testing over mock
-        $oTest = $this->getMock('oxArticleList', array('loadAktionArticles'));
-        $oTest->expects($this->once())->method('loadAktionArticles')
+        $oTest = $this->getMock('oxArticleList', array('loadActionArticles'));
+        $oTest->expects($this->once())->method('loadActionArticles')
                                       ->with('oxtop5');
 
         $this->setConfigParam( 'iTop5Mode', 1 );
@@ -1429,7 +1412,7 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
         $sArticleTable = $this->_getArticleTable();
         $oArticle = new oxarticle();
 
-        $sExpt = "select $sArticleTable.oxid from $sArticleTable where $sArticleTable.oxvendorid = 'testVendor'  and ".$oArticle->getSqlActiveSnippet()." and $sArticleTable.oxparentid = ''   ORDER BY customsort ";
+        $sExpt = "select `$sArticleTable`.`oxid` from $sArticleTable where $sArticleTable.oxvendorid = 'testVendor'  and ".$oArticle->getSqlActiveSnippet()." and $sArticleTable.oxparentid = ''   ORDER BY customsort ";
 
 
         $sCustomSorting = 'customsort';
@@ -1454,7 +1437,7 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
         $sArticleTable = $this->_getArticleTable();
         $oArticle = new oxarticle();
 
-        $sExpt = "select $sArticleTable.oxid from $sArticleTable where $sArticleTable.oxmanufacturerid = 'testManufacturer'  and ".$oArticle->getSqlActiveSnippet()." and $sArticleTable.oxparentid = ''   ORDER BY customsort ";
+        $sExpt = "select `$sArticleTable`.`oxid` from $sArticleTable where $sArticleTable.oxmanufacturerid = 'testManufacturer'  and ".$oArticle->getSqlActiveSnippet()." and $sArticleTable.oxparentid = ''   ORDER BY customsort ";
 
 
         $sCustomSorting = 'customsort';
@@ -1662,7 +1645,7 @@ class Unit_Core_oxarticlelistTest extends OxidTestCase
 
         $this->setTime(100);
 
-        $sExpt = "select $sArticleTable.oxid from $sArticleTable where $sArticleTable.oxid in ( '1','a','3','a\'a' ) and ".$oArticle->getSqlActiveSnippet();
+        $sExpt = "select `$sArticleTable`.`oxid` from $sArticleTable where $sArticleTable.oxid in ( '1','a','3','a\'a' ) and ".$oArticle->getSqlActiveSnippet();
 
         $oTest = $this->getMock("oxArticleList", array('selectString'));
         $oTest->expects($this->once())->method("selectString")->with($sExpt)->will($this->returnValue(true));

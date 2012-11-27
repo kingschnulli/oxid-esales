@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: languagemainTest.php 47414 2012-07-16 14:57:33Z arturas.sevcenko $
+ * @version   SVN: $Id: languagemainTest.php 51854 2012-11-15 11:50:09Z aurimas.gladutis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -315,8 +315,8 @@ class Unit_Admin_LanguageMainTest extends OxidTestCase
         $aLangData['params']['de'] = array("baseId" => 0, "active" => 1, "sort" => 1);
         $aLangData['params']['en'] = array("baseId" => 1, "active" => 1, "sort" => 10, "default" => false);
 
-        $oConfig = $this->getMock( "oxConfig", array( "getDir" ) );
-        $oConfig->expects( $this->once() )->method( "getDir" )->with( $this->equalTo( 'lang.php' ), oxLang::getInstance()->getLanguageAbbr( 1 ), $this->equalTo( 0 ), $this->equalTo( 1 ) )->will( $this->returnValue( "dir/to/langfile" ) );
+        $oConfig = $this->getMock( "oxConfig", array( "getTranslationsDir" ) );
+        $oConfig->expects( $this->once() )->method( "getTranslationsDir" )->with( $this->equalTo( 'lang.php' ), oxLang::getInstance()->getLanguageAbbr( 1 ) )->will( $this->returnValue( "dir/to/langfile" ) );
 
         $oView = $this->getMock( "modLanguageMain", array( "getConfig" ), array(), '', false );
         $oView->expects( $this->any() )->method( 'getConfig' )->will( $this->returnValue( $oConfig ) );
@@ -339,9 +339,9 @@ class Unit_Admin_LanguageMainTest extends OxidTestCase
         $aLangData['params']['de'] = array("baseId" => 0, "active" => 1, "sort" => 1);
         $aLangData['params']['en'] = array("baseId" => 1, "active" => 1, "sort" => 10, "default" => false);
 
-        $oConfig = $this->getMock( "oxConfig", array( "getDir" ) );
+        $oConfig = $this->getMock( "oxConfig", array( "getTranslationsDir" ) );
        
-        $oConfig->expects( $this->once() )->method( "getDir" )->with( $this->equalTo( 'lang.php' ), oxLang::getInstance()->getLanguageAbbr( 1 ), $this->equalTo( 0 ), $this->equalTo( 1 ) )->will( $this->returnValue( "" ) );
+        $oConfig->expects( $this->once() )->method( "getTranslationsDir" )->with( $this->equalTo( 'lang.php' ), oxLang::getInstance()->getLanguageAbbr( 1 ) )->will( $this->returnValue( "" ) );
 
         $oView = $this->getMock( "modLanguageMain", array( "getConfig" ), array(), '', false );
         $oView->expects( $this->any() )->method( 'getConfig' )->will( $this->returnValue( $oConfig ) );

@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxwtagcloudTest.php 46826 2012-06-29 11:57:40Z saulius.stasiukaitis $
+ * @version   SVN: $Id: oxwtagcloudTest.php 52441 2012-11-26 09:20:04Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -40,4 +40,39 @@ class Unit_Components_Widgets_oxwTagCloudTest extends OxidTestCase
         $oTagCloud = new oxwTagCloud();
         $this->assertTrue( $oTagCloud->getTagCloudManager() instanceof oxTagCloud );
     }
+
+    /**
+     * Testing oxwTagCloud::render()
+     *
+     * @return null
+     */
+    public function testRender()
+    {
+        $oTagCloud = new oxwTagCloud();
+        $this->assertEquals( 'widget/sidebar/tags.tpl', $oTagCloud->render() );
+    }
+
+    /**
+     * Testing oxwTagCloud::displayInBox()
+     *
+     * @return null
+     */
+    public function testDisplayInBox()
+    {
+        $oTagCloud = new oxwTagCloud();
+        $oTagCloud->setViewParameters( array("blShowBox" => 1) );
+        $this->assertTrue( $oTagCloud->displayInBox() );
+    }
+
+    /**
+     * Testing oxwTagCloud::isMoreTagsVisible()
+     *
+     * @return null
+     */
+    public function testIsMoreTagsVisible()
+    {
+        $oTagCloud = new oxwTagCloud();
+        $this->assertTrue( $oTagCloud->isMoreTagsVisible() );
+    }
+
 }

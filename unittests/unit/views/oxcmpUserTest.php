@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcmpUserTest.php 47905 2012-07-30 07:57:00Z linas.kukulskis $
+ * @version   SVN: $Id: oxcmpUserTest.php 52088 2012-11-21 11:36:04Z andrius.silgalis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -402,9 +402,10 @@ class Unit_Views_oxcmpUserTest extends OxidTestCase
         modConfig::setParameter('anid', 'artid');
         modConfig::setParameter('tpl', 'test');
         modConfig::setParameter('oxloadid', 'test');
+        modConfig::setParameter('recommid', 'recommid');
         $sLink = $oView->getLogoutLink();
         $sExpLink = "shopurl/?cl=testclass&amp;searchparam=a&amp;anid=artid&amp;cnid=catid&amp;mnid=manId" .
-                    "&amp;tpl=test&amp;oxloadid=test&amp;fnc=logout";
+                    "&amp;tpl=test&amp;oxloadid=test&amp;recommid=recommid&amp;fnc=logout";
 
         $this->assertEquals( $sExpLink, $sLink );
     }
@@ -739,7 +740,7 @@ class Unit_Views_oxcmpUserTest extends OxidTestCase
     {
         $oUserView = $this->getMock( 'oxcmp_user', array( '_changeUser_noRedirect' ) );
         $oUserView->expects( $this->once() )->method( '_changeUser_noRedirect' )->will( $this->returnValue( true ) );
-        $this->assertNull( $oUserView->changeuser_testvalues() );
+        $this->assertEquals( 'account_user', $oUserView->changeuser_testvalues() );
     }
 
     /**

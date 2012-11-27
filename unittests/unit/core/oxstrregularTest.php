@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxstrregularTest.php 44744 2012-05-09 13:53:15Z linas.kukulskis $
+ * @version   SVN: $Id: oxstrregularTest.php 51379 2012-11-06 07:30:52Z andrius.silgalis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -206,5 +206,11 @@ class Unit_Core_oxstrRegularTest extends OxidTestCase
     {
         $this->assertEquals( '[". ;","asdasd",{"asd":"asdasd","0":"asda"}]', $this->_oSubj->jsonEncode( array(". ;", 'asdasd', array('asd'=>'asdasd', 'asda')) ) );
         $this->assertEquals( '[". ;","asdasd",{"asd":"as\n\t\\\\d\\\\a\\\\\'\"[]{sd","0":"asda"}]', $this->_oSubj->jsonEncode( array(". ;", 'asdasd', array('asd'=>"as\n\t\\d\a\'\"[]{sd", 'asda')) ) );
+    }
+
+    public function testStripTags()
+    {
+        $this->assertEquals( 'without styling definition.',                                            $this->_oSubj->strip_tags( '<div>without</div> <style type="text/css">p {color:blue;}</style>styling definition.' ) );
+        $this->assertEquals( 'with <style type="text/css">p {color:blue;}</style>styling definition.', $this->_oSubj->strip_tags( '<div>with</div> <style type="text/css">p {color:blue;}</style>styling definition.', '<style>' ) );
     }
 }

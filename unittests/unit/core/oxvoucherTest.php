@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxvoucherTest.php 47937 2012-07-30 11:32:27Z linas.kukulskis $
+ * @version   SVN: $Id: oxvoucherTest.php 51702 2012-11-12 13:19:54Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -621,33 +621,6 @@ class Unit_Core_oxvoucherTest extends OxidTestCase
         }
 
         $this->assertEquals( 'EXCEPTION_VOUCHER_INCORRECTPRICE', $sErrorMsg );
-    }
-
-    /**
-     * Checking prices when price is below minimum value
-     */
-    public function testIsAvailablePriceWhenDiscountIsNegative()
-    {
-        $sOXID = $this->_aVoucherOxid[$this->_aSerieOxid[0]][getRandLTAmnt()];
-        $oSerie = oxNew( 'oxvoucherserie' );
-        $oSerie->load($this->_aSerieOxid[0]);
-        $oSerie->oxvoucherseries__oxminimumvalue = new oxField(10, oxField::T_RAW);
-        $oSerie->oxvoucherseries__oxdiscount = new oxField(-1, oxField::T_RAW);
-        $oSerie->save();
-
-        $oNewVoucher = oxNew( 'oxvoucher' );
-        $oNewVoucher->oxvouchers__oxvoucherserieid = new oxField($this->_aSerieOxid[0], oxField::T_RAW);
-
-        $iErrorMsgId = null;
-        $dPrice  = 9;
-
-        try {
-            $aErrors = $oNewVoucher->UNITisAvailablePrice( $dPrice );
-        } catch (oxVoucherException $oEx) {
-            $sErrorMsg = $oEx->getMessage();
-        }
-
-        $this->assertEquals( 'EXCEPTION_VOUCHER_TOTALBELOWZERO', $sErrorMsg );
     }
 
     /**

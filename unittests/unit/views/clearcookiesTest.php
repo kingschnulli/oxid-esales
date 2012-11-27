@@ -60,8 +60,17 @@ class Unit_Views_clearcookiesTest extends OxidTestCase
      */
     public function testRender()
     {
-        $oView = $this->getMock("clearcookies", array("_removeCookies"));
-        $oView->expects( $this->once() )->method("_removeCookies");
+        $_SERVER['HTTP_COOKIE'] = "shop=1";
+
+
+            $oView = new clearcookies();
+
+        $oUtilsServer = $this->getMock( 'oxUtilsServer', array( 'setOxCookie' ) );
+        $oUtilsServer->expects( $this->at(0) )->method( 'setOxCookie')->with( $this->equalTo( 'shop' ) );
+        $oUtilsServer->expects( $this->at(1) )->method( 'setOxCookie')->with( $this->equalTo( 'language' ) );
+        $oUtilsServer->expects( $this->at(2) )->method( 'setOxCookie')->with( $this->equalTo( 'displayedCookiesNotification' ) );
+        oxRegistry::set('oxUtilsServer', $oUtilsServer);
+
         $this->assertEquals( 'page/info/clearcookies.tpl', $oView->render() );
     }
 
@@ -72,7 +81,7 @@ class Unit_Views_clearcookiesTest extends OxidTestCase
      */
     public function testGetBreadCrumb()
     {
-        $oContent = new Content();
-        $this->assertEquals(1, count($oContent->getBreadCrumb()));
+        $oView = new clearcookies();
+        $this->assertEquals(1, count($oView->getBreadCrumb()));
     }
 }

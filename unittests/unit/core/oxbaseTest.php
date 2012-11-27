@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxbaseTest.php 50062 2012-10-03 12:44:55Z tomas $
+ * @version   SVN: $Id: oxbaseTest.php 51958 2012-11-19 08:47:22Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -1231,13 +1231,13 @@ class Unit_Core_oxbaseTest extends OxidTestCase
      */
     public function testBuildSelectString()
     {
-        $oBase = new _oxBase();
+        $oBase = new oxBase();
         $oBase->init("oxactions");
         $sView = getViewName("oxactions", -1);
         $sSelect = $oBase->buildSelectString(array("$sView.oxid" => "oxstart"));
         $sSelect = str_replace("  ", " ", $sSelect);
 
-        $this->assertEquals("select $sView.oxid, $sView.oxshopid, $sView.oxtype, $sView.oxtitle, $sView.oxtitle_1, $sView.oxtitle_2, $sView.oxtitle_3, $sView.oxlongdesc, $sView.oxlongdesc_1, $sView.oxlongdesc_2, $sView.oxlongdesc_3, $sView.oxactive, $sView.oxactivefrom, $sView.oxactiveto, $sView.oxpic, $sView.oxpic_1, $sView.oxpic_2, $sView.oxpic_3, $sView.oxlink, $sView.oxlink_1, $sView.oxlink_2, $sView.oxlink_3, $sView.oxsort, $sView.oxtimestamp from $sView where 1 and $sView.oxid = 'oxstart'", $sSelect);
+        $this->assertEquals("select `$sView`.`oxid`, `$sView`.`oxshopid`, `$sView`.`oxtype`, `$sView`.`oxtitle`, `$sView`.`oxtitle_1`, `$sView`.`oxtitle_2`, `$sView`.`oxtitle_3`, `$sView`.`oxlongdesc`, `$sView`.`oxlongdesc_1`, `$sView`.`oxlongdesc_2`, `$sView`.`oxlongdesc_3`, `$sView`.`oxactive`, `$sView`.`oxactivefrom`, `$sView`.`oxactiveto`, `$sView`.`oxpic`, `$sView`.`oxpic_1`, `$sView`.`oxpic_2`, `$sView`.`oxpic_3`, `$sView`.`oxlink`, `$sView`.`oxlink_1`, `$sView`.`oxlink_2`, `$sView`.`oxlink_3`, `$sView`.`oxsort`, `$sView`.`oxtimestamp` from $sView where 1 and $sView.oxid = 'oxstart'", $sSelect);
     }
 
     /**
@@ -1247,11 +1247,11 @@ class Unit_Core_oxbaseTest extends OxidTestCase
      */
     public function testBuildSelectStringWithoutShopId()
     {
-        $oBase = new _oxBase();
+        $oBase = new oxBase();
         $oBase->init("oxattribute");
         $sSelect = $oBase->buildSelectString(array("oxid" => "111"));
         $sSelect = str_replace("  ", " ", $sSelect);
-            $this->assertEquals("select oxv_oxattribute.oxid, oxv_oxattribute.oxshopid, oxv_oxattribute.oxtitle, oxv_oxattribute.oxtitle_1, oxv_oxattribute.oxtitle_2, oxv_oxattribute.oxtitle_3, oxv_oxattribute.oxpos, oxv_oxattribute.oxtimestamp, oxv_oxattribute.oxdisplayinbasket from oxv_oxattribute where 1 and oxid = '111'", $sSelect);
+            $this->assertEquals("select `oxv_oxattribute`.`oxid`, `oxv_oxattribute`.`oxshopid`, `oxv_oxattribute`.`oxtitle`, `oxv_oxattribute`.`oxtitle_1`, `oxv_oxattribute`.`oxtitle_2`, `oxv_oxattribute`.`oxtitle_3`, `oxv_oxattribute`.`oxpos`, `oxv_oxattribute`.`oxtimestamp`, `oxv_oxattribute`.`oxdisplayinbasket` from oxv_oxattribute where 1 and oxid = '111'", $sSelect);
     }
 
     /**
@@ -1261,11 +1261,11 @@ class Unit_Core_oxbaseTest extends OxidTestCase
      */
     public function  testBuildSelectStringWithShopId()
     {
-        $oBase = new _oxBase();
+        $oBase = new oxBase();
         $oBase->init("oxattribute");
         $sSelect = $oBase->buildSelectString(array("oxid" => "111"));
         $sSelect = str_replace("  ", " ", $sSelect);
-            $this->assertEquals("select oxv_oxattribute.oxid, oxv_oxattribute.oxshopid, oxv_oxattribute.oxtitle, oxv_oxattribute.oxtitle_1, oxv_oxattribute.oxtitle_2, oxv_oxattribute.oxtitle_3, oxv_oxattribute.oxpos, oxv_oxattribute.oxtimestamp, oxv_oxattribute.oxdisplayinbasket from oxv_oxattribute where 1 and oxid = '111'", $sSelect);
+            $this->assertEquals("select `oxv_oxattribute`.`oxid`, `oxv_oxattribute`.`oxshopid`, `oxv_oxattribute`.`oxtitle`, `oxv_oxattribute`.`oxtitle_1`, `oxv_oxattribute`.`oxtitle_2`, `oxv_oxattribute`.`oxtitle_3`, `oxv_oxattribute`.`oxpos`, `oxv_oxattribute`.`oxtimestamp`, `oxv_oxattribute`.`oxdisplayinbasket` from oxv_oxattribute where 1 and oxid = '111'", $sSelect);
     }
 
     /**
@@ -1318,11 +1318,11 @@ class Unit_Core_oxbaseTest extends OxidTestCase
      */
     public function  testGetSelectFields()
     {
-        $oBase = new _oxBase();
+        $oBase = new oxBase();
         $oBase->init('oxactions');
 
         $sView = getViewName('oxactions', -1);
-        $this->assertEquals("$sView.oxid, $sView.oxshopid, $sView.oxtype, $sView.oxtitle, $sView.oxtitle_1, $sView.oxtitle_2, $sView.oxtitle_3, $sView.oxlongdesc, $sView.oxlongdesc_1, $sView.oxlongdesc_2, $sView.oxlongdesc_3, $sView.oxactive, $sView.oxactivefrom, $sView.oxactiveto, $sView.oxpic, $sView.oxpic_1, $sView.oxpic_2, $sView.oxpic_3, $sView.oxlink, $sView.oxlink_1, $sView.oxlink_2, $sView.oxlink_3, $sView.oxsort, $sView.oxtimestamp", $oBase->getSelectFields());
+        $this->assertEquals("`$sView`.`oxid`, `$sView`.`oxshopid`, `$sView`.`oxtype`, `$sView`.`oxtitle`, `$sView`.`oxtitle_1`, `$sView`.`oxtitle_2`, `$sView`.`oxtitle_3`, `$sView`.`oxlongdesc`, `$sView`.`oxlongdesc_1`, `$sView`.`oxlongdesc_2`, `$sView`.`oxlongdesc_3`, `$sView`.`oxactive`, `$sView`.`oxactivefrom`, `$sView`.`oxactiveto`, `$sView`.`oxpic`, `$sView`.`oxpic_1`, `$sView`.`oxpic_2`, `$sView`.`oxpic_3`, `$sView`.`oxlink`, `$sView`.`oxlink_1`, `$sView`.`oxlink_2`, `$sView`.`oxlink_3`, `$sView`.`oxsort`, `$sView`.`oxtimestamp`", $oBase->getSelectFields());
     }
 
     /**
@@ -1332,8 +1332,8 @@ class Unit_Core_oxbaseTest extends OxidTestCase
      */
     public function  testGetSelectFieldsNoFields()
     {
-        $oBase = new _oxBase();
-        $this->assertEquals($oBase->getSelectFields(), ".oxid");
+        $oBase = new oxBase();
+        $this->assertEquals($oBase->getSelectFields(), ".`oxid`");
     }
 
     /**

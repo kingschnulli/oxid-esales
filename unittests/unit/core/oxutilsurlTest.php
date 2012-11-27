@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutilsurlTest.php 49596 2012-09-17 12:01:08Z rimvydas.paskevicius $
+ * @version   SVN: $Id: oxutilsurlTest.php 52464 2012-11-26 22:46:36Z alfonsas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -100,6 +100,20 @@ class Unit_Core_oxUtilsUrlTest extends OxidTestCase
         $this->assertEquals( $aBaseUrlParams, $oUtils->getAddUrlParams() );
     }
 
+    public function testPrepareUrlForNoSessionSeoOn()
+    {
+        oxTestModules::addFunction('oxUtils', 'seoIsActive', '{return true;}');
+
+        $this->assertEquals('http://example.com/', oxUtilsUrl::getInstance()->prepareUrlForNoSession('http://example.com/?sid=abc123'));
+        $this->assertEquals('http://example.com/', oxUtilsUrl::getInstance()->prepareUrlForNoSession('http://example.com/?force_sid=abc123'));
+
+        $this->assertEquals('http://example.com/?cl=test', oxUtilsUrl::getInstance()->prepareUrlForNoSession('http://example.com/?cl=test&amp;sid=abc123'));
+        $this->assertEquals('http://example.com/?cl=test', oxUtilsUrl::getInstance()->prepareUrlForNoSession('http://example.com/?cl=test&amp;force_sid=abc123'));
+
+        $this->assertEquals('http://example.com/?cl=test', oxUtilsUrl::getInstance()->prepareUrlForNoSession('http://example.com/?sid=abc123&amp;cl=test'));
+        $this->assertEquals('http://example.com/?cl=test', oxUtilsUrl::getInstance()->prepareUrlForNoSession('http://example.com/?force_sid=abc123&amp;cl=test'));
+    }
+
     public function testPrepareUrlForNoSession()
     {
         oxTestModules::addFunction('oxUtils', 'seoIsActive', '{return false;}');
@@ -112,7 +126,6 @@ class Unit_Core_oxUtilsUrlTest extends OxidTestCase
         $this->assertEquals('sdf?a&amp;lang=1' . $sShopId, oxUtilsUrl::getInstance()->prepareUrlForNoSession('sdf?sid=111&a&amp;lang=1'));
         $this->assertEquals('sdf?a&&amp;lang=3' . $sShopId, oxUtilsUrl::getInstance()->prepareUrlForNoSession('sdf?sid=111&a&'));
         $this->assertEquals('sdf?lang=3' . $sShopId, oxUtilsUrl::getInstance()->prepareUrlForNoSession('sdf'));
-
 
         $sShopId = '';
         $this->getConfig()->setShopId(5);
@@ -130,7 +143,7 @@ class Unit_Core_oxUtilsUrlTest extends OxidTestCase
 
         $this->assertEquals('sdf?bonusid=111&amp;lang=3'.$sShopId, oxUtilsUrl::getInstance()->prepareUrlForNoSession('sdf?bonusid=111'));
         $this->assertEquals('sdf?a=1&bonusid=111&amp;lang=3'.$sShopId, oxUtilsUrl::getInstance()->prepareUrlForNoSession('sdf?a=1&bonusid=111'));
-        $this->assertEquals('sdf?a=1&amp;bonusid=111&amp;&amp;lang=3'.$sShopId, oxUtilsUrl::getInstance()->prepareUrlForNoSession('sdf?a=1&amp;bonusid=111&amp;force_admin_sid=111'));
+        $this->assertEquals('sdf?a=1&amp;bonusid=111&amp;lang=3'.$sShopId, oxUtilsUrl::getInstance()->prepareUrlForNoSession('sdf?a=1&amp;bonusid=111&amp;force_admin_sid=111'));
 
         modConfig::getInstance()->setParameter('currency', 2);
         $this->assertEquals('sdf?lang=3&amp;cur=2'.$sShopId, oxUtilsUrl::getInstance()->prepareUrlForNoSession('sdf'));

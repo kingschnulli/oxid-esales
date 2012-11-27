@@ -30,17 +30,6 @@ require_once realpath( "." ).'/unit/test_config.inc.php';
  */
 class Unit_Components_Widgets_oxwMiniBasketTest extends OxidTestCase
 {
-    /**
-     * Testing oxwMiniBasket::isCacheable()
-     *
-     * @return null
-     */
-    public function testIsCacheable()
-    {
-            return;
-        $oWMiniBasket = new oxwMiniBasket();
-        $this->assertFalse( $oWMiniBasket->isCacheable() );
-    }
 
     /**
      * Testing oxwMiniBasket::render()

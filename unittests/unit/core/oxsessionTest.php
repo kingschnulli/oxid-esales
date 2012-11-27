@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxsessionTest.php 50926 2012-10-25 08:51:39Z saulius.stasiukaitis $
+ * @version   SVN: $Id: oxsessionTest.php 52010 2012-11-19 15:14:45Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -1207,7 +1207,7 @@ class Unit_Core_oxsessionTest extends OxidTestCase
         $oSession->expects( $this->any() )->method( 'isSidNeeded')->will( $this->returnValue( true ) );
         $oSession->UNITsetSessionId('testSid');
         $sSid = $oSession->hiddenSid();
-        $this->assertEquals('<input type="hidden" name="stoken" value="stok"><input type="hidden" name="force_sid" value="testSid">', $sSid);
+        $this->assertEquals('<input type="hidden" name="stoken" value="stok" /><input type="hidden" name="force_sid" value="testSid" />', $sSid);
     }
 
     /**
@@ -1221,7 +1221,7 @@ class Unit_Core_oxsessionTest extends OxidTestCase
         $oSession->expects( $this->any() )->method( 'isSidNeeded')->will( $this->returnValue( false ) );
         $oSession->UNITsetSessionId('testSid');
         $sSid = $oSession->hiddenSid();
-        $this->assertEquals('<input type="hidden" name="stoken" value="stok">', $sSid);
+        $this->assertEquals('<input type="hidden" name="stoken" value="stok" />', $sSid);
     }
 
     /**
@@ -1235,7 +1235,7 @@ class Unit_Core_oxsessionTest extends OxidTestCase
         $oSession->expects( $this->any() )->method( 'isSidNeeded')->will( $this->returnValue( true ) );
         $oSession->UNITsetSessionId('testSid');
         $sSid = $oSession->hiddenSid();
-        $this->assertEquals('<input type="hidden" name="stoken" value="stok"><input type="hidden" name="force_sid" value="testSid">', $sSid);
+        $this->assertEquals('<input type="hidden" name="stoken" value="stok" /><input type="hidden" name="force_sid" value="testSid" />', $sSid);
     }
 
     /**
@@ -1249,7 +1249,7 @@ class Unit_Core_oxsessionTest extends OxidTestCase
         $oSession->expects( $this->any() )->method( 'isSidNeeded')->will( $this->returnValue( false ) );
         $oSession->UNITsetSessionId('testSid');
         $sSid = $oSession->hiddenSid();
-        $this->assertEquals('<input type="hidden" name="stoken" value="stok">', $sSid);
+        $this->assertEquals('<input type="hidden" name="stoken" value="stok" />', $sSid);
     }
 
     /**

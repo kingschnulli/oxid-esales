@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: toolslistTest.php 25400 2010-01-27 22:42:50Z alfonsas $
+ * @version   SVN: $Id: toolslistTest.php 51491 2012-11-07 11:37:05Z aurimas.gladutis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -87,5 +87,22 @@ class Unit_Admin_ToolsListTest extends OxidTestCase
         // testing..
         $oView = new Tools_List();
         $this->assertEquals( 'tools_list.tpl', $oView->render() );
+    }
+
+    /**
+     * Tools_List::updateViews() test case
+     *
+     * @return null
+     */
+    public function testUpdateViews()
+    {
+        modSession::getInstance()->setVar( 'malladmin', true );
+
+        $oView = new Tools_List();
+        $oView->updateViews();
+
+        // assert that updating was successful
+        $aViewData = $oView->getViewData();
+        $this->assertTrue( $aViewData['blViewSuccess'] );
     }
 }

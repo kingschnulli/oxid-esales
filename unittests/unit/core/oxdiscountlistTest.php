@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxdiscountlistTest.php 49162 2012-08-30 11:01:36Z linas.kukulskis $
+ * @version   SVN: $Id: oxdiscountlistTest.php 51653 2012-11-12 08:30:11Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -512,8 +512,11 @@ class Unit_Core_oxDiscountlistTest extends OxidTestCase
         $aDiscounts[4]->oxdiscount__oxaddsumtype = new oxField('itm', oxField::T_RAW);
         $aDiscounts[4]->expects( $this->never() )->method( 'isForBasketAmount' );
 
+        $oDList = $this->getMock( 'oxList', array( 'getArray' ) );
+        $oDList->expects( $this->once() )->method( 'getArray' )->will( $this->returnValue( $aDiscounts ) );
+
         $oList = $this->getMock( 'oxdiscountlist', array( '_getList' ) );
-        $oList->expects( $this->once() )->method( '_getList' )->will( $this->returnValue( $aDiscounts ) );
+        $oList->expects( $this->once() )->method( '_getList' )->will( $this->returnValue( $oDList ) );
 
         // now proceeding to disocunt id check
         $this->assertEquals( array( 'xxx' => $aDiscounts[0], 'yyy' => $aDiscounts[1] ), $oList->getBasketItemDiscounts( $oArticle, $oBasket ) );

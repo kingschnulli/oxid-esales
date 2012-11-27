@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutilsserverTest.php 45497 2012-05-21 14:26:54Z linas.kukulskis $
+ * @version   SVN: $Id: oxutilsserverTest.php 51736 2012-11-13 08:31:42Z saulius.stasiukaitis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -45,12 +45,13 @@ class Unit_Core_oxUtilsServerTest extends OxidTestCase
      */
     public function testSetOxCookieForSaveSessionCookie()
     {
-        $this->markTestSkipped();
-
+        $sValue = 'some value';
         $oUtilsServer = $this->getMock( "oxUtilsServer", array( "_saveSessionCookie" ));
+        // One cookie will be saved to session another will not.
         $oUtilsServer->expects( $this->once() )->method( '_saveSessionCookie' );
         $oUtilsServer->setOxCookie( "testName1", $sValue );
-        $oUtilsServer->setOxCookie( "testName2", "", 0, '/', null, false );
+        // Check if do not save to session when pass false(sixth param) as not to save to session.
+        $oUtilsServer->setOxCookie( "testName2", $sValue, 0, '/', null, false );
     }
 
     /**

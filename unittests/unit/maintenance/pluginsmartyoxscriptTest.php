@@ -34,16 +34,12 @@ class Unit_Maintenance_pluginSmartyOxScriptTest extends OxidTestCase
      */
     public function testSmartyFunctionOxScript_includeNotExist()
     {
-        $this->markTestSkipped( "Skip on server, as local do not fail." );
-
         $oSmarty = new Smarty();
         $this->assertEquals( '', smarty_function_oxscript( array( 'include' => 'somescript.js' ), $oSmarty ) );
     }
 
     public function testSmartyFunctionOxScript_includeExist()
     {
-        $this->markTestSkipped( "Skip on server, as local do not fail." );
-
         $oSmarty = new Smarty();
         $this->assertEquals( '', smarty_function_oxscript( array( 'include' => 'http://someurl/src/js/libs/jquery.min.js' ), $oSmarty ) );
 
@@ -54,8 +50,6 @@ class Unit_Maintenance_pluginSmartyOxScriptTest extends OxidTestCase
 
     public function testSmartyFunctionOxScript_widget_include()
     {
-        $this->markTestSkipped( "Skip on server, as local do not fail." );
-
         $oSmarty = new Smarty();
         $this->assertEquals( '', smarty_function_oxscript( array( 'include' => 'http://someurl/src/js/libs/jquery.min.js' ), $oSmarty ) );
 
@@ -74,8 +68,6 @@ class Unit_Maintenance_pluginSmartyOxScriptTest extends OxidTestCase
 
     public function testSmartyFunctionOxScript_add()
     {
-        $this->markTestSkipped( "Skip on server, as local do not fail." );
-
         $oSmarty = new Smarty();
         $this->assertEquals( '', smarty_function_oxscript( array('add' => 'oxidadd'), $oSmarty ) );
 
@@ -86,8 +78,6 @@ class Unit_Maintenance_pluginSmartyOxScriptTest extends OxidTestCase
 
     public function testSmartyFunctionOxScript_widget_add()
     {
-        $this->markTestSkipped( "Skip on server, as local do not fail." );
-
         $oSmarty = new Smarty();
         $this->assertEquals( '', smarty_function_oxscript( array( 'add' => 'oxidadd' ), $oSmarty ) );
 

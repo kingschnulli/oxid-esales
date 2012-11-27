@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: basketTest.php 48004 2012-07-31 08:44:35Z vilma $
+ * @version   SVN: $Id: basketTest.php 51853 2012-11-15 11:28:55Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -161,7 +161,7 @@ class Unit_Views_basketTest extends OxidTestCase
         $o = $this->getMock('Basket', array('getSession'));
         $o->expects($this->once())->method('getSession')->will($this->returnValue($oSession));
 
-        modConfig::setParameter( 'voucherNr', 'vouchnr' );
+        $this->setRequestParam( 'voucherNr', 'vouchnr' );
         $this->assertEquals(null, $o->addVoucher());
     }
 
@@ -174,7 +174,7 @@ class Unit_Views_basketTest extends OxidTestCase
         $o = $this->getMock('Basket', array('getSession'));
         $o->expects($this->once())->method('getSession')->will($this->returnValue($oSession));
 
-        modConfig::setParameter( 'voucherId', 'vouchnr' );
+        $this->setRequestParam( 'voucherId', 'vouchnr' );
         $this->assertEquals(null, $o->removeVoucher());
     }
 
@@ -232,7 +232,7 @@ class Unit_Views_basketTest extends OxidTestCase
 
     public function testRenderDoesNotCleanReservationsIfOff()
     {
-        modConfig::getInstance()->setConfigParam('blPsBasketReservationEnabled', false);
+        $this->setConfigParam('blPsBasketReservationEnabled', false);
 
         $oS = $this->getMock('oxsession', array('getBasketReservations'));
         $oS->expects($this->never())->method('getBasketReservations');
@@ -244,7 +244,7 @@ class Unit_Views_basketTest extends OxidTestCase
     }
     public function testRenderDoesCleanReservationsIfOn()
     {
-        modConfig::getInstance()->setConfigParam('blPsBasketReservationEnabled', true);
+        $this->setConfigParam('blPsBasketReservationEnabled', true);
 
         $oR = $this->getMock('stdclass', array('renewExpiration'));
         $oR->expects($this->once())->method('renewExpiration')->will($this->returnValue(null));
@@ -271,15 +271,41 @@ class Unit_Views_basketTest extends OxidTestCase
     }
 
     /**
+     * Testing Basket::getWrappingList()
+     *
+     * @return null
+     */
+    public function testGetWrappingList()
+    {
+        oxTestModules::addFunction('oxwrapping', 'getWrappingList', '{ return "getWrappingList"; }' );
+
+        $oView = new Basket();
+        $this->assertEquals( "getWrappingList", $oView->getWrappingList() );
+    }
+
+    /**
+     * Testing Basket::getCardList()
+     *
+     * @return null
+     */
+    public function testGetCardList()
+    {
+        oxTestModules::addFunction('oxwrapping', 'getWrappingList', '{ return "getCardList"; }' );
+
+        $oView = new Basket();
+        $this->assertEquals( "getCardList", $oView->getCardList() );
+    }
+
+    /**
      * Testing Wrapping::changeWrapping()
      *
      * @return null
      */
     public function testChangeWrapping()
     {
-        modConfig::setParameter( "wrapping", array( 1 => 2 ) );
-        modConfig::setParameter( "giftmessage", "testCardMessage" );
-        modConfig::setParameter( "chosencard", "testCardId" );
+        $this->setRequestParam( "wrapping", array( 1 => 2 ) );
+        $this->setRequestParam( "giftmessage", "testCardMessage" );
+        $this->setRequestParam( "chosencard", "testCardId" );
 
         $oBasketItem1 = $this->getMock( "oxBasketItem", array( "setWrapping" ));
         $oBasketItem1->expects( $this->once() )->method( 'setWrapping' )->with( $this->equalTo( 2 ) );
@@ -308,4 +334,29 @@ class Unit_Views_basketTest extends OxidTestCase
         $oView->expects( $this->once() )->method( 'getSession' )->will( $this->returnValue( $oSession ) );
         $oView->changeWrapping();
     }
+
+    /**
+     * Test is Wrapping
+     *
+     * @return null
+     */
+    public function testIsWrapping()
+    {
+        $oView = new Basket();
+        $this->assertTrue( $oView->isWrapping() );
+    }
+
+    /**
+     * Test oxViewConfig::getShowGiftWrapping() affection
+     *
+     * @return null
+     */
+    public function testIsWrappingIfWrappingIsOff()
+    {
+        $this->setConfigParam( 'bl_showGiftWrapping', false );
+
+        $oView = new Basket();
+        $this->assertSame(false, $oView->isWrapping());
+    }
+
 }

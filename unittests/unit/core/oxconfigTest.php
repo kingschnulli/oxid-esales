@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxconfigTest.php 50865 2012-10-23 08:33:47Z rimvydas.paskevicius $
+ * @version   SVN: $Id: oxconfigTest.php 51854 2012-11-15 11:50:09Z aurimas.gladutis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -921,6 +921,75 @@ class Unit_Core_oxconfigTest extends OxidTestCase
     }
 
     /**
+     * Testing if shop var saver writes num value with valid string to config correctly
+     */
+    public function testsaveShopConfVarNumValidString()
+    {
+        $oConfig = new oxConfig();
+        $oConfig->init();
+
+        $oE = null;
+        try {
+            $oConfig->saveShopConfVar( 'num', "testVar", "10.000,5989" );
+            $this->assertEquals( 10000.5989, $oConfig->getShopConfVar( "testVar" ) );
+            $this->assertEquals( 10000.5989, $oConfig->getConfigParam( "testVar" ) );
+            $oConfig->saveShopConfVar( 'num', "testVar", "20,000.5989" );
+            $this->assertEquals( 20000.5989, $oConfig->getShopConfVar( "testVar" ) );
+            $this->assertEquals( 20000.5989, $oConfig->getConfigParam( "testVar" ) );
+        } catch (Exception $oE) {
+            // rethrow later
+        }
+        oxDb::getDb()->execute("delete from oxconfig where oxvarname='testVar'");
+        if ($oE) {
+            throw $oE;
+        }
+    }
+
+    /**
+     * Testing if shop var saver writes num value with invalid string to config correctly
+     */
+    public function testsaveShopConfVarNumInvalidString()
+    {
+        $oConfig = new oxConfig();
+        $oConfig->init();
+
+        $oE = null;
+        try {
+            $oConfig->saveShopConfVar( 'num', "testVar", "abc" );
+            $this->assertEquals( 0, $oConfig->getShopConfVar( "testVar" ) );
+            $this->assertEquals( 0, $oConfig->getConfigParam( "testVar" ) );
+        } catch (Exception $oE) {
+            // rethrow later
+        }
+        oxDb::getDb()->execute("delete from oxconfig where oxvarname='testVar'");
+        if ($oE) {
+            throw $oE;
+        }
+    }
+
+    /**
+     * Testing if shop var saver writes num value with float to config correctly
+     */
+    public function testsaveShopConfVarNumFloat()
+    {
+        $oConfig = new oxConfig();
+        $oConfig->init();
+
+        $oE = null;
+        try {
+            $oConfig->saveShopConfVar( 'num', "testVar", 50.009 );
+            $this->assertEquals( 50.009, $oConfig->getShopConfVar( "testVar" ) );
+            $this->assertEquals( 50.009, $oConfig->getConfigParam( "testVar" ) );
+        } catch (Exception $oE) {
+            // rethrow later
+        }
+        oxDb::getDb()->execute("delete from oxconfig where oxvarname='testVar'");
+        if ($oE) {
+            throw $oE;
+        }
+    }
+
+    /**
      * Testing serial number setter
      */
     public function testSetSerial()
@@ -1183,6 +1252,16 @@ class Unit_Core_oxconfigTest extends OxidTestCase
         $this->assertEquals( $sDir, $oConfig->getTemplatePath( 'start.tpl', true ) );
     }
 
+    /**
+     * Testing getAbsDynImageDir getter
+     */
+    public function testGetTranslationsDir()
+    {
+        $oConfig = new oxConfig();
+        $sDir = $this->getConfigParam( 'sShopDir' ).'application/translations/en/lang.php';
+        $this->assertEquals( $sDir, $oConfig->getTranslationsDir('lang.php', 'en') );
+        $this->assertFalse( $oConfig->getTranslationsDir('lang.php', 'na') );
+    }
 
     /**
      * Testing getAbsDynImageDir getter
@@ -1192,7 +1271,9 @@ class Unit_Core_oxconfigTest extends OxidTestCase
         $oConfig = new oxConfig();
         $oConfig->init();
 
-        $sDir = $oConfig->getConfigParam( 'sShopDir' ).'out/pictures'.OXID_VERSION_SUFIX.'/';
+        $sDir = $oConfig->getConfigParam( 'sShopDir' ).'out/pictures/';
+
+
         $this->assertEquals( $sDir, $oConfig->getPictureDir(false) );
     }
     public function testGetAbsDynImageDirForSecondLang()
@@ -1202,7 +1283,10 @@ class Unit_Core_oxconfigTest extends OxidTestCase
         $oConfig = new oxConfig();
         $oConfig->init();
         $oConfig->setConfigParam( 'blUseDifferentDynDirs', true );
-        $sDir = $oConfig->getConfigParam( 'sShopDir' ).'out/pictures'.OXID_VERSION_SUFIX.'/';
+
+        $sDir = $oConfig->getConfigParam( 'sShopDir' ).'out/pictures/';
+
+
         $this->assertEquals( $sDir, $oConfig->getPictureDir(false) );
     }
 
@@ -2039,7 +2123,6 @@ class Unit_Core_oxconfigTest extends OxidTestCase
 
 
 
-
     public function testGetOutDir()
     {
         $oConfig = new oxConfig();
@@ -2087,7 +2170,10 @@ class Unit_Core_oxconfigTest extends OxidTestCase
     {
         $oConfig = new oxConfig();
         $oConfig->init();
-        $sDir = $oConfig->getConfigParam( 'sShopDir' ).'out/pictures'.OXID_VERSION_SUFIX.'/';
+
+        $sDir = $oConfig->getConfigParam( 'sShopDir' ).'out/pictures/';
+
+
         $this->assertEquals( $sDir, $oConfig->getPicturePath( null, false) );
     }
 
@@ -2102,7 +2188,8 @@ class Unit_Core_oxconfigTest extends OxidTestCase
         $sMainURL = $oConfig->getConfigParam( 'sShopURL' );
         $sMallURL = 'http://www.example.com/';
 
-        $sDir = 'out/pictures'.OXID_VERSION_SUFIX.'/';
+        $sDir = 'out/pictures/';
+
 
         $oConfig->setConfigParam( 'sMallShopURL', $sMallURL);
 
@@ -2153,7 +2240,10 @@ class Unit_Core_oxconfigTest extends OxidTestCase
         $oConfig->setConfigParam( "sAltImageDir", false );
         $oConfig->setConfigParam( "blFormerTplSupport", false );
 
-        $this->assertEquals( $myConfig->getConfigParam( "sShopURL" )."out/pictures".OXID_VERSION_SUFIX."/master/nopic.jpg", $oConfig->getPictureUrl( "unknown.file", true ) );
+        $sNoPicUrl = $myConfig->getConfigParam( "sShopURL" )."out/pictures/master/nopic.jpg";
+
+
+        $this->assertEquals( $sNoPicUrl, $oConfig->getPictureUrl( "unknown.file", true ) );
     }
 
     public function testGetTemplateBase()
@@ -2211,13 +2301,16 @@ class Unit_Core_oxconfigTest extends OxidTestCase
 
     public function testUtfModeIsSet()
     {
-        //T2009-08-17
-        //skipping this test. This config option is set only during setup process, but at the moment unit test db is set up from sql file.
-        //any idea how ths could be tested
-        $this->markTestSkipped();
-        $sQ = "select count(*) from oxconfig where oxvarname = 'iSetUtfMode'";
-        $iRes = oxDb::getDb()->getOne($sQ);
-        $this->assertTrue($iRes >= 1);
+        $oConfig = $this->getMock('oxConfig', array('getConfigParam'));
+        $oConfig->expects($this->once())->method('getConfigParam')->with('iUtfMode')->will($this->returnValue(1));
+        $this->assertTrue($oConfig->isUtf(), 'Should be utf mode.');
+    }
+
+    public function testUtfModeIsNotSet()
+    {
+        $oConfig = $this->getMock('oxConfig', array('getConfigParam'));
+        $oConfig->expects($this->once())->method('getConfigParam')->with('iUtfMode')->will($this->returnValue(0));
+        $this->assertFalse($oConfig->isUtf(), 'Should not be utf mode.');
     }
 
     public function testIsThemeOption()

@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxwrecommendationTest.php 47990 2012-07-31 07:42:20Z vilma $
+ * @version   SVN: $Id: oxwrecommendationTest.php 51853 2012-11-15 11:28:55Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -62,4 +62,16 @@ class Unit_Components_Widgets_oxwRecommendationTest extends OxidTestCase
 
         $this->assertEquals( "oxRecommListMock", $oRecomm->getSimilarRecommLists(), "Should try to create RecommList object." );
     }
+
+    /**
+     * Testing oxwRecommendation::getRecommList()
+     *
+     * @return null
+     */
+    public function testGetRecommList()
+    {
+        $oRecommList = new oxwRecommendation();
+        $this->assertTrue( $oRecommList->getRecommList() instanceof recommlist );
+    }
+
 }

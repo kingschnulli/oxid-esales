@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxattributelistTest.php 47476 2012-07-18 14:40:01Z vaidas.matulevicius $
+ * @version   SVN: $Id: oxattributelistTest.php 52100 2012-11-21 13:35:43Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -113,6 +113,19 @@ class Unit_Core_oxattributelistTest extends OxidTestCase
         $sAttribValue = $oAttrList[$sID]->oxobject2attribute__oxvalue->value;
         $this->assertEquals( $sExpectedValue, $sAttribValue);
     }
+    
+	/**
+     * Test load attributes.
+     *
+     * @return null
+     */
+    public function testLoadAttributesWithParent()
+    {
+        $oAttrList = new oxAttributelist();
+        $oAttrList->loadAttributes('1672', '1351');
+        $this->assertEquals( 9, $oAttrList->count() );
+    }
+    
     
     /**
      * Test load displayable in basket/order attributes.

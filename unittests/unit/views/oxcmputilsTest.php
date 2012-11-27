@@ -40,7 +40,7 @@ class Unit_Views_oxCmpUtilsTest extends OxidTestCase
          modConfig::getInstance()->setConfigParam( 'blAllowRemoteArticleInfo', 1 );
 
         oxTestModules::addFunction( 'oxUtils', 'showMessageAndExit', '{ throw new Exception( $aA[0] ); }' );
-        oxTestModules::addFunction( 'oxarticlelist', 'loadAktionArticles', '{}' );
+        oxTestModules::addFunction( 'oxarticlelist', 'loadActionArticles', '{}' );
         oxTestModules::addFunction( 'oxarticlelist', 'current', '{}' );
 
         modConfig::setParameter( 'oxid', false );

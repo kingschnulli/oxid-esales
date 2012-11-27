@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxadminlistTest.php 47972 2012-07-30 16:08:39Z linas.kukulskis $
+ * @version   SVN: $Id: oxadminlistTest.php 51976 2012-11-19 10:50:01Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -401,7 +401,7 @@ class Unit_Admin_oxAdminListTest extends OxidTestCase
     public function testBuildSelectString()
     {
         $sTable = getViewName( 'oxactions' );
-        $sSql = "select {$sTable}.oxid, {$sTable}.oxshopid, {$sTable}.oxtype, {$sTable}.oxtitle, {$sTable}.oxlongdesc, {$sTable}.oxactive, {$sTable}.oxactivefrom, {$sTable}.oxactiveto, {$sTable}.oxpic, {$sTable}.oxlink, {$sTable}.oxsort, {$sTable}.oxtimestamp from {$sTable} where 1 ";
+        $sSql = "select `{$sTable}`.`oxid`, `{$sTable}`.`oxshopid`, `{$sTable}`.`oxtype`, `{$sTable}`.`oxtitle`, `{$sTable}`.`oxlongdesc`, `{$sTable}`.`oxactive`, `{$sTable}`.`oxactivefrom`, `{$sTable}`.`oxactiveto`, `{$sTable}`.`oxpic`, `{$sTable}`.`oxlink`, `{$sTable}`.`oxsort`, `{$sTable}`.`oxtimestamp` from {$sTable} where 1 ";
 
         $oAdminList = new oxadminlist();
         $this->assertEquals( $sSql, $oAdminList->UNITbuildSelectString( new oxActions() ) );

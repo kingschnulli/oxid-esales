@@ -59,33 +59,5 @@ class Unit_Views_oxCmpShopTest extends OxidTestCase
 
         $oCmp->render();
     }
-
-    /**
-     * Testing oxcmp_shop::render()
-     *
-     * @return null
-     */
-    public function testRenderPE()
-    {
-
-        $sLogoPath = oxConfig::getInstance()->getConfigParam( "sShopDir" )."/out/azure/img/";
-
-        $oShop = new oxShop();
-        $oShop->oxshops__oxactive = new oxField( 1 );
-
-        $oParent = $this->getMock( "oxView", array( "setShopLogo" ) );
-        $oParent->expects( $this->once() )->method('setShopLogo');
-
-        $oConfig = $this->getMock( "oxConfig", array( "getConfigParam", "getImageDir", "getActiveShop" ) );
-        $oConfig->expects( $this->at( 0 ) )->method('getConfigParam')->with( $this->equalTo( "sShopLogo" ) )->will( $this->returnValue( "stars.jpg" ) );
-        $oConfig->expects( $this->at( 1 ) )->method('getImageDir')->will( $this->returnValue( $sLogoPath ) );
-        $oConfig->expects( $this->at( 2 ) )->method('getActiveShop')->will( $this->returnValue( $oShop ) );
-
-        $oCmp = $this->getMock( "oxcmp_shop", array( "getConfig", "isAdmin" ), array(), '', false );
-        $oCmp->expects( $this->once() )->method('getConfig')->will( $this->returnValue( $oConfig ) );
-        $oCmp->setParent( $oParent );
-
-        $this->assertTrue( $oCmp->render() instanceof oxShop );
-    }
 }
 
