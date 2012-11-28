@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: alistTest.php 44499 2012-04-30 06:59:07Z saulius.stasiukaitis $
+ * @version   SVN: $Id: alistTest.php 51387 2012-11-06 09:11:01Z andrius.silgalis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -708,7 +708,7 @@ class Unit_Views_alistTest extends OxidTestCase
     public function testPrepareMetaDescription()
     {
         $oParentCategory = new oxcategory();
-        $oParentCategory->oxcategories__oxtitle = new oxField( 'parent category' );
+        $oParentCategory->oxcategories__oxtitle = new oxField( '<span>parent</span> <style type="text/css">p {color:blue;}</style>category' );
 
         $oCategory = new oxcategory();
         $oCategory->oxcategories__oxtitle = new oxField( 'category' );

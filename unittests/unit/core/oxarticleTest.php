@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticleTest.php 45764 2012-05-31 07:01:10Z edvardas.gineika $
+ * @version   SVN: $Id: oxarticleTest.php 51591 2012-11-09 09:31:18Z andrius.silgalis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -1353,10 +1353,23 @@ class Unit_Core_oxarticleTest extends OxidTestCase
      */
     public function testDisablePriceLoad()
     {
-        $oArticle = new oxarticle();
-        $oArticle->disablePriceLoad( $oArticle );
-        $this->assertNull( $oArticle->getBasePrice());
+        $this->oArticle = new oxarticle();
+        $this->oArticle->disablePriceLoad( );
+        $this->assertNull( $this->oArticle->getBasePrice());
     }
+
+    /**
+     * Test eable price load.
+     *
+     * @depends testDisablePriceLoad
+     * @return null
+     */
+    public function testEnablePriceLoad()
+    {
+        $this->oArticle->enablePriceLoad( );
+        $this->assertNotNull( $this->oArticle->getBasePrice());
+    }
+
 
     /**
      * Test set/get item key.
@@ -5663,6 +5676,44 @@ class Unit_Core_oxarticleTest extends OxidTestCase
     }
 
     /**
+     * Test assign parent field values to inherit Quantity and Unit.
+     *
+     * @return null
+     */
+    public function testAssignParentFieldValues_QuantityUnitInherit()
+    {
+        $this->oArticle->oxarticles__oxunitquantity = new oxField( '3', oxField::T_TEXT);
+        $this->oArticle->oxarticles__oxunitname = new oxField( '_UNIT_KG', oxField::T_TEXT);
+        $this->oArticle->save();
+        $oArticle2 = new _oxArticle();
+        $oArticle2->load('_testVar');
+        $oArticle2->resetVar();
+        $oArticle2->UNITassignParentFieldValues();
+        $this->assertEquals( '3', $oArticle2->oxarticles__oxunitquantity->value);
+        $this->assertEquals( '_UNIT_KG', $oArticle2->oxarticles__oxunitname->value);
+    }
+
+    /**
+     * Test assign parent field values to not inherit Quantity and Unit.
+     *
+     * @return null
+     */
+    public function testAssignParentFieldValues_QuantityUnitDontInherit()
+    {
+        $this->oArticle->oxarticles__oxunitquantity = new oxField( '3', oxField::T_TEXT);
+        $this->oArticle->oxarticles__oxunitname = new oxField( '_UNIT_KG', oxField::T_TEXT);
+        $this->oArticle->save();
+        $oArticle2 = new _oxArticle();
+        $oArticle2->load('_testVar');
+        $oArticle2->oxarticles__oxunitquantity = new oxField( '7', oxField::T_TEXT);
+        $oArticle2->oxarticles__oxunitname = new oxField( '_UNIT_L', oxField::T_TEXT);
+        $oArticle2->resetVar();
+        $oArticle2->UNITassignParentFieldValues();
+        $this->assertEquals( '7', $oArticle2->oxarticles__oxunitquantity->value);
+        $this->assertEquals( '_UNIT_L', $oArticle2->oxarticles__oxunitname->value);
+    }
+
+    /**
      * Test assign parent field value with zero price.
      *
      * @return null
@@ -6343,6 +6394,14 @@ class Unit_Core_oxarticleTest extends OxidTestCase
         $oSubj->oxarticles__oxzoom1 = new stdClass();
         $oSubj->oxarticles__oxzoom1->value = "nopic.jpg";
         $this->assertTrue($oSubj->UNITisFieldEmpty("OXARTICLES__OXZOOM1"));
+
+        $oSubj->oxarticles__oxunitquantity = new stdClass();
+        $oSubj->oxarticles__oxunitquantity->value = 0;
+        $this->assertTrue($oSubj->UNITisFieldEmpty("oxarticles__oxunitquantity"));
+
+        $oSubj->oxarticles__oxunitquantity = new stdClass();
+        $oSubj->oxarticles__oxunitquantity->value = "0";
+        $this->assertTrue($oSubj->UNITisFieldEmpty("oxarticles__oxunitquantity"));
     }
 
     /**
@@ -6379,6 +6438,10 @@ class Unit_Core_oxarticleTest extends OxidTestCase
         $oSubj->oxarticles__oxpic = new stdClass();
         $oSubj->oxarticles__oxpic->value = "nopic_ico.jpg";
         $this->assertFalse($oSubj->UNITisFieldEmpty("oxarticles__oxpic"));
+
+        $oSubj->oxarticles__oxunitquantity = new stdClass();
+        $oSubj->oxarticles__oxunitquantity->value = 3;
+        $this->assertFalse($oSubj->UNITisFieldEmpty("oxarticles__oxunitquantity"));
     }
 
     /**

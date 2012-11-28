@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxconfigTest.php 45507 2012-05-21 15:26:15Z rimvydas.paskevicius $
+ * @version   SVN: $Id: oxconfigTest.php 50464 2012-10-12 13:37:50Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -2225,5 +2225,6 @@ class Unit_Core_oxconfigTest extends OxidTestCase
         $this->assertEquals( $sSSLUrl, $oConfig->getShopMainUrl() );
 
     }
+
 
 }

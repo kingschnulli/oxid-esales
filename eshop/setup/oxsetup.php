@@ -105,7 +105,7 @@ if ( !function_exists( 'getLocation' ) ) {
      */
     function getLocation()
     {
-        $aCountries = array();
+        $aLocationCountries = array();
         if ( defined( 'OXID_PHP_UNIT' ) ) {
             include getShopBasePath()."admin/shop_countries.php";
         } else {
@@ -678,9 +678,9 @@ class OxSetupSession extends oxSetupCore
             }
 
             //storring shop language value settings to session
-            $sShopLang = $oUtils->getRequestVar( "sShopLang", "post" );
+            $sShopLang = $oUtils->getRequestVar( "setup_lang", "post" );
             if ( isset( $sShopLang ) ) {
-                $this->setSessionParam( 'sShopLang', $sShopLang );
+                $this->setSessionParam( 'setup_lang', $sShopLang );
             }
 
             //storring dyn pages settings to session
@@ -964,7 +964,8 @@ class OxSetupDb extends oxSetupCore
         $sLocationLang  = isset( $aParams["location_lang"] ) ? $aParams["location_lang"] : $oSession->getSessionParam( 'location_lang' );
         $blCheckForUpdates = isset( $aParams["check_for_updates"] ) ? $aParams["check_for_updates"] : $oSession->getSessionParam( 'check_for_updates' );
         $sCountryLang  = isset( $aParams["country_lang"] ) ? $aParams["country_lang"] : $oSession->getSessionParam( 'country_lang' );
-        $sShopLang  = isset( $aParams["sShopLang"] ) ? $aParams["sShopLang"] : $oSession->getSessionParam( 'sShopLang' );
+        $sShopLang  = isset( $aParams["setup_lang"] ) ? $aParams["setup_lang"] : $oSession->getSessionParam( 'setup_lang' );
+
         $sBaseShopId = $this->getInstance( "oxSetup" )->getShopId();
 
         $this->execSql( "update oxcountry set oxactive = '0'" );

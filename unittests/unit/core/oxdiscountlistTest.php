@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxdiscountlistTest.php 43062 2012-03-21 09:14:58Z tomas $
+ * @version   SVN: $Id: oxdiscountlistTest.php 49762 2012-09-25 15:12:13Z tomas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -244,6 +244,8 @@ class Unit_Core_oxDiscountlistTest extends OxidTestCase
      */
     public function testApplyBaskketDiscountsLargeAmountDiscountPrecission()
     {
+
+        $this->markTestSkipped("Skipped due to #3587 rollback");
         //INIT
         $dInitialPrice = 2.98;
         $dDiscountValue = 2;//%
@@ -279,6 +281,8 @@ class Unit_Core_oxDiscountlistTest extends OxidTestCase
      */
     public function testApplyBaskketDiscountsLargeAmountDiscountPrecissionCombined()
     {
+        $this->markTestSkipped("Skipped due to #3587 rollback");
+
         //INIT
         $dInitialPrice = 2.98;
         $dDiscountValue1 = 2;//%

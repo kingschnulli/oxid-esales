@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxbasketTest.php 43062 2012-03-21 09:14:58Z tomas $
+ * @version   SVN: $Id: oxbasketTest.php 50454 2012-10-12 12:41:22Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -1702,18 +1702,10 @@ class Unit_Core_oxbasketTest extends OxidTestCase
         $oBasket->calculateBasket( false );
 
         $aVAT = $oBasket->getDiscountProductsPrice()->getVatInfo();
-        //#3587
-        //$this->assertEquals(8.18, round($aVAT[10], 2));
-        $this->assertEquals(9.09, round($aVAT[10], 2));
-            //start of #3587 changes
-            /*$this->assertEquals(8.46, round($aVAT[19], 2));
+        $this->assertEquals(8.18, round($aVAT[10], 2));
+            $this->assertEquals(8.46, round($aVAT[19], 2));
             $this->assertEquals(143, $oBasket->getDiscountProductsPrice()->getBruttoSum());
-            $this->assertEquals(126.36, $oBasket->getDiscountedNettoPrice());*/
-
-            $this->assertEquals(9.26, round($aVAT[19], 2));
-            $this->assertEquals(158, $oBasket->getDiscountProductsPrice()->getBruttoSum());
-            $this->assertEquals(126.39, $oBasket->getDiscountedNettoPrice());
-            //end of #3587 changes
+            $this->assertEquals(126.36, $oBasket->getDiscountedNettoPrice());
 
             $this->assertEquals(158, $oBasket->getProductsPrice()->getBruttoSum());
 
@@ -2010,9 +2002,7 @@ class Unit_Core_oxbasketTest extends OxidTestCase
 
         $oPrice = $this->getMock( 'oxprice', array( 'setPrice', 'subtract', 'add' ) );
         $oPrice->expects( $this->once() )->method( 'setPrice' );
-        //#3587
-        //$oPrice->expects( $this->exactly( 3 ) )->method( 'subtract' );
-        $oPrice->expects( $this->exactly( 2 ) )->method( 'subtract' );
+        $oPrice->expects( $this->exactly( 3 ) )->method( 'subtract' );
         $oPrice->expects( $this->exactly( 3 ) )->method( 'add' );
 
         $oBasket = new modForTestAddBundles();
@@ -3685,9 +3675,7 @@ class Unit_Core_oxbasketTest extends OxidTestCase
      */
     public function testCalcBasketTotalDiscountWithNoDiscounts()
     {
-        #3587
-        //$aDiscounts = null;
-        $aDiscounts = array();
+        $aDiscounts = null;
 
         $oBasket = $this->getProxyClass( "oxBasket" );
         $oBasket->setNonPublicVar( '_aDiscounts', $aDiscounts );
