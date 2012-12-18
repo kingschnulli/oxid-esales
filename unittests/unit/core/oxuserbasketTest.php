@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxuserbasketTest.php 48058 2012-07-31 14:37:05Z vilma $
+ * @version   SVN: $Id: oxuserbasketTest.php 29921 2010-09-21 12:18:02Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -156,6 +156,8 @@ class Unit_Core_oxuserbasketTest extends OxidTestCase
         $oBasket = new oxUserBasket();
         $oBasket->setId( "_testUserBasketId" );
         $oBasket->save();
+
+        $this->assertEquals( $iTime, $oBasket->oxuserbaskets__oxcreate->value );
         $this->assertEquals( $iTime, $oBasket->oxuserbaskets__oxupdate->value );
     }
 
@@ -356,8 +358,7 @@ class Unit_Core_oxuserbasketTest extends OxidTestCase
         $aSel    = array("A");
         $aParam  = array("B");
 
-        $this->setTime(99999);
-
+        oxTestModules::addFunction('oxUtilsDate', 'getTime', '{return 99999;}');
         $oBasket = new oxUserBasket();
         $oBasket->load( "testUserBasket" );
         $oBasket->setIsNewBasket();
@@ -496,12 +497,12 @@ class Unit_Core_oxuserbasketTest extends OxidTestCase
      */
     public function testSetIsNewBasket()
     {
-        $this->setTime(3333);
-
+        oxTestModules::addFunction('oxUtilsDate', 'getTime', '{return 3333;}');
         $oBasket = new oxUserBasket();
         $oBasket->setIsNewBasket();
 
         $this->assertTrue( $oBasket->isNewBasket() );
+        $this->assertEquals( 3333, $oBasket->oxuserbaskets__oxcreate->value );
         $this->assertEquals( 3333, $oBasket->oxuserbaskets__oxupdate->value );
     }
 }

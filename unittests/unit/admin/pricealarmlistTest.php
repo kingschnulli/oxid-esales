@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: pricealarmlistTest.php 47944 2012-07-30 12:41:30Z linas.kukulskis $
+ * @version   SVN: $Id: pricealarmlistTest.php 33217 2011-02-11 16:06:47Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -48,7 +48,7 @@ class Unit_Admin_PriceAlarmListTest extends OxidTestCase
 
         // testing..
         $oView = new PriceAlarm_List();
-        $this->assertEquals( $sSql, $oView->UNITbuildSelectString( new stdClass() ) );
+        $this->assertEquals( $sSql, $oView->UNITbuildSelectString( new oxStdClass() ) );
     }
 
     /**

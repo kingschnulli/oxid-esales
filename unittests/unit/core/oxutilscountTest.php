@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutilscountTest.php 51578 2012-11-09 07:48:35Z alfonsas $
+ * @version   SVN: $Id: oxutilscountTest.php 42805 2012-03-13 15:06:37Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -241,6 +241,7 @@ class Unit_Core_oxUtilsCountTest extends OxidTestCase
 
     public function testSetPriceCatArticleCount()
     {
+
         $myUtilsTest = new oxutilscount();
 
         $sRetSet = oxUtilsCount::getInstance()->setPriceCatArticleCount(array(), '30e44ab8338d7bf06.79655612', $myUtilsTest->UNITgetUserViewId(), 10, 100 );
@@ -248,7 +249,7 @@ class Unit_Core_oxUtilsCountTest extends OxidTestCase
         $this->assertEquals($sRetSet, $sRetGet);
 
 
-            $this->assertEquals(35, $sRetSet);
+            $this->assertEquals(34, $sRetSet);
     }
 
     public function testSetVendorArticleCount()
@@ -599,7 +600,7 @@ class Unit_Core_oxUtilsCountTest extends OxidTestCase
         $myConfig = oxConfig::getInstance();
         $myUtilsTest = new oxutilscount();
 
-        $sExpected = md5($myConfig->GetShopID().oxLang::getInstance()->getLanguageTag().serialize(null).'0');
+        $sExpected = md5($myConfig->GetShopID().oxLang::getInstance()->getLanguageTag().serialize(null).(int)isAdmin());
         $this->assertEquals($sExpected, $myUtilsTest->UNITgetUserViewId());
     }
 

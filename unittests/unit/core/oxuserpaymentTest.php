@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxuserpaymentTest.php 47937 2012-07-30 11:32:27Z linas.kukulskis $
+ * @version   SVN: $Id: oxuserpaymentTest.php 39576 2011-10-26 13:34:00Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -90,22 +90,22 @@ class Unit_Core_oxuserpaymentTest extends OxidTestCase
     {
         $aDynValues = array();
 
-        $oVal = new stdClass();
+        $oVal = new oxStdClass();
         $oVal->name = 'lsbankname';
         $oVal->value = '12613212';
         $aDynValues[] = $oVal;
 
-        $oVal = new stdClass();
+        $oVal = new oxStdClass();
         $oVal->name = 'lsblz';
         $oVal->value = '132132132';
         $aDynValues[] = $oVal;
 
-        $oVal = new stdClass();
+        $oVal = new oxStdClass();
         $oVal->name = 'lsktonr';
         $oVal->value = '1331321321';
         $aDynValues[] = $oVal;
 
-        $oVal = new stdClass();
+        $oVal = new oxStdClass();
         $oVal->name = 'lsktoinhaber';
         $oVal->value = 'Dainius O&quot;bryan';
         $aDynValues[] = $oVal;

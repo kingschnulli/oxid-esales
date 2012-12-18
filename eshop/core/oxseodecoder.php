@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxseodecoder.php 51063 2012-10-29 16:41:56Z saulius.stasiukaitis $
+ * @version   SVN: $Id: oxseodecoder.php 43748 2012-04-11 08:08:11Z linas.kukulskis $
  */
 
 /**
@@ -206,15 +206,14 @@ class oxSeoDecoder extends oxSuperCfg
             // in case SEO url is actual
             if ( is_array( $aGet = $this->decodeUrl( $sParams ) ) ) {
                 $_GET = array_merge( $aGet, $_GET );
-                oxRegistry::getLang()->resetBaseLanguage();
+                oxLang::getInstance()->resetBaseLanguage();
             } elseif ( ( $sRedirectUrl = $this->_decodeOldUrl( $sParams ) ) ) {
                 // in case SEO url was changed - redirecting to new location
-                oxRegistry::getUtils()->redirect( $this->getConfig()->getShopURL().$sRedirectUrl, false );
+                oxUtils::getInstance()->redirect( $this->getConfig()->getShopURL().$sRedirectUrl, false );
             } elseif ( ( $sRedirectUrl = $this->_decodeSimpleUrl( $sParams ) ) ) {
                 // old type II seo urls
-                oxRegistry::getUtils()->redirect( $this->getConfig()->getShopURL().$sRedirectUrl, false );
+                oxUtils::getInstance()->redirect( $this->getConfig()->getShopURL().$sRedirectUrl, false );
             } else {
-                oxRegistry::getSession()->start();
                 // unrecognized url
                 error_404_handler( $sParams );
             }
@@ -241,7 +240,7 @@ class oxSeoDecoder extends oxSuperCfg
 
         if ( $sLastParam ) {
 
-            $iLanguage  = oxRegistry::getLang()->getBaseLanguage();
+            $iLanguage  = oxLang::getInstance()->getBaseLanguage();
 
             // article ?
             if ( strpos( $sLastParam, '.htm' ) !== false ) {
@@ -307,7 +306,7 @@ class oxSeoDecoder extends oxSuperCfg
 
         // this should not happen on most cases, because this redirect is handled by .htaccess
         if ( $sParams && !$oStr->preg_match( '/\.html$/', $sParams ) && !$oStr->preg_match( '/\/$/', $sParams ) ) {
-            oxRegistry::getUtils()->redirect( $this->getConfig()->getShopURL() . $sParams . '/', false );
+            oxUtils::getInstance()->redirect( $this->getConfig()->getShopURL() . $sParams . '/', false );
         }
 
         return $sParams;

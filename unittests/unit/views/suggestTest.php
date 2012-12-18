@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: suggestTest.php 47729 2012-07-24 14:21:31Z tomas $
+ * @version   SVN: $Id: suggestTest.php 44707 2012-05-09 11:24:40Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -192,9 +192,7 @@ class Unit_Views_suggestTest extends OxidTestCase
 
         oxTestModules::addModuleObject('oxemail', $oEmail );
 
-        //T20120724
-        //$oProduct = $this->getMock( "stdclass", array( 'getId' ) );
-        $oProduct = $this->getMock( "oxarticle", array( 'getId' ) );
+        $oProduct = $this->getMock( "stdclass", array( 'getId' ) );
         $oProduct->expects( $this->once() )->method( 'getId')->will($this->returnValue( 'XProduct' ) );
 
         $oCaptcha = $this->getMock( "stdclass", array( 'pass' ) );

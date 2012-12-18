@@ -50,6 +50,17 @@ class Unit_Views_tagsTest extends OxidTestCase
     }
 
     /**
+     * Testing Tags::isMoreTagsVisible()
+     *
+     * @return null
+     */
+    public function testIsMoreTagsVisible()
+    {
+        $oView = new Tags();
+        $this->assertFalse( $oView->isMoreTagsVisible() );
+    }
+
+    /**
      * Testing Tags::getTitleSuffix()
      *
      * @return null

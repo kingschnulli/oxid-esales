@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: userpaymentTest.php 47944 2012-07-30 12:41:30Z linas.kukulskis $
+ * @version   SVN: $Id: userpaymentTest.php 28252 2010-06-09 13:03:19Z michael.keiluweit $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -161,7 +161,7 @@ class Unit_Admin_userPaymentTest extends OxidTestCase
     public function testGetPaymentIdFromUserPayment()
     {
         modConfig::setParameter( 'oxpaymentid', null );
-        $oUserPayment  = new oxUserPayment();
+        $oUserPayment  = new oxStdClass();
         $oUserPayment->oxuserpayments__oxid = new oxField('oxidinvoice');
         $oUser = $this->getMock( 'oxuser', array( 'getUserPayments' ) );
         $oUser->expects( $this->once() )->method( 'getUserPayments')->will( $this->returnValue( array($oUserPayment) ) );

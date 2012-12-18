@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxbasketitemTest.php 48273 2012-08-06 09:48:35Z linas.kukulskis $
+ * @version   SVN: $Id: oxbasketitemTest.php 43667 2012-04-10 13:21:41Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -113,8 +113,7 @@ class Unit_Core_oxbasketitemTest extends OxidTestCase
 
         oxTestModules::addFunction('oxarticle', 'getLink( $iLang = null, $blMain = false  )', '{return "htpp://link_for_article/".$this->getId();}');
 
-        $sNewId = oxUtilsObject::getInstance()->generateUId();
-        $sNewId[0] = '_';
+        $sNewId = '_'.oxUtilsObject::getInstance()->generateUId();
 
         $this->oArticle = oxNew( 'oxarticle' );
         $this->oArticle->disableLazyLoading();
@@ -131,8 +130,6 @@ class Unit_Core_oxbasketitemTest extends OxidTestCase
         $this->oArticle = oxNew( 'oxarticle' );
         $this->oArticle->disableLazyLoading();
         $this->oArticle->Load( $sNewId );
-
-
 
         // making select list
         $this->oSelList = oxNew( 'oxselectlist' );
@@ -198,7 +195,7 @@ class Unit_Core_oxbasketitemTest extends OxidTestCase
         } catch ( oxArticleInputException $oException ) {
             return;
         }
-        $this->fail( "product should not be orderable" );
+        $this->fail( "product should ne be orderable" );
     }
 
     /**
@@ -445,6 +442,27 @@ class Unit_Core_oxbasketitemTest extends OxidTestCase
     }
 
     /**
+     * Testing if image dir getter returns correct pathes
+     *
+     * @return null
+     */
+    public function testGetImageDir()
+    {
+        $oConfig = $this->getMock( 'oxconfig', array( 'isSsl' ) );
+        $oConfig->expects( $this->once() )->method( 'isSsl' )->will( $this->returnValue( true ) );
+
+        $oBasketItem = new modFortestSetAsDiscountArticle();
+
+        // simulating parameters
+        $oBasketItem->setVar( '_sDimageDirSsl', 'ssl' );
+        $oBasketItem->setVar( '_sDimageDirNoSsl', 'nossl' );
+        $this->assertEquals( 'nossl', $oBasketItem->getImageUrl() );
+        $oBasketItem->setConfig($oConfig);
+        $this->assertEquals( 'ssl', $oBasketItem->getImageUrl() );
+
+    }
+
+    /**
      * Testing basket item article getter
      *
      * if no product id is set - exception must be thrown
@@ -607,7 +625,7 @@ class Unit_Core_oxbasketitemTest extends OxidTestCase
      */
     public function testGetPrice()
     {
-        $oPrice = new oxPrice();
+        $oPrice = new Oxstdclass();
 
         $oBasketItem = new modFortestSetAsDiscountArticle();
         $oBasketItem->init( $this->oArticle->getId(), 6 );
@@ -689,6 +707,19 @@ class Unit_Core_oxbasketitemTest extends OxidTestCase
         $oBasketItem->expects( $this->any() )->method( 'getArticle' )->will( $this->returnValue( $this->oArticle ) );
 
         $this->assertEquals( "title2, var2", $oBasketItem->getTitle() );
+    }
+
+    /**
+     * Testing icon getter
+     *
+     * @return null
+     */
+    public function testGetIcon()
+    {
+        $oBasketItem = new oxbasketitem();
+        $oBasketItem->init( $this->oArticle->getId(), 6 );
+
+            $this->assertEquals( "2077_p1_ico.jpg", $oBasketItem->getIcon() );
     }
 
     /**
@@ -793,7 +824,7 @@ class Unit_Core_oxbasketitemTest extends OxidTestCase
         $oBasketItem = new oxbasketitem();
         $oBasketItem->init( $this->oArticle->getId(), 6 );
 
-        $oList = new stdClass();
+        $oList = new oxStdClass();
         $oList->name  = 'Test title';
         $oList->value = null;
 
@@ -1047,6 +1078,7 @@ class Unit_Core_oxbasketitemTest extends OxidTestCase
         $this->assertEquals( "title, var1", $oBasketItem->getTitle() );
         $this->assertEquals( "var1", $oBasketItem->getVarSelect() );
         $this->assertEquals( $this->oArticle->getId(), $oBasketItem->getProductId() );
+        $this->assertEquals( $this->oArticle->oxarticles__oxicon->value, $oBasketItem->getIcon() );
         $this->assertEquals( $this->oArticle->getLink(), $oBasketItem->getLink() );
         $this->assertEquals( oxConfig::getInstance()->getShopId(), $oBasketItem->getShopId() );
     }

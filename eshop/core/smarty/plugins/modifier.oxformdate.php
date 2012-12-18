@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   smarty_plugins
- * @copyright (C) OXID eSales AG 2003-2012
+ * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: modifier.oxformdate.php 52113 2012-11-21 15:46:41Z aurimas.gladutis $
+ * @version   SVN: $Id: modifier.oxformdate.php 25466 2010-02-01 14:12:07Z alfonsas $
  */
 
 /**
@@ -46,16 +46,16 @@ function smarty_modifier_oxformdate( $oConvObject, $sFieldType = null, $blPassed
         $oConvObject->setValue($sValue);
     }
 
-    $myConfig = oxRegistry::getConfig();
+    $myConfig = oxConfig::getInstance();
 
     // if such format applies to this type of field - sets formatted value to passed object
     if ( !$myConfig->getConfigParam( 'blSkipFormatConversion' ) ) {
         if ( $oConvObject->fldtype == "datetime" || $sFieldType == "datetime")
-            oxRegistry::get('oxUtilsDate')->convertDBDateTime( $oConvObject );
+            oxDb::getInstance()->convertDBDateTime( $oConvObject );
         elseif ( $oConvObject->fldtype == "timestamp" || $sFieldType == "timestamp")
-            oxRegistry::get('oxUtilsDate')->convertDBTimestamp( $oConvObject );
+            oxDb::getInstance()->convertDBTimestamp( $oConvObject );
         elseif ( $oConvObject->fldtype == "date" || $sFieldType == "date")
-            oxRegistry::get('oxUtilsDate')->convertDBDate( $oConvObject );
+            oxDb::getInstance()->convertDBDate( $oConvObject );
     }
 
     return $oConvObject->value;

@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutilsTest.php 51669 2012-11-12 10:31:49Z aurimas.gladutis $
+ * @version   SVN: $Id: oxutilsTest.php 43628 2012-04-06 16:00:49Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -111,7 +111,7 @@ class Unit_Core_oxutilsTest extends OxidTestCase
 
     public function testShowMessageAndExit()
     {
-        $oSession = $this->getMock( "oxSession", array( "freeze" ) );
+        $oSession = $this->getMock( "OxStdClass", array( "freeze" ) );
         $oSession->expects( $this->once() )->method( 'freeze');
 
         $oUtils = $this->getMock( "oxUtils", array( "getSession", "commitFileCache" ) );
@@ -202,7 +202,7 @@ class Unit_Core_oxutilsTest extends OxidTestCase
         $aResult = oxUtils::getInstance()->assignValuesFromText( $sTestString );
 
         $aShouldBe = array();
-        $oObject = new stdClass();
+        $oObject = new OxstdClass();
         $oObject->price = '99.5';
         $oObject->priceUnit = '%';
         $oObject->fprice = '99.5%';
@@ -210,7 +210,7 @@ class Unit_Core_oxutilsTest extends OxidTestCase
         $oObject->value = 'oneValue';
         $aShouldBe[] = $oObject;
 
-        $oObject = new stdClass();
+        $oObject = new OxstdClass();
         $oObject->price  = '12.41';
         $oObject->fprice = '12,41';
         $oObject->priceUnit = 'abs';
@@ -218,7 +218,7 @@ class Unit_Core_oxutilsTest extends OxidTestCase
         $oObject->value = 'twoValue';
         $aShouldBe[] = $oObject;
 
-        $oObject = new stdClass();
+        $oObject = new OxstdClass();
         $oObject->price  = '-5.99';
         $oObject->fprice = '-5,99';
         $oObject->priceUnit = 'abs';
@@ -226,7 +226,7 @@ class Unit_Core_oxutilsTest extends OxidTestCase
         $oObject->value = 'threeValue';
         $aShouldBe[] = $oObject;
 
-        $oObject = new stdClass();
+        $oObject = new OxstdClass();
         $oObject->name  = 'Lagerort';
         $oObject->value = 'Lager 1';
         $aShouldBe[] = $oObject;
@@ -249,12 +249,12 @@ class Unit_Core_oxutilsTest extends OxidTestCase
         $aResult = oxUtils::getInstance()->assignValuesFromText( $sTestString );
 
         $aShouldBe = array();
-        $oObject = new stdClass();
+        $oObject = new OxstdClass();
         $oObject->name  = 'one';
         $oObject->value = 'oneValue';
         $aShouldBe[] = $oObject;
 
-        $oObject = new stdClass();
+        $oObject = new OxstdClass();
         $oObject->price  = '0.00';
         $oObject->fprice = '0,00';
         $oObject->priceUnit = 'abs';
@@ -282,7 +282,7 @@ class Unit_Core_oxutilsTest extends OxidTestCase
         $aResult = oxUtils::getInstance()->assignValuesFromText( $sTestString, 19);
 
         $aShouldBe = array();
-        $oObject = new stdClass();
+        $oObject = new OxstdClass();
         $oObject->price = '99.5';
         $oObject->priceUnit = '%';
         $oObject->fprice = '99.5%';
@@ -290,7 +290,7 @@ class Unit_Core_oxutilsTest extends OxidTestCase
         $oObject->value = 'oneValue';
         $aShouldBe[] = $oObject;
 
-        $oObject = new stdClass();
+        $oObject = new OxstdClass();
         $oObject->price  = '12.41';
         $oObject->fprice = '12,41';
         $oObject->priceUnit = 'abs';
@@ -316,22 +316,22 @@ class Unit_Core_oxutilsTest extends OxidTestCase
         $aResult = oxUtils::getInstance()->assignValuesFromText( $sTestString );
 
         $aShouldBe = array();
-        $oObject = new stdClass();
+        $oObject = new OxstdClass();
         $oObject->name  = 'one';
         $oObject->value = 'oneValue';
         $aShouldBe[] = $oObject;
 
-        $oObject = new stdClass();
+        $oObject = new OxstdClass();
         $oObject->name  = 'two';
         $oObject->value = 'twoValue';
         $aShouldBe[] = $oObject;
 
-        $oObject = new stdClass();
+        $oObject = new OxstdClass();
         $oObject->name  = 'three';
         $oObject->value = 'threeValue';
         $aShouldBe[] = $oObject;
 
-        $oObject = new stdClass();
+        $oObject = new OxstdClass();
         $oObject->name  = 'Lagerort';
         $oObject->value = 'Lager 1';
         $aShouldBe[] = $oObject;
@@ -364,34 +364,13 @@ class Unit_Core_oxutilsTest extends OxidTestCase
     }
 
     /**
-     * Testing if shop var saver writes num value with valid string to config correctly
-     */
-    public function testString2Float()
-    {
-        $oUtils = oxRegistry::getUtils();
-        $fFloat = $oUtils->string2Float("10.322,32");
-        $this->assertEquals($fFloat, 10322.32);
-        $fFloat = $oUtils->string2Float("10,322.32");
-        $this->assertEquals($fFloat, 10322.32);
-        $fFloat = $oUtils->string2Float("10322,32");
-        $this->assertEquals($fFloat, 10322.32);
-        $fFloat = $oUtils->string2Float("10322.32");
-        $this->assertEquals($fFloat, 10322.32);
-        $fFloat = $oUtils->string2Float("10.32225");
-        $this->assertEquals($fFloat, 10.32225);
-        $fFloat = $oUtils->string2Float("10 000.32225");
-        $this->assertEquals($fFloat, 10000.32225);
-        $fFloat = $oUtils->string2Float("10 000.00");
-        $this->assertEquals($fFloat, 10000);
-    }
-
-    /**
      * SE check, non admin mode, will cache result
      */
     public function testIsSearchEngineNonAdminNonSE()
     {
         // cleaning ..
         $myConfig = oxConfig::getInstance();
+        $myConfig->setGlobalParameter( 'blIsSearchEngine', null );
 
         modConfig::getInstance()->setConfigParam( 'iDebug', 1 );
         modConfig::getInstance()->setConfigParam( 'aRobots', array() );
@@ -407,6 +386,7 @@ class Unit_Core_oxutilsTest extends OxidTestCase
     {
         // cleaning ..
         $myConfig = oxConfig::getInstance();
+        $myConfig->setGlobalParameter( 'blIsSearchEngine', null );
 
         modConfig::getInstance()->setConfigParam( 'iDebug', 0 );
         modConfig::getInstance()->setConfigParam( 'aRobots', array('googlebot', 'xxx') );
@@ -422,6 +402,7 @@ class Unit_Core_oxutilsTest extends OxidTestCase
     {
         // cleaning ..
         $myConfig = oxConfig::getInstance();
+        $myConfig->setGlobalParameter( 'blIsSearchEngine', null );
 
         modConfig::getInstance()->setConfigParam( 'iDebug', 1 );
         modConfig::getInstance()->setConfigParam( 'aRobots', array('googlebot', 'xxx') );
@@ -437,6 +418,7 @@ class Unit_Core_oxutilsTest extends OxidTestCase
     {
         // cleaning ..
         $myConfig = oxConfig::getInstance();
+        $myConfig->setGlobalParameter( 'blIsSearchEngine', null );
 
         modConfig::getInstance()->setConfigParam( 'iDebug', 1 );
         modConfig::getInstance()->setConfigParam( 'aRobots', array('googlebot', 'xxx') );
@@ -452,7 +434,7 @@ class Unit_Core_oxutilsTest extends OxidTestCase
     {
         $this->assertTrue( oxUtils::getInstance()->isValidEmail( 'mathias.krieck@oxid-esales.com' ) );
         $this->assertTrue( oxUtils::getInstance()->isValidEmail( 'mytest@com.org' ) );
-        $this->assertFalse( oxUtils::getInstance()->isValidEmail( 'ï¿½mathias.krieck@oxid-esales.com' ) );
+        $this->assertFalse( oxUtils::getInstance()->isValidEmail( 'ßmathias.krieck@oxid-esales.com' ) );
         $this->assertFalse( oxUtils::getInstance()->isValidEmail( 'my/test@com.org' ) );
         $this->assertFalse( oxUtils::getInstance()->isValidEmail( '@com.org' ) );
         $this->assertFalse( oxUtils::getInstance()->isValidEmail( 'mytestcom.org' ) );
@@ -506,7 +488,6 @@ class Unit_Core_oxutilsTest extends OxidTestCase
         $this->assertEquals('-9.85', oxUtils::getInstance()->fRound('-9.849', $oCur));
         $this->assertEquals('-9', oxUtils::getInstance()->fRound('-9,849', $oCur));
 
-        $this->assertEquals('1522.61', oxUtils::getInstance()->fRound('1522.605', $oCur));
 
     }
 
@@ -706,7 +687,7 @@ class Unit_Core_oxutilsTest extends OxidTestCase
 
         $oUtils  = oxUtils::getInstance();
         $oSmarty = oxUtilsview::getInstance()->getSmarty(true);
-        $sTmpDir = $myConfig->getConfigParam( 'sCompileDir' ) . "/smarty/";
+        $sTmpDir = $myConfig->getConfigParam( 'sCompileDir' );
 
         $aTemplates = array('message/success.tpl', 'message/notice.tpl','message/errors.tpl',);
         foreach ($aTemplates as $sTpl) {
@@ -723,7 +704,7 @@ class Unit_Core_oxutilsTest extends OxidTestCase
         //Remove templates
         $this->assertNull( $oUtils->resetTemplateCache($aTemplates));
 
-        $this->assertEquals( 0, count(glob("{$sTmpDir}/*{$sRemoveTemplate}.php")), "File removed ".$sRemoveTemplate );
+        $this->assertEquals( 0, count(glob("{$sTmpDir}/*{$sRemoveTemplate}.php")), "Filr removed ".$sRemoveTemplate );
         $this->assertEquals( 1, count(glob("{$sTmpDir}/*{$sLeaveTemplate}.php")), "File left ".$sLeaveTemplate );
     }
 
@@ -838,6 +819,26 @@ class Unit_Core_oxutilsTest extends OxidTestCase
 
         if ($e) {
             throw $e;
+        }
+    }
+
+    public function testBitwiseAnd()
+    {
+
+        for ($iCountA = 2147483645; $iCountA <= 2147483647; $iCountA++) {
+            for ($iCountB = 2147483645; $iCountB <= 2147483647; $iCountB++) {
+                $this->assertEquals(oxUtils::getInstance()->bitwiseAnd($iCountA, $iCountB), ($iCountA & $iCountB));
+            }
+        }
+    }
+
+    public function testBitwiseOr()
+    {
+
+        for ($iCountA = 2147483645; $iCountA <= 2147483647; $iCountA++) {
+            for ($iCountB = 2147483645; $iCountB <= 2147483647; $iCountB++) {
+                $this->assertEquals(oxUtils::getInstance()->bitwiseOr($iCountA, $iCountB), ($iCountA | $iCountB));
+            }
         }
     }
 
@@ -1132,10 +1133,10 @@ class Unit_Core_oxutilsTest extends OxidTestCase
         oxTestModules::addFunction('oxUBase', 'render', '{throw new Exception();}');
 
         oxUtils::getInstance()->handlePageNotFoundError("url aa");
-        $this->assertEquals(3, count(oxUtils::getInstance()->setHeaderCall));
-        $this->assertEquals(2, count(oxUtilsView::getInstance()->getTemplateOutputCall));
-        $this->assertEquals(3, count(oxUtils::getInstance()->showMessageAndExitCall));
-        $this->assertEquals("Page not found.", oxUtils::getInstance()->showMessageAndExitCall[2][0]);
+        $this->assertEquals(1, count(oxUtils::getInstance()->setHeaderCall));
+        $this->assertEquals(0, count(oxUtilsView::getInstance()->getTemplateOutputCall));
+        $this->assertEquals(1, count(oxUtils::getInstance()->showMessageAndExitCall));
+        $this->assertEquals("Page not found.", oxUtils::getInstance()->showMessageAndExitCall[0][0]);
     }
 
     public function testToPhpFileCache()
@@ -1163,7 +1164,7 @@ class Unit_Core_oxutilsTest extends OxidTestCase
         $oSubj = $this->getMock("oxUtils", array("getCacheFilePath"));
         $oSubj->expects($this->any())->method("getCacheFilePath")->will($this->returnValue(false));
 
-        oxTestModules::addModuleObject("oxUtils", $oSubj);
+        modInstances::addMod("oxUtils", $oSubj);
 
         $sTestArray = array("testVal1", "key1" => "testVal2");
         oxUtils::getInstance()->toPhpFileCache("testVal2", $sTestArray);

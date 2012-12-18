@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxdbmetadatahandlerTest.php 51491 2012-11-07 11:37:05Z aurimas.gladutis $
+ * @version   SVN: $Id: oxdbmetadatahandlerTest.php 50768 2012-10-22 07:11:33Z rimvydas.paskevicius $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -477,6 +477,5 @@ class Unit_Core_oxDbMetaDataHandlerTest extends OxidTestCase
 
         $oDbMeta->resetLanguage( 1, "testDbMetaDataHandler" );
     }
-
 
 }

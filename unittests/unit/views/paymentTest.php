@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: paymentTest.php 51960 2012-11-19 09:11:15Z vilma $
+ * @version   SVN: $Id: paymentTest.php 45770 2012-05-31 11:55:04Z edvardas.gineika $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -90,19 +90,19 @@ class Unit_Views_paymentTest extends OxidTestCase
     {
         oxTestModules::addFunction('oxarticle', 'getLink( $iLang = null, $blMain = false  )', '{return "htpp://link_for_article/".$this->getId();}');
         $mySession = oxSession::getInstance();
-        $this->setRequestParam( 'sShipSet', 'oxidstandard' );
-        $this->setConfigParam( "blVariantParentBuyable", 1 );
+        modConfig::setParameter( 'sShipSet', 'oxidstandard' );
+        modConfig::getInstance()->setConfigParam( "blVariantParentBuyable", 1 );
         /**
          * Preparing input
          */
 
         $oUser = new oxuser();
         $oUser->load( 'oxdefaultadmin' );
-        $this->setRequestParam( 'deladrid', null );
+        modConfig::setParameter( 'deladrid', null );
 
         $oBasket = new oxBasket();
         $oBasket->setBasketUser( $oUser );
-        $this->setConfigParam( 'blAllowUnevenAmounts', true );
+        modConfig::getInstance()->setConfigParam( 'blAllowUnevenAmounts', true );
         $oBasket->addToBasket( '1127', 1 );
         $oBasket->calculateBasket();
 
@@ -123,8 +123,8 @@ class Unit_Views_paymentTest extends OxidTestCase
     public function testGetPaymentCnt()
     {
         oxTestModules::addFunction('oxarticle', 'getLink( $iLang = null, $blMain = false  )', '{return "htpp://link_for_article/".$this->getId();}');
-        $this->setRequestParam( 'sShipSet', 'oxidstandard' );
-        $this->setConfigParam( "blVariantParentBuyable", 1 );
+        modConfig::setParameter( 'sShipSet', 'oxidstandard' );
+        modConfig::getInstance()->setConfigParam( "blVariantParentBuyable", 1 );
         $mySession = oxSession::getInstance();
         /**
          * Preparing input
@@ -132,11 +132,11 @@ class Unit_Views_paymentTest extends OxidTestCase
 
         $oUser = new oxuser();
         $oUser->load( 'oxdefaultadmin' );
-        $this->setRequestParam( 'deladrid', null );
+        modConfig::setParameter( 'deladrid', null );
 
         $oBasket = new oxBasket();
         $oBasket->setBasketUser( $oUser );
-        $this->setConfigParam( 'blAllowUnevenAmounts', true );
+        modConfig::getInstance()->setConfigParam( 'blAllowUnevenAmounts', true );
         $oBasket->addToBasket( '1127', 1 );
         $oBasket->calculateBasket();
 
@@ -155,17 +155,17 @@ class Unit_Views_paymentTest extends OxidTestCase
     public function testGetAllSets()
     {
         oxTestModules::addFunction('oxarticle', 'getLink( $iLang = null, $blMain = false  )', '{return "htpp://link_for_article/".$this->getId();}');
-        $this->setRequestParam( 'sShipSet', 'oxidstandard' );
-        $this->setConfigParam( "blVariantParentBuyable", 1 );
+        modConfig::setParameter( 'sShipSet', 'oxidstandard' );
+        modConfig::getInstance()->setConfigParam( "blVariantParentBuyable", 1 );
         $mySession = oxSession::getInstance();
 
         $oUser = new oxuser();
         $oUser->load( 'oxdefaultadmin' );
-        $this->setRequestParam( 'deladrid', null );
+        modConfig::setParameter( 'deladrid', null );
 
         $oBasket = new oxBasket();
         $oBasket->setBasketUser( $oUser );
-        $this->setConfigParam( 'blAllowUnevenAmounts', true );
+        modConfig::getInstance()->setConfigParam( 'blAllowUnevenAmounts', true );
         $oBasket->addToBasket( '1127', 1 );
         $oBasket->calculateBasket();
 
@@ -185,17 +185,17 @@ class Unit_Views_paymentTest extends OxidTestCase
     public function testGetAllSetsCnt()
     {
         oxTestModules::addFunction('oxarticle', 'getLink( $iLang = null, $blMain = false  )', '{return "htpp://link_for_article/".$this->getId();}');
-        $this->setRequestParam( 'sShipSet', 'oxidstandard' );
-        $this->setConfigParam( "blVariantParentBuyable", 1 );
+        modConfig::setParameter( 'sShipSet', 'oxidstandard' );
+        modConfig::getInstance()->setConfigParam( "blVariantParentBuyable", 1 );
         $mySession = oxSession::getInstance();
 
         $oUser = new oxuser();
         $oUser->load( 'oxdefaultadmin' );
-        $this->setRequestParam( 'deladrid', null );
+        modConfig::setParameter( 'deladrid', null );
 
         $oBasket = new oxBasket();
         $oBasket->setBasketUser( $oUser );
-        $this->setConfigParam( 'blAllowUnevenAmounts', true );
+        modConfig::getInstance()->setConfigParam( 'blAllowUnevenAmounts', true );
         $oBasket->addToBasket( '1127', 1 );
         $oBasket->calculateBasket();
 
@@ -226,7 +226,7 @@ class Unit_Views_paymentTest extends OxidTestCase
     public function testGetPaymentErrorWithoutOtherCountryOrder()
     {
         //basket name in session will be "basket"
-        $this->setConfigParam( 'blOtherCountryOrder', false );
+        modConfig::getInstance()->setConfigParam( 'blOtherCountryOrder', false );
 
         $oPayment = new Payment();
         $oPayment->UNITsetDefaultEmptyPayment();
@@ -236,7 +236,7 @@ class Unit_Views_paymentTest extends OxidTestCase
 
     public function testGetPaymentErrorFromSession()
     {
-        $this->setSessionParam('payerror', 'test');
+        modSession::getInstance()->setVar('payerror', 'test');
 
         $oPayment = new Payment();
         $oPayment->UNITunsetPaymentErrors();
@@ -247,7 +247,7 @@ class Unit_Views_paymentTest extends OxidTestCase
 
     public function testGetPaymentErrorTextFromSession()
     {
-        $this->setSessionParam('payerrortext', 'test');
+        modSession::getInstance()->setVar('payerrortext', 'test');
 
         $oPayment = new Payment();
         $oPayment->UNITunsetPaymentErrors();
@@ -258,7 +258,7 @@ class Unit_Views_paymentTest extends OxidTestCase
 
     public function testGetPaymentErrorFromRequest()
     {
-        $this->setRequestParam('payerror', 'test');
+        modConfig::setParameter('payerror', 'test');
 
         $oPayment = new Payment();
         $oPayment->UNITunsetPaymentErrors();
@@ -269,7 +269,7 @@ class Unit_Views_paymentTest extends OxidTestCase
 
     public function testGetPaymentErrorTextFromRequest()
     {
-        $this->setRequestParam('payerrortext', 'test');
+        modConfig::setParameter('payerrortext', 'test');
 
         $oPayment = new Payment();
         $oPayment->UNITunsetPaymentErrors();
@@ -280,8 +280,8 @@ class Unit_Views_paymentTest extends OxidTestCase
 
     public function testGetDynValueSetInSession()
     {
-        $this->setSessionParam('dynvalue', 'test');
-        $this->setRequestParam('dynvalue', 'test2');
+        modSession::getInstance()->setVar('dynvalue', 'test');
+        modConfig::setParameter('dynvalue', 'test2');
 
         $oPayment = new Payment();
         $this->assertEquals( 'test', $oPayment->getDynValue() );
@@ -289,8 +289,8 @@ class Unit_Views_paymentTest extends OxidTestCase
 
     public function testGetDynValueNotSetInSession()
     {
-        $this->setSessionParam('dynvalue', null);
-        $this->setRequestParam('dynvalue', 'test2');
+        modSession::getInstance()->setVar('dynvalue', null);
+        modConfig::setParameter('dynvalue', 'test2');
 
         $oPayment = new Payment();
         $this->assertEquals( 'test2', $oPayment->getDynValue() );
@@ -306,7 +306,7 @@ class Unit_Views_paymentTest extends OxidTestCase
         $sQ = "INSERT INTO `oxorder`
                    (`OXID`, `OXSHOPID`, `OXUSERID`, `OXORDERDATE`, `OXORDERNR`, `OXBILLCOMPANY`, `OXBILLEMAIL`, `OXBILLFNAME`, `OXBILLLNAME`, `OXBILLSTREET`, `OXBILLSTREETNR`, `OXBILLADDINFO`, `OXBILLUSTID`, `OXBILLCITY`, `OXBILLCOUNTRYID`, `OXBILLSTATEID`, `OXBILLZIP`, `OXBILLFON`, `OXBILLFAX`, `OXBILLSAL`, `OXDELCOMPANY`, `OXDELFNAME`, `OXDELLNAME`, `OXDELSTREET`, `OXDELSTREETNR`, `OXDELADDINFO`, `OXDELCITY`, `OXDELCOUNTRYID`, `OXDELSTATEID`, `OXDELZIP`, `OXDELFON`, `OXDELFAX`, `OXDELSAL`, `OXPAYMENTID`, `OXPAYMENTTYPE`, `OXTOTALNETSUM`, `OXTOTALBRUTSUM`, `OXTOTALORDERSUM`, `OXARTVAT1`, `OXARTVATPRICE1`, `OXARTVAT2`, `OXARTVATPRICE2`, `OXDELCOST`, `OXDELVAT`, `OXPAYCOST`, `OXPAYVAT`, `OXWRAPCOST`, `OXWRAPVAT`, `OXCARDID`, `OXCARDTEXT`, `OXDISCOUNT`, `OXEXPORT`, `OXBILLNR`, `OXTRACKCODE`, `OXSENDDATE`, `OXREMARK`, `OXVOUCHERDISCOUNT`, `OXCURRENCY`, `OXCURRATE`, `OXFOLDER`, `OXTRANSID`, `OXPAYID`, `OXXID`, `OXPAID`, `OXSTORNO`, `OXIP`, `OXTRANSSTATUS`, `OXLANG`, `OXINVOICENR`, `OXDELTYPE`)
                VALUES
-                   (?, ?, ?, ?, ?, '', 'info@oxid-esales.com', 'Marc', 'Muster', 'Hauptstr.', '13', '', '', 'Freiburg', 'a7c40f631fc920687.20179984', 'BW', '79098', '', '', 'MR', '', '', '', '', '', '', '', '', '', '', '', '', '', ?, 'oxiddebitnote', 1639.15, 2108.39, 1950.59, 19, 311.44, 0, 0, 0, 19, 0, 0, 0, 0, '', '', 157.8, 0, '', '', '0000-00-00 00:00:00', 'Hier kï¿½nnen Sie uns noch etwas mitteilen.', 0, 'EUR', 1, 'ORDERFOLDER_NEW', '', '', '', '0000-00-00 00:00:00', 0, '', 'OK', 0, 0, 'oxidstandard')";
+                   (?, ?, ?, ?, ?, '', 'info@oxid-esales.com', 'Marc', 'Muster', 'Hauptstr.', '13', '', '', 'Freiburg', 'a7c40f631fc920687.20179984', 'BW', '79098', '', '', 'MR', '', '', '', '', '', '', '', '', '', '', '', '', '', ?, 'oxiddebitnote', 1639.15, 2108.39, 1950.59, 19, 311.44, 0, 0, 0, 19, 0, 0, 0, 0, '', '', 157.8, 0, '', '', '0000-00-00 00:00:00', 'Hier können Sie uns noch etwas mitteilen.', 0, 'EUR', 1, 'ORDERFOLDER_NEW', '', '', '', '0000-00-00 00:00:00', 0, '', 'OK', 0, 0, 'oxidstandard')";
 
         $sShopId = oxConfig::getInstance()->GetBaseShopId();
         foreach ( $aUserPaymentId as $iCnt => $sUserPaymentId ) {
@@ -321,7 +321,7 @@ class Unit_Views_paymentTest extends OxidTestCase
     public function testGetDynValueIfDebitNoteIsSet()
     {
         $this->_insertTestOrders( array( '_testOxId3', '_testOxId2', '_testOxId' ), "oxdefaultadmin" );
-        $this->setSessionParam('dynvalue', array('lsbankname'=>''));
+        modSession::getInstance()->setVar('dynvalue', array('lsbankname'=>''));
 
         $oUser = new oxuser();
         $oUser->load( 'oxdefaultadmin' );
@@ -341,7 +341,7 @@ class Unit_Views_paymentTest extends OxidTestCase
 
     public function testGetCheckedPaymentId()
     {
-        $this->setRequestParam('paymentid', 'testId');
+        modConfig::setParameter('paymentid', 'testId');
 
         $oPayment = $this->getProxyClass( "payment" );
         $oPaymentList = array();
@@ -353,8 +353,8 @@ class Unit_Views_paymentTest extends OxidTestCase
 
     public function testGetCheckedPaymentIdSelectedPayment()
     {
-        $this->setRequestParam('paymentid', null);
-        $this->setSessionParam('_selected_paymentid', 'testId2');
+        modConfig::setParameter('paymentid', null);
+        modSession::getInstance()->setVar('_selected_paymentid', 'testId2');
 
         $oPayment = $this->getProxyClass( "payment" );
         $oPaymentList = array();
@@ -366,8 +366,8 @@ class Unit_Views_paymentTest extends OxidTestCase
 
     public function testGetCheckedPaymentIdLastUserPaymentType()
     {
-        $this->setRequestParam('paymentid', null);
-        $this->setSessionParam('_selected_paymentid', null);
+        modConfig::setParameter('paymentid', null);
+        modSession::getInstance()->setVar('_selected_paymentid', null);
 
         $oUser = new oxuser();
         $oUser->load( 'oxdefaultadmin' );
@@ -384,8 +384,8 @@ class Unit_Views_paymentTest extends OxidTestCase
 
     public function testGetCheckedPaymentIdNotAllowed()
     {
-        $this->setRequestParam('paymentid', null);
-        $this->setSessionParam('_selected_paymentid', 'testId4');
+        modConfig::setParameter('paymentid', null);
+        modSession::getInstance()->setVar('_selected_paymentid', 'testId4');
 
         $oPayment = $this->getProxyClass( "payment" );
         $oPaymentList = array();
@@ -397,8 +397,8 @@ class Unit_Views_paymentTest extends OxidTestCase
 
     public function testGetCheckedPaymentIdInDB()
     {
-        $this->setRequestParam('paymentid', null);
-        $this->setSessionParam('_selected_paymentid', null);
+        modConfig::setParameter('paymentid', null);
+        modSession::getInstance()->setVar('_selected_paymentid', null);
         $oPayment = $this->getProxyClass( "payment" );
         $oPaymentList = array();
         $oPaymentList['testId'] = true;
@@ -435,7 +435,7 @@ class Unit_Views_paymentTest extends OxidTestCase
         $oPayment = $this->getMock( 'Payment', array( 'getUser', 'getSession' ) );
         $oPayment->expects( $this->once() )->method( 'getUser')->will( $this->returnValue( $oUser ) );
         $oPayment->expects( $this->once() )->method( 'getSession')->will( $this->returnValue( $oSession ) );
-        $this->setRequestParam( "paymentid", 'testId' );
+        modConfig::setParameter( "paymentid", 'testId' );
 
         $oPayment->validatePayment();
 
@@ -462,8 +462,8 @@ class Unit_Views_paymentTest extends OxidTestCase
         $oPayment = $this->getMock( 'Payment', array( 'getUser', 'getSession' ) );
         $oPayment->expects( $this->once() )->method( 'getUser')->will( $this->returnValue( $oUser ) );
         $oPayment->expects( $this->once() )->method( 'getSession')->will( $this->returnValue( $oSession ) );
-        $this->setRequestParam( "paymentid", 'testId' );
-        $this->setRequestParam( "sShipSet", 'newShipping' );
+        modConfig::setParameter( "paymentid", 'testId' );
+        modConfig::setParameter( "sShipSet", 'newShipping' );
 
         $oPayment->validatePayment();
 
@@ -473,7 +473,7 @@ class Unit_Views_paymentTest extends OxidTestCase
     public function testFilterDynDataNotFiltered()
     {
         $oSubj = $this->getProxyClass("payment");
-        $this->setConfigParam("blStoreCreditCardInfo", 1);
+        modConfig::getInstance()->setConfigParam("blStoreCreditCardInfo", 1);
 
         $sTNumber = "tstNumber";
         $sTName = "tstName";
@@ -527,7 +527,7 @@ class Unit_Views_paymentTest extends OxidTestCase
     public function testFilterDynDataFiltered()
     {
         $oSubj = $this->getProxyClass("payment");
-        $this->setConfigParam("blStoreCreditCardInfo", 0);
+        modConfig::getInstance()->setConfigParam("blStoreCreditCardInfo", 0);
 
         $sTNumber = "tstNumber";
         $sTName = "tstName";
@@ -578,11 +578,11 @@ class Unit_Views_paymentTest extends OxidTestCase
         //$this->assertNull($aDynData["kkyear"]);
         //$this->assertNull($aDynData["kkpruef"]);
 
-        $this->assertNull($this->getSessionParam("kknumber"));
-        $this->assertNull($this->getSessionParam("kkname"));
-        $this->assertNull($this->getSessionParam("kkmonth"));
-        $this->assertNull($this->getSessionParam("kkyear"));
-        $this->assertNull($this->getSessionParam("kkpruef"));
+        $this->assertNull(modSession::getInstance()->getVar("kknumber"));
+        $this->assertNull(modSession::getInstance()->getVar("kkname"));
+        $this->assertNull(modSession::getInstance()->getVar("kkmonth"));
+        $this->assertNull(modSession::getInstance()->getVar("kkyear"));
+        $this->assertNull(modSession::getInstance()->getVar("kkpruef"));
 
         $this->assertFalse($this->_checkInArrayRecursive($sTNumber, $_REQUEST));
         $this->assertFalse($this->_checkInArrayRecursive($sTNumber, $_POST));
@@ -610,7 +610,7 @@ class Unit_Views_paymentTest extends OxidTestCase
         $this->assertNull( $_GET["dynvalue[kkpruef]"]);
 
     }
-
+    
     protected function _checkInArrayRecursive($needle, $haystack)
     {
         foreach ($haystack as $v) {
@@ -626,7 +626,7 @@ class Unit_Views_paymentTest extends OxidTestCase
     public function testRenderDoesNotCleanReservationsIfOff()
     {
         oxTestModules::addFunction('oxUtils', 'redirect', '{throw new Exception("REDIRECT");}');
-        $this->setConfigParam('blPsBasketReservationEnabled', false);
+        modConfig::getInstance()->setConfigParam('blPsBasketReservationEnabled', false);
 
         $oS = $this->getMock('oxsession', array('getBasketReservations'));
         $oS->expects($this->never())->method('getBasketReservations');
@@ -643,7 +643,7 @@ class Unit_Views_paymentTest extends OxidTestCase
     public function testRenderDoesCleanReservationsIfOn()
     {
         oxTestModules::addFunction('oxUtils', 'redirect', '{throw new Exception("REDIRECT");}');
-        $this->setConfigParam('blPsBasketReservationEnabled', true);
+        modConfig::getInstance()->setConfigParam('blPsBasketReservationEnabled', true);
 
         $oR = $this->getMock('stdclass', array('renewExpiration'));
         $oR->expects($this->once())->method('renewExpiration')->will($this->returnValue(null));
@@ -663,8 +663,8 @@ class Unit_Views_paymentTest extends OxidTestCase
     public function testRenderReturnsToBasketIfReservationOnAndBasketEmpty()
     {
         oxTestModules::addFunction('oxUtils', 'redirect($url, $blAddRedirectParam = true, $iHeaderCode = 301)', '{throw new Exception($url);}');
-        $this->setConfigParam('blPsBasketReservationEnabled', true);
-        $this->setRequestParam( 'sslredirect', 'forced' );
+        modConfig::getInstance()->setConfigParam('blPsBasketReservationEnabled', true);
+        modConfig::setParameter( 'sslredirect', 'forced' );
 
         $oR = $this->getMock('stdclass', array('renewExpiration'));
         $oR->expects($this->once())->method('renewExpiration')->will($this->returnValue(null));
@@ -694,9 +694,9 @@ class Unit_Views_paymentTest extends OxidTestCase
         $this->setExpectedException('Exception', $sRedirUrl);
 
         oxTestModules::addFunction('oxUtils', 'redirect($url, $blAddRedirectParam = true, $iHeaderCode = 301)', '{throw new Exception($url);}');
-        $this->setConfigParam('blPsBasketReservationEnabled', false);
+        modConfig::getInstance()->setConfigParam('blPsBasketReservationEnabled', false);
         // skip redirect to SSL
-        $this->setRequestParam( 'sslredirect', 'forced' );
+        modConfig::setParameter( 'sslredirect', 'forced' );
 
         $oB = $this->getMock('oxbasket', array('getProductsCount'));
         $oB->expects($this->once())->method('getProductsCount')->will($this->returnValue(1));
@@ -716,9 +716,9 @@ class Unit_Views_paymentTest extends OxidTestCase
         $this->setExpectedException('Exception', $sRedirUrl);
 
         oxTestModules::addFunction('oxUtils', 'redirect($url, $blAddRedirectParam = true, $iHeaderCode = 301)', '{throw new Exception($url);}');
-        $this->setConfigParam('blPsBasketReservationEnabled', false);
+        modConfig::getInstance()->setConfigParam('blPsBasketReservationEnabled', false);
         // skip redirect to SSL
-        $this->setRequestParam( 'sslredirect', 'forced' );
+        modConfig::setParameter( 'sslredirect', 'forced' );
 
         $oB = $this->getMock('oxbasket', array('getProductsCount'));
         $oB->expects($this->once())->method('getProductsCount')->will($this->returnValue(0));
@@ -732,9 +732,29 @@ class Unit_Views_paymentTest extends OxidTestCase
         $oO->render();
     }
 
+    public function testGetTsProtections()
+    {
+        modConfig::getInstance()->setConfigParam( 'blEnterNetPrice', false );
+        $oP = $this->getMock('oxprice', array('getBruttoPrice'));
+        $oP->expects($this->once())->method('getBruttoPrice')->will($this->returnValue(50));
+        $oB = $this->getMock('oxbasket', array('getPrice'));
+        $oB->expects($this->once())->method('getPrice')->will($this->returnValue($oP));
+        $oS = $this->getMock('oxsession', array('getBasket'));
+        $oS->expects($this->any())->method('getBasket')->will($this->returnValue($oB));
+        $oPayment = $this->getMock('payment', array('getSession'));
+        $oPayment->expects($this->any())->method('getSession')->will($this->returnValue($oS));
+
+        $oProducts = $oPayment->getTsProtections();
+        $oProduct = current($oProducts);
+
+        $this->assertEquals( "0,98", $oProduct->getFPrice() );
+        $this->assertEquals( 'TS080501_500_30_EUR', $oProduct->getTsId() );
+        $this->assertEquals( 500, $oProduct->getAmount() );
+    }
+
     public function testGetCheckedTsProductId()
     {
-        $this->setRequestParam('stsprotection', 'testId');
+        modConfig::setParameter('stsprotection', 'testId');
         $oPayment = $this->getProxyClass( "payment" );
 
         $this->assertEquals( 'testId', $oPayment->getCheckedTsProductId() );
@@ -753,17 +773,17 @@ class Unit_Views_paymentTest extends OxidTestCase
     }
 
     /**
-     * Testing Payment::getDynDataFiltered() against false on creation
-     *
-     * @return null
+     * Testing Payment::getDynDataFiltered() against false on creation 
+     * 
+     * @return null 
      */
-    public function testGetDynDataFilteredFalse()
+    public function testGetDynDataFilteredFalse() 
     {
         $oPayment = new Payment();
-
+        
         $this->assertFalse($oPayment->getDynDataFiltered());
     }
-
+    
     /**
      * Testing Payment::getDynDataFiltered() against false after payment->init()
      * when credit card fields are not populated
@@ -771,11 +791,11 @@ class Unit_Views_paymentTest extends OxidTestCase
     public function testGetDynDataFilteredFalseInit()
     {
         $oPayment = new Payment();
-        $this->setConfigParam("blStoreCreditCardInfo", 0);
+        modConfig::getInstance()->setConfigParam("blStoreCreditCardInfo", 0);
         $oPayment->init();
         $this->assertFalse($oPayment->getDynDataFiltered());
     }
-
+    
     /**
      * Testing Payment::getDynDataFiltered() against true after payment->init()
      * when credit card fields are populated with session data
@@ -783,7 +803,7 @@ class Unit_Views_paymentTest extends OxidTestCase
     public function testGetDynDataFilteredTrueSessDataInit()
     {
         $oPayment = new Payment();
-        $this->setConfigParam("blStoreCreditCardInfo", 0);
+        modConfig::getInstance()->setConfigParam("blStoreCreditCardInfo", 0);
         $sTNumber = "tstNumber";
         $sTName = "tstName";
         $sTMonth = "tstMonth";
@@ -799,22 +819,22 @@ class Unit_Views_paymentTest extends OxidTestCase
                           "kkpruef" => $sTProof
                             );
 
-        $this->setSessionParam("dynvalue", $aDynData);
+        modSession::getInstance()->setVar("dynvalue", $aDynData);
 
         $oPayment->init();
         $this->assertTrue($oPayment->getDynDataFiltered());
     }
-
+    
     /**
      * Testing Payment::getDynDataFiltered() against true after payment->init()
      * when credit card fields are populated with request data
-     *
+     * 
      * @return null
      */
     public function testGetDynDataFilteredTrueReqDataInit()
     {
         $oPayment = new Payment();
-        $this->setConfigParam("blStoreCreditCardInfo", 0);
+        modConfig::getInstance()->setConfigParam("blStoreCreditCardInfo", 0);
         //TODO populate session and request variables with data
         $sTNumber = "tstNumber";
         $sTName = "tstName";
@@ -823,7 +843,7 @@ class Unit_Views_paymentTest extends OxidTestCase
         $sTProof = "tstProof";
         $sTType = "tstType";
 
-
+       
         $_REQUEST["dynvalue"]["kktype"] = $sTType;
         $_REQUEST["dynvalue"]["kknumber"] = $sTNumber;
         $_REQUEST["dynvalue"]["kkname"] = $sTName;
@@ -848,11 +868,11 @@ class Unit_Views_paymentTest extends OxidTestCase
         $oPayment->init();
         $this->assertTrue($oPayment->getDynDataFiltered());
     }
-
+    
     /**
      * Testing Payment::ValidatePayment() when we use creditcard payment
      * and do not store CC data, using session saved CC entered data
-     *
+     * 
      * @return null
      */
     public function testValidatePayment_NoStoreCardInfoSession()
@@ -872,10 +892,10 @@ class Unit_Views_paymentTest extends OxidTestCase
         $oPayment = $this->getMock( 'Payment', array( 'getUser', 'getSession' ) );
         $oPayment->expects( $this->any() )->method( 'getUser')->will( $this->returnValue( $oUser ) );
         $oPayment->expects( $this->any() )->method( 'getSession')->will( $this->returnValue( $oSession ) );
-
-        $this->setRequestParam( "paymentid", 'oxidcreditcard' );
-        $this->setConfigParam("blStoreCreditCardInfo", 0);
-
+       
+        modConfig::setParameter( "paymentid", 'oxidcreditcard' );
+        modConfig::getInstance()->setConfigParam("blStoreCreditCardInfo", 0);
+       
         $sTNumber = "4111111111111111";
         $sTName = "Hans Mustermann";
         $sTMonth = "01";
@@ -891,16 +911,16 @@ class Unit_Views_paymentTest extends OxidTestCase
                           "kkpruef" => $sTProof
                             );
 
-        $this->setSessionParam("dynvalue", $aDynData);
+        modSession::getInstance()->setVar("dynvalue", $aDynData);
         $oPayment->init();
         $sRetVal = $oPayment->validatePayment();
         $this->assertEquals( null, $sRetVal );
     }
-
+    
     /**
      * Testing Payment::ValidatePayment() when we use creditcard payment
      * and do not store CC data, using CC entered data from $_REQUEST, $_POST or $_GET
-     *
+     * 
      * @return null
      */
     public function testValidatePayment_NoStoreCardInfoRequest()
@@ -920,10 +940,10 @@ class Unit_Views_paymentTest extends OxidTestCase
         $oPayment = $this->getMock( 'Payment', array( 'getUser', 'getSession' ) );
         $oPayment->expects( $this->any() )->method( 'getUser')->will( $this->returnValue( $oUser ) );
         $oPayment->expects( $this->any() )->method( 'getSession')->will( $this->returnValue( $oSession ) );
-
-        $this->setRequestParam( "paymentid", 'oxidcreditcard' );
-        $this->setConfigParam("blStoreCreditCardInfo", 0);
-
+       
+        modConfig::setParameter( "paymentid", 'oxidcreditcard' );
+        modConfig::getInstance()->setConfigParam("blStoreCreditCardInfo", 0);
+       
         $sTNumber = "4111111111111111";
         $sTName = "Hans Mustermann";
         $sTMonth = "01";
@@ -956,13 +976,13 @@ class Unit_Views_paymentTest extends OxidTestCase
         $sRetVal = $oPayment->validatePayment();
         $this->assertEquals( null, $sRetVal );
     }
-
+    
     /**
      * Testing Payment::_CheckArrValuesEmpty() when checked array is empty
-     *
+     * 
      * @return null
      */
-    public function test_CheckArrValuesEmptyWithoutData()
+    public function test_CheckArrValuesEmptyWithoutData() 
     {
          $oPayment = $this->getProxyClass("payment");
          $aData = array ("kktype"=>null,"kknumber"=>null);
@@ -970,13 +990,13 @@ class Unit_Views_paymentTest extends OxidTestCase
 
          $this->assertTrue($oPayment->UNITcheckArrValuesEmpty($aData,$aKeys));
     }
-
+    
     /**
      * Testing Payment::_CheckArrValuesEmpty() when checked array is populated with good data
-     *
+     * 
      * @return null
-     */
-    public function test_CheckArrValuesEmptyWithData()
+     */  
+    public function test_CheckArrValuesEmptyWithData() 
     {
          $oPayment = $this->getProxyClass("payment");
          $aData = array ( "kktype"=>"vis", "kknumber"=>"42222222" );
@@ -984,68 +1004,17 @@ class Unit_Views_paymentTest extends OxidTestCase
 
          $this->assertFalse( $oPayment->UNITcheckArrValuesEmpty( $aData, $aKeys ) );
     }
-
+    
     /**
      * Testing Payment::_CheckArrValuesEmpty() when checked array is populated with bad data
-     *
+     * 
      * @return null
      */
-    public function test_CheckArrValuesEmptyWithBadData()
+    public function test_CheckArrValuesEmptyWithBadData() 
     {
          $oPayment = $this->getProxyClass( "payment" );
          $aKeys = array ( "kktype", "kknumber" );
 
          $this->assertTrue( $oPayment->UNITcheckArrValuesEmpty( null, $aKeys ) );
     }
-
-    /**
-     * Test payment if changed shipping
-     */
-    public function testChangeshippingt()
-    {
-        $this->setRequestParam( 'sShipSet', 'paypal' );
-        $oBasket = $this->getMock( 'oxBasket', array( 'onUpdate', 'setShipping' ) );
-        $oBasket->expects( $this->once() )->method( 'onUpdate');
-        $oBasket->expects( $this->once() )->method( 'setShipping')->with( $this->equalTo( null ) );
-
-        $oSession = $this->getMock( 'oxSession', array( 'getBasket' ) );
-        $oSession->expects( $this->any() )->method( 'getBasket')->will( $this->returnValue( $oBasket ) );
-
-        $oPayment = $this->getMock( 'Payment', array( 'getSession' ) );
-        $oPayment->expects( $this->any() )->method( 'getSession')->will( $this->returnValue( $oSession ) );
-        $oPayment->changeshipping();
-
-        $this->assertEquals( 'paypal', $this->getSessionParam( 'sShipSet' ) );
-    }
-
-    public function testIsPaymentVatSplitted()
-    {
-        $this->setConfigParam( 'blShowVATForPayCharge', true );
-
-        $oPayment = new Payment();
-        $this->assertTrue( $oPayment->isPaymentVatSplitted() );
-    }
-
-    /**
-     * Test payment if changed shipping
-     */
-    public function testGetTsProtections()
-    {
-        $oPrice = oxNew( 'oxPrice' );
-        $oPrice->setPrice( 100, 21 );
-
-        $oBasket = $this->getMock( 'oxBasket', array( 'getAdditionalServicesVatPercent', 'getPrice' ) );
-        $oBasket->expects( $this->once() )->method( 'getAdditionalServicesVatPercent')->will( $this->returnValue( 21 ) );
-        $oBasket->expects( $this->once() )->method( 'getPrice')->will( $this->returnValue( $oPrice ) );
-
-        $oSession = $this->getMock( 'oxSession', array( 'getBasket' ) );
-        $oSession->expects( $this->any() )->method( 'getBasket')->will( $this->returnValue( $oBasket ) );
-
-        $oPayment = $this->getMock( 'Payment', array( 'getSession' ) );
-        $oPayment->expects( $this->any() )->method( 'getSession')->will( $this->returnValue( $oSession ) );
-
-        $aTsProducts = $oPayment->getTsProtections();
-        $this->assertFalse( empty($aTsProducts) );
-    }
-
 }

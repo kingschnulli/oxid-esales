@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxsupercfg.php 48727 2012-08-16 09:09:02Z tomas $
+ * @version   SVN: $Id: oxsupercfg.php 43608 2012-04-06 14:34:48Z linas.kukulskis $
  */
 
 /**
@@ -108,11 +108,11 @@ class oxSuperCfg
             if ( isset( $this->unitCustModConf ) ) {
                 return $this->unitCustModConf;
             }
-            return oxRegistry::getConfig();
+            return oxConfig::getInstance();
         }
 
         if ( self::$_oConfig == null ) {
-            self::$_oConfig = oxRegistry::getConfig();
+            self::$_oConfig = oxConfig::getInstance();
         }
 
         return self::$_oConfig;
@@ -146,11 +146,11 @@ class oxSuperCfg
             if ( isset( $this->unitCustModSess ) ) {
                 return $this->unitCustModSess;
             }
-            return oxRegistry::getSession();
+            return oxSession::getInstance();
         }
 
         if ( self::$_oSession == null ) {
-            self::$_oSession = oxRegistry::getSession();
+            self::$_oSession = oxSession::getInstance();
         }
 
         return self::$_oSession;

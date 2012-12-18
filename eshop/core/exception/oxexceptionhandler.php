@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   core
- * @copyright (C) OXID eSales AG 2003-2012
+ * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxexceptionhandler.php 48727 2012-08-16 09:09:02Z tomas $
+ * @version   SVN: $Id: oxexceptionhandler.php 39858 2011-11-09 08:19:09Z linas.kukulskis $
  */
 
 /**
@@ -124,11 +124,11 @@ class oxExceptionHandler
         if ( defined( 'OXID_PHP_UNIT' ) ) {
             return $oEx->getString();
         } elseif ( 0 != $this->_iDebug ) {
-            oxRegistry::getUtils()->showMessageAndExit( $oEx->getString() );
+            oxUtils::getInstance()->showMessageAndExit( $oEx->getString() );
         }
 
         //simple safe redirect in productive mode
-        $sShopUrl = oxRegistry::getConfig()->getShopMainUrl();
+        $sShopUrl = oxConfig::getInstance()->getShopMainUrl();
         $this->_safeShopRedirectAndExit( $sShopUrl . "offline.html" );
 
         //should not be reached
@@ -147,15 +147,15 @@ class oxExceptionHandler
     {
         if ( 0 != $this->_iDebug ) {
             $sLogMsg = date( 'Y-m-d H:i:s' ) . $oEx . "\n---------------------------------------------\n";
-            oxRegistry::getUtils()->writeToLog( $sLogMsg, $this->getLogFileName() );
+            oxUtils::getInstance()->writeToLog( $sLogMsg, $this->getLogFileName() );
             if ( defined( 'OXID_PHP_UNIT' ) ) {
                 return;
             } elseif ( 0 != $this->_iDebug ) {
-                oxRegistry::getUtils()->showMessageAndExit( $sLogMsg );
+                oxUtils::getInstance()->showMessageAndExit( $sLogMsg );
             }
         }
 
-        $sShopUrl = oxRegistry::getConfig()->getShopMainUrl();
+        $sShopUrl = oxConfig::getInstance()->getShopMainUrl();
         $this->_safeShopRedirectAndExit( $sShopUrl . "offline.html" );
     }
 

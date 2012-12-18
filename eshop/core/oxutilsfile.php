@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutilsfile.php 51949 2012-11-19 08:05:29Z aurimas.gladutis $
+ * @version   SVN: $Id: oxutilsfile.php 43698 2012-04-10 14:53:40Z mindaugas.rimgaila $
  */
 
 /**
@@ -134,13 +134,23 @@ class oxUtilsFile extends oxSuperCfg
     /**
      * Returns object instance
      *
-     * @deprecated since v5.0 (2012-08-10); Use oxRegistry::get("oxUtilsFile") instead.
-     *
      * @return oxUtilsFile
      */
     public static function getInstance()
     {
-        return oxRegistry::get("oxUtilsFile");
+        // disable caching for test modules
+        if ( defined( 'OXID_PHP_UNIT' ) ) {
+            self::$_instance = modInstances::getMod( __CLASS__ );
+        }
+
+        if ( !self::$_instance instanceof oxUtilsFile ) {
+
+            self::$_instance = oxNew( 'oxUtilsFile' );
+            if ( defined( 'OXID_PHP_UNIT' ) ) {
+                modInstances::addMod( __CLASS__, self::$_instance);
+            }
+        }
+        return self::$_instance;
     }
 
     /**
@@ -313,7 +323,7 @@ class oxUtilsFile extends oxSuperCfg
 
                 // unallowed files ?
                 if ( in_array( $sFileType, $this->_aBadFiles ) || ( $blDemo && !in_array( $sFileType, $this->_aAllowedFiles ) ) ) {
-                    oxRegistry::getUtils()->showMessageAndExit( "We don't play this game, go away" );
+                    oxUtils::getInstance()->showMessageAndExit( "We don't play this game, go away" );
                 }
 
                 // removing file type
@@ -414,9 +424,7 @@ class oxUtilsFile extends oxSuperCfg
     protected function _moveImage( $sSource, $sTarget )
     {
         $blDone = false;
-        if ( !is_dir( dirname( $sTarget ) ) ) {
-            mkdir(dirname($sTarget), 0744, true);
-        }
+
         if ( $sSource === $sTarget ) {
             $blDone = true;
         } else {
@@ -477,7 +485,7 @@ class oxUtilsFile extends oxSuperCfg
                 if ( UPLOAD_ERR_OK !== $iError && UPLOAD_ERR_NO_FILE !== $iError ) {
                     $sErrorsDescription = $this->translateError( $iError );
                     $oEx->setMessage( $sErrorsDescription );
-                    oxRegistry::get("oxUtilsView")->addErrorToDisplay( $oEx, false );
+                    oxUtilsView::getInstance()->addErrorToDisplay( $oEx, false );
                 }
 
                 // checking file type and building final file name
@@ -579,6 +587,60 @@ class oxUtilsFile extends oxSuperCfg
     }
 
     /**
+     * Handles uploaded path. Returns new URL to the file
+     *
+     * @param array  $aFileInfo   Global $_FILE parameter info
+     * @param string $sUploadPath RELATIVE (to config sShopDir parameter) path for uploaded file to be copied
+     *
+     * @throws oxException if file is not valid
+     *
+     * @return string
+     *
+     * deprecated since 2011-08-29 4.5.2 insted use processFile() function
+     */
+    public function handleUploadedFile($aFileInfo, $sUploadPath)
+    {
+        $sBasePath = $this->getConfig()->getConfigParam('sShopDir');
+
+        //checking params
+        if ( !isset( $aFileInfo['name'] ) || !isset( $aFileInfo['tmp_name'] ) ) {
+            throw oxNew( "oxException", 'EXCEPTION_NOFILE' );
+        }
+
+        //wrong chars in file name?
+        if ( !getStr()->preg_match('/^[\-_a-z0-9\.]+$/i', $aFileInfo['name'] ) ) {
+            throw oxNew( "oxException", 'EXCEPTION_FILENAMEINVALIDCHARS' );
+        }
+
+        // error uploading file ?
+        if ( isset( $aFileInfo['error'] ) && $aFileInfo['error'] ) {
+            throw oxNew( "oxException", 'EXCEPTION_FILEUPLOADERROR_'.( (int) $aFileInfo['error'] ) );
+        }
+
+        $aPathInfo = pathinfo($aFileInfo['name']);
+
+        $sExt = $aPathInfo['extension'];
+        $sFileName = $aPathInfo['filename'];
+
+        $aAllowedUploadTypes = (array) $this->getConfig()->getConfigParam( 'aAllowedUploadTypes' );
+        $aAllowedUploadTypes = array_map( "strtolower", $aAllowedUploadTypes );
+        if ( !in_array( strtolower( $sExt ), $aAllowedUploadTypes ) ) {
+            throw oxNew( "oxException", 'EXCEPTION_NOTALLOWEDTYPE' );
+        }
+
+        $sFileName = $this->_getUniqueFileName( $sBasePath . $sUploadPath, $sFileName, $sExt );
+        $this->_moveImage( $aFileInfo['tmp_name'], $sBasePath . $sUploadPath . "/" . $sFileName );
+
+        $sUrl = $this->getConfig()->getShopUrl() . $sUploadPath . "/" . $sFileName;
+
+        //removing dublicate slashes
+        $sUrl = str_replace('//', '/', $sUrl);
+        $sUrl = str_replace(array('http:/', 'https:/'), array('http://', 'https://'), $sUrl);
+
+        return $sUrl;
+    }
+
+     /**
      * Process uploaded files. Returns unique file name, on fail false
      *
      * @param string $sFileName   form file item name
@@ -700,4 +762,28 @@ class oxUtilsFile extends oxSuperCfg
         return $message;
     }
 
+    /**
+     * Returns mime type by filename
+     *
+     * @param string $sFileName File name
+     *
+     * @return string
+     */
+    public function getMimeType($sFileName)
+    {
+        //for PHP 5.3
+        if (function_exists("finfo_file")) {
+            $rFinfo = finfo_open(FILEINFO_MIME_TYPE);
+            $sMime = finfo_file($rFinfo, $sFileName);
+            return $sMime;
+        }
+
+        //deprecated functionality
+        if (function_exists("mime_content_type")) {
+            $sMime = mime_content_type($sFileName);
+            return $sMime;
+        }
+
+        return null;
+    }
 }

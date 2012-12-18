@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: dynexportbaseTest.php 47944 2012-07-30 12:41:30Z linas.kukulskis $
+ * @version   SVN: $Id: dynexportbaseTest.php 44015 2012-04-18 09:29:22Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -624,17 +624,17 @@ class Unit_Admin_DynExportBaseTest extends OxidTestCase
         $oArticle = $this->getMock( "oxArticle", array( "getCategoryIds" ) );
         $oArticle->expects( $this->once() )->method( 'getCategoryIds' )->will( $this->returnValue( array( "cat1", "cat2", "cat3" ) ) );
 
-        $aCache["cat1"] = new stdClass();
+        $aCache["cat1"] = new oxStdClass();
         $aCache["cat1"]->ilevel     = 1;
         $aCache["cat1"]->oxtitle    = "cat1";
         $aCache["cat1"]->oxparentid = "oxrootid";
 
-        $aCache["cat2"] = new stdClass();
+        $aCache["cat2"] = new oxStdClass();
         $aCache["cat2"]->ilevel     = 2;
         $aCache["cat2"]->oxtitle    = "cat2";
         $aCache["cat2"]->oxparentid = "cat1";
 
-        $aCache["cat3"] = new stdClass();
+        $aCache["cat3"] = new oxStdClass();
         $aCache["cat3"]->ilevel     = 3;
         $aCache["cat3"]->oxtitle    = "cat3";
         $aCache["cat3"]->oxparentid = "cat2";

@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxshopTest.php 52092 2012-11-21 11:47:26Z linas.kukulskis $
+ * @version   SVN: $Id: oxshopTest.php 40264 2011-11-24 14:04:45Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -36,7 +36,5 @@ class Unit_Core_oxshopTest extends OxidTestCase
     }
 
     protected $_aLangTables = array();
-
-
 
 }

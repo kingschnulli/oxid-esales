@@ -36,11 +36,11 @@ class Unit_Core_oxbasketreservationTest extends OxidTestCase
      */
     public function testGetReservationsIdInitNew()
     {
-        $this->setSessionParam( 'basketReservationToken', null );
+        modSession::getInstance()->setVar( 'basketReservationToken', null );
 
         $oUO = $this->getMock('oxUtilsObject', array('generateUID'));
         $oUO->expects($this->once())->method('generateUID')->will($this->returnValue('newvarval'));
-        oxTestModules::addModuleObject( 'oxUtilsObject', $oUO );
+        modInstances::addMod('oxUtilsObject', $oUO);
 
         $oR = oxNew('oxBasketReservation');
 
@@ -59,7 +59,7 @@ class Unit_Core_oxbasketreservationTest extends OxidTestCase
 
         $oUO = $this->getMock('oxUtilsObject', array('generateUID'));
         $oUO->expects($this->never())->method('generateUID');
-        oxTestModules::addModuleObject( 'oxUtilsObject', $oUO );
+        modInstances::addMod('oxUtilsObject', $oUO);
 
         $oR = oxNew('oxBasketReservation');
 

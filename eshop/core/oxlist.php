@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxlist.php 52493 2012-11-27 16:13:19Z aurimas.gladutis $
+ * @version   SVN: $Id: oxlist.php 44382 2012-04-25 13:39:12Z linas.kukulskis $
  */
 
 /**
@@ -159,7 +159,6 @@ class oxList extends oxSuperCfg implements ArrayAccess, Iterator, Countable
      */
     public function rewind()
     {
-        $this->_blRemovedActive = false;
         $this->_blValid = ( false !== reset( $this->_aArray ) );
     }
 
@@ -417,34 +416,6 @@ class oxList extends oxSuperCfg implements ArrayAccess, Iterator, Countable
             }
         }
     }
-
-
-    /**
-     * Assign data from array to list
-     *
-     * @param array $aData datao for list
-     *
-     * @return null;
-     */
-    public function assignArray( $aData )
-    {
-        $this->clear();
-        if ( count( $aData ) ) {
-
-            $oSaved = clone $this->getBaseObject();
-
-            foreach ($aData as $aItem) {
-                $oListObject = clone $oSaved;
-                $this->_assignElement( $oListObject, $aItem );
-                if ( $oListObject->getId() ) {
-                    $this->_aArray[ $oListObject->getId() ] = $oListObject;
-                } else {
-                    $this->_aArray[] = $oListObject;
-                }
-            }
-        }
-    }
-
 
     /**
      * Sets SQL Limit

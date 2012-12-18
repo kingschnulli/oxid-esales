@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: manufacturerlistTest.php 47914 2012-07-30 08:41:23Z linas.kukulskis $
+ * @version   SVN: $Id: manufacturerlistTest.php 38654 2011-09-06 08:57:31Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -60,7 +60,7 @@ class Unit_Views_ManufacturerlistTest extends OxidTestCase
      */
     public function testRender()
     {
-        $oManufacturer = $this->getMock( "oxManufacturer", array( "getId" ) );
+        $oManufacturer = $this->getMock( "oxStdClass", array( "getId" ) );
         $oManufacturer->expects( $this->atLeastOnce() )->method( 'getId' )->will( $this->returnValue( "testId" ) );
 
         $oView = $this->getMock( "manufacturerlist", array( "getManufacturerTree", "getActManufacturer", "getArticleList", "_processListArticles", "_checkRequestedPage" ) );
@@ -182,7 +182,7 @@ class Unit_Views_ManufacturerlistTest extends OxidTestCase
     {
         oxTestModules::addFunction( 'oxUtils', 'seoIsActive', '{ return true; }');
 
-        $oManufacturer = $this->getMock( "oxManufacturer", array( "getLink" ) );
+        $oManufacturer = $this->getMock( "oxStdClass", array( "getLink" ) );
         $oManufacturer->expects( $this->atLeastOnce() )->method( 'getLink' )->will( $this->returnValue( "testLink" ) );
 
         $oView = $this->getMock( "manufacturerlist", array( "getActManufacturer" ) );
@@ -372,6 +372,23 @@ class Unit_Views_ManufacturerlistTest extends OxidTestCase
         $oManufacturer = $this->getMock( 'Manufacturerlist', array( 'generatePageNavigation' ));
         $oManufacturer->expects( $this->any() )->method( 'generatePageNavigation')->will($this->returnValue( "aaa" ) );
         $this->assertEquals( 'aaa', $oManufacturer->getPageNavigation() );
+    }
+
+    /**
+     * Test get recomendation list.
+     *
+     * @return null
+     */
+    public function testGetRecommList()
+    {
+        oxTestModules::addFunction('oxRecommList', 'getRecommListsByIds', '{ return "testRecomm"; }');
+        $oArtList = new oxarticlelist();
+
+        $oManufacturer = $this->getProxyClass( "Manufacturerlist" );
+        $oManufacturer->setNonPublicVar( "_aArticleList", $oArtList );
+        $oManufacturer->setNonPublicVar( "_iArticleCnt", 1 );
+
+        $this->assertEquals( "testRecomm", $oManufacturer->getSimilarRecommLists() );
     }
 
     /**

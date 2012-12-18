@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxattributeTest.php 48860 2012-08-21 06:50:32Z vilma $
+ * @version   SVN: $Id: oxattributeTest.php 43613 2012-04-06 14:41:31Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -111,13 +111,13 @@ class Unit_Core_oxattributeTest extends OxidTestCase
         $sVarId2 = '_testVar2';
         $aSellTitle = array( 0 => '_testAttr',
                              1 => '_tetsAttr_1');
-        $oValue = new stdClass();
+        $oValue = new oxStdClass();
         $oValue->name = 'red';
-        $oValue2 = new stdClass();
+        $oValue2 = new oxStdClass();
         $oValue2->name = 'rot';
-        $oValue3 = new stdClass();
+        $oValue3 = new oxStdClass();
         $oValue3->name = 'blue';
-        $oValue4 = new stdClass();
+        $oValue4 = new oxStdClass();
         $oValue4->name = 'blau';
         $aSellValue = array( $sVarId => array ( 0 => $oValue,
                                                 1 => $oValue2),
@@ -211,19 +211,6 @@ class Unit_Core_oxattributeTest extends OxidTestCase
         $oAttr->addValue( 'val2' );
 
         $this->assertEquals( array( 'val1', 'val2' ), $oAttr->getValues() );
-    }
-
-    /**
-     * Test get attribute id.
-     *
-     * @return null
-     */
-    public function testGetArticleIds()
-    {
-            return; // EE only
-        $aArticles = $this->_oAttr->getArticleIds();
-        $this->assertEquals( 1, count( $aArticles ) );
-        $this->assertEquals( 'test_oxid', $aArticles[0] );
     }
 
 

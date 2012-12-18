@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: accountRecommlistTest.php 52182 2012-11-23 12:19:31Z aurimas.gladutis $
+ * @version   SVN: $Id: accountRecommlistTest.php 33442 2011-02-22 16:14:37Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -47,7 +47,7 @@ class Unit_Views_accountRecommlistTest extends OxidTestCase
         $sQ = 'insert into oxrecommlists ( oxid, oxuserid, oxtitle, oxdesc, oxshopid ) values ( "testlist2", "oxdefaultadmin", "oxtest2", "oxtest2", "'.$sShopId.'" ) ';
         $myDB->Execute( $sQ );
         $this->_sArticleID = '1651';
-        $sQ = 'insert into oxobject2list ( oxid, oxobjectid, oxlistid, oxdesc ) values ( "testlist", "'.$this->_sArticleID.'", "testlist", "test" ) ';
+        $sQ = 'insert into oxobject2list ( oxid, oxobjectid, oxlistid, oxdesc ) values ( "testlist", "'.$this->sArticleID.'", "testlist", "test" ) ';
         $myDB->Execute( $sQ );
     }
 
@@ -428,7 +428,7 @@ class Unit_Views_accountRecommlistTest extends OxidTestCase
      */
     public function testGetNavigationParams()
     {
-        $oList = $this->getMock( 'oxrecommlist', array( 'getId' ));
+        $oList = $this->getMock( 'oxStdClass', array( 'getId' ));
         $oList->expects( $this->once() )->method( 'getId')->will($this->returnValue( "testId" ) );
 
         $oView = $this->getMock( 'account_recommlist', array( 'getActiveRecommList' ));
@@ -461,7 +461,7 @@ class Unit_Views_accountRecommlistTest extends OxidTestCase
         $oUser->expects( $this->once() )->method( 'getRecommListsCount');
         $oUser->oxuser__oxpassword = new oxField( "testPass" );
 
-        $oLists = $this->getMock( 'oxlist', array( 'count' ));
+        $oLists = $this->getMock( 'oxStdClass', array( 'count' ));
         $oLists->expects( $this->once() )->method( 'count')->will( $this->returnValue( 1 ) );
 
         $oView = $this->getMock( 'account_recommlist', array( 'getUser', "getRecommLists", "getActiveRecommList" ));
@@ -481,13 +481,5 @@ class Unit_Views_accountRecommlistTest extends OxidTestCase
         $oAccRecommList = new Account_Recommlist();
 
         $this->assertEquals(2, count($oAccRecommList->getBreadCrumb()));
-    }
-
-    public function testGetArticleCount()
-    {
-        $oList = $this->getProxyClass( 'account_recommlist' );
-        $oList->setNonPublicVar( '_iAllArtCnt', 3 );
-
-        $this->assertEquals( 3, $oList->getArticleCount() );
     }
 }

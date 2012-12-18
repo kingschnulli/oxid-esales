@@ -95,10 +95,10 @@ class Unit_Views_accountWishlistTest extends OxidTestCase
      */
     public function testGetWishList()
     {
-        $oBasket = $this->getMock( "oxBasket", array( "isEmpty" ) );
+        $oBasket = $this->getMock( "oxStdClass", array( "isEmpty" ) );
         $oBasket->expects( $this->any() )->method( 'isEmpty')->will( $this->returnValue( false ) );
 
-        $oUser = $this->getMock( "oxUser", array( "getBasket" ) );
+        $oUser = $this->getMock( "oxStdClass", array( "getBasket" ) );
         $oUser->expects( $this->any() )->method( 'getBasket')->with( $this->equalTo( "wishlist" ) )->will( $this->returnValue( $oBasket ) );
 
         $oView = $this->getMock( "Account_Wishlist", array( "getUser" ) );
@@ -118,7 +118,7 @@ class Unit_Views_accountWishlistTest extends OxidTestCase
         $oUserBasket->expects( $this->once() )->method( 'isEmpty')->will( $this->returnValue( true ) );
         $oUserBasket->setId( "testwishlist" );
 
-        $oUser = $this->getMock( "oxUser", array( "getBasket" ) );
+        $oUser = $this->getMock( "oxStdClass", array( "getBasket" ) );
         $oUser->expects( $this->any() )->method( 'getBasket')->with( $this->equalTo( "wishlist" ) )->will( $this->returnValue( $oUserBasket ) );
 
         $oView = $this->getMock( "Account_Wishlist", array( "getUser" ) );
@@ -149,7 +149,7 @@ class Unit_Views_accountWishlistTest extends OxidTestCase
      */
     public function testGetWishProductList()
     {
-        $oWishList = $this->getMock( "oxuserbasket", array( "getArticles" ) );
+        $oWishList = $this->getMock( "oxStdClass", array( "getArticles" ) );
         $oWishList->expects( $this->any() )->method( 'getArticles')->will( $this->returnValue( "testArticles" ) );
 
         $oView = $this->getMock( "Account_Wishlist", array( "getWishList" ) );
@@ -162,20 +162,30 @@ class Unit_Views_accountWishlistTest extends OxidTestCase
      *
      * @return null
      */
-    public function testGetSimilarRecommListIds()
+    public function testGetSimilarRecommListsListManiaOff()
     {
-        $sArrayKey = "articleId";
-        $aArrayKeys = array( $sArrayKey );
+        modconfig::getInstance()->setConfigParam( "bl_showListmania", false );
 
-        // Mock to get Id
-        $oSimilarProd = $this->getMock( "oxarticle", array( "getId" ) );
-        $oSimilarProd->expects( $this->once() )->method( "getId" )->will( $this->returnValue( $sArrayKey ) );
+        $oView = new Account_Wishlist();
+        $this->assertFalse( $oView->getSimilarRecommLists() );
+    }
 
-        $aWishProdList = array( $oSimilarProd );
+    /**
+     * Testing Account_Wishlist::getSimilarRecommLists()
+     *
+     * @return null
+     */
+    public function testGetSimilarRecommLists()
+    {
+        modconfig::getInstance()->setConfigParam( "bl_showListmania", true );
+        oxTestModules::addFunction('oxrecommlist', 'getRecommListsByIds', '{ return "testRecommListsByIds"; }' );
 
-        $oSearch = $this->getMock( "account_wishlist", array( "getWishProductList" ) );
-        $oSearch->expects( $this->once() )->method( "getWishProductList" )->will( $this->returnValue( $aWishProdList ) );
-        $this->assertEquals( $aArrayKeys, $oSearch->getSimilarRecommListIds(), "getSimilarRecommListIds() should return array of key from result of getWishProductList()" );
+        $oProduct  = $this->getMock( "oxStdClass", array( "getId" ) );
+        $oProduct->expects( $this->once() )->method( 'getId')->will( $this->returnValue( "testId" ) );
+
+        $oView = $this->getMock( "Account_Wishlist", array( "getWishProductList" ) );
+        $oView->expects( $this->any() )->method( 'getWishProductList')->will( $this->returnValue( array( $oProduct ) ) );
+        $this->assertEquals( 'testRecommListsByIds', $oView->getSimilarRecommLists() );
     }
 
     /**
@@ -212,7 +222,7 @@ class Unit_Views_accountWishlistTest extends OxidTestCase
         oxTestModules::addFunction( 'oxUtilsView', 'addErrorToDisplay', '{ return "addErrorToDisplay"; }' );
         oxTestModules::addFunction( 'oxemail', 'sendWishlistMail', '{ return false; }' );
 
-        $oUser = $this->getMock( "oxUser", array( "getId" ) );
+        $oUser = $this->getMock( "oxStdClass", array( "getId" ) );
         $oUser->expects( $this->once() )->method( 'getId')->will( $this->returnValue( "testId" ) );
         $oUser->oxuser__oxusername = new oxField( "testName" );
         $oUser->oxuser__oxfname    = new oxField( "testFName" );
@@ -234,10 +244,10 @@ class Unit_Views_accountWishlistTest extends OxidTestCase
     {
         modConfig::setParameter( "blpublic", 1 );
 
-        $oBasket = $this->getMock( "oxBasket", array( "save" ) );
+        $oBasket = $this->getMock( "oxStdClass", array( "save" ) );
         $oBasket->expects( $this->once() )->method( 'save');
 
-        $oUser = $this->getMock( "oxUser", array( "getBasket" ) );
+        $oUser = $this->getMock( "oxStdClass", array( "getBasket" ) );
         $oUser->expects( $this->once() )->method( 'getBasket')->with( $this->equalTo( "wishlist" ) )->will( $this->returnValue( $oBasket ) );
 
         $oView = $this->getMock( "Account_Wishlist", array( "getUser" ) );
@@ -262,7 +272,7 @@ class Unit_Views_accountWishlistTest extends OxidTestCase
         $this->assertEquals( "searchParam", $oView->getWishListSearchParam() );
     }
 
-    /**
+	/**
      * Testing Account_RecommList::getBreadCrumb()
      *
      * @return null

@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oximexTest.php 51578 2012-11-09 07:48:35Z alfonsas $
+ * @version   SVN: $Id: oximexTest.php 27794 2010-05-18 13:52:47Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -42,8 +42,7 @@ class Unit_Core_oxImexTest extends OxidTestCase
     public function test_exportLexwareArticles()
     {
         $myConfig = oxConfig::getInstance();
-        //$sFile = $myConfig->sShopDir.'/tmp/test.xpr';
-        $sFile = oxregistry::get( "oxConfigFile" )->getVar( "sCompileDir" ) .'/test.xpr';
+        $sFile = $myConfig->sShopDir.'/tmp/test.xpr';
         @unlink($sFile);
         $oImex = new oxImex();
         if (!$oImex->exportLexwareArticles(0, 1000, $sFile)){

@@ -256,7 +256,7 @@ class oxLegacyDb extends oxSuperCfg
      */
     public function qstr( $sValue )
     {
-        return $this->getDb( false )->qstr( $sValue );
+        return $this->getDb()->qstr( $sValue );
     }
 
     /**
@@ -268,7 +268,7 @@ class oxLegacyDb extends oxSuperCfg
      */
     public function quote( $sValue )
     {
-        return $this->getDb( false )->quote( $sValue );
+        return $this->getDb()->quote( $sValue );
     }
 
     /**
@@ -280,7 +280,7 @@ class oxLegacyDb extends oxSuperCfg
      */
     public function metaColumns( $sTable )
     {
-        return $this->getDb( false )->MetaColumns( $sTable );
+        return $this->getDb()->MetaColumns( $sTable );
     }
 
     /**
@@ -293,7 +293,7 @@ class oxLegacyDb extends oxSuperCfg
      */
     public function metaColumnNames( $sTable, $blNumIndexes=false )
     {
-        return $this->getDb( false )->MetaColumnNames( $sTable, $numIndexes );
+        return $this->getDb()->MetaColumnNames( $sTable, $numIndexes );
     }
 
     /**
@@ -340,18 +340,6 @@ class oxLegacyDb extends oxSuperCfg
         if ( in_array( strtoupper( $sLevel ), $aLevels ) ) {
             return $this->getDb( false )->execute( 'SET TRANSACTION ISOLATION LEVEL ' . $sLevel );
         }
-    }
-
-    /**
-     * Calls Db UI method
-     *
-     * @param type $pollsecs poll seconds
-     *
-     * @return null
-     */
-    public function UI( $pollsecs=5 )
-    {
-        $this->getDb( false )->UI( $pollsecs );
     }
 
 }

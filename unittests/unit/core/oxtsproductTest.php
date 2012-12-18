@@ -36,8 +36,8 @@ class Unit_Core_oxtsproductTest extends OxidTestCase
      */
     public function testGetAmount()
     {
-        $oSubj = new oxTsProduct() ;
-        $oSubj->setTsId('TS080501_500_30_EUR');
+        $oSubj = $this->getProxyClass("oxTsProduct");
+        $oSubj->setNonPublicVar('_sTsId', 'TS080501_500_30_EUR');
         $this->assertEquals( '500', $oSubj->getAmount() );
     }
 
@@ -47,9 +47,10 @@ class Unit_Core_oxtsproductTest extends OxidTestCase
      */
     public function testGetFPrice()
     {
-        $oSubj = new oxTsProduct() ;
-        $oSubj->setTsId('TS080501_500_30_EUR');
-        $this->assertEquals( '0,82', $oSubj->getFPrice() );
+        modConfig::getInstance()->setConfigParam( 'blEnterNetPrice', false );
+        $oSubj = $this->getProxyClass("oxTsProduct");
+        $oSubj->setNonPublicVar('_sTsId', 'TS080501_500_30_EUR');
+        $this->assertEquals( '0,98', $oSubj->getFPrice() );
     }
 
     /**
@@ -58,9 +59,24 @@ class Unit_Core_oxtsproductTest extends OxidTestCase
      */
     public function testSetGetTsId()
     {
-        $oSubj = new oxTsProduct();
+        $oSubj = $this->getMock( 'oxTsProduct', array( '_setDeprecatedValues' ) );
+        $oSubj->expects( $this->once() )->method( '_setDeprecatedValues' );
         $oSubj->setTsId('TS080501_500_30_EUR');
         $this->assertEquals( 'TS080501_500_30_EUR', $oSubj->getTsId() );
+    }
+
+    /**
+     * Tests oxTsProduct::testSetDeprecatedValues()
+     *
+     */
+    public function testSetDeprecatedValues()
+    {
+        $oSubj = $this->getProxyClass("oxTsProduct");
+        $oSubj->setNonPublicVar('_sTsId', 'TS080501_500_30_EUR');
+        $oSubj->UNITsetDeprecatedValues();
+        $this->assertEquals( $oSubj->getTsId(), $oSubj->sTsId );
+        $this->assertEquals( $oSubj->getAmount(), $oSubj->iAmount );
+        $this->assertEquals( $oSubj->getFPrice(), $oSubj->fPrice );
     }
 
     /**
@@ -69,7 +85,7 @@ class Unit_Core_oxtsproductTest extends OxidTestCase
      */
     public function testGetAllTsProducts()
     {
-        $oSubj = new oxTsProduct() ;
+        $oSubj = $this->getProxyClass("oxTsProduct");
         $this->assertEquals( 6, count($oSubj->getAllTsProducts()) );
     }
 }

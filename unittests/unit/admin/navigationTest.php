@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: navigationTest.php 47944 2012-07-30 12:41:30Z linas.kukulskis $
+ * @version   SVN: $Id: navigationTest.php 26675 2010-03-19 12:47:04Z arvydas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -81,8 +81,8 @@ class Unit_Admin_NavigationTest extends OxidTestCase
         modConfig::setParameter( "navReload", false );
         modConfig::setParameter( "openHistory", true );
 
-        $oDom = new stdClass();
-        $oDom->documentElement = new stdClass();
+        $oDom = new oxStdClass();
+        $oDom->documentElement = new oxStdClass();
         $oDom->documentElement->childNodes = 'testNodes';
 
         $oNavigation = $this->getMock( "oxnavigationtree", array( "getDomXml", "getListNodes" ) );
@@ -121,8 +121,8 @@ class Unit_Admin_NavigationTest extends OxidTestCase
         modConfig::setParameter( "openHistory", true );
         modSession::getInstance()->setVar( "navReload", "true" );
 
-        $oDom = new stdClass();
-        $oDom->documentElement = new stdClass();
+        $oDom = new oxStdClass();
+        $oDom->documentElement = new oxStdClass();
         $oDom->documentElement->childNodes = 'testNodes';
 
         $oNavigation = $this->getMock( "oxnavigationtree", array( "getDomXml", "getListNodes" ) );
@@ -300,7 +300,7 @@ class Unit_Admin_NavigationTest extends OxidTestCase
         oxTestModules::addFunction( 'oxUtilsFile', 'readRemoteFileAsString', '{ return 4; }');
         oxTestModules::addFunction( 'oxLang', 'translateString', '{ return "Version %s is available."; }');
 
-        $oConfig = $this->getMock( "oxConfig", array( "getVersion" ) );
+        $oConfig = $this->getMock( "oxStdClass", array( "getVersion" ) );
         $oConfig->expects( $this->once() )->method( 'getVersion' )->will( $this->returnValue( 3 ) );
 
         // testing..

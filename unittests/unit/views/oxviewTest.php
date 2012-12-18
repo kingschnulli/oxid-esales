@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxviewTest.php 52118 2012-11-21 16:09:54Z vaidas.matulevicius $
+ * @version   SVN: $Id: oxviewTest.php 44704 2012-05-09 11:24:03Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -62,8 +62,8 @@ class Unit_Views_oxviewTest extends OxidTestCase
         $this->_oView = new oxView;
 
         // backuping
-        $this->_iSeoMode = $this->getConfig()->getActiveShop()->oxshops__oxseoactive->value;
-        $this->getConfig()->getActiveShop()->oxshops__oxseoactive = new oxField(0, oxField::T_RAW);
+        $this->_iSeoMode = oxConfig::getInstance()->getActiveShop()->oxshops__oxseoactive->value;
+        oxConfig::getInstance()->getActiveShop()->oxshops__oxseoactive = new oxField(0, oxField::T_RAW);
 
         oxUtils::getInstance()->seoIsActive( true );
     }
@@ -78,7 +78,7 @@ class Unit_Views_oxviewTest extends OxidTestCase
         modOxView::reset();
 
         // restoring
-        $this->getConfig()->getActiveShop()->oxshops__oxseoactive = new oxField($this->_iSeoMode, oxField::T_RAW);
+        oxConfig::getInstance()->getActiveShop()->oxshops__oxseoactive = new oxField($this->_iSeoMode, oxField::T_RAW);
 
         oxUtils::getInstance()->seoIsActive( true );
 
@@ -109,11 +109,6 @@ class Unit_Views_oxviewTest extends OxidTestCase
         $oView = oxNew( 'oxView' );
         $oView->init();
         $this->assertEquals( "oxview", $oView->getThisAction() );
-
-        $oUtilsServer = $this->getMock( 'oxUtilsServer', array( 'setOxCookie' ) );
-        $oUtilsServer->expects( $this->never() )->method( 'setOxCookie');
-
-        modInstances::addMod( "oxUtilsServer", $oUtilsServer );
     }
 
     /*
@@ -151,7 +146,7 @@ class Unit_Views_oxviewTest extends OxidTestCase
      */
     public function testAddGlobalParams()
     {
-        $myConfig = $this->getConfig();
+        $myConfig = oxConfig::getInstance();
 
         $oView = oxNew( 'oxView' );
 
@@ -194,10 +189,10 @@ class Unit_Views_oxviewTest extends OxidTestCase
     /*
      * Test getTemplateName()
      */
-    public function testSetGetTemplateName()
+    public function testGetTemplateName()
     {
-        $oView = new oxView();
-        $oView->setTemplateName("testTemplate");
+        $oView = $this->getProxyClass( "oxView" );
+        $oView->setNonPublicVar( "_sThisTemplate", "testTemplate" );
 
         $this->assertEquals( 'testTemplate', $oView->getTemplateName() );
     }
@@ -316,12 +311,6 @@ class Unit_Views_oxviewTest extends OxidTestCase
         $oCmp->executeFunction( 'xxx' );
         $oCmp->executeFunction( 'xxx' );
     }
-    
-    /**
-     * oxView::executeFunction() test case
-     * 
-     * @return null
-     */
 
 
     /**
@@ -341,7 +330,7 @@ class Unit_Views_oxviewTest extends OxidTestCase
         $oView = $this->getMock( 'oxview', array( 'getConfig' ) );
         $oView->expects( $this->once() )->method( 'getConfig' )->will( $this->returnValue( $oConfig ) );
         $sUrl = $oView->UNITexecuteNewAction( "testAction" );
-        $this->assertEquals( 'shopurl/index.php?cl=testAction&'.$this->getSession()->sid(), oxUtils::getInstance()->sRedirectUrl );
+        $this->assertEquals( 'shopurl/index.php?cl=testAction&'.oxSession::getInstance()->sid(), oxUtils::getInstance()->sRedirectUrl );
 
         $oConfig = $this->getMock( 'oxconfig', array( 'getConfigParam', 'isSsl', 'getSslShopUrl', 'getShopUrl' ) );
         $oConfig->expects( $this->at( 0 ) )->method( 'getConfigParam')->will( $this->returnValue( false ) );
@@ -353,7 +342,7 @@ class Unit_Views_oxviewTest extends OxidTestCase
         $oView = $this->getMock( 'oxview', array( 'getConfig' ) );
         $oView->expects( $this->once() )->method( 'getConfig' )->will( $this->returnValue( $oConfig ) );
         $sUrl = $oView->UNITexecuteNewAction( "testAction?someparam=12" );
-        $this->assertEquals( "shopurl/index.php?cl=testAction&someparam=12&".$this->getSession()->sid(), oxUtils::getInstance()->sRedirectUrl );
+        $this->assertEquals( "shopurl/index.php?cl=testAction&someparam=12&".oxSession::getInstance()->sid(), oxUtils::getInstance()->sRedirectUrl );
 
     }
 
@@ -371,7 +360,7 @@ class Unit_Views_oxviewTest extends OxidTestCase
         $oView = $this->getMock( 'oxview', array( 'getConfig' ) );
         $oView->expects( $this->once() )->method( 'getConfig' )->will( $this->returnValue( $oConfig ) );
         $sUrl = $oView->UNITexecuteNewAction( "details?fnc=somefnc&anid=someanid" );
-        $this->assertEquals( 'SSLshopurl/index.php?cl=details&fnc=somefnc&anid=someanid&'.$this->getSession()->sid(), oxUtils::getInstance()->sRedirectUrl );
+        $this->assertEquals( 'SSLshopurl/index.php?cl=details&fnc=somefnc&anid=someanid&'.oxSession::getInstance()->sid(), oxUtils::getInstance()->sRedirectUrl );
     }
 
     public function testExecuteNewActionSslIsAdmin()
@@ -382,26 +371,20 @@ class Unit_Views_oxviewTest extends OxidTestCase
         $oConfig->expects( $this->once() )->method( 'isSsl')->will( $this->returnValue( true ) );
         $oConfig->expects( $this->once() )->method( 'getSslShopUrl' )->will( $this->returnValue( 'SSLshopurl/' ) );
         $oConfig->expects( $this->never() )->method( 'getShopUrl' );
-        $this->setConfigParam( 'sAdminDir', 'admin' );
+        $oConfig->setConfigParam( 'sAdminDir', 'admin' );
 
         $oView = $this->getMock( 'oxview', array( 'getConfig', 'isAdmin' ) );
         $oView->expects( $this->once() )->method( 'getConfig' )->will( $this->returnValue( $oConfig ) );
         $oView->expects( $this->once() )->method( 'isAdmin' )->will( $this->returnValue( true ) );
         $sUrl = $oView->UNITexecuteNewAction( "details?fnc=somefnc&anid=someanid" );
-        $this->assertEquals( 'SSLshopurl/admin/index.php?cl=details&fnc=somefnc&anid=someanid&'.$this->getSession()->sid(), oxUtils::getInstance()->sRedirectUrl );
+        $this->assertEquals( 'SSLshopurl/admin/index.php?cl=details&fnc=somefnc&anid=someanid&'.oxSession::getInstance()->sid(), oxUtils::getInstance()->sRedirectUrl );
     }
-    
-    /**
-     * oxView::_executeNewAction() test case
-     * 
-     * @return null
-     */
 
     public function testGetTrustedShopIdNotValid()
     {
         $oView = $this->getProxyClass( 'oxview' );
-        $this->getConfig()->setConfigParam( 'tsSealActive', 1 );
-        $this->getConfig()->setConfigParam( 'iShopID_TrustedShops', array (0=>'aaa') );
+        modConfig::getInstance()->setConfigParam( 'tsSealActive', 1 );
+        modConfig::getInstance()->setConfigParam( 'iShopID_TrustedShops', array (0=>'aaa') );
 
         $this->assertFalse( $oView->getTrustedShopId() );
     }
@@ -409,26 +392,26 @@ class Unit_Views_oxviewTest extends OxidTestCase
     public function testGetTrustedShopIdIfNotMultilanguage()
     {
         $oView = $this->getProxyClass( 'oxview' );
-        $this->getConfig()->setConfigParam( 'tsSealActive', 1 );
-        $this->getConfig()->setConfigParam( 'tsSealType', array( 0 => 'CLASSIC'));
-        $this->getConfig()->setConfigParam( 'iShopID_TrustedShops', 'XAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA' );
+        modConfig::getInstance()->setConfigParam( 'tsSealActive', 1 );
+        modConfig::getInstance()->setConfigParam( 'tsSealType', array( 0 => 'CLASSIC'));
+        modConfig::getInstance()->setConfigParam( 'iShopID_TrustedShops', 'XAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA' );
         $this->assertEquals( 'XAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA', $oView->getTrustedShopId() );
     }
 
     public function testGetTrustedShopIdIfNotMultilanguageNotValid()
     {
         $oView = $this->getProxyClass( 'oxview' );
-        $this->getConfig()->setConfigParam( 'tsSealActive', 1 );
-        $this->getConfig()->setConfigParam( 'iShopID_TrustedShops', 'XXX' );
+        modConfig::getInstance()->setConfigParam( 'tsSealActive', 1 );
+        modConfig::getInstance()->setConfigParam( 'iShopID_TrustedShops', 'XXX' );
         $this->assertFalse( $oView->getTrustedShopId() );
     }
 
     public function testGetTrustedShopId()
     {
         $oView = $this->getProxyClass( 'oxview' );
-        $this->getConfig()->setConfigParam( 'tsSealActive', 1 );
-        $this->getConfig()->setConfigParam( 'tsSealType', array( 0 => 'CLASSIC'));
-        $this->getConfig()->setConfigParam( 'iShopID_TrustedShops', array (0=>'XAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA') );
+        modConfig::getInstance()->setConfigParam( 'tsSealActive', 1 );
+        modConfig::getInstance()->setConfigParam( 'tsSealType', array( 0 => 'CLASSIC'));
+        modConfig::getInstance()->setConfigParam( 'iShopID_TrustedShops', array (0=>'XAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA') );
 
         $this->assertEquals( 'XAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA', $oView->getTrustedShopId() );
     }
@@ -436,90 +419,9 @@ class Unit_Views_oxviewTest extends OxidTestCase
     public function testGetTrustedShopIdNotActive()
     {
         $oView = $this->getProxyClass( 'oxview' );
-        $this->getConfig()->setConfigParam( 'iShopID_TrustedShops', null );
+        modConfig::getInstance()->setConfigParam( 'iShopID_TrustedShops', null );
 
         $this->assertFalse( $oView->getTrustedShopId() );
-    }
-    
-    /**
-     * oxView::getTrustedShopId() test case
-     * 
-     * @return null
-     */
-    
-    public function testGetTrustedShopIdFalse()
-    {
-        
-        $oView = $this->getProxyClass( 'oxview' );
-        $this->getConfig()->setConfigParam( 'tsSealActive', 1 );
-        $this->getConfig()->setConfigParam( 'tsSealType', array( 0 => 'CLASSIC'));
-        $this->getConfig()->setConfigParam( 'iShopID_TrustedShops', 'ABC' );
-        $this->assertEquals( $sTest , $oView->getTrustedShopId() );
-    }
-    
-    /**
-     * oxView::getTSExcellenceId() test case
-     * 
-     * @return null
-     */
-    
-    public function testGetTSExcellenceId()
-    {
-        $sTest = "testValue";
-        
-        $oView = $this->getProxyClass('oxView');
-        $oView->setNonPublicVar( '_sTSExcellenceId', $sTest );
-        $this->assertEquals( $sTest, $oView->getTSExcellenceId() );
-    }
-    
-    /**
-     * oxView::getTSExcellenceId() test case
-     * 
-     * @return null
-     */
-    
-    public function testGetTSExcellenceIdNull()
-    {
-        $sTest = "testValue";
-        $iTest = 0;
-        
-        $oView = $this->getProxyClass('oxView');
-        $oView->setNonPublicVar( '_sTSExcellenceId', null );
-        
-        $this->getConfig()->setConfigParam( 'tsSealActive', 1 );
-        $this->getConfig()->setConfigParam( 'tsSealType', array( 0 => 'EXCELLENCE'));
-        $this->getConfig()->setConfigParam( 'iShopID_TrustedShops', $sTest );
-        
-        $oLang = $this->getMock( "oxLang", array( "getBaseLanguage" ) );
-        $oLang->expects( $this->any() )->method( "getBaseLanguage" )->will( $this->returnValue( $iTest ) );
-        oxregistry::set('oxLang', $oLang);
-        
-        $this->assertEquals( $sTest[$iTest], $oView->getTSExcellenceId() );
-    }
-    
-    /**
-     * oxView::getTSExcellenceId() test case
-     * 
-     * @return null
-     */
-    
-    public function testGetTSExcellenceIdNullWrongSealType()
-    {
-        $sTest = "testValue";
-        $iTest = 0;
-        
-        $oView = $this->getProxyClass('oxView');
-        $oView->setNonPublicVar( '_sTSExcellenceId', null );
-        
-        $this->getConfig()->setConfigParam( 'tsSealActive', 1 );
-        $this->getConfig()->setConfigParam( 'tsSealType', array( 0 => 'WRONG_TYPE'));
-        $this->getConfig()->setConfigParam( 'iShopID_TrustedShops', $sTest );
-        
-        $oLang = $this->getMock( "oxLang", array( "getBaseLanguage" ) );
-        $oLang->expects( $this->any() )->method( "getBaseLanguage" )->will( $this->returnValue( $iTest ) );
-        oxregistry::set('oxLang', $oLang);
-        
-        $this->assertEquals( '', $oView->getTSExcellenceId() );
     }
 
     public function testGetCharSet()
@@ -531,13 +433,13 @@ class Unit_Views_oxviewTest extends OxidTestCase
     public function testGetShopVersion()
     {
         $oView = $this->getProxyClass( 'oxview' );
-        $this->assertEquals( $this->getConfig()->getActiveShop()->oxshops__oxversion->value, $oView->getShopVersion() );
+        $this->assertEquals( modConfig::getInstance()->getActiveShop()->oxshops__oxversion->value, $oView->getShopVersion() );
     }
 
     public function testIsDemoVersion()
     {
         $oView = $this->getProxyClass( 'oxview' );
-        if ( $this->getConfig()->detectVersion() == 1 ) {
+        if ( modConfig::getInstance()->detectVersion() == 1 ) {
             $this->assertTrue( $oView->isDemoVersion() );
         } else {
             $this->assertFalse( $oView->isDemoVersion() );
@@ -576,29 +478,36 @@ class Unit_Views_oxviewTest extends OxidTestCase
         //edition is always set
         $oView = $this->getProxyClass( 'oxview' );
         $sEdition = $oView->getShopFullEdition();
-        
-            $this->assertEquals( "Community Edition", $sEdition );
 
+            $this->assertTrue($sEdition == "Community Edition" || $sEdition == "Professional Edition");
+
+    }
+
+    public function testShowNewsletter()
+    {
+        $oView = $this->getProxyClass( 'oxview' );
+        $this->assertEquals( 1, $oView->showNewsletter() );
+    }
+
+    public function testSetShowNewsletter()
+    {
+        $oView = $this->getProxyClass( 'oxview' );
+        $oView->setShowNewsletter(0);
+
+        $this->assertEquals( 0, $oView->showNewsletter() );
     }
 
     public function testSetGetShopLogo()
     {
-        $oView = new oxView();
-        $oView->setShopLogo( "testlogo" );
+        $oView = $this->getProxyClass( 'oxview' );
+        $oView->setShopLogo("testlogo");
+
         $this->assertEquals( "testlogo", $oView->getShopLogo() );
     }
 
-    public function testSetGetShopLogoFromConfig()
-    {
-        $oView = new oxView();
-        $this->getConfig()->setConfigParam( "sShopLogo", 'logo' );
-        $this->assertEquals( "logo", $oView->getShopLogo() );
-    }
-
-
     public function testSetGetActCategory()
     {
-        $oView = new oxView();
+        $oView = new oxview();
         $oView->setActCategory( 'oClickCat' );
         $this->assertEquals( 'oClickCat', $oView->getActCategory() );
     }
@@ -611,11 +520,11 @@ class Unit_Views_oxviewTest extends OxidTestCase
         $oView = new oxview();
         $this->assertNull( $oView->getCategoryId() );
 
-        $this->getConfig()->setParameter( 'cnid', 'xxx' );
+        modConfig::setParameter( 'cnid', 'xxx' );
         $this->assertEquals( 'xxx', $oView->getCategoryId() );
 
         // additionally checking cache
-        $this->getConfig()->setParameter( 'cnid', null );
+        modConfig::setParameter( 'cnid', null );
         $this->assertEquals( 'xxx', $oView->getCategoryId() );
 
         $oView->setCategoryId( 'yyy' );
@@ -637,32 +546,18 @@ class Unit_Views_oxviewTest extends OxidTestCase
      */
     public function testIsConnectedWithFb()
     {
-        $oFB = $this->getMock( "oxFb", array( "isConnected" ) );
-        $oFB->expects( $this->any() )->method( "isConnected" )->will( $this->returnValue( true ) );
-        oxTestModules::addModuleObject( 'oxFb', $oFB );
-        $oView = new oxView();
+        oxTestModules::addFunction( "oxFb", "isConnected", "{return true;}" );
 
-        $this->setConfigParam( "bl_showFbConnect", true );
+        $myConfig = modConfig::getInstance();
+        $myConfig->setConfigParam( "bl_showFbConnect", false );
+
+        $oView = new oxView();
+        $this->assertFalse( $oView->isConnectedWithFb() );
+
+        $myConfig->setConfigParam( "bl_showFbConnect", true );
         $this->assertTrue( $oView->isConnectedWithFb() );
 
-        $this->setConfigParam( "bl_showFbConnect", false );
-        $this->assertFalse( $oView->isConnectedWithFb() );
-    }
-
-    /**
-     * Testing getter for checking if user is connected using Facebook connect
-     *
-     * return null
-     */
-    public function testIsNotConnectedWithFb()
-    {
-        $oFB = $this->getMock( "oxFb", array( "isConnected" ) );
-        $oFB->expects( $this->any() )->method( "isConnected" )->will( $this->returnValue( false ) );
-        oxTestModules::addModuleObject( 'oxFb', $oFB );
-
-        $this->setConfigParam( "bl_showFbConnect", true );
-
-        $oView = new oxView();
+        oxTestModules::addFunction( "oxFb", "isConnected", "{return false;}" );
         $this->assertFalse( $oView->isConnectedWithFb() );
     }
 
@@ -675,7 +570,7 @@ class Unit_Views_oxviewTest extends OxidTestCase
     {
         oxTestModules::addFunction( "oxFb", "getUser", "{return 123;}" );
 
-        $myConfig = $this->getConfig();
+        $myConfig = modConfig::getInstance();
         $myConfig->setConfigParam( "bl_showFbConnect", false );
 
         $oView = new oxView();
@@ -693,7 +588,7 @@ class Unit_Views_oxviewTest extends OxidTestCase
      */
     public function testShowFbConnectToAccountMsg_FbConnectIsOff()
     {
-        $myConfig = $this->getConfig();
+        $myConfig = modConfig::getInstance();
         $myConfig->setParameter( "fblogin", false );
 
         $oView = new oxView();
@@ -709,7 +604,7 @@ class Unit_Views_oxviewTest extends OxidTestCase
      */
     public function testShowFbConnectToAccountMsg_FbOn_NoAccount()
     {
-        $myConfig = $this->getConfig();
+        $myConfig = modConfig::getInstance();
         $myConfig->setParameter( "fblogin", true );
 
         $oView = $this->getMock( 'oxview', array( 'getUser' ) );
@@ -727,7 +622,7 @@ class Unit_Views_oxviewTest extends OxidTestCase
      */
     public function testShowFbConnectToAccountMsg_FbOn_AccountOn()
     {
-        $myConfig = $this->getConfig();
+        $myConfig = modConfig::getInstance();
         $myConfig->setParameter( "fblogin", true );
         $oUser = new oxUser();
 
@@ -752,99 +647,22 @@ class Unit_Views_oxviewTest extends OxidTestCase
         $oView->setIsCallForCache( '123456789' );
         $this->assertEquals( '123456789', $oView->getIsCallForCache() );
     }
-
+    
     /*
      * Testing oxview::getViewId()
-     *
+     * 
      * @return null
      */
     public function testgetViewId()
     {
         $oView = new oxView();
-        $this->assertNull( $oView->getViewId() );
+        $this->assertNull( $oView->getViewId() );        
     }
 
     public function testShowRdfa()
     {
         $oView = new oxview();
         $this->assertFalse( $oView->showRdfa() );
-    }
-
-    public function testSetGetViewParameters()
-    {
-        $oView = new oxview();
-
-        $oView->setViewParameters( array("testItem1"=>"testValue1", "testItem2"=>"testValue2") );
-
-        $this->assertEquals( "testValue1", $oView->getViewParameter("testItem1") );
-        $this->assertEquals( "testValue2", $oView->getViewParameter("testItem2") );
-        $this->assertNull( $oView->getViewParameter("testItem3") );
-    }
-
-
-    public function testShowNewsletter()
-    {
-        $oView = $this->getProxyClass( 'oxview' );
-        $this->assertEquals( 1, $oView->showNewsletter() );
-    }
-
-    public function testSetShowNewsletter()
-    {
-        $oView = $this->getProxyClass( 'oxview' );
-        $oView->setShowNewsletter(0);
-
-        $this->assertEquals( 0, $oView->showNewsletter() );
-    }
-    
-    /**
-     * oxView::getBelboonParam() test case
-     * 
-     * @return null
-     */
-    
-    public function testGetBelboonParam()
-    {
-        $sTest = "testValue";
-        $this->getSession()->setVariable( 'belboon', $sTest );
-        
-        $oView = new oxview();
-        $this->assertEquals( $sTest, $oView->getBelboonParam() );
-        
-        //other test case
-        $this->getSession()->setVariable( 'belboon', false );
-        $this->assertEquals( '', $oView->getBelboonParam() );
-        
-        //other test case
-        $sTest2 = "testValue2";
-        
-        $oSession = $this->getMock( "oxSession", array( "setVariable" ) );
-        $oSession->expects( $this->once() )->method( "setVariable" )->with( $this->equalTo( 'belboon' ) );
-        
-        $this->getSession()->setVariable( 'belboon', false );
-        $this->setRequestParam( 'belboon', $sTest2 );
-        $oView = $this->getMock( "oxView", array( "getSession" ) );
-        $oView->expects( $this->exactly(2) )->method( "getSession" )->will( $this->returnValue( $oSession ) );
-        $this->assertEquals( $sTest2, $oView->getBelboonParam() );
-    }
-    
-    /**
-     * oxView::getRevision() test case
-     * 
-     * @return null
-     */
-    
-    public function testGetRevision()
-    {
-        $sTest = "testRevision";
-        $this->getConfig()->setConfigParam( "blStockOnDefaultMessage", $sTest );
-        
-        $oConfig = $this->getMock( "oxConfig", array( "getRevision" ) );
-        $oConfig->expects( $this->once() )->method( "getRevision" )->will( $this->returnValue( $sTest ) );
-        
-        $oView = $this->getMock( "oxView", array( "getConfig" ) );
-        $oView->expects( $this->once() )->method( "getConfig" )->will( $this->returnValue( $oConfig ) );
-        
-        $this->assertEquals( $sTest, $oView->getRevision() );
     }
 
 }

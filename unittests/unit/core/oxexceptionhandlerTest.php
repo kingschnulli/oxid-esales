@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxexceptionhandlerTest.php 48024 2012-07-31 11:41:36Z linas.kukulskis $
+ * @version   SVN: $Id: oxexceptionhandlerTest.php 26841 2010-03-25 13:58:15Z arvydas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -151,7 +151,7 @@ class Unit_Core_oxexceptionhandlerTest extends OxidTestCase
         $oTestUtils->expects($this->once())->method("writeToLog");
         $oTestException = new Exception("testMsg");
 
-        oxTestModules::addModuleObject( 'oxUtils', $oTestUtils );
+        modInstances::addMod("oxUtils", $oTestUtils);
 
         try {
             $oTestObject->UNITdealWithNoOxException($oTestException);

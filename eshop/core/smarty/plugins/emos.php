@@ -36,7 +36,7 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * $Id: emos.php 52846 2012-12-12 12:25:36Z linas.kukulskis $
+ * $Id: emos.php 49000 2012-08-24 11:52:35Z tomas $
  */
 
 /**
@@ -409,7 +409,6 @@ class Emos
 
         $aBasketItems = array();
         foreach ( $aBasket as $oItem ) {
-            $oItem = $this->_emos_ItemFormat( $oItem );
             $aBasketItems[] = array("buy", $oItem->productId, $oItem->productName,
                                   $oItem->price, $oItem->productGroup, $oItem->quantity,
                                   $oItem->variant1, $oItem->variant2, $oItem->variant3 );
@@ -500,7 +499,7 @@ class Emos
         }
 
         if ( $sCip ) {
-            $ort .= getStr()->substr( $sCip, 0, 1 )."/".getStr()->substr( $sCip, 0, 2 )."/";
+            $ort .= substr( $sCip, 0, 1 )."/".substr( $sCip, 0, 2 )."/";
         }
 
         if ( $sCity ) {

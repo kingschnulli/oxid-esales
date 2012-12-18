@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutilsserverTest.php 51736 2012-11-13 08:31:42Z saulius.stasiukaitis $
+ * @version   SVN: $Id: oxutilsserverTest.php 42118 2012-02-09 15:13:35Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -45,13 +45,12 @@ class Unit_Core_oxUtilsServerTest extends OxidTestCase
      */
     public function testSetOxCookieForSaveSessionCookie()
     {
-        $sValue = 'some value';
+        $this->markTestSkipped();
+
         $oUtilsServer = $this->getMock( "oxUtilsServer", array( "_saveSessionCookie" ));
-        // One cookie will be saved to session another will not.
         $oUtilsServer->expects( $this->once() )->method( '_saveSessionCookie' );
         $oUtilsServer->setOxCookie( "testName1", $sValue );
-        // Check if do not save to session when pass false(sixth param) as not to save to session.
-        $oUtilsServer->setOxCookie( "testName2", $sValue, 0, '/', null, false );
+        $oUtilsServer->setOxCookie( "testName2", "", 0, '/', null, false );
     }
 
     /**
@@ -180,6 +179,25 @@ class Unit_Core_oxUtilsServerTest extends OxidTestCase
         $oUtilsServer = new oxUtilsServer();
         $this->assertEquals( "xxx", $oUtilsServer->UNITgetCookiePath( "xxx" ) );
         $this->assertEquals( "", $oUtilsServer->UNITgetCookiePath( null ) );
+    }
+
+    public function testGetCookieDomain()
+    {
+        $oUtilsServer = new oxUtilsServer();
+        $this->assertEquals( "xxx", $oUtilsServer->UNITgetCookieDomain( "xxx" ) );
+        $this->assertEquals( "", $oUtilsServer->UNITgetCookieDomain( null ) );
+
+        modConfig::getInstance()->setConfigParam( "sCookieDomain", "yyy" );
+        $this->assertEquals( "yyy", $oUtilsServer->UNITgetCookieDomain( null ) );
+    }
+
+    public function testGetCookiePathUserDefinedPath()
+    {
+        $oUtilsServer = new oxUtilsServer();
+        $this->assertEquals( 'xxxpath', $oUtilsServer->UNITgetCookiePath( 'xxxpath' ) );
+
+        modConfig::getInstance()->setConfigParam( 'sCookiePath', 'yyypath' );
+        $this->assertEquals( 'yyypath', $oUtilsServer->UNITgetCookiePath( 'xxxpath' ) );
     }
 
     /**

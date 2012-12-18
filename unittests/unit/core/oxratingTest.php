@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxratingTest.php 48047 2012-07-31 13:23:55Z linas.kukulskis $
+ * @version   SVN: $Id: oxratingTest.php 41752 2012-01-25 09:46:08Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -56,6 +56,25 @@ class Unit_Core_oxratingTest extends OxidTestCase
         $oDB->Execute( $sInsert );
 
         parent::tearDown();
+    }
+
+    public function testInsert()
+    {
+        // cleanup before test ..
+        oxDb::getDb()->execute( "delete from oxratings where oxid='test'" );
+
+        $sTime = time();
+        oxTestModules::addFunction( "oxUtilsDate", "getTime", "{return '$sTime';}" );
+
+        $oRating = new oxrating();
+        $oRating->setId( 'test' );
+        $oRating->oxratings__oxshopid = new oxfield( oxConfig::getInstance()->getShopId() );
+        $oRating->save();
+
+        $oRating = new oxrating();
+        $oRating->load( 'test' );
+        $this->assertEquals( date( 'Y-m-d H:i:s', $sTime ), $oRating->oxratings__oxtimestamp->value );
+
     }
 
     public function testAllowRating()
