@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: newsletterTest.php 44704 2012-05-09 11:24:03Z linas.kukulskis $
+ * @version   SVN: $Id: newsletterTest.php 52489 2012-11-27 15:54:43Z aurimas.gladutis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -125,19 +125,23 @@ class Unit_Views_newsletterTest extends OxidTestCase
         $this->assertEquals(3, $iStatus );
     }
 
-    /**
-     * Test get newsletter status after add.
-     *
-     * @return null
-     */
     public function testGetNewsletterStatusAfterAddme()
     {
+        $oUser = oxNew( 'oxuser' );
+        $oUser->setId('testAddMe');
+        $oUser->oxuser__oxusername = new oxField('test@addme.com', oxField::T_RAW);
+        $oUser->oxuser__oxpasssalt = new oxField('salt', oxField::T_RAW);
+        $oUser->save();
+
         $oTestNews = oxNew( "NewsLetter" );
-        modConfig::setParameter( 'uid', 'test' );
+        modConfig::setParameter( 'uid', 'testAddMe' );
+        modConfig::setParameter( 'confirm', md5( 'test@addme.comsalt' ) );
         $oTestNews->addme();
         $iStatus = $oTestNews->getNewsletterStatus();
 
         $this->assertEquals(2, $iStatus );
+
+        $oUser->delete();
     }
 
     /**

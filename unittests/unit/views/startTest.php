@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: startTest.php 42218 2012-02-13 13:35:13Z linas.kukulskis $
+ * @version   SVN: $Id: startTest.php 51876 2012-11-15 12:53:05Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -116,24 +116,6 @@ class Unit_Views_startTest extends OxidTestCase
         $aList = $oStart->getCatOfferArticleList();
         $this->assertTrue($aList instanceof oxarticlelist);
         $this->assertEquals(2, $aList->count());
-    }
-
-    /**
-     * Testing start::getTagCloudManager()
-     *
-     * @return null
-     */
-    public function testGetTagCloudManager()
-    {
-        $oView = new Start();
-        $this->assertTrue( $oView->getTagCloudManager() instanceof oxTagCloud );
-    }
-
-    public function testIsMoreTagsVisible()
-    {
-        $oStart = $this->getProxyClass( 'start' );
-
-        $this->assertTrue($oStart->isMoreTagsVisible());
     }
 
     public function testPrepareMetaKeyword()

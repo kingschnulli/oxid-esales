@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxerptype.php 43708 2012-04-11 06:29:15Z linas.kukulskis $
+ * @version   SVN: $Id: oxerptype.php 52715 2012-12-05 15:01:54Z aurimas.gladutis $
  */
 
 /**
@@ -125,7 +125,7 @@ class oxERPType
     public function getTableName($iShopID=null, $iLanguage = 0)
     {
         if ($iShopID === null) {
-            $iShopID = oxConfig::getInstance()->getShopId();
+            $iShopID = oxRegistry::getConfig()->getShopId();
         }
 
         return getViewName($this->_sTableName, -1, $iShopID);
@@ -282,7 +282,7 @@ class oxERPType
      */
     public function getObjectForDeletion( $sId)
     {
-        $myConfig = oxConfig::getInstance();
+        $myConfig = oxRegistry::getConfig();
 
         if (!isset($sId)) {
             throw new Exception( "Missing ID!");
@@ -322,13 +322,15 @@ class oxERPType
      */
     protected function _isAllowedToEdit($iShopId)
     {
-        if ($oUsr = oxUser::getAdminUser()) {
-            if ($oUsr->oxuser__oxrights->value == "malladmin") {
-                return true;
-            } elseif ($oUsr->oxuser__oxrights->value == (int) $iShopId) {
-                return true;
-            }
+        $oUsr = oxNew('oxUser');
+        $oUsr->loadAdminUser();
+
+        if ($oUsr->oxuser__oxrights->value == "malladmin") {
+            return true;
+        } elseif ($oUsr->oxuser__oxrights->value == (int) $iShopId) {
+            return true;
         }
+
         return false;
     }
 
@@ -372,10 +374,10 @@ class oxERPType
             throw new Exception( "Missing ID!");
         }
         // malladmin can do it
-        if ($oUsr = oxUser::getAdminUser()) {
-            if ($oUsr->oxuser__oxrights->value == "malladmin") {
-                return;
-            }
+        $oUsr = oxNew('oxUser');
+        $oUsr->loadAdminUser();
+        if ($oUsr->oxuser__oxrights->value == "malladmin") {
+            return;
         }
         try {
             $this->getObjectForDeletion($sId);
@@ -397,7 +399,7 @@ class oxERPType
      */
     public function delete($sID)
     {
-        $myConfig = oxConfig::getInstance();
+        $myConfig = oxRegistry::getConfig();
         $oDb = oxDb::getDb();
         $sSql = "delete from ".$this->_sTableName." where oxid = " . $oDb->quote( $sID );
 
@@ -434,7 +436,6 @@ class oxERPType
      *
      * @param array $aFields initial data
      *
-     * @deprecated
      * @see _preAssignObject
      *
      * @return array
@@ -447,13 +448,14 @@ class oxERPType
     /**
      * used for the RR implementation, right now not really used
      *
-     * @deprecated
-     *
      * @return array
      */
     public function getRightFields()
     {
         $aRParams = array();
+        if (!$this->_aFieldList) {
+            $this->getFieldList();
+        }
 
         foreach ($this->_aFieldList as $sField) {
             $aRParams[] = strtolower($this->_sTableName.'__'.$sField);
@@ -483,8 +485,8 @@ class oxERPType
         }
 
         $sViewName = $oShopObject->getViewName();
-        $sFields = str_ireplace( $sViewName . ".", "", strtoupper($oShopObject->getSelectFields()) );
-        $sFields = str_ireplace( " ", "", $sFields );
+        $sFields = str_ireplace( '`' . $sViewName . "`.", "", strtoupper($oShopObject->getSelectFields()) );
+        $sFields = str_ireplace( array(" ", "`"), array("", ""), $sFields );
         $this->_aFieldList = explode( ",", $sFields );
 
         return $this->_aFieldList;
@@ -509,7 +511,7 @@ class oxERPType
      */
     public function getOxidFromKeyFields($aData)
     {
-        $myConfig = oxConfig::getInstance();
+        $myConfig = oxRegistry::getConfig();
 
         if (!is_array($this->getKeyFields())) {
             return null;

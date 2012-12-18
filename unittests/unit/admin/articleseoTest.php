@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: articleseoTest.php 40264 2011-11-24 14:04:45Z linas.kukulskis $
+ * @version   SVN: $Id: articleseoTest.php 47944 2012-07-30 12:41:30Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -224,11 +224,11 @@ class Unit_Admin_ArticleSeoTest extends OxidTestCase
      */
     public function testGetTag()
     {
-        $oTag1 = $this->getMock( "oxStdClass", array( "getId", "getTitle" ) );
+        $oTag1 = $this->getMock( "oxManufacturer", array( "getId", "getTitle" ) );
         $oTag1->expects( $this->once() )->method( 'getId' )->will( $this->returnValue( "testTagId2" ) );
         $oTag1->expects( $this->never() )->method( 'getTitle' )->will( $this->returnValue( "testTagId" ) );
 
-        $oTag2 = $this->getMock( "oxStdClass", array( "getId", "getTitle" ) );
+        $oTag2 = $this->getMock( "oxManufacturer", array( "getId", "getTitle" ) );
         $oTag2->expects( $this->once() )->method( 'getId' )->will( $this->returnValue( "testTagId" ) );
         $oTag2->expects( $this->once() )->method( 'getTitle' )->will( $this->returnValue( "testTagId" ) );
 

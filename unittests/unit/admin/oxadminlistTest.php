@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxadminlistTest.php 32455 2011-01-10 09:33:51Z arvydas $
+ * @version   SVN: $Id: oxadminlistTest.php 51976 2012-11-19 10:50:01Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -255,7 +255,7 @@ class Unit_Admin_oxAdminListTest extends OxidTestCase
         $sTable = getViewName( 'oxarticles', 1 );
 
         $aSorting = array( "oxarticles" => array( "oxtitle" => "asc" ) );
-        $oListObject = $this->getMock( 'oxstdclass', array( "isMultilang", "getLanguage" ) );
+        $oListObject = $this->getMock( 'oxLinks', array( "isMultilang", "getLanguage" ) );
         $oListObject->expects( $this->once() )->method( 'isMultilang' )->will( $this->returnValue( true ) );
         $oListObject->expects( $this->once() )->method( 'getLanguage' )->will( $this->returnValue( 1 ) );
 
@@ -276,7 +276,7 @@ class Unit_Admin_oxAdminListTest extends OxidTestCase
         $sTable = getViewName( 'oxlinks', 1 );
         $aSorting = array( "oxlinks" => array( "oxtitle" => "asc", "oxactive" => "asc", "sort" => "asc" ) );
 
-        $oListObject = $this->getMock( 'oxstdclass', array( "isMultilang", "getLanguage" ) );
+        $oListObject = $this->getMock( 'oxlinks', array( "isMultilang", "getLanguage" ) );
         $oListObject->expects( $this->once() )->method( 'isMultilang' )->will( $this->returnValue( true ) );
         $oListObject->expects( $this->once() )->method( 'getLanguage' )->will( $this->returnValue( 1 ) );
 
@@ -295,12 +295,12 @@ class Unit_Admin_oxAdminListTest extends OxidTestCase
      */
     public function testPrepareOrderByQueryByInternalParam()
     {
-        $oListObject = $this->getMock( 'oxstdclass', array( "isMultilang", "getLanguage", "getCoreTableName" ) );
+        $oListObject = $this->getMock( 'oxlinks', array( "isMultilang", "getLanguage", "getCoreTableName" ) );
         $oListObject->expects( $this->once() )->method( 'isMultilang' )->will( $this->returnValue( true ) );
         $oListObject->expects( $this->once() )->method( 'getLanguage' )->will( $this->returnValue( 1 ) );
         $oListObject->expects( $this->once() )->method( 'getCoreTableName' )->will( $this->returnValue( "oxlinks" ) );
 
-        $oList = $this->getMock( 'oxstdclass', array( "getBaseObject" ) );
+        $oList = $this->getMock( 'oxlist', array( "getBaseObject" ) );
         $oList->expects( $this->any() )->method( 'getBaseObject' )->will( $this->returnValue( $oListObject ) );
 
         $sTable = getViewName( 'oxlinks', 1 );
@@ -340,7 +340,7 @@ class Unit_Admin_oxAdminListTest extends OxidTestCase
         $sTable = getViewName( 'oxlinks', 1 );
         $aSorting = array( "oxlinks" => array( "oxtitle" => "desc" ) );
 
-        $oListObject = $this->getMock( 'oxstdclass', array( "isMultilang", "getLanguage" ) );
+        $oListObject = $this->getMock( 'oxlinks', array( "isMultilang", "getLanguage" ) );
         $oListObject->expects( $this->once() )->method( 'isMultilang' )->will( $this->returnValue( true ) );
         $oListObject->expects( $this->once() )->method( 'getLanguage' )->will( $this->returnValue( 1 ) );
 
@@ -361,7 +361,7 @@ class Unit_Admin_oxAdminListTest extends OxidTestCase
         $sTable = getViewName( 'oxlinks', 1 );
         $aSorting = array( "oxlinks" => array( "oxurldesc" => "asc" ) );
 
-        $oListObject = $this->getMock( 'oxstdclass', array( "isMultilang", "getLanguage" ) );
+        $oListObject = $this->getMock( 'oxlinks', array( "isMultilang", "getLanguage" ) );
         $oListObject->expects( $this->once() )->method( 'isMultilang' )->will( $this->returnValue( true ) );
         $oListObject->expects( $this->once() )->method( 'getLanguage' )->will( $this->returnValue( 1 ) );
 
@@ -382,7 +382,7 @@ class Unit_Admin_oxAdminListTest extends OxidTestCase
         $sTable = getViewName( 'oxarticles', 1 );
         $aSorting = array( "oxarticles" => array( "oxtitle" => "asc" ) );
 
-        $oListObject = $this->getMock( 'oxstdclass', array( "isMultilang", "getLanguage" ) );
+        $oListObject = $this->getMock( 'oxarticles', array( "isMultilang", "getLanguage" ) );
         $oListObject->expects( $this->once() )->method( 'isMultilang' )->will( $this->returnValue( true ) );
         $oListObject->expects( $this->once() )->method( 'getLanguage' )->will( $this->returnValue( 1 ) );
 
@@ -401,7 +401,7 @@ class Unit_Admin_oxAdminListTest extends OxidTestCase
     public function testBuildSelectString()
     {
         $sTable = getViewName( 'oxactions' );
-        $sSql = "select {$sTable}.oxid, {$sTable}.oxshopid, {$sTable}.oxtype, {$sTable}.oxtitle, {$sTable}.oxlongdesc, {$sTable}.oxactive, {$sTable}.oxactivefrom, {$sTable}.oxactiveto, {$sTable}.oxpic, {$sTable}.oxlink, {$sTable}.oxsort from {$sTable} where 1 ";
+        $sSql = "select `{$sTable}`.`oxid`, `{$sTable}`.`oxshopid`, `{$sTable}`.`oxtype`, `{$sTable}`.`oxtitle`, `{$sTable}`.`oxlongdesc`, `{$sTable}`.`oxactive`, `{$sTable}`.`oxactivefrom`, `{$sTable}`.`oxactiveto`, `{$sTable}`.`oxpic`, `{$sTable}`.`oxlink`, `{$sTable}`.`oxsort`, `{$sTable}`.`oxtimestamp` from {$sTable} where 1 ";
 
         $oAdminList = new oxadminlist();
         $this->assertEquals( $sSql, $oAdminList->UNITbuildSelectString( new oxActions() ) );
@@ -546,7 +546,7 @@ class Unit_Admin_oxAdminListTest extends OxidTestCase
         $oAdminList = $this->getProxyClass( 'order_list' );
         $sResultSql = $oAdminList->UNITprepareWhereQuery( $aWhere, '' );
 
-        $sSql = " and ( oxorder.oxfolder = 'Neu' or oxorder.oxfolder = 'Neu' )";
+        $sSql = " and ( oxorder.oxfolder = 'Neu' )";
         $this->assertEquals( $sSql, $sResultSql );
     }
 
@@ -731,14 +731,14 @@ class Unit_Admin_oxAdminListTest extends OxidTestCase
 
         $aViewData = $oAdminList->getViewData();
 
-        $oPageNavi = new Oxstdclass();
+        $oPageNavi = new stdClass();
         $oPageNavi->pages    = 112;
         $oPageNavi->actpage  = 6;
         $oPageNavi->lastlink = 999;
         $oPageNavi->nextlink = 59;
         $oPageNavi->backlink = 41;
 
-        $oVal = new oxStdClass();
+        $oVal = new stdClass();
         $oVal->selected = 0;
 
         $oPageNavi->changePage = array_fill( 1, 11, $oVal );
@@ -814,7 +814,7 @@ class Unit_Admin_oxAdminListTest extends OxidTestCase
 
         $aWhere = $oAdminList->getViewDataElement( 'where' );
 
-        $aResult = new oxStdClass();
+        $aResult = new oxLinks();
         $aResult->oxlinks__oxid       = '1';
         $aResult->oxlinks__oxshopid   = '2';
         $aResult->oxarticles__oxtitle = '3';
@@ -895,7 +895,7 @@ class Unit_Admin_oxAdminListTest extends OxidTestCase
             $this->assertEquals( $sResult, $oAdminList->UNITconvertTime( $sInput ) );
         }
     }
-    
+
     /**
      * Test item list clear (set to null)
      *
@@ -907,7 +907,7 @@ class Unit_Admin_oxAdminListTest extends OxidTestCase
 
          $oAdminList->setNonPublicVar( '_oList', 'list');
          $oAdminList->clearItemList();
-         
+
          $this->assertNull( $oAdminList->getNonPublicVar( '_oList') );
      }
 

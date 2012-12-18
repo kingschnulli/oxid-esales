@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxfieldTest.php 28225 2010-06-08 12:32:23Z sarunas $
+ * @version   SVN: $Id: oxfieldTest.php 51553 2012-11-08 14:59:57Z saulius.stasiukaitis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -84,41 +84,7 @@ class Unit_Core_oxfieldTest extends OxidTestCase
         $this->assertEquals("ssss&lt;<br />\n&gt;", $oField->rawValue);
         $this->assertEquals("ssss&lt;<br />\n&gt;", $oField->value);
     }
-/*
-    public function testSetValue_inAdmin()
-    {
-        $this->markTestSkipped('not testable now since oxField uses direct isAdmin function for performance');
-        $oField = $this->getMock( 'oxfield', array( 'isAdmin' ) );
-        $oField->expects( $this->any() )
-                    ->method( 'isAdmin' )
-                    ->will( $this->returnValue(true));
 
-        $oField->setValue("ssss<\n>");
-        $this->assertEquals("ssss<\n>", $oField->rawValue);
-        $this->assertEquals("ssss<\n>", $oField->value);
-
-        $oField->setValue("ssss<\n>", oxField::T_RAW);
-        $this->assertEquals("ssss<\n>", $oField->rawValue);
-        $this->assertEquals("ssss<\n>", $oField->value);
-    }
-
-    public function testSetValue_inNonAdmin()
-    {
-        $this->markTestSkipped('not testable now since oxField uses direct isAdmin function for performance');
-        $oField = $this->getMock( 'oxfield', array( 'isAdmin' ) );
-        $oField->expects( $this->any() )
-                    ->method( 'isAdmin' )
-                    ->will( $this->returnValue(false));
-
-        $oField->setValue("ssss<\n>");
-        $this->assertEquals("ssss<\n>", $oField->rawValue);
-        $this->assertEquals("ssss&lt;\n&gt;", $oField->value);
-
-        $oField->setValue("ssss<\n>", oxField::T_RAW);
-        $this->assertEquals("ssss<\n>", $oField->rawValue);
-        $this->assertEquals("ssss<\n>", $oField->value);
-    }
-*/
     public function testSetValue_resetPrev()
     {
         $oField = new oxField();

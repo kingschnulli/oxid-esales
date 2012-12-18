@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: voucherseriemainTest.php 33190 2011-02-10 15:56:27Z arvydas.vapsva $
+ * @version   SVN: $Id: voucherseriemainTest.php 51455 2012-11-07 08:08:48Z aurimas.gladutis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -125,7 +125,7 @@ class Unit_Admin_VoucherSerieMainTest extends OxidTestCase
         $this->assertNull( $oView->getStatus() );
 
         // with serie..
-        $oSerie = $this->getMock( "oxStdClass", array( "countVouchers" ) );
+        $oSerie = $this->getMock( "oxVoucherSerie", array( "countVouchers" ) );
         $oSerie->expects( $this->once() )->method( 'countVouchers' )->will( $this->returnValue( "testCountVouchers" ) );
 
         $oView = $this->getMock( "VoucherSerie_Main", array( "_getVoucherSerie" ) );
@@ -176,5 +176,16 @@ class Unit_Admin_VoucherSerieMainTest extends OxidTestCase
         $this->assertNotNull( $oVoucherSerie );
         $this->assertEquals( "_testvoucherserie", $oVoucherSerie->getId() );
 
+    }
+
+    /**
+     * VoucherSerie_Main::getViewId() test case
+     *
+     * @return null
+     */
+    public function testGetViewId()
+    {
+        $oView = new VoucherSerie_Main();
+        $this->assertEquals( "tbclvoucherserie_main", $oView->getViewId() );
     }
 }

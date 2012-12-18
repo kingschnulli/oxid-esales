@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: toolsTest.php 26271 2010-03-04 08:42:11Z arvydas $
+ * @version   SVN: $Id: toolsTest.php 47944 2012-07-30 12:41:30Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -52,7 +52,7 @@ class Unit_Admin_ToolsTest extends OxidTestCase
         oxTestModules::addFunction( 'oxUtils', 'showMessageAndExit', '{ return "Access denied !"; }');
 
 
-        $oConfig = $this->getMock( "oxStdClass", array( "isDemoShop" ) );
+        $oConfig = $this->getMock( "oxConfig", array( "isDemoShop" ) );
         $oConfig->expects( $this->once() )->method( 'isDemoShop' )->will( $this->returnValue( true ) );
 
         // testing..

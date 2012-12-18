@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: newslettersendTest.php 38603 2011-09-05 13:32:16Z linas.kukulskis $
+ * @version   SVN: $Id: newslettersendTest.php 47972 2012-07-30 16:08:39Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -102,7 +102,7 @@ class Unit_Admin_NewsletterSendTest extends OxidTestCase
      */
     public function testRenderAlt()
     {
-        oxTestModules::addFunction( 'oxNewsLetter', 'getGroups', '{ $oGroup1 = new oxStdclass();$oGroup1->oxgroups__oxid = new oxField("oxidadmin"); $oGroup2 = new oxStdclass();$oGroup2->oxgroups__oxid = new oxField("oxidcustomer"); return array( $oGroup1, $oGroup2 ); }');
+        oxTestModules::addFunction( 'oxNewsLetter', 'getGroups', '{ $oGroup1 = new oxGroups();$oGroup1->oxgroups__oxid = new oxField("oxidadmin"); $oGroup2 = new oxGroups();$oGroup2->oxgroups__oxid = new oxField("oxidcustomer"); return array( $oGroup1, $oGroup2 ); }');
         oxTestModules::addFunction( 'oxNewsLetter', 'send', '{ return false; }');
         oxTestModules::addFunction( 'oxNewsLetter', 'prepare', '{ return true; }');
 
@@ -166,7 +166,7 @@ class Unit_Admin_NewsletterSendTest extends OxidTestCase
      */
     public function testSetupNavigation()
     {
-        $oNavigation = $this->getMock( "oxStdClass", array( "getTabs", "getActiveTab" ) );
+        $oNavigation = $this->getMock( "oxnavigationtree", array( "getTabs", "getActiveTab" ) );
         $oNavigation->expects( $this->once() )->method( "getTabs" )->will( $this->returnValue( "getTabs" ) );
         $oNavigation->expects( $this->exactly( 2 ) )->method( "getActiveTab" )->will( $this->returnValue( "getActiveTab" ) );
 

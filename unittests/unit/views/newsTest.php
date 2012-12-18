@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: newsTest.php 40677 2011-12-19 08:21:54Z linas.kukulskis $
+ * @version   SVN: $Id: newsTest.php 51853 2012-11-15 11:28:55Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -121,6 +121,18 @@ class Unit_Views_newsTest extends OxidTestCase
         $aResults[] = $aResult;
 
         $this->assertEquals( $aResults, $oNews->getBreadCrumb() );
+    }
+
+    /**
+     * Test get list page navigation.
+     *
+     * @return null
+     */
+    public function testGetPageNavigation()
+    {
+        $oObj = $this->getMock( 'News', array( 'generatePageNavigation' ));
+        $oObj->expects( $this->any() )->method( 'generatePageNavigation')->will($this->returnValue( "aaa" ) );
+        $this->assertEquals( 'aaa', $oObj->getPageNavigation() );
     }
 
 }

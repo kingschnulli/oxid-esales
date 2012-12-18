@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: recommlistTest.php 32991 2011-02-07 14:23:27Z vilma $
+ * @version   SVN: $Id: recommlistTest.php 47791 2012-07-25 15:09:04Z saulius.stasiukaitis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';

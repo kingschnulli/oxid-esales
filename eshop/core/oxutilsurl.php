@@ -50,22 +50,13 @@ class oxUtilsUrl extends oxSuperCfg
     /**
      * resturns a single instance of this class
      *
+     * @deprecated since v5.0 (2012-08-10); Use oxRegistry::get("oxUtilsUrl") instead
+     *
      * @return oxUtilsUrl
      */
     public static function getInstance()
     {
-        // disable caching for test modules
-        if ( defined( 'OXID_PHP_UNIT' ) ) {
-            self::$_instance = modInstances::getMod( __CLASS__ );
-        }
-
-        if ( !(self::$_instance instanceof oxUtilsUrl ) ) {
-            self::$_instance = oxNew( 'oxUtilsUrl' );
-            if ( defined( 'OXID_PHP_UNIT' ) ) {
-                modInstances::addMod( __CLASS__, self::$_instance);
-            }
-        }
-        return self::$_instance;
+        return oxRegistry::get("oxUtilsUrl");
     }
 
     /**
@@ -109,12 +100,15 @@ class oxUtilsUrl extends oxSuperCfg
      */
     public function prepareUrlForNoSession( $sUrl )
     {
-        if ( oxUtils::getInstance()->seoIsActive() ) {
+        $oStr = getStr();
+
+        // cleaning up session id..
+        $sUrl = $oStr->preg_replace('/(\?|&(amp;)?)(force_)?(admin_)?sid=[a-z0-9\._]+&?(amp;)?/i', '\1', $sUrl);
+        $sUrl = $oStr->preg_replace( '/(&amp;|\?)$/', '', $sUrl );
+
+        if ( oxRegistry::getUtils()->seoIsActive() ) {
             return $sUrl;
         }
-
-        $oStr = getStr();
-        $sUrl = $oStr->preg_replace('/(\?|&(amp;)?)(force_)?(admin_)?sid=[a-z0-9\._]+&?(amp;)?/i', '\1', $sUrl);
 
         if ($qpos = $oStr->strpos($sUrl, '?')) {
             if ($qpos == $oStr->strlen($sUrl)-1) {
@@ -127,7 +121,7 @@ class oxUtilsUrl extends oxSuperCfg
         }
 
         if ( !$oStr->preg_match('/[&?](amp;)?lang=[0-9]+/i', $sUrl)) {
-            $sUrl .= "{$sSep}lang=".oxLang::getInstance()->getBaseLanguage();
+            $sUrl .= "{$sSep}lang=".oxRegistry::getLang()->getBaseLanguage();
             $sSep = '&amp;';
         }
 
@@ -162,9 +156,9 @@ class oxUtilsUrl extends oxSuperCfg
         $sSep = ( $oStr->strpos( $sUrl, '?' ) === false ) ? '?' : '&amp;';
 
 
-        if ( !oxUtils::getInstance()->seoIsActive() ) {
+        if ( !oxRegistry::getUtils()->seoIsActive() ) {
             // non seo url has no language identifier..
-            $iLang = oxLang::getInstance()->getBaseLanguage();
+            $iLang = oxRegistry::getLang()->getBaseLanguage();
             if ( !$oStr->preg_match( '/[&?](amp;)?lang=[0-9]+/i', $sUrl ) && $iLang != $oConfig->getConfigParam( 'sDefaultLang' ) ) {
                 $sUrl .= "{$sSep}lang=".$iLang;
             }
@@ -239,15 +233,15 @@ class oxUtilsUrl extends oxSuperCfg
             $aAddParams = array_merge( $aAddParams, $aParams );
         }
 
-        $ret = oxSession::getInstance()->processUrl(
-                    oxLang::getInstance()->processUrl(
-                        $this->appendUrl(
-                                $sUrl,
-                                $aAddParams
-                        ),
-                        $iLang
-                    )
-                );
+        $ret = oxRegistry::getSession()->processUrl(
+            oxRegistry::getLang()->processUrl(
+                $this->appendUrl(
+                    $sUrl,
+                    $aAddParams
+                ),
+                $iLang
+            )
+        );
 
         if ($blFinalUrl) {
             $ret = getStr()->preg_replace('/(\?|&(amp;)?)$/', '', $ret);
@@ -413,5 +407,32 @@ class oxUtilsUrl extends oxSuperCfg
             return $sUrl.'?';
         }
         return $sUrl.'&amp;';
+    }
+
+    /**
+     * Return current url
+     *
+     * @return string
+     */
+    function getCurrentUrl()
+    {
+        $oUtilsServer = oxRegistry::get( "oxUtilsServer" );
+
+        $aServerParams["HTTPS"]       = $oUtilsServer->getServerVar( "HTTPS" );
+        $aServerParams["HTTP_X_FORWARDED_PROTO"] = $oUtilsServer->getServerVar( "HTTP_X_FORWARDED_PROTO" );
+        $aServerParams["HTTP_HOST"]   = $oUtilsServer->getServerVar( "HTTP_HOST" );
+        $aServerParams["REQUEST_URI"] = $oUtilsServer->getServerVar( "REQUEST_URI" );
+
+        $sProtocol = "http://";
+
+        if ( isset($aServerParams['HTTPS']) && (($aServerParams['HTTPS'] == 'on' || $aServerParams['HTTPS'] == 1))
+            || (isset($aServerParams['HTTP_X_FORWARDED_PROTO']) && $aServerParams['HTTP_X_FORWARDED_PROTO'] == 'https')
+        ) {
+            $sProtocol = 'https://';
+        }
+
+        $sUrl = $sProtocol . $aServerParams['HTTP_HOST'] . $aServerParams['REQUEST_URI'];
+
+        return $sUrl;
     }
 }

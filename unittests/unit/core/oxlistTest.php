@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxlistTest.php 44384 2012-04-25 13:39:36Z linas.kukulskis $
+ * @version   SVN: $Id: oxlistTest.php 52493 2012-11-27 16:13:19Z aurimas.gladutis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -76,7 +76,6 @@ class Unit_Core_oxlistTest extends OxidTestCase
 
     public function testSplIterator()
     {
-
         $oTest = new stdClass();
         $oTest->sTest = "HELLO";
         $this->_oList[] = $oTest;
@@ -93,7 +92,7 @@ class Unit_Core_oxlistTest extends OxidTestCase
         $this->assertEquals( "HELLO AGAIN", $sTest);
     }
 
-    public function testAssignArray()
+    public function testAssign()
     {
         $oTest = oxNew('oxList');
         $oTest[] = "A";
@@ -112,6 +111,29 @@ class Unit_Core_oxlistTest extends OxidTestCase
         }
         $this->assertEquals($i, 3);
 
+    }
+
+    public function testAssignArray()
+    {
+        $aData = array();
+        $aData[] = array( 'oxid' => 1, 'oxtitle' => 'name1' );
+        $aData[] = array( 'oxid' => 2, 'oxtitle' => 'name2' );
+        $aData[] = array( 'oxid' => 3, 'oxtitle' => 'name3' );
+        $aData[] = array( 'oxid' => 4, 'oxtitle' => 'name4' );
+
+
+        $oList = new oxList;
+        $oList->init('oxCategory');
+        $oList->assignArray( $aData );
+
+        $i = 0;
+        foreach ($oList as $value) {
+            $this->assertEquals($aData[$i]['oxid'], $value->oxcategories__oxid->value);
+            $this->assertEquals($aData[$i]['oxtitle'], $value->oxcategories__oxtitle->value);
+            ++$i;
+        }
+
+        $this->assertEquals($i, 4);
     }
 
     public function testSplCount()
@@ -360,6 +382,29 @@ class Unit_Core_oxlistTest extends OxidTestCase
         }
     }
 
+    /**
+     * Testing oxList::unset() before foreach loop
+     *
+     * @return null
+     */
+    public function testUnsetBeforeForeach()
+    {
+        $oList = new oxlist();
+        $oList->offsetSet( 'k1', 'cnt4' );
+        $oList->offsetSet( 'k2', 'cnt3' );
+        $oList->offsetSet( 'k3', 'cnt2' );
+        $oList->offsetSet( 'k4', 'cnt1' );
+
+        $oList->offsetUnset('k1');
+        $iTotal = $oList->count();
+        $iCount = 0;
+
+        foreach ($oList as $sVal) {
+            $iCount++;
+        }
+        $this->assertEquals( $iTotal, $iCount );
+    }
+
     public function testUnsetWhile()
     {
         $oList = new oxlist();
@@ -378,5 +423,30 @@ class Unit_Core_oxlistTest extends OxidTestCase
             $iTotal--;
             unset($oList[$sKey]);
         }
+    }
+
+    /**
+     * Testing oxList::unset() before while loop
+     *
+     * @return null
+     */
+    public function testUnsetBeforeWhile()
+    {
+        $oList = new oxlist();
+        $oList->offsetSet( 'k1', 'cnt4' );
+        $oList->offsetSet( 'k2', 'cnt3' );
+        $oList->offsetSet( 'k3', 'cnt2' );
+        $oList->offsetSet( 'k4', 'cnt1' );
+
+        $oList->offsetUnset('k1');
+        $iTotal = $oList->count();
+        $iCount = 0;
+
+        $oList->rewind();
+        while ($oList->valid()) {
+            $iCount++;
+            $oList->next();
+        }
+        $this->assertEquals( $iTotal, $iCount );
     }
 }
