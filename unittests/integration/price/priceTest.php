@@ -122,7 +122,7 @@ class Integration_Price_PriceTest extends OxidTestCase
             $this->assertEquals( $aExp['price'], $oArt->getFPrice(), "Price of article #{$aArt['id']}" );
 
             isset( $aExp['rrp_price'] )
-                ? $this->assertEquals( $aExp['rrp_price'], $this->_getFormatted( $oArt->getTPrice()->getPrice() ), "RRP price of article #{$aArt['id']}" )
+                ? $this->assertEquals( $aExp['rrp_price'], $oArt->getFTPrice(), "RRP price of article #{$aArt['id']}" )
                 : '';
             isset( $aExp['unit_price'] )
                 ? $this->assertEquals( $aExp['unit_price'], $oArt->getFUnitPrice(), "Unit Price of article #{$aArt['id']}" )

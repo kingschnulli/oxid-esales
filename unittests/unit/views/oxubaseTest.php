@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxubaseTest.php 52464 2012-11-26 22:46:36Z alfonsas $
+ * @version   SVN: $Id: oxubaseTest.php 52660 2012-12-03 14:34:50Z aurimas.gladutis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -1225,8 +1225,13 @@ class Unit_Views_oxubaseTest extends OxidTestCase
      */
     public function testGetTitle()
     {
-        $oView = new oxubase();
-        $this->assertNull( $oView->getTitle() );
+        $oActiveView = $this->getMock( 'oxubase', array( 'getClassName' ) );
+        $oActiveView->expects( $this->once() )->method( 'getClassName' )->will( $this->returnValue( 'links' ) );
+        $oConfig = $this->getMock( 'oxconfig', array( 'getActiveView' ) );
+        $oConfig->expects( $this->once() )->method( 'getActiveView' )->will( $this->returnValue( $oActiveView ) );
+        $oView = $this->getMock( 'oxubase', array( 'getConfig' ) );
+        $oView->expects( $this->once() )->method( 'getConfig' )->will( $this->returnValue( $oConfig ) );
+        $this->assertEquals( 'Links', $oView->getTitle() );
     }
 
     /*

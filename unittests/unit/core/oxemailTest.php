@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxemailTest.php 51862 2012-11-15 12:41:21Z aurimas.gladutis $
+ * @version   SVN: $Id: oxemailTest.php 52489 2012-11-27 15:54:43Z aurimas.gladutis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -1048,6 +1048,15 @@ class Unit_Core_oxemailTest extends OxidTestCase
         $oActShop = oxConfig::getInstance()->getActiveShop();
         $oActShop->setLanguage(1);
         $this->assertEquals($sUrl, $this->_oEmail->UNITgetNewsSubsLink('XXXX'));
+    }
+
+    public function testGetNewsSubsLinkWithConfirm()
+    {
+        $sUrl = oxConfig::getInstance()->getShopHomeURL().'cl=newsletter&amp;fnc=addme&amp;uid=XXXX&amp;confirm=AAAA';
+        $this->assertEquals($sUrl, $this->_oEmail->UNITgetNewsSubsLink('XXXX', 'AAAA'));
+        $oActShop = oxConfig::getInstance()->getActiveShop();
+        $oActShop->setLanguage(1);
+        $this->assertEquals($sUrl, $this->_oEmail->UNITgetNewsSubsLink('XXXX', 'AAAA'));
     }
 
     public function testSetSmtpProtocol()

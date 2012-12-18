@@ -106,13 +106,13 @@ $aData = array (
                 1001 => array (
                         'base_price'        => '79,90',
                         'price'             => '76,43',
-                        'rrp_price'         => '69,48',
+                        'rrp_price'         => '',
                         'show_rrp'          => false
                 ),
                 1002 => array (
                         'base_price'        => '79,90',
                         'price'             => '73,09',
-                        'rrp_price'         => '69,48',
+                        'rrp_price'         => '',
                         'show_rrp'          => false
                 ),
                 1003 => array (
@@ -130,19 +130,19 @@ $aData = array (
                 1005 => array (
                         'base_price'        => '89,90',
                         'price'             => '85,99',
-                        'rrp_price'         => '69,48',
+                        'rrp_price'         => '',
                         'show_rrp'          => false
                 ),
                 1006 => array (
                         'base_price'        => '89,90',
                         'price'             => '82,23',
-                        'rrp_price'         => '69,48',
+                        'rrp_price'         => '',
                         'show_rrp'          => false
                 ),
                 1007 => array (
                         'base_price'        => '89,90',
                         'price'             => '73,87',
-                        'rrp_price'         => '69,48',
+                        'rrp_price'         => '',
                         'show_rrp'          => false
                 ),
         ),

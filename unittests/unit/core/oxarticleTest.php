@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticleTest.php 52163 2012-11-23 09:14:58Z aurimas.gladutis $
+ * @version   SVN: $Id: oxarticleTest.php 52936 2012-12-14 12:27:30Z aurimas.gladutis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -1578,6 +1578,10 @@ class Unit_Core_oxarticleTest extends OxidTestCase
         $this->assertEquals( 15, $oParent->UNITgetVarMaxPrice() );
         $this->assertEquals( 15, $oParent->getMinPrice()->getBruttoPrice() );
         $this->assertFalse( $oParent->isRangePrice() );
+
+        $oParent->delete();
+        $oVar1->delete();
+        $oVar2->delete();
     }
 
     /**
@@ -4000,8 +4004,7 @@ class Unit_Core_oxarticleTest extends OxidTestCase
         $this->oArticle2->oxarticles__oxactive = new oxField(1, oxField::T_RAW);
         $this->oArticle2->oxarticles__oxprice = new oxField(17.5, oxField::T_RAW);
         $this->oArticle2->save();
-        $this->oArticle = $this->getMock('oxarticle', array( 'isParentNotBuyable' ) );
-        $this->oArticle->expects( $this->any() )->method( 'isParentNotBuyable' )->will( $this->returnValue( true ) );
+        modConfig::getInstance()->setConfigParam( "blVariantParentBuyable", 0 );
         $this->oArticle->oxarticles__oxvarcount = new oxField(1, oxField::T_RAW);
         $this->oArticle->UNITonChangeUpdateMinVarPrice('_testArt');
         $this->assertEquals( 17.5, oxDb::getDB()->getOne("select oxvarminprice from oxarticles where oxid = '_testArt'") );
@@ -5921,15 +5924,42 @@ class Unit_Core_oxarticleTest extends OxidTestCase
     }
 
     /**
-     * Test get formated old price.
+     * Test get formated old price when it is more than price.
      *
      * @return null
      */
-    public function testGetFTPrice()
+    public function testGetFTPriceIfMore()
     {
-        $this->oArticle->oxarticles__oxtprice = new oxField( 12.1, oxField::T_RAW);
+        $this->oArticle->oxarticles__oxprice  = new oxField( 15.5, oxField::T_RAW);
+        $this->oArticle->oxarticles__oxtprice = new oxField( 16.6, oxField::T_RAW);
         $this->oArticle->save();
-        $this->assertEquals( '12,10', $this->oArticle->getFTPrice() );
+        $this->assertEquals( '16,60', $this->oArticle->getFTPrice() );
+    }
+
+    /**
+     * Test get formated old price when it is same as price.
+     *
+     * @return null
+     */
+    public function testGetFTPriceIfEqual()
+    {
+        $this->oArticle->oxarticles__oxprice  = new oxField( 15.5, oxField::T_RAW);
+        $this->oArticle->oxarticles__oxtprice = new oxField( 15.5, oxField::T_RAW);
+        $this->oArticle->save();
+        $this->assertEquals( '', $this->oArticle->getFTPrice() );
+    }
+
+    /**
+     * Test get formated old price when it is less than price.
+     *
+     * @return null
+     */
+    public function testGetFTPriceIfLess()
+    {
+        $this->oArticle->oxarticles__oxprice  = new oxField( 15.5, oxField::T_RAW);
+        $this->oArticle->oxarticles__oxtprice = new oxField( 14.4, oxField::T_RAW);
+        $this->oArticle->save();
+        $this->assertEquals( '', $this->oArticle->getFTPrice() );
     }
 
     /**
@@ -6161,6 +6191,45 @@ class Unit_Core_oxarticleTest extends OxidTestCase
         $oSubj->setUser('testUser');
         $oSubj->setArticleUser('testLocalUser');
         $this->assertEquals('testLocalUser', $oSubj->getArticleUser());
+    }
+
+    /**
+     * Test oxarticle::updateVariantsRemind()
+     *
+     * @return null
+     */
+    public function testUpdateVariantsRemind()
+    {
+        $oParent = new oxArticle();
+        $oParent->setId( "_testParent" );
+        $oParent->oxarticles__oxshopid = new oxField(oxConfig::getInstance()->getBaseShopId(), oxField::T_RAW);
+        $oParent->oxarticles__oxactive       = new oxField( 1 );
+        $oParent->oxarticles__oxremindactive = new oxField( 0 );
+        $oParent->oxarticles__oxvarcount    = new oxField( 1 );
+        $oParent->save();
+
+        $oVariant = new oxArticle();
+        $oVariant->setId( "_testVariant" );
+        $oVariant->oxarticles__oxshopid = new oxField(oxConfig::getInstance()->getBaseShopId(), oxField::T_RAW);
+        $oVariant->oxarticles__oxparentid     = new oxField( "_testParent" );
+        $oVariant->oxarticles__oxactive       = new oxField( 1 );
+        $oVariant->oxarticles__oxremindactive = new oxField( 0 );
+        $oVariant->save();
+
+        $oParent->oxarticles__oxremindactive = new oxField( 1 );
+        $oParent->updateVariantsRemind();
+
+        $oVariant->load('_testVariant');
+        $this->assertEquals( 1, $oVariant->oxarticles__oxremindactive->value );
+
+        $oParent->oxarticles__oxremindactive =  new oxField( 0 );
+        $oParent->updateVariantsRemind();
+
+        $oVariant->load('_testVariant');
+        $this->assertEquals( 0, $oVariant->oxarticles__oxremindactive->value );
+
+        $oParent->delete();
+        $oVariant->delete();
     }
 
     /**
@@ -6846,16 +6915,62 @@ class Unit_Core_oxarticleTest extends OxidTestCase
     {
         oxTestModules::addFunction("oxVariantHandler", "buildVariantSelections", "{return 'buildVariantSelections';}");
         $oVariantHandler = $this->getMock('oxVariantHandler', array("buildVariantSelections"));
+        $aVariantSelections = array('selections' => 'asd', 'rawselections' => 'asd');
         $oVariantHandler->expects($this->once())->method("buildVariantSelections")
             ->with($this->equalTo('varname'), $this->equalTo('variants'), $this->equalTo(1), $this->equalTo(2), $this->equalTo(3))
-            ->will($this->returnValue("asd"));
+            ->will($this->returnValue($aVariantSelections));
         oxTestModules::addModuleObject("oxVariantHandler", $oVariantHandler);
 
         $oProduct = $this->getMock( "oxArticle", array( "getVariants" ) );
         $oProduct->expects( $this->once() )->method( 'getVariants' )->will( $this->returnValue( 'variants' ) );
         $oProduct->oxarticles__oxvarcount = new oxField( 3 );
         $oProduct->oxarticles__oxvarname  = new oxField( 'varname' );
-        $this->assertEquals( 'asd', $oProduct->getVariantSelections(1, 2, 3) );
+        $this->assertEquals( $aVariantSelections, $oProduct->getVariantSelections(1, 2, 3) );
+    }
+
+    /**
+     * oxArticle::getVariantSelections() with all inactive variants
+     * #0004199
+     *
+     * @return null
+     */
+    public function testGetVariantSelectionsWithAllInactiveVariants()
+    {
+        oxTestModules::addFunction("oxVariantHandler", "buildVariantSelections", "{return 'buildVariantSelections';}");
+        $oVariantHandler = $this->getMock('oxVariantHandler', array("buildVariantSelections"));
+        $aVariantSelections = array('selections' => 'asd', 'rawselections' => '');
+        $oVariantHandler->expects($this->once())->method("buildVariantSelections")
+            ->with($this->equalTo('varname'), $this->equalTo('variants'), $this->equalTo(1), $this->equalTo(2), $this->equalTo(3))
+            ->will($this->returnValue( $aVariantSelections ) );
+        oxTestModules::addModuleObject("oxVariantHandler", $oVariantHandler);
+
+        $oProduct = $this->getMock( "oxArticle", array( "getVariants" ) );
+        $oProduct->expects( $this->once() )->method( 'getVariants' )->will( $this->returnValue( 'variants' ) );
+        $oProduct->oxarticles__oxvarcount = new oxField( 3 );
+        $oProduct->oxarticles__oxvarname  = new oxField( 'varname' );
+        $this->assertFalse( $oProduct->getVariantSelections(1, 2, 3) );
+    }
+
+    /**
+     * oxArticle::getVariantSelections() should return selection list when no variants exists (blLoadVariants = false)
+     *
+     * @return null
+     */
+    public function testGetVariantSelectionsWithNoVariants()
+    {
+        oxTestModules::addFunction("oxVariantHandler", "buildVariantSelections", "{return 'buildVariantSelections';}");
+        $oVariantHandler = $this->getMock('oxVariantHandler', array("buildVariantSelections"));
+        $aVariantSelections = array('selections' => 'asd', 'rawselections' => '');
+        $oVariantHandler->expects($this->once())->method("buildVariantSelections")
+            ->with($this->equalTo('varname'), $this->equalTo(array()), $this->equalTo(1), $this->equalTo(2), $this->equalTo(3))
+            ->will($this->returnValue( $aVariantSelections ) );
+        oxTestModules::addModuleObject("oxVariantHandler", $oVariantHandler);
+
+        $oProduct = $this->getMock( "oxArticle", array( "getVariants" ) );
+        $oProduct->expects( $this->once() )->method( 'getVariants' )->will( $this->returnValue( array() ) );
+        $oProduct->oxarticles__oxvarcount = new oxField( 3 );
+        $oProduct->oxarticles__oxvarname  = new oxField( 'varname' );
+        $this->assertEquals( $aVariantSelections, $oProduct->getVariantSelections(1, 2, 3) );
     }
 
     /**

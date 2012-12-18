@@ -31,17 +31,6 @@ require_once realpath(dirname(__FILE__).'/../../') . '/unit/OxidTestCase.php';
 class Integration_Timestamp_TimestampTest extends OxidTestCase
 {
     /**
-     * Initialize the fixture.
-     *
-     * @return null
-     */
-    protected function setUp()
-    {
-        $this->markTestSkipped("temporary skip");
-        parent::setUp();
-    }
-
-    /**
      * Tear down the fixture.
      *
      * @return null

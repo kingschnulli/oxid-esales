@@ -86,13 +86,13 @@ $aData = array (
                 1001 => array (
                         'base_price'        => '100,00',
                         'price'             => '110,00',
-                        'rrp_price'         => '94,52',
+                        'rrp_price'         => '',
                         'show_rrp'          => false
                 ),
                 1002 => array (
                         'base_price'        => '100,00',
                         'price'             => '105,20',
-                        'rrp_price'         => '94,52',
+                        'rrp_price'         => '',
                         'show_rrp'          => false
                 ),
                 1003 => array (

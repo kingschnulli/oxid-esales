@@ -5,7 +5,7 @@
  * Price type: range
  * Articles: 1 with price 0.00
  * Variants: 0-2
- * Parent buyable: no
+ * Parent buyable: yes
  */
 $aData = array (
         'articles' => array (
