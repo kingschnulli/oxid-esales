@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: shopconfigTest.php 50563 2012-10-16 10:36:57Z aurimas.gladutis $
+ * @version   SVN: $Id: shopconfigTest.php 51422 2012-11-06 15:07:22Z aurimas.gladutis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -55,6 +55,7 @@ class Unit_Admin_ShopConfigTest extends OxidTestCase
      */
     public function testSaveConfVars()
     {
+        modConfig::getInstance()->setAdminMode( true );
         modConfig::setParameter( "oxid", "testId" );
         modConfig::setParameter( "confbools",   array( "varnamebool" => true ) );
         modConfig::setParameter( "confstrs",    array( "varnamestr"  => "string" ) );
@@ -130,21 +131,9 @@ class Unit_Admin_ShopConfigTest extends OxidTestCase
      */
     public function testSave()
     {
-        oxTestModules::addFunction( 'oxshop', 'load', '{ return true; }');
-        oxTestModules::addFunction( 'oxshop', 'assign', '{ return true; }');
-        oxTestModules::addFunction( 'oxshop', 'save', '{ return true; }');
-        oxTestModules::addFunction( 'oxUtils', 'rebuildCache', '{ throw new Exception( "rebuildCache" ); }');
-
-        // testing..
-        try {
-            $oView = $this->getMock( "Shop_Config", array( "saveConfVars" ) );
-            $oView->expects( $this->once() )->method( 'saveConfVars' );
-            $oView->save();
-        } catch ( Exception $oExcp ) {
-            $this->assertEquals( "rebuildCache", $oExcp->getMEssage(), "Error in Shop_Config::save()" );
-            return;
-        }
-        $this->fail( "Error in Shop_Config::save()" );
+        $oView = $this->getMock( "Shop_Config", array( "saveConfVars" ) );
+        $oView->expects( $this->once() )->method( 'saveConfVars' );
+        $oView->save();
     }
 
     /**
@@ -265,15 +254,14 @@ class Unit_Admin_ShopConfigTest extends OxidTestCase
 
 
     /**
-     * _loadConfVars test
+     * loadConfVars test
      *
      * @return null
      */
     public function testLoadConfVars()
     {
-        $sCl = oxTestModules::publicize('Shop_Config', '_loadConfVars');
-        $oTest = new $sCl;
-        $aDbConfig = $oTest->p_loadConfVars(oxConfig::getInstance()->getShopId(), '');
+        $oTest = new Shop_Config();
+        $aDbConfig = $oTest->loadConfVars(oxConfig::getInstance()->getShopId(), '');
 
         $this->assertEquals(
             array('vars', 'constraints', 'grouping'),

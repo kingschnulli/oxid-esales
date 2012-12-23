@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: categoryseoTest.php 38261 2011-08-19 11:26:16Z linas.kukulskis $
+ * @version   SVN: $Id: categoryseoTest.php 48686 2012-08-15 08:53:32Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -86,8 +86,8 @@ class Unit_Admin_CategorySeoTest extends OxidTestCase
      */
     public function testSave()
     {
-        oxTestModules::addFunction( 'oxbase', 'load', '{ return true; }');
-        oxTestModules::addFunction( 'oxbase', 'save', '{ return true; }');
+        oxTestModules::addFunction( 'oxcategory', 'load', '{ return true; }');
+        oxTestModules::addFunction( 'oxcategory', 'save', '{ return true; }');
         oxTestModules::addFunction( 'oxSeoEncoderCategory', 'markRelatedAsExpired', '{ throw new Exception( "markRelatedAsExpired" ); }');
         modConfig::setParameter( "oxid", "testId" );
 

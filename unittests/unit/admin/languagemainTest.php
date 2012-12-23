@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: languagemainTest.php 46728 2012-06-27 11:23:20Z arturas.sevcenko $
+ * @version   SVN: $Id: languagemainTest.php 51854 2012-11-15 11:50:09Z aurimas.gladutis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -315,10 +315,9 @@ class Unit_Admin_LanguageMainTest extends OxidTestCase
         $aLangData['params']['de'] = array("baseId" => 0, "active" => 1, "sort" => 1);
         $aLangData['params']['en'] = array("baseId" => 1, "active" => 1, "sort" => 10, "default" => false);
 
-        $oConfig = $this->getMock( "oxConfig", array( "getDir" ) );
-        $oConfig->expects( $this->at(0) )->method( "getDir" )->with( $this->equalTo( 'lang.php' ), oxLang::getInstance()->getLanguageAbbr( 1 ), $this->equalTo( 0 ), $this->equalTo( 1 ) )->will( $this->returnValue( "dir/to/langfile" ) );
-        
-        
+        $oConfig = $this->getMock( "oxConfig", array( "getTranslationsDir" ) );
+        $oConfig->expects( $this->once() )->method( "getTranslationsDir" )->with( $this->equalTo( 'lang.php' ), oxLang::getInstance()->getLanguageAbbr( 1 ) )->will( $this->returnValue( "dir/to/langfile" ) );
+
         $oView = $this->getMock( "modLanguageMain", array( "getConfig" ), array(), '', false );
         $oView->expects( $this->any() )->method( 'getConfig' )->will( $this->returnValue( $oConfig ) );
         $oView->setVar( '_aLangData', $aLangData );
@@ -329,7 +328,7 @@ class Unit_Admin_LanguageMainTest extends OxidTestCase
         $aEx = oxSession::getVar("Errors");
         $this->assertNull( $aEx );
     }
-	
+
     /**
      * Language_Main::CheckLangTranslations() test case
      *
@@ -337,79 +336,24 @@ class Unit_Admin_LanguageMainTest extends OxidTestCase
      */
     public function testCheckLangTranslations_withError()
     {
-    	$aLangData['params']['de'] = array("baseId" => 0, "active" => 1, "sort" => 1);
-    	$aLangData['params']['en'] = array("baseId" => 1, "active" => 1, "sort" => 10, "default" => false);
-    
-    	$oConfig = $this->getMock( "oxConfig", array( "getDir", "getLanguagePath" ) );
-    
-    
-    	$oConfig->expects( $this->at(0) )->method( "getDir" )->with( $this->equalTo( 'lang.php' ), oxLang::getInstance()->getLanguageAbbr( 1 ), $this->equalTo( 0 ), $this->equalTo( 1 ) )->will( $this->returnValue( "" ) );
-    	$oConfig->expects( $this->once() )->method( "getLanguagePath" )->with( $this->equalTo( 'lang.txt' ), $this->equalTo( 0 ), $this->equalTo( 1 ) )->will( $this->returnValue( "" ) );
-    
-    	$oView = $this->getMock( "modLanguageMain", array( "getConfig" ), array(), '', false );
-    	$oView->expects( $this->any() )->method( 'getConfig' )->will( $this->returnValue( $oConfig ) );
-    	$oView->setVar( '_aLangData', $aLangData );
-    
-    	$oView->UNITcheckLangTranslations( "en" );
-    
-    	$aEx = oxSession::getVar( "Errors" );
-    	$oEx = unserialize( $aEx["default"][0] );
-    	$sErrMsg = oxLang::getInstance()->translateString( "LANGUAGE_FRONTEND_NOTRANSLATIONS_WARNING" );
-    
-    	$this->assertEquals( $sErrMsg, $oEx->getOxMessage() );
-    }
-    
-    /**
-     * Language_Main::CheckLangTranslationsAdmin() test case
-     *
-     * @return null
-     */
-    public function testCheckLangTranslationsAdmin()
-    {
-    	$aLangData['params']['de'] = array("baseId" => 0, "active" => 1, "sort" => 1);
-    	$aLangData['params']['en'] = array("baseId" => 1, "active" => 0, "sort" => 10, "default" => false);
-    	
-    	$oConfig = $this->getMock( "oxConfig", array( "getDir" ) );
-    	$oConfig->expects( $this->at(1) )->method( "getDir" )->with( $this->equalTo( 'lang.php' ), oxLang::getInstance()->getLanguageAbbr( 1 ), $this->equalTo( 1 ), $this->equalTo( 1 ) )->will( $this->returnValue( "dir/to/langfile" ) );
-    
-    	$oView = $this->getMock( "modLanguageMain", array( "getConfig" ), array(), '', false );
-    	$oView->expects( $this->any() )->method( 'getConfig' )->will( $this->returnValue( $oConfig ) );
-    	$oView->setVar( '_aLangData', $aLangData );
-    	
-    	$oView->UNITcheckLangTranslations( "en" );
-    	
-    	//no errors should be added to session
-    	$aEx = oxSession::getVar("Errors");
-    	$this->assertNull( $aEx );
-    }
-    
-    /**
-     * Language_Main::CheckLangTranslationsAdmin() test case
-     *
-     * @return null
-     */
-    public function testCheckLangTranslationsAdmin_withError()
-    {
-    	$aLangData['params']['de'] = array("baseId" => 0, "active" => 1, "sort" => 1);
-    	$aLangData['params']['en'] = array("baseId" => 1, "active" => 0, "sort" => 10, "default" => false);
-    
-    	$oConfig = $this->getMock( "oxConfig", array( "getDir", "getLanguagePath" ) );
-    
-    
-    	$oConfig->expects( $this->at(0) )->method( "getDir" )->with( $this->equalTo( 'lang.php' ), oxLang::getInstance()->getLanguageAbbr( 1 ), $this->equalTo( 0 ), $this->equalTo( 1 ) )->will( $this->returnValue( "" ) );
-    	$oConfig->expects( $this->once() )->method( "getLanguagePath" )->with( $this->equalTo( 'lang.txt' ), $this->equalTo( 0 ), $this->equalTo( 1 ) )->will( $this->returnValue( "" ) );
-    
-    	$oView = $this->getMock( "modLanguageMain", array( "getConfig" ), array(), '', false );
-    	$oView->expects( $this->any() )->method( 'getConfig' )->will( $this->returnValue( $oConfig ) );
-    	$oView->setVar( '_aLangData', $aLangData );
-    
-    	$oView->UNITcheckLangTranslations( "en" );
-    
-    	$aEx = oxSession::getVar( "Errors" );
-    	$oEx = unserialize( $aEx["default"][0] );
-    	$sErrMsg = oxLang::getInstance()->translateString( "LANGUAGE_BACKEND_NOTRANSLATIONS_WARNING" );
-    
-    	$this->assertEquals( $sErrMsg, $oEx->getOxMessage() );
+        $aLangData['params']['de'] = array("baseId" => 0, "active" => 1, "sort" => 1);
+        $aLangData['params']['en'] = array("baseId" => 1, "active" => 1, "sort" => 10, "default" => false);
+
+        $oConfig = $this->getMock( "oxConfig", array( "getTranslationsDir" ) );
+       
+        $oConfig->expects( $this->once() )->method( "getTranslationsDir" )->with( $this->equalTo( 'lang.php' ), oxLang::getInstance()->getLanguageAbbr( 1 ) )->will( $this->returnValue( "" ) );
+
+        $oView = $this->getMock( "modLanguageMain", array( "getConfig" ), array(), '', false );
+        $oView->expects( $this->any() )->method( 'getConfig' )->will( $this->returnValue( $oConfig ) );
+        $oView->setVar( '_aLangData', $aLangData );
+
+        $oView->UNITcheckLangTranslations( "en" );
+
+        $aEx = oxSession::getVar( "Errors" );
+        $oEx = unserialize( $aEx["default"][0] );
+        $sErrMsg = oxLang::getInstance()->translateString( "LANGUAGE_NOTRANSLATIONS_WARNING" );
+
+        $this->assertEquals( $sErrMsg, $oEx->getOxMessage() );
     }
 
     /**

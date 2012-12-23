@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxerpcsv.php 43726 2012-04-11 07:27:01Z linas.kukulskis $
+ * @version   SVN: $Id: oxerpcsv.php 53107 2012-12-18 15:35:50Z aurimas.gladutis $
  */
 
 /**
@@ -411,17 +411,19 @@ class oxErpCsv extends oxERPBase
     protected function _importArticle( oxERPType $oType, $aRow)
     {
         if ( $this->_sCurrVersion == "0.1" ) {
-            $myConfig = oxConfig::getInstance();
+            $myConfig = oxRegistry::getConfig();
             //to allow different shopid without consequences (ignored fields)
             $myConfig->setConfigParam('blMallCustomPrice', false);
         }
 
         if ( isset($aRow['OXID'] ) ) {
             $this->_checkIDField($aRow['OXID']);
-        } else {
+        }
+        // #0004426
+        /*else {
             $this->_checkIDField($aRow['OXARTNUM']);
             $aRow['OXID'] = $aRow['OXARTNUM'];
-        }
+        }*/
 
         $sResult = $this->_save( $oType, $aRow, $this->_sCurrVersion == "0.1"); // V0.1 allowes the shopid to be set no matter which login
         return (boolean) $sResult;
@@ -439,7 +441,7 @@ class oxErpCsv extends oxERPBase
     {
         // deleting old relations before import in V0.1
         if ( $this->_sCurrVersion == "0.1" && !isset($this->_aImportedAccessoire2Article[$aRow['OXARTICLENID']] ) ) {
-            $myConfig = oxConfig::getInstance();
+            $myConfig = oxRegistry::getConfig();
             $oDb = oxDb::getDb();
             $oDb->execute( "delete from oxaccessoire2article where oxarticlenid = ".$oDb->quote( $aRow['OXARTICLENID'] ) );
             $this->_aImportedAccessoire2Article[$aRow['OXARTICLENID']] = 1;
@@ -462,7 +464,7 @@ class oxErpCsv extends oxERPBase
 
         if ( $this->_sCurrVersion == "0.1" && !isset( $this->_aImportedActions2Article[$aRow['OXARTID']] ) ) {
             //only in V0.1 and only once per import/article
-            $myConfig = oxConfig::getInstance();
+            $myConfig = oxRegistry::getConfig();
             $oDb = oxDb::getDb();
             $oDb->execute( "delete from oxactions2article where oxartid = ".$oDb->quote( $aRow['OXARTID'] ) );
             $this->_aImportedActions2Article[$aRow['OXARTID']] = 1;
@@ -484,7 +486,7 @@ class oxErpCsv extends oxERPBase
     {
         // deleting old relations before import in V0.1
         if ( $this->_sCurrVersion == "0.1" && !isset( $this->_aImportedObject2Category[$aRow['OXOBJECTID']] ) ) {
-            $myConfig = oxConfig::getInstance();
+            $myConfig = oxRegistry::getConfig();
             $oDb = oxDb::getDb();
             $oDb->execute( "delete from oxobject2category where oxobjectid = ".$oDb->quote( $aRow['OXOBJECTID'] ) );
             $this->_aImportedObject2Category[$aRow['OXOBJECTID']] = 1;
@@ -506,7 +508,7 @@ class oxErpCsv extends oxERPBase
     {
         $aRow['OXTIME'] = 0;
 
-        $myConfig = oxConfig::getInstance();
+        $myConfig = oxRegistry::getConfig();
         $oDb = oxDb::getDb();
 
         $sSql = "select OXID from oxobject2category where oxobjectid = ".$oDb->quote( $aRow['OXOBJECTID'] )." and OXCATNID = ".$oDb->quote( $aRow['OXCATNID'] );
@@ -547,7 +549,7 @@ class oxErpCsv extends oxERPBase
     {
         // deleting old relations before import in V0.1
         if ( $this->_sCurrVersion == "0.1" && !isset($this->_aImportedObject2Article[$aRow['OXARTICLENID']] ) ) {
-            $myConfig = oxConfig::getInstance();
+            $myConfig = oxRegistry::getConfig();
             $oDb = oxDb::getDb();
             $oDb->Execute( "delete from oxobject2article where oxarticlenid = ".$oDb->quote( $aRow['OXARTICLENID'] ) );
             $this->aImportedObject2Article[$aRow['OXARTICLENID']] = 1;

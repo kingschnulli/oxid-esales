@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: detailsTest.php 44354 2012-04-25 11:30:15Z mindaugas.rimgaila $
+ * @version   SVN: $Id: detailsTest.php 53162 2012-12-20 09:44:43Z aurimas.gladutis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -55,7 +55,7 @@ class Unit_Views_detailsTest extends OxidTestCase
      */
     public function testGetCanonicalUrlSeoOn()
     {
-        oxTestModules::addFunction( "oxUtils", "seoIsActive", "{ return true; }" );
+        $this->setConfigParam( 'blSeoMode', true );
 
         $oProduct = $this->getMock( "oxarticle", array( "getBaseSeoLink", "getBaseStdLink" ) );
         $oProduct->expects( $this->once() )->method( 'getBaseSeoLink')->will( $this->returnValue( "testSeoUrl" ) );
@@ -74,7 +74,7 @@ class Unit_Views_detailsTest extends OxidTestCase
      */
     public function testGetCanonicalUrlSeoOff()
     {
-        oxTestModules::addFunction( "oxUtils", "seoIsActive", "{ return false; }" );
+        $this->setConfigParam( 'blSeoMode', false );
 
         $oProduct = $this->getMock( "oxarticle", array( "getBaseSeoLink", "getBaseStdLink" ) );
         $oProduct->expects( $this->never() )->method( 'getBaseSeoLink')->will( $this->returnValue( "testSeoUrl" ) );
@@ -155,10 +155,10 @@ class Unit_Views_detailsTest extends OxidTestCase
     {
         $oDetails = new Details();
 
-        modConfig::setParameter( 'searchtag', null );
+        $this->setRequestParam( 'searchtag', null );
         $this->assertNull( $oDetails->getTag() );
 
-        modConfig::setParameter( 'searchtag', 'sometag' );
+        $this->setRequestParam( 'searchtag', 'sometag' );
         $this->assertEquals( 'sometag', $oDetails->getTag() );
     }
 
@@ -169,7 +169,7 @@ class Unit_Views_detailsTest extends OxidTestCase
      */
     public function testLoadVariantInformation()
     {
-        modConfig::getInstance()->setConfigParam( 'blVariantParentBuyable', true );
+        $this->setConfigParam( 'blVariantParentBuyable', true );
 
         $this->getProxyClass( 'oxarticle' );
         $oProductParent = $this->getMock( 'oxarticlePROXY', array( 'getSelectLists', 'getId' ) );
@@ -219,22 +219,22 @@ class Unit_Views_detailsTest extends OxidTestCase
      */
     public function testGetLinkType()
     {
-        modConfig::setParameter( 'listtype', 'vendor' );
+        $this->setRequestParam( 'listtype', 'vendor' );
         $oDetailsView = $this->getMock( "details", array( 'getActCategory' ) );
         $oDetailsView->expects( $this->never() )->method( 'getActCategory');
         $this->assertEquals( OXARTICLE_LINKTYPE_VENDOR, $oDetailsView->getLinkType() );
 
-        modConfig::setParameter( 'listtype', 'manufacturer' );
+        $this->setRequestParam( 'listtype', 'manufacturer' );
         $oDetailsView = $this->getMock( "details", array( 'getActCategory' ) );
         $oDetailsView->expects( $this->never() )->method( 'getActCategory');
         $this->assertEquals( OXARTICLE_LINKTYPE_MANUFACTURER, $oDetailsView->getLinkType() );
 
-        modConfig::setParameter( 'listtype', 'tag' );
+        $this->setRequestParam( 'listtype', 'tag' );
         $oDetailsView = $this->getMock( "details", array( 'getActCategory' ) );
         $oDetailsView->expects( $this->never() )->method( 'getActCategory');
         $this->assertEquals( OXARTICLE_LINKTYPE_TAG, $oDetailsView->getLinkType() );
 
-        modConfig::setParameter( 'listtype', null );
+        $this->setRequestParam( 'listtype', null );
         $oDetailsView = $this->getMock( "details", array( 'getActCategory' ) );
         $oDetailsView->expects( $this->once() )->method( 'getActCategory')->will( $this->returnValue( null ) );
         $this->assertEquals( OXARTICLE_LINKTYPE_CATEGORY, $oDetailsView->getLinkType() );
@@ -242,12 +242,12 @@ class Unit_Views_detailsTest extends OxidTestCase
         $oCategory = $this->getMock( "oxcategory", array( 'isPriceCategory' ) );
         $oCategory->expects( $this->once() )->method( 'isPriceCategory')->will( $this->returnValue( true ) );
 
-        modConfig::setParameter( 'listtype', "recommlist" );
+        $this->setRequestParam( 'listtype', "recommlist" );
         $oDetailsView = $this->getMock( "details", array( 'getActCategory' ) );
         $oDetailsView->expects( $this->never() )->method( 'getActCategory')->will( $this->returnValue( $oCategory ) );
         $this->assertEquals( OXARTICLE_LINKTYPE_RECOMM, $oDetailsView->getLinkType() );
 
-        modConfig::setParameter( 'listtype', null );
+        $this->setRequestParam( 'listtype', null );
         $oDetailsView = $this->getMock( "details", array( 'getActCategory' ) );
         $oDetailsView->expects( $this->once() )->method( 'getActCategory')->will( $this->returnValue( $oCategory ) );
         $this->assertEquals( OXARTICLE_LINKTYPE_PRICECATEGORY, $oDetailsView->getLinkType() );
@@ -278,7 +278,7 @@ class Unit_Views_detailsTest extends OxidTestCase
      */
     public function testGetProductNotExistingProduct()
     {
-        modConfig::setParameter( 'anid', 'notexistingproductid' );
+        $this->setRequestParam( 'anid', 'notexistingproductid' );
         oxTestModules::addFunction( "oxUtils", "redirect", "{ throw new Exception( \$aA[0] ); }" );
 
         try {
@@ -299,10 +299,10 @@ class Unit_Views_detailsTest extends OxidTestCase
     public function testForBugEntry0002223()
     {
         $sQ = "select oxid from oxarticles where oxparentid!='' and oxactive = 1";
-        modConfig::setParameter( 'anid', oxDb::getDb()->getOne( $sQ ) );
+        $this->setRequestParam( 'anid', oxDb::getDb()->getOne( $sQ ) );
         oxTestModules::addFunction( "oxUtils", "redirect", "{ throw new Exception( \$aA[0] ); }" );
 
-        $oParentProduct = $this->getMock( "oxStdClass", array( "isVisible" ) );
+        $oParentProduct = $this->getMock( "oxArticle", array( "isVisible" ) );
         $oParentProduct->expects( $this->once() )->method( 'isVisible')->will( $this->returnValue( false ) );
 
         try {
@@ -326,7 +326,7 @@ class Unit_Views_detailsTest extends OxidTestCase
         $oProduct = $this->getMock( 'oxarticle', array( 'isVisible' ));
         $oProduct->expects( $this->once() )->method( 'isVisible')->will( $this->returnValue( false ) );
 
-        modConfig::setParameter( 'anid', 'notexistingproductid' );
+        $this->setRequestParam( 'anid', 'notexistingproductid' );
         oxTestModules::addFunction( "oxUtils", "redirect", "{ throw new Exception( \$aA[0] ); }" );
 
         try {
@@ -347,7 +347,7 @@ class Unit_Views_detailsTest extends OxidTestCase
      */
     public function testNoIndex()
     {
-        modConfig::setParameter( 'listtype', 'vendor' );
+        $this->setRequestParam( 'listtype', 'vendor' );
 
         $oDetailsView = new details();
         $this->assertEquals( 2, $oDetailsView->noIndex() );
@@ -360,7 +360,7 @@ class Unit_Views_detailsTest extends OxidTestCase
      */
     public function testNoIndex_unknowntype()
     {
-        modConfig::setParameter( 'listtype', 'unknown' );
+        $this->setRequestParam( 'listtype', 'unknown' );
 
         $oView = new Details();
         $this->assertSame( 0, $oView->noIndex() );
@@ -414,7 +414,7 @@ class Unit_Views_detailsTest extends OxidTestCase
         oxTestModules::addFunction('oxSeoEncoderTag', '_saveToDb', '{return null;}');
         oxTestModules::addFunction("oxutilsserver", "getServerVar", "{ \$aArgs = func_get_args(); if ( \$aArgs[0] === 'HTTP_HOST' ) { return '".oxConfig::getInstance()->getShopUrl()."'; } elseif ( \$aArgs[0] === 'SCRIPT_NAME' ) { return ''; } else { return \$_SERVER[\$aArgs[0]]; } }");
         oxTestModules::addFunction( "oxutils", "seoIsActive", "{return true;}" );
-        modConfig::setParameter( 'newTags', "newTag" );
+        $this->setRequestParam( 'newTags', "newTag" );
         $oArt = new oxarticle();
         $oArt->load('2000');
         $oArt->setId('_testArt');
@@ -448,7 +448,7 @@ class Unit_Views_detailsTest extends OxidTestCase
     public function testGetProduct()
     {
         oxTestModules::addFunction( "oxutils", "seoIsActive", "{return false;}" );
-        modConfig::setParameter( 'anid', '2000' );
+        $this->setRequestParam( 'anid', '2000' );
         $oDetails = $this->getProxyClass( 'details' );
         $oDetails->init();
         $this->assertEquals('2000', $oDetails->getProduct()->getId());
@@ -470,8 +470,8 @@ class Unit_Views_detailsTest extends OxidTestCase
                 ->will($this->returnValue(array('oActiveVariant'=>'actvar', 'blPerfectFit'=>true)));
         oxTestModules::addModuleObject('oxarticle', $oProduct);
 
-        modConfig::setParameter( 'anid', 'anid__' );
-        modConfig::setParameter( 'varselid', 'varselid__' );
+        $this->setRequestParam( 'anid', 'anid__' );
+        $this->setRequestParam( 'varselid', 'varselid__' );
 
         $oDetailsView = $this->getProxyClass( 'details' );
         $oDetailsView->setNonPublicVar( '_blIsInitialized', 1 );
@@ -494,8 +494,8 @@ class Unit_Views_detailsTest extends OxidTestCase
                 ->will($this->returnValue(array('oActiveVariant'=>'actvar', 'blPerfectFit'=>false)));
         oxTestModules::addModuleObject('oxarticle', $oProduct);
 
-        modConfig::setParameter( 'anid', 'anid__' );
-        modConfig::setParameter( 'varselid', 'varselid__' );
+        $this->setRequestParam( 'anid', 'anid__' );
+        $this->setRequestParam( 'varselid', 'varselid__' );
 
         $oDetailsView = $this->getProxyClass( 'details' );
         $oDetailsView->setNonPublicVar( '_blIsInitialized', 1 );
@@ -509,7 +509,7 @@ class Unit_Views_detailsTest extends OxidTestCase
      */
     public function testGetVariantList()
     {
-        modConfig::setParameter( 'anid', '2077' );
+        $this->setRequestParam( 'anid', '2077' );
 
         $oDetails = $this->getProxyClass( 'details' );
         $this->assertEquals( 3, $oDetails->getVariantList()->count() );
@@ -581,15 +581,16 @@ class Unit_Views_detailsTest extends OxidTestCase
      */
     public function testGetLastProducts()
     {
-        modSession::getInstance()->addClassFunction('getId', create_function('', 'return "ok";'));
-        modConfig::setParameter( 'anid', '1771' );
-        $oDetails = $this->getProxyClass( 'details' );
+        $this->setSessionParam('aHistoryArticles', array('1771'));
+
+        $this->setRequestParam( 'anid', '1771' );
+        $oDetails = new details();
         $oDetails->init();
         $oDetails->render();
         $oDetails->getLastProducts();
 
-        modConfig::setParameter( 'anid', '2000' );
-        $oDetails = $this->getProxyClass( 'details' );
+        $this->setRequestParam( 'anid', '2000' );
+        $oDetails = new details();
         $oDetails->init();
 
         $this->assertEquals('1771', $oDetails->getLastProducts()->current()->getId());
@@ -861,7 +862,7 @@ class Unit_Views_detailsTest extends OxidTestCase
      */
     public function testGetSelectLists()
     {
-        modConfig::getInstance()->setConfigParam( 'bl_perfLoadSelectLists', true );
+        $this->setConfigParam( 'bl_perfLoadSelectLists', true );
         $oArticle = $this->getMock( 'oxarticle', array( 'getSelectLists' ) );
         $oArticle->expects( $this->any() )->method( 'getSelectLists')->will( $this->returnValue( "aaa" ) );
 
@@ -925,20 +926,21 @@ class Unit_Views_detailsTest extends OxidTestCase
     }
 
     /**
-     * Test get similar recomendation lists.
+     * Test get ids for similar recomendation list.
      *
      * @return null
      */
-    public function testGetSimilarRecommLists()
+
+    public function testGetSimilarRecommListIds()
     {
-        oxTestModules::addFunction('oxRecommList', 'getRecommListsByIds', '{ return "testRecomm"; }');
+        $articleId = "articleId";
+        $aArrayKeys = array( $articleId );
+        $oProduct = $this->getMock( "oxarticle", array( "getId" ) );
+        $oProduct->expects( $this->once() )->method( "getId" )->will( $this->returnValue( $articleId ) );
 
-        $oDetails = $this->getProxyClass( 'details' );
-        $oArticle = oxNew("oxarticle");
-        $oArticle->load("1849");
-        $oDetails->setNonPublicVar( "_oProduct", $oArticle );
-
-        $this->assertEquals( "testRecomm", $oDetails->getSimilarRecommLists() );
+        $oDetails = $this->getMock( "details", array( "getProduct" ) );
+        $oDetails->expects( $this->once() )->method( "getProduct" )->will( $this->returnValue( $oProduct ) );
+        $this->assertEquals( $aArrayKeys, $oDetails->getSimilarRecommListIds(), "getSimilarRecommListIds() should return array of key from result of getProduct()" );
     }
 
     /**
@@ -980,7 +982,7 @@ class Unit_Views_detailsTest extends OxidTestCase
      */
     public function testIsPriceAlarm()
     {
-        $oArticle = new oxStdClass();
+        $oArticle = new oxArticle();
         $oArticle->oxarticles__oxblfixedprice = new oxField(1, oxField::T_RAW);
 
         $oView = $this->getMock( 'details', array( 'getProduct' ) );
@@ -996,7 +998,7 @@ class Unit_Views_detailsTest extends OxidTestCase
      */
     public function testIsPriceAlarm_true()
     {
-        $oArticle = new oxStdClass();
+        $oArticle = new oxArticle();
         $oArticle->oxarticles__oxblfixedprice = new oxField(0, oxField::T_RAW);
 
         $oView = $this->getMock( 'details', array( 'getProduct' ) );
@@ -1057,19 +1059,42 @@ class Unit_Views_detailsTest extends OxidTestCase
     }
 
     /**
-     * Test meta meta desctionio generation..
+     * Test meta meta desctionio generation
      *
      * @return null
      */
-    public function testMetaDescription()
+    public function testMetaDescriptionWithLongDesc()
     {
         $oProduct = oxNew("oxarticle");
         $oProduct->load("1849");
 
         $oDetails = $this->getMock( 'details', array( 'getProduct' ) );
         $oDetails->expects( $this->once() )->method( 'getProduct')->will( $this->returnValue( $oProduct ) );
+        $sMeta = $oProduct->oxarticles__oxtitle->value.' - '.$oProduct->getLongDescription();
 
-        $sMeta = $oProduct->oxarticles__oxtitle->value.' - '.$oProduct->oxarticles__oxlongdesc->value;
+        $oView = new oxubase();
+        $this->assertEquals( $oView->UNITprepareMetaDescription( $sMeta, 200, false ), $oDetails->UNITprepareMetaDescription( null ) );
+    }
+
+    /**
+     * Test meta meta desctionio generation when short desc is empty (should use long desc).
+     *
+     * @return null
+     */
+    public function testMetaDescriptionWithLongDescWithSmartyParsing()
+    {
+        modConfig::getInstance()->setConfigParam( 'bl_perfParseLongDescinSmarty', true );
+
+        $oProduct = $this->getMock('oxarticle', array('getLongDesc', 'getLongDescription'));
+        $oProduct->expects( $this->once() )->method( 'getLongDesc')->will( $this->returnValue( 'parsed description' ) );
+        $oProduct->expects( $this->never() )->method( 'getLongDescription')->will( $this->returnValue( 'not parsed description' ) );
+        $oProduct->oxarticles__oxshortdesc =  new oxField( 'Short description', oxField::T_RAW);
+        $oProduct->oxarticles__oxtitle =  new oxField( 'Title', oxField::T_RAW);
+
+        $oDetails = $this->getMock( 'details', array( 'getProduct' ) );
+        $oDetails->expects( $this->once() )->method( 'getProduct')->will( $this->returnValue( $oProduct ) );
+
+        $sMeta = 'Title - parsed description';
 
         $oView = new oxubase();
         $this->assertEquals( $oView->UNITprepareMetaDescription( $sMeta, 200, false ), $oDetails->UNITprepareMetaDescription( null ) );
@@ -1123,11 +1148,9 @@ class Unit_Views_detailsTest extends OxidTestCase
     {
         $this->_oProduct->oxarticles__oxtitle->value . ( $this->_oProduct->oxarticles__oxvarselect->value ? ' ' . $this->_oProduct->oxarticles__oxvarselect->value : '' );
 
-        $oProduct = new oxarticle();
-        $oProduct->oxarticles__oxtitle = new oxstdClass();
-        $oProduct->oxarticles__oxtitle->value = 'product title';
-        $oProduct->oxarticles__oxvarselect = new oxstdClass();
-        $oProduct->oxarticles__oxvarselect->value = 'and varselect';
+        $oProduct = new oxArticle();
+        $oProduct->oxarticles__oxtitle = new oxField( 'product title' );
+        $oProduct->oxarticles__oxvarselect = new oxField( 'and varselect' );
 
         $oDetails = $this->getMock( 'details', array( 'getProduct' ) );
         $oDetails->expects( $this->once() )->method( 'getProduct')->will( $this->returnValue( $oProduct ) );
@@ -1166,15 +1189,16 @@ class Unit_Views_detailsTest extends OxidTestCase
      */
     public function testSaveReview()
     {
-        modConfig::setParameter( 'rvw_txt', 'review test' );
-        modConfig::setParameter( 'artrating', '4' );
-        modConfig::setParameter( 'anid', 'test' );
-        modSession::getInstance()->setVar( 'usr', 'oxdefaultadmin' );
-        $oProduct = $this->getMock( 'oxarticle', array( 'getId', 'addToRatingAverage' ) );
+        $this->setRequestParam( 'rvw_txt', 'review test' );
+        $this->setRequestParam( 'artrating', '4' );
+        $this->setRequestParam( 'anid', 'test' );
+        $this->setSessionParam( 'usr', 'oxdefaultadmin' );
+
+        $oProduct = $this->getMock( 'oxArticle', array( 'getId', 'addToRatingAverage' ) );
         $oProduct->expects( $this->any() )->method( 'getId')->will( $this->returnValue( 'test' ) );
         $oProduct->expects( $this->any() )->method( 'addToRatingAverage');
 
-        $oDetails = $this->getMock( 'details', array( 'getProduct', 'canAcceptFormData' ) );
+        $oDetails = $this->getMock( 'Details', array( 'getProduct', 'canAcceptFormData' ) );
         $oDetails->expects( $this->any() )->method( 'getProduct')->will( $this->returnValue( $oProduct ) );
         $oDetails->expects( $this->any() )->method( 'canAcceptFormData')->will( $this->returnValue( true ) );
         $oDetails->saveReview();
@@ -1190,16 +1214,16 @@ class Unit_Views_detailsTest extends OxidTestCase
      */
     public function testSaveReviewIfUserNotSet()
     {
-        modConfig::setParameter( 'rvw_txt', 'review test' );
-        modConfig::setParameter( 'artrating', '4' );
-        modConfig::setParameter( 'anid', 'test' );
-        modSession::getInstance()->setVar( 'usr', null );
-        $oProduct = $this->getMock( 'oxarticle', array( 'getId', 'addToRatingAverage' ) );
+        $this->setRequestParam( 'rvw_txt', 'review test' );
+        $this->setRequestParam( 'artrating', '4' );
+        $this->setRequestParam( 'anid', 'test' );
+        $this->setSessionParam( 'usr', null );
+        $oProduct = $this->getMock( 'oxArticle', array( 'getId', 'addToRatingAverage' ) );
         $oProduct->expects( $this->any() )->method( 'getId')->will( $this->returnValue( 'test' ) );
         $oProduct->expects( $this->any() )->method( 'addToRatingAverage');
 
         $oDetails = $this->getProxyClass( 'details' );
-        $oDetails = $this->getMock( 'details', array( 'getProduct' ) );
+        $oDetails = $this->getMock( 'Details', array( 'getProduct' ) );
         $oDetails->expects( $this->any() )->method( 'getProduct')->will( $this->returnValue( $oProduct ) );
         $oDetails->saveReview();
 
@@ -1214,9 +1238,9 @@ class Unit_Views_detailsTest extends OxidTestCase
      */
     public function testSaveReviewIfOnlyReviewIsSet()
     {
-        modConfig::setParameter( 'rvw_txt', 'review test' );
-        modConfig::setParameter( 'artrating', null );
-        modConfig::setParameter( 'anid', 'test' );
+        $this->setRequestParam( 'rvw_txt', 'review test' );
+        $this->setRequestParam( 'artrating', null );
+        $this->setRequestParam( 'anid', 'test' );
 
         $oProduct = $this->getMock( 'oxarticle', array( 'getId', 'addToRatingAverage' ) );
         $oProduct->expects( $this->any() )->method( 'getId')->will( $this->returnValue( 'test' ) );
@@ -1243,9 +1267,9 @@ class Unit_Views_detailsTest extends OxidTestCase
      */
     public function testSaveReviewIfWrongRating()
     {
-        modConfig::setParameter( 'rvw_txt', 'review test' );
-        modConfig::setParameter( 'artrating', 6 );
-        modConfig::setParameter( 'anid', 'test' );
+        $this->setRequestParam( 'rvw_txt', 'review test' );
+        $this->setRequestParam( 'artrating', 6 );
+        $this->setRequestParam( 'anid', 'test' );
 
         $oProduct = $this->getMock( 'oxarticle', array( 'getId', 'addToRatingAverage' ) );
         $oProduct->expects( $this->any() )->method( 'getId')->will( $this->returnValue( 'test' ) );
@@ -1272,10 +1296,10 @@ class Unit_Views_detailsTest extends OxidTestCase
      */
     public function testSaveReviewIfOnlyRatingIsSet()
     {
-        modConfig::setParameter( 'rvw_txt', null );
-        modConfig::setParameter( 'artrating', 3 );
-        modConfig::setParameter( 'anid', 'test' );
-        modSession::getInstance()->setVar( 'usr', 'oxdefaultadmin' );
+        $this->setRequestParam( 'rvw_txt', null );
+        $this->setRequestParam( 'artrating', 3 );
+        $this->setRequestParam( 'anid', 'test' );
+        $this->setSessionParam( 'usr', 'oxdefaultadmin' );
         $oProduct = $this->getMock( 'oxarticle', array( 'getId', 'addToRatingAverage' ) );
         $oProduct->expects( $this->any() )->method( 'getId')->will( $this->returnValue( 'test' ) );
         $oProduct->expects( $this->any() )->method( 'addToRatingAverage');
@@ -1296,7 +1320,7 @@ class Unit_Views_detailsTest extends OxidTestCase
      */
     public function testIsMdVariantView()
     {
-        modConfig::getInstance()->setConfigParam( 'blUseMultidimensionVariants', true );
+        $this->setConfigParam( 'blUseMultidimensionVariants', true );
         $oMdVariant = $this->getMock( 'oxMdVariant', array( 'getMaxDepth' ) );
         $oMdVariant->expects( $this->any() )->method( 'getMaxDepth')->will( $this->returnValue( 2 ) );
         $oProduct = $this->getMock( 'oxarticle', array( 'getMdVariants' ) );
@@ -1314,7 +1338,7 @@ class Unit_Views_detailsTest extends OxidTestCase
      */
     public function testIsMdVariantViewNotActive()
     {
-        modConfig::getInstance()->setConfigParam( 'blUseMultidimensionVariants', false );
+        $this->setConfigParam( 'blUseMultidimensionVariants', false );
         $oDetails = $this->getProxyClass( 'details' );
         $this->assertFalse( $oDetails->isMdVariantView() );
     }
@@ -1354,23 +1378,6 @@ class Unit_Views_detailsTest extends OxidTestCase
      *
      * @return null
      */
-    public function testgetSimilarRecommListsIfOff()
-    {
-        $oCfg = $this->getMock( "stdClass", array( "getShowListmania" ) );
-        $oCfg->expects( $this->once() )->method( 'getShowListmania')->will($this->returnValue( false ) );
-
-        $oRecomm = $this->getMock( "details", array( "getViewConfig", 'getArticleList' ) );
-        $oRecomm->expects( $this->once() )->method( 'getViewConfig')->will($this->returnValue( $oCfg ) );
-        $oRecomm->expects( $this->never() )->method( 'getArticleList');
-
-        $this->assertSame(false, $oRecomm->getSimilarRecommLists());
-    }
-
-    /**
-     * Test oxViewConfig::getShowListmania() affection
-     *
-     * @return null
-     */
     public function testAddToRecommIfOff()
     {
         $oCfg = $this->getMock( "stdClass", array( "getShowListmania" ) );
@@ -1380,7 +1387,7 @@ class Unit_Views_detailsTest extends OxidTestCase
         $oRecomm->expects( $this->once() )->method( 'getViewConfig')->will($this->returnValue( $oCfg ) );
         $oRecomm->expects( $this->never() )->method( 'getArticleList');
 
-        modConfig::setParameter( 'anid' , 'asd');
+        $this->setRequestParam( 'anid' , 'asd');
         oxTestModules::addFunction('oxrecommlist', 'load', '{throw new Exception("should not come here");}');
 
         $this->assertSame(null, $oRecomm->addToRecomm());
@@ -1396,13 +1403,13 @@ class Unit_Views_detailsTest extends OxidTestCase
         $oCfg = $this->getMock( "stdClass", array( "getShowListmania" ) );
         $oCfg->expects( $this->once() )->method( 'getShowListmania')->will($this->returnValue( true ) );
 
-        $oProduct = $this->getMock( 'oxStdClass', array( 'getId' ) );
+        $oProduct = $this->getMock( 'oxArticle', array( 'getId' ) );
         $oProduct->expects( $this->once() )->method( 'getId' )->will( $this->returnValue( 'test_artid' ) );
 
-        modConfig::setParameter( 'recomm', 'test_recomm' );
-        modConfig::setParameter( 'recomm_txt', 'test_recommtext' );
+        $this->setRequestParam( 'recomm', 'test_recomm' );
+        $this->setRequestParam( 'recomm_txt', 'test_recommtext' );
 
-        $oRecommList = $this->getMock( 'oxStdClass', array( 'load', 'addArticle' ) );
+        $oRecommList = $this->getMock( 'oxRecommList', array( 'load', 'addArticle' ) );
         $oRecommList->expects( $this->once() )->method( 'load' )->with( $this->equalTo('test_recomm') );
         $oRecommList->expects( $this->once() )->method( 'addArticle' )->with( $this->equalTo('test_artid'), $this->equalTo('test_recommtext') );
 
@@ -1425,16 +1432,16 @@ class Unit_Views_detailsTest extends OxidTestCase
 
         $oDetails = new Details();
 
-        modConfig::setParameter( 'listtype', 'search' );
+        $this->setRequestParam( 'listtype', 'search' );
         $this->assertTrue( count($oDetails->getBreadCrumb()) >= 1 );
 
-        modConfig::setParameter( 'listtype', 'tag' );
+        $this->setRequestParam( 'listtype', 'tag' );
         $this->assertTrue( count($oDetails->getBreadCrumb()) >= 1 );
 
-        modConfig::setParameter( 'listtype', 'recommlist' );
+        $this->setRequestParam( 'listtype', 'recommlist' );
         $this->assertTrue( count($oDetails->getBreadCrumb()) >= 1 );
 
-        modConfig::setParameter( 'listtype', 'aaa' );
+        $this->setRequestParam( 'listtype', 'aaa' );
 
         $oCat1 = $this->getMock( 'oxcategory', array( 'getLink' ));
         $oCat1->expects( $this->once() )->method( 'getLink')->will($this->returnValue( 'linkas1' ) );
@@ -1535,7 +1542,7 @@ class Unit_Views_detailsTest extends OxidTestCase
     public function testGetSearchParamForHtml()
     {
         $oDetails = $this->getProxyClass( 'details' );
-        modConfig::setParameter( 'searchparam', 'aaa' );
+        $this->setRequestParam( 'searchparam', 'aaa' );
 
         $this->assertEquals( 'aaa', $oDetails->getSearchParamForHtml() );
     }
@@ -1556,14 +1563,14 @@ class Unit_Views_detailsTest extends OxidTestCase
         $oBaseView = new oxUBase();
         $sBaseViewId = $oBaseView->getViewId();
 
-        modConfig::setParameter( 'anid', 'test_anid' );
-        modConfig::setParameter( 'cnid', 'test_cnid' );
-        modConfig::setParameter( 'listtype', 'search' );
-        modConfig::setParameter( 'searchparam', 'test_sparam' );
-        modConfig::setParameter( 'renderPartial', 'test_render' );
-        modConfig::setParameter( 'varselid', 'test_varselid' );
+        $this->setRequestParam( 'anid', 'test_anid' );
+        $this->setRequestParam( 'cnid', 'test_cnid' );
+        $this->setRequestParam( 'listtype', 'search' );
+        $this->setRequestParam( 'searchparam', 'test_sparam' );
+        $this->setRequestParam( 'renderPartial', 'test_render' );
+        $this->setRequestParam( 'varselid', 'test_varselid' );
         $aFilters = array( 'test_cnid' => array( 0 => 'test_filters' ) );
-        modSession::getInstance()->setVar( 'session_attrfilter', $aFilters );
+        $this->setSessionParam( 'session_attrfilter', $aFilters );
 
             $sExpected = $sBaseViewId.'|test_anid|';
 
@@ -1592,18 +1599,17 @@ class Unit_Views_detailsTest extends OxidTestCase
 
     public function testCancelTags()
     {
-        $oTagCloud = $this->getMock( 'oxStdClass', array( 'getTags' ) );
+
+        $this->setRequestParam( 'blAjax', false );
+        $oTagCloud = $this->getMock( 'oxTagCloud', array( 'getTags' ) );
         $oTagCloud->expects( $this->once() )->method( 'getTags' )->with( $this->equalTo( 'test_artid' ) )->will( $this->returnValue( 'test_tags' ) );
         oxTestModules::addModuleObject('oxTagCloud', $oTagCloud);
 
-        $oProduct = $this->getMock( 'oxStdClass', array( 'getId' ) );
+        $oProduct = $this->getMock( 'oxArticle', array( 'getId' ) );
         $oProduct->expects( $this->once() )->method( 'getId' )->will( $this->returnValue( 'test_artid' ) );
 
-        $oConfig = $this->getMock( 'oxStdClass', array( 'getParameter' ) );
-        $oConfig->expects( $this->once() )->method( 'getParameter' )->with( $this->equalTo( 'blAjax' ) )->will( $this->returnValue( false ) );
 
-        $oView = $this->getMock( $this->getProxyClassName( 'Details' ), array( 'getConfig', 'getProduct' ) );
-        $oView->expects( $this->once() )->method( 'getConfig' )->will( $this->returnValue( $oConfig ) );
+        $oView = $this->getMock( $this->getProxyClassName( 'Details' ), array( 'getProduct' ) );
         $oView->expects( $this->once() )->method( 'getProduct' )->will( $this->returnValue( $oProduct ) );
         $oView->cancelTags();
 
@@ -1613,35 +1619,28 @@ class Unit_Views_detailsTest extends OxidTestCase
 
     public function testCancelTags_ajaxcall()
     {
-        $oTagCloud = $this->getMock( 'oxStdClass', array( 'getTags' ) );
+        $this->setRequestParam( 'blAjax', true );
+        $oTagCloud = $this->getMock( 'oxTagCloud', array( 'getTags' ) );
         $oTagCloud->expects( $this->once() )->method( 'getTags' )->with( $this->equalTo( 'test_artid' ) )->will( $this->returnValue( 'test_tags' ) );
         oxTestModules::addModuleObject('oxTagCloud', $oTagCloud);
 
-        $oProduct = $this->getMock( 'oxStdClass', array( 'getId' ) );
+        $oProduct = $this->getMock( 'oxArticle', array( 'getId' ) );
         $oProduct->expects( $this->once() )->method( 'getId' )->will( $this->returnValue( 'test_artid' ) );
 
-        $oConfig = $this->getMock( 'oxStdClass', array( 'getParameter' ) );
-        $oConfig->expects( $this->once() )->method( 'getParameter' )->with( $this->equalTo( 'blAjax' ) )->will( $this->returnValue( true ) );
-
-        $oUtils = $this->getMock( 'oxStdClass', array( 'setHeader', 'showMessageAndExit' ) );
+        $oUtils = $this->getMock( 'oxUtils', array( 'setHeader', 'showMessageAndExit' ) );
         $oUtils->expects( $this->once() )->method( 'setHeader' );
         $oUtils->expects( $this->once() )->method( 'showMessageAndExit' );
         oxTestModules::addModuleObject( 'oxUtils', $oUtils );
 
-        $oLang = $this->getMock( 'oxStdClass', array( 'translateString' ) );
-        $oLang->expects( $this->once() )->method( 'translateString' );
-        oxTestModules::addModuleObject( 'oxLang', $oLang );
-
-        $oSmarty = $this->getMock( 'oxStdClass', array( 'assign', 'fetch' ) );
+        $oSmarty = $this->getMock( 'smarty', array( 'assign', 'fetch' ) );
         $oSmarty->expects( $this->atLeastOnce() )->method( 'assign' );
         $oSmarty->expects( $this->once() )->method( 'fetch' )->with( $this->equalTo( 'page/details/inc/tags.tpl' ), $this->equalTo( 'test_viewId' ) );
 
-        $oUtilsView = $this->getMock( 'oxStdClass', array( 'getSmarty' ) );
+        $oUtilsView = $this->getMock( 'oxUtilsView', array( 'getSmarty' ) );
         $oUtilsView->expects( $this->once() )->method( 'getSmarty' )->will( $this->returnValue( $oSmarty ) );
         oxTestModules::addModuleObject( 'oxUtilsView', $oUtilsView );
 
-        $oView = $this->getMock( $this->getProxyClassName( 'Details' ), array( 'getConfig', 'getProduct', 'getViewConfig', 'getViewId' ) );
-        $oView->expects( $this->once() )->method( 'getConfig' )->will( $this->returnValue( $oConfig ) );
+        $oView = $this->getMock( $this->getProxyClassName( 'Details' ), array( 'getProduct', 'getViewConfig', 'getViewId' ) );
         $oView->expects( $this->once() )->method( 'getProduct' )->will( $this->returnValue( $oProduct ) );
         $oView->expects( $this->once() )->method( 'getViewConfig' );
         $oView->expects( $this->once() )->method( 'getViewId' )->will( $this->returnValue( 'test_viewId' ) );
@@ -1664,35 +1663,28 @@ class Unit_Views_detailsTest extends OxidTestCase
 
     public function testEditTags_ajaxcall()
     {
-        $oTagCloud = $this->getMock( 'oxStdClass', array( 'getTags' ) );
+        $this->setRequestParam( 'blAjax', true );
+        $oTagCloud = $this->getMock( 'oxTagCloud', array( 'getTags' ) );
         $oTagCloud->expects( $this->once() )->method( 'getTags' )->with( $this->equalTo( 'test_artid' ) )->will( $this->returnValue( 'test_tags' ) );
         oxTestModules::addModuleObject('oxTagCloud', $oTagCloud);
 
-        $oProduct = $this->getMock( 'oxStdClass', array( 'getId' ) );
+        $oProduct = $this->getMock( 'oxArticle', array( 'getId' ) );
         $oProduct->expects( $this->once() )->method( 'getId' )->will( $this->returnValue( 'test_artid' ) );
 
-        $oConfig = $this->getMock( 'oxStdClass', array( 'getParameter' ) );
-        $oConfig->expects( $this->once() )->method( 'getParameter' )->with( $this->equalTo( 'blAjax' ) )->will( $this->returnValue( true ) );
-
-        $oUtils = $this->getMock( 'oxStdClass', array( 'setHeader', 'showMessageAndExit' ) );
+        $oUtils = $this->getMock( 'oxUtils', array( 'setHeader', 'showMessageAndExit' ) );
         $oUtils->expects( $this->once() )->method( 'setHeader' );
         $oUtils->expects( $this->once() )->method( 'showMessageAndExit' );
         oxTestModules::addModuleObject( 'oxUtils', $oUtils );
 
-        $oLang = $this->getMock( 'oxStdClass', array( 'translateString' ) );
-        $oLang->expects( $this->once() )->method( 'translateString' );
-        oxTestModules::addModuleObject( 'oxLang', $oLang );
-
-        $oSmarty = $this->getMock( 'oxStdClass', array( 'assign', 'fetch' ) );
+        $oSmarty = $this->getMock( 'Smarty', array( 'assign', 'fetch' ) );
         $oSmarty->expects( $this->atLeastOnce() )->method( 'assign' );
         $oSmarty->expects( $this->once() )->method( 'fetch' )->with( $this->equalTo( 'page/details/inc/editTags.tpl' ), $this->equalTo( 'test_viewId' ) );
 
-        $oUtilsView = $this->getMock( 'oxStdClass', array( 'getSmarty' ) );
+        $oUtilsView = $this->getMock( 'oxUtilsView', array( 'getSmarty' ) );
         $oUtilsView->expects( $this->once() )->method( 'getSmarty' )->will( $this->returnValue( $oSmarty ) );
         oxTestModules::addModuleObject( 'oxUtilsView', $oUtilsView );
 
-        $oView = $this->getMock( $this->getProxyClassName( 'Details' ), array( 'getConfig', 'getProduct', 'getViewConfig', 'getViewId', 'getUser' ) );
-        $oView->expects( $this->once() )->method( 'getConfig' )->will( $this->returnValue( $oConfig ) );
+        $oView = $this->getMock( $this->getProxyClassName( 'Details' ), array( 'getProduct', 'getViewConfig', 'getViewId', 'getUser' ) );
         $oView->expects( $this->once() )->method( 'getProduct' )->will( $this->returnValue( $oProduct ) );
         $oView->expects( $this->once() )->method( 'getViewConfig' );
         $oView->expects( $this->once() )->method( 'getViewId' )->will( $this->returnValue( 'test_viewId' ) );
@@ -1716,7 +1708,7 @@ class Unit_Views_detailsTest extends OxidTestCase
 
     public function testGetTagSeparator()
     {
-        $oConfig = $this->getMock( 'oxStdClass', array( 'getConfigParam' ) );
+        $oConfig = $this->getMock( 'oxConfig', array( 'getConfigParam' ) );
         $oConfig->expects( $this->once() )->method( 'getConfigParam' )->with( $this->equalTo( 'sTagSeparator' ) )->will( $this->returnValue( 'test_separator' ) );
 
         $oView = $this->getMock( 'Details', array( 'getConfig' ) );
@@ -1727,10 +1719,10 @@ class Unit_Views_detailsTest extends OxidTestCase
 
     public function testGetRatingValue_active()
     {
-        $oConfig = $this->getMock( 'oxStdClass', array( 'getConfigParam' ) );
+        $oConfig = $this->getMock( 'oxConfig', array( 'getConfigParam' ) );
         $oConfig->expects( $this->once() )->method( 'getConfigParam' )->with( $this->equalTo( 'blShowVariantReviews' ) )->will( $this->returnValue( true ) );
 
-        $oProduct = $this->getMock( 'oxStdClass', array( 'getArticleRatingAverage' ) );
+        $oProduct = $this->getMock( 'oxArticle', array( 'getArticleRatingAverage' ) );
         $oProduct->expects( $this->once() )->method( 'getArticleRatingAverage' )->will( $this->returnValue( 123.855 ) );
 
         $oView = $this->getMock( $this->getProxyClassName( 'Details' ), array( 'getConfig', 'isReviewActive', 'getProduct' ) );
@@ -1755,7 +1747,7 @@ class Unit_Views_detailsTest extends OxidTestCase
 
     public function testIsReviewActive()
     {
-        $oConfig = $this->getMock( 'oxStdClass', array( 'getConfigParam' ) );
+        $oConfig = $this->getMock( 'oxConfig', array( 'getConfigParam' ) );
         $oConfig->expects( $this->once() )->method( 'getConfigParam' )->with( $this->equalTo( 'bl_perfLoadReviews' ) )->will( $this->returnValue( 'test_isactive' ) );
 
         $oView = $this->getMock( 'Details', array( 'getConfig' ) );
@@ -1766,10 +1758,10 @@ class Unit_Views_detailsTest extends OxidTestCase
 
      public function testGetRatingCount_active()
     {
-        $oConfig = $this->getMock( 'oxStdClass', array( 'getConfigParam' ) );
+        $oConfig = $this->getMock( 'oxConfig', array( 'getConfigParam' ) );
         $oConfig->expects( $this->once() )->method( 'getConfigParam' )->with( $this->equalTo( 'blShowVariantReviews' ) )->will( $this->returnValue( true ) );
 
-        $oProduct = $this->getMock( 'oxStdClass', array( 'getArticleRatingCount' ) );
+        $oProduct = $this->getMock( 'oxArticle', array( 'getArticleRatingCount' ) );
         $oProduct->expects( $this->once() )->method( 'getArticleRatingCount' )->will( $this->returnValue( 123 ) );
 
         $oView = $this->getMock( $this->getProxyClassName( 'Details' ), array( 'getConfig', 'isReviewActive', 'getProduct' ) );
@@ -1794,10 +1786,10 @@ class Unit_Views_detailsTest extends OxidTestCase
 
     public function testAddme_invalidCaptcha()
     {
-        $oCaptcha = $this->getMock( 'oxStdClass', array( 'pass' ) );
+        $oCaptcha = $this->getMock( 'oxCapche', array( 'pass' ) );
         $oCaptcha->expects( $this->once() )->method( 'pass' )->will( $this->returnValue( false ) );
 
-        $oEmail = $this->getMock( 'oxStdClass', array( 'sendPricealarmNotification' ) );
+        $oEmail = $this->getMock( 'oxEmail', array( 'sendPricealarmNotification' ) );
         $oEmail->expects( $this->never() )->method( 'sendPricealarmNotification' );
         oxTestModules::addModuleObject( 'oxEmail', $oEmail );
 
@@ -1810,18 +1802,14 @@ class Unit_Views_detailsTest extends OxidTestCase
 
     public function testAddme_invalidEmail()
     {
-        $oCaptcha = $this->getMock( 'oxStdClass', array( 'pass' ) );
+        $oCaptcha = $this->getMock( 'oxCapche', array( 'pass' ) );
         $oCaptcha->expects( $this->once() )->method( 'pass' )->will( $this->returnValue( true ) );
 
-        $oEmail = $this->getMock( 'oxStdClass', array( 'sendPricealarmNotification' ) );
+        $oEmail = $this->getMock( 'oxEmail', array( 'sendPricealarmNotification' ) );
         $oEmail->expects( $this->never() )->method( 'sendPricealarmNotification' );
         oxTestModules::addModuleObject( 'oxEmail', $oEmail );
 
-        $oUtils = $this->getMock( 'oxStdClass', array( 'isValidEmail' ) );
-        $oUtils->expects( $this->once() )->method( 'isValidEmail' )->will( $this->returnValue( false ) );
-        oxTestModules::addModuleObject( 'oxUtils', $oUtils );
-
-        $oPriceAlarm = $this->getMock( 'oxStdClass', array( 'save' ) );
+        $oPriceAlarm = $this->getMock( 'oxpricealarm', array( 'save' ) );
         $oPriceAlarm->expects( $this->never() )->method( 'save' );
         oxTestModules::addModuleObject( 'oxpricealarm', $oPriceAlarm );
 
@@ -1831,29 +1819,25 @@ class Unit_Views_detailsTest extends OxidTestCase
         $aParams = array();
         $aParams['email'] = 'test_email';
 
-        modConfig::setParameter( 'pa', $aParams );
+        $this->setRequestParam( 'pa', $aParams );
         $oView->addme();
         $this->assertSame( 0, $oView->getNonPublicVar( '_iPriceAlarmStatus' ) );
     }
 
     public function testAddme_mailsent()
     {
-        $oCaptcha = $this->getMock( 'oxStdClass', array( 'pass' ) );
+        $oCaptcha = $this->getMock( 'oxCapcha', array( 'pass' ) );
         $oCaptcha->expects( $this->once() )->method( 'pass' )->will( $this->returnValue( true ) );
 
-        $oEmail = $this->getMock( 'oxStdClass', array( 'sendPricealarmNotification' ) );
+        $oEmail = $this->getMock( 'oxEmail', array( 'sendPricealarmNotification' ) );
         $oEmail->expects( $this->once() )->method( 'sendPricealarmNotification' )->will( $this->returnValue( 123 ) );
         oxTestModules::addModuleObject( 'oxEmail', $oEmail );
 
-        $oUtils = $this->getMock( 'oxUtils', array( 'isValidEmail' ) );
-        $oUtils->expects( $this->once() )->method( 'isValidEmail' )->will( $this->returnValue( true ) );
-        oxTestModules::addModuleObject( 'oxUtils', $oUtils );
-
-        $oPriceAlarm = $this->getMock( 'oxStdClass', array( 'save' ) );
+        $oPriceAlarm = $this->getMock( 'oxPriceAlarm', array( 'save' ) );
         $oPriceAlarm->expects( $this->once() )->method( 'save' );
         oxTestModules::addModuleObject( 'oxpricealarm', $oPriceAlarm );
 
-        $oProduct = $this->getMock( 'oxStdClass', array( 'getId' ) );
+        $oProduct = $this->getMock( 'oxArticle', array( 'getId' ) );
         $oProduct->expects( $this->once() )->method( 'getId' )->will( $this->returnValue( 'test_artid' ) );
 
         $oView = $this->getMock( $this->getProxyClassName( 'Details' ), array( 'getCaptcha', 'getProduct' ) );
@@ -1861,8 +1845,8 @@ class Unit_Views_detailsTest extends OxidTestCase
         $oView->expects( $this->once() )->method( 'getProduct' )->will( $this->returnValue( $oProduct ) );
 
         $aParams = array();
-        $aParams['email'] = 'test_email';
-        modConfig::setParameter( 'pa', $aParams );
+        $aParams['email'] = 'test_email@eshop.com';
+        $this->setRequestParam( 'pa', $aParams );
 
         $oView->addme();
         $this->assertSame( 123, $oView->getNonPublicVar( '_iPriceAlarmStatus' ) );
@@ -1880,7 +1864,7 @@ class Unit_Views_detailsTest extends OxidTestCase
     {
         $aParams = array();
         $aParams['price'] = '123.45';
-        modConfig::setParameter( 'pa', $aParams );
+        $this->setRequestParam( 'pa', $aParams );
 
         $oView = $this->getProxyClass( 'Details' );
 
@@ -1888,15 +1872,9 @@ class Unit_Views_detailsTest extends OxidTestCase
         $this->assertSame( '123,45', $oView->getNonPublicVar( '_sBidPrice' ) );
     }
 
-    public function testIsMoreTagsVisible()
-    {
-        $oView = new Details();
-        $this->assertTrue( $oView->isMoreTagsVisible() );
-    }
-
     public function testRender_customArtTpl()
     {
-        $oProduct = new oxStdClass();
+        $oProduct = new oxArticle();
         $oProduct->oxarticles__oxtemplate = new oxField( 'test_template.tpl' );
 
         $oView = $this->getMock( $this->getProxyClassName( 'Details' ), array( 'getProduct' ) );
@@ -1908,9 +1886,9 @@ class Unit_Views_detailsTest extends OxidTestCase
 
     public function testRender_customParamTpl()
     {
-        $oProduct = new oxStdClass();
+        $oProduct = new oxArticle();
         $oProduct->oxarticles__oxtemplate = new oxField( 'test_template.tpl' );
-        modConfig::setParameter( 'tpl', '../some/path/test_paramtpl.tpl' );
+        $this->setRequestParam( 'tpl', '../some/path/test_paramtpl.tpl' );
 
         $oView = $this->getMock( $this->getProxyClassName( 'Details' ), array( 'getProduct' ) );
         $oView->expects( $this->once() )->method( 'getProduct' )->will( $this->returnValue( $oProduct ) );
@@ -1922,10 +1900,10 @@ class Unit_Views_detailsTest extends OxidTestCase
 
     public function testRender_partial_productinfo()
     {
-        $oProduct = new oxStdClass();
+        $oProduct = new oxArticle();
         $oProduct->oxarticles__oxtemplate = new oxField( 'test_template.tpl' );
-        modConfig::setParameter( 'tpl', '../some/path/test_paramtpl.tpl' );
-        modConfig::setParameter( 'renderPartial', 'productInfo' );
+        $this->setRequestParam( 'tpl', '../some/path/test_paramtpl.tpl' );
+        $this->setRequestParam( 'renderPartial', 'productInfo' );
 
         $oView = $this->getMock( $this->getProxyClassName( 'Details' ), array( 'getProduct' ) );
         $oView->expects( $this->once() )->method( 'getProduct' )->will( $this->returnValue( $oProduct ) );
@@ -1935,14 +1913,187 @@ class Unit_Views_detailsTest extends OxidTestCase
 
     public function testRender_partial_detailsMain()
     {
-        $oProduct = new oxStdClass();
+        $oProduct = new oxArticle();
         $oProduct->oxarticles__oxtemplate = new oxField( 'test_template.tpl' );
-        modConfig::setParameter( 'tpl', '../some/path/test_paramtpl.tpl' );
-        modConfig::setParameter( 'renderPartial', 'detailsMain' );
+        $this->setRequestParam( 'tpl', '../some/path/test_paramtpl.tpl' );
+        $this->setRequestParam( 'renderPartial', 'detailsMain' );
 
         $oView = $this->getMock( $this->getProxyClassName( 'Details' ), array( 'getProduct' ) );
         $oView->expects( $this->once() )->method( 'getProduct' )->will( $this->returnValue( $oProduct ) );
 
         $this->assertSame( 'page/details/ajax/productmain.tpl', $oView->render() );
     }
+
+    /**
+     * Test if ratings are activated.
+     *
+     * @return null
+     */
+    public function testRatingIsActive()
+    {
+        $this->setConfigParam( 'bl_perfLoadReviews', true );
+        $oDetails = $this->getProxyClass( 'details' );
+        $this->assertTrue( $oDetails->ratingIsActive() );
+    }
+
+    public function testCanRate()
+    {
+        $oArt = new oxarticle();
+        $oArt->load('2000');
+
+        $oUser = new oxUser();
+        $oUser->load( 'oxdefaultadmin' );
+
+        $this->setConfigParam( 'bl_perfLoadReviews', true );
+
+        $oDetails = $this->getMock( 'details', array( 'getProduct', 'getUser' ) );
+        $oDetails->expects( $this->any() )->method( 'getProduct')->will( $this->returnValue( $oArt ) );
+        $oDetails->expects( $this->any() )->method( 'getUser')->will( $this->returnValue( $oUser ) );
+
+        $this->assertTrue( $oDetails->canRate() );
+    }
+
+    /**
+     * Testing Rdfa
+     *
+     * @return null
+     */
+    public function testShowRdfa()
+    {
+        $this->setConfigParam( 'blRDFaEmbedding', true );
+        $oDetails = new details();
+        $this->assertTrue( $oDetails->showRdfa() );
+    }
+
+    public function testGetRDFaNormalizedRatingNoRatings()
+    {
+        $this->setConfigParam( 'iRDFaMinRating', 1 );
+        $this->setConfigParam( 'iRDFaMaxRating', 5 );
+        $oArt = new oxarticle();
+        $oArt->load('2000');
+        $oArt->oxarticles__oxratingcnt = new oxField(0);
+
+        $oDetails = $this->getMock( 'details', array( 'getProduct' ) );
+        $oDetails->expects( $this->any() )->method( 'getProduct')->will( $this->returnValue( $oArt ) );
+
+        $this->assertFalse($oDetails->getRDFaNormalizedRating());
+    }
+
+    public function testGetRDFaNormalizedRating()
+    {
+        $this->setConfigParam( 'iRDFaMinRating', 1 );
+        $this->setConfigParam( 'iRDFaMaxRating', 5 );
+        $oArt = new oxarticle();
+        $oArt->load('2000');
+        $oArt->oxarticles__oxratingcnt = new oxField('5');
+        $oArt->oxarticles__oxrating = new oxField('10');
+
+        $oDetails = $this->getMock( 'details', array( 'getProduct' ) );
+        $oDetails->expects( $this->any() )->method( 'getProduct')->will( $this->returnValue( $oArt ) );
+
+        $aNomalizedRating = $oDetails->getRDFaNormalizedRating();
+        $this->assertEquals( 5, $aNomalizedRating["count"] );
+        $this->assertEquals( 10, $aNomalizedRating["value"] );
+    }
+
+    public function testGetRDFaValidityPeriod()
+    {
+        $this->setConfigParam( 'iRDFaOfferingValidity', 30 );
+        $oDetails = new details();
+
+        $aValidity = $oDetails->getRDFaValidityPeriod('iRDFaOfferingValidity');
+        $this->assertNotNull( $aValidity["from"] );
+        $this->assertNotNull( $aValidity["through"] );
+    }
+
+    public function testGetRDFaValidityPeriodNotGiven()
+    {
+        $oDetails = new details();
+        $this->assertFalse( $oDetails->getRDFaValidityPeriod( null ) );
+    }
+
+    public function testGetRDFaBusinessFnc()
+    {
+        $this->setConfigParam( 'sRDFaBusinessFnc', "B2B" );
+        $oDetails = new details();
+        $this->assertEquals( 'B2B', $oDetails->getRDFaBusinessFnc() );
+    }
+
+    public function testGetRDFaCustomers()
+    {
+        $this->setConfigParam( 'aRDFaCustomers', "new" );
+        $oDetails = new details();
+        $this->assertEquals( 'new', $oDetails->getRDFaCustomers() );
+    }
+
+    public function testGetRDFaVAT()
+    {
+        $this->setConfigParam( 'iRDFaVAT', "21" );
+        $oDetails = new details();
+        $this->assertEquals( '21', $oDetails->getRDFaVAT() );
+    }
+
+    public function testgetRDFaGenericCondition()
+    {
+        $this->setConfigParam( 'iRDFaCondition', true );
+        $oDetails = new details();
+        $this->assertTrue( $oDetails->getRDFaGenericCondition() );
+    }
+
+    public function testGetRDFaPaymentMethods()
+    {
+        $oArt = new oxarticle();
+        $oArt->load('2000');
+
+        $oDetails = $this->getMock( 'details', array( 'getProduct' ) );
+        $oDetails->expects( $this->any() )->method( 'getProduct')->will( $this->returnValue( $oArt ) );
+
+        $this->assertTrue( $oDetails->getRDFaPaymentMethods() instanceof oxpaymentlist );
+    }
+
+    public function testGetRDFaDeliverySetMethods()
+    {
+        $oDetails = new details();
+        $this->assertTrue( $oDetails->getRDFaDeliverySetMethods() instanceof oxdeliverysetlist );
+    }
+
+    public function testGetProductsDeliveryList()
+    {
+        $oArt = new oxarticle();
+        $oArt->load('2000');
+
+        $oDetails = $this->getMock( 'details', array( 'getProduct' ) );
+        $oDetails->expects( $this->any() )->method( 'getProduct')->will( $this->returnValue( $oArt ) );
+
+        $this->assertTrue( $oDetails->getProductsDeliveryList() instanceof oxDeliveryList );
+    }
+
+    public function testGetRDFaDeliveryChargeSpecLoc()
+    {
+        $this->setConfigParam( 'sRDFaDeliveryChargeSpecLoc', "oxpayment" );
+        $oDetails = new details();
+        $this->assertEquals( 'oxpayment', $oDetails->getRDFaDeliveryChargeSpecLoc() );
+    }
+
+    public function testGetRDFaPaymentChargeSpecLoc()
+    {
+        $this->setConfigParam( 'sRDFaPaymentChargeSpecLoc', 'oxpayment' );
+        $oDetails = new details();
+        $this->assertEquals( 'oxpayment', $oDetails->getRDFaPaymentChargeSpecLoc() );
+    }
+
+    public function testGetRDFaBusinessEntityLoc()
+    {
+        $this->setConfigParam( 'sRDFaBusinessEntityLoc', 'oxagb' );
+        $oDetails = new details();
+        $this->assertEquals( 'oxagb', $oDetails->getRDFaBusinessEntityLoc() );
+    }
+
+    public function testShowRDFaProductStock()
+    {
+        $this->setConfigParam( 'blShowRDFaProductStock', true );
+        $oDetails = new details();
+        $this->assertTrue( $oDetails->showRDFaProductStock() );
+    }
+
 }

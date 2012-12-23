@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxaddressTest.php 32785 2011-01-28 08:07:32Z arvydas.vapsva $
+ * @version   SVN: $Id: oxaddressTest.php 53098 2012-12-18 14:42:11Z aurimas.gladutis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -107,6 +107,32 @@ class Unit_Core_oxAddressTest extends OxidTestCase
         $oSubj = $this->getMock("oxaddress", array("toString"));
         $oSubj->expects( $this->once() )->method( 'toString' )->will($this->returnValue( "teststr" ));
         (string) $oSubj;
+    }
+
+    /**
+     * Testing encoding of delivery address.
+     * Checks whether it generates different hashes for different data and
+     * eqal hashes for eqal data.
+     *
+     * @return null
+     */
+    public function testGetEncodedDeliveryAddress()
+    {
+        $oSubj = new oxAddress();
+        $oSubj->oxaddress__oxcompany   = new oxField('Company');
+        $oSubj->oxaddress__oxfname     = new oxField('First name');
+        $oSubj->oxaddress__oxlname     = new oxField('Last name');
+        $oSubj->oxaddress__oxstreet    = new oxField('Street');
+        $oSubj->oxaddress__oxstreetnr  = new oxField('Street number');
+        $sEncoded = $oSubj->getEncodedDeliveryAddress();
+
+        $oSubj->oxaddress__oxstreetnr  = new oxField('Street 41');
+
+        $this->assertNotEquals( $sEncoded, $oSubj->getEncodedDeliveryAddress() );
+
+        $oSubj->oxaddress__oxstreetnr  = new oxField('Street number');
+
+        $this->assertEquals( $sEncoded, $oSubj->getEncodedDeliveryAddress() );
     }
 
     /**

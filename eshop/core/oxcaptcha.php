@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcaptcha.php 43712 2012-04-11 06:51:26Z linas.kukulskis $
+ * @version   SVN: $Id: oxcaptcha.php 52492 2012-11-27 16:09:35Z aurimas.gladutis $
  */
 
 /**
@@ -88,9 +88,12 @@ class oxCaptcha extends oxSuperCfg
         $sTextHash = $this->getTextHash( $sText );
 
         // if session is started - storing captcha info here
-        if ( $this->getSession()->isSessionStarted() ) {
+        $session = $this->getSession();
+        if ( $session->isSessionStarted() ) {
             $sHash = oxUtilsObject::getInstance()->generateUID();
-            oxSession::setVar( "aCaptchaHash", array( $sHash => array( $sTextHash => $iTime ) ) );
+            $aHash = $session->getVariable( "aCaptchaHash" );
+            $aHash[$sHash] = array( $sTextHash => $iTime );
+            $session->setVariable( "aCaptchaHash", $aHash );
         } else {
             $oDb = oxDb::getDb();
             $sQ = "insert into oxcaptcha ( oxhash, oxtime ) values ( '{$sTextHash}', '{$iTime}' )";
@@ -125,7 +128,7 @@ class oxCaptcha extends oxSuperCfg
     public function getImageUrl()
     {
         $sUrl = $this->getConfig()->getCoreUtilsURL() . "verificationimg.php?e_mac=";
-        $sUrl .= oxUtils::getInstance()->strMan( $this->getText() );
+        $sUrl .= oxRegistry::getUtils()->strMan( $this->getText() );
 
         return $sUrl;
     }
@@ -152,9 +155,15 @@ class oxCaptcha extends oxSuperCfg
     protected function _passFromSession( $sMacHash, $sHash, $iTime )
     {
         $blPass = null;
-        if ( ( $aHash = oxSession::getVar( "aCaptchaHash" ) ) ) {
+        $oSession = $this->getSession();
+        if ( ( $aHash = $oSession->getVariable( "aCaptchaHash" ) ) ) {
             $blPass = ( isset( $aHash[$sMacHash][$sHash] ) && $aHash[$sMacHash][$sHash] >= $iTime ) ? true : false;
-            oxSession::deleteVar( "aCaptchaHash" );
+            unset( $aHash[$sMacHash] );
+            if ( !empty( $aHash ) ) {
+                $oSession->setVariable( "aCaptchaHash", $aHash );
+            } else {
+                $oSession->deleteVariable( "aCaptchaHash" );
+            }
         }
         return $blPass;
     }

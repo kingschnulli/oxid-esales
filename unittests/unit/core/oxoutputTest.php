@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxoutputTest.php 34114 2011-04-01 08:32:47Z sarunas $
+ * @version   SVN: $Id: oxoutputTest.php 47937 2012-07-30 11:32:27Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -182,7 +182,7 @@ class Unit_Core_oxoutputTest extends OxidTestCase
     public function testProcessEmail()
     {
         $oOutput = oxNew( 'oxOutput' );
-        $oEmail = new Oxstdclass();
+        $oEmail = new oxEmail();
         $oEmail->email = 1;
         $oEmail2 = clone $oEmail;
         $oOutput->processEmail( $oEmail );

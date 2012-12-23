@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: dynscreenTest.php 25334 2010-01-22 07:14:37Z alfonsas $
+ * @version   SVN: $Id: dynscreenTest.php 47944 2012-07-30 12:41:30Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -41,7 +41,7 @@ class Unit_Admin_DynscreenTest extends OxidTestCase
         modConfig::setParameter( "menu", $sNode );
         modConfig::setParameter( 'actedit', 1 );
 
-        $oNavigation = $this->getMock( "OxStdClass", array( "getListUrl", "getEditUrl", "getTabs", "getActiveTab", "getBtn" ) );
+        $oNavigation = $this->getMock( "oxnavigationtree", array( "getListUrl", "getEditUrl", "getTabs", "getActiveTab", "getBtn" ) );
         $oNavigation->expects( $this->any() )->method( 'getActiveTab' )->will( $this->returnValue( "testEdit" ) );
         $oNavigation->expects( $this->once() )->method( 'getListUrl' )->with( $this->equalTo( $sNode ) )->will( $this->returnValue( "testListUrl" ) );
         $oNavigation->expects( $this->once() )->method( 'getEditUrl' )->with( $this->equalTo( $sNode ), $this->equalTo( 1 ) )->will( $this->returnValue( "testEditUrl" ) );
