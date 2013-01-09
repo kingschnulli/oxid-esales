@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   views
- * @copyright (C) OXID eSales AG 2003-2012
+ * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
- * @version   SVN: $Id: guestbook.php 48767 2012-08-16 17:33:56Z tomas $
+ * @version   SVN: $Id: guestbook.php 53434 2013-01-07 13:47:23Z linas.kukulskis $
  */
 
 /**
@@ -130,6 +130,7 @@ class GuestBook extends oxUBase
      */
     public function getSortColumns()
     {
+        $this->setSortColumns( array( 'author', 'date' ) );
         return $this->_aSortColumns;
     }
 
@@ -169,7 +170,7 @@ class GuestBook extends oxUBase
             $oEntries = oxNew( 'oxgbentry' );
             if ( $iCnt = $oEntries->getEntryCount() ) {
                 $this->_iCntPages = round( $iCnt / $iNrofCatArticles + 0.49 );
-                $this->_aEntries  = $oEntries->getAllEntries( $this->getActPage() * $iNrofCatArticles, $iNrofCatArticles, $this->getSortingSql( 'oxgb' ) );
+                $this->_aEntries  = $oEntries->getAllEntries( $this->getActPage() * $iNrofCatArticles, $iNrofCatArticles, $this->getSortingSql( $this->getSortIdent() ) );
             }
         }
 
@@ -216,6 +217,27 @@ class GuestBook extends oxUBase
     }
 
     /**
+     * Returns page sort indentificator. It is used as intentificator in session variable aSorting[ident]
+     *
+     * @return string
+     */
+    public function getSortIdent()
+    {
+        return 'oxgb';
+    }
+
+    /**
+     * Returns default category sorting for selected category
+     *
+     * @return array
+     */
+    public function getDefaultSorting()
+    {
+        $aSorting = array ( 'sortby' => 'date', 'sortdir' => 'desc' );
+        return $aSorting;
+    }
+
+    /**
      * Retrieves from session or gets new sorting parameters for
      * guestbook entries. Sets new sorting parameters
      * (reverse or new column sort) to session.
@@ -225,6 +247,8 @@ class GuestBook extends oxUBase
      *
      * Session variables:
      * <b>gborderby</b>, <b>gborder</b>
+     *
+     * @deprecated since v4.7.3/5.0.3 (2013-01-07); use getSorting();
      *
      * @return  void
      */

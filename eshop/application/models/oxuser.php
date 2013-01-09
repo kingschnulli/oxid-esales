@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   core
- * @copyright (C) OXID eSales AG 2003-2012
+ * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
- * @version   SVN: $Id: oxuser.php 53156 2012-12-20 08:19:56Z aurimas.gladutis $
+ * @version   SVN: $Id: oxuser.php 53476 2013-01-08 11:58:19Z linas.kukulskis $
  */
 
 /**
@@ -1012,14 +1012,17 @@ class oxUser extends oxBase
     }
 
     /**
-     * No logic set, only returns "1000". You should extend this function
-     * according your needs.
+     * Return standart credit rating, can be set in config option iCreditRating;
      *
      * @return integer
      */
     public function getBoni()
     {
-        return 1000;
+        if ( ! $iBoni = $this->getConfig()->getConfigParam( 'iCreditRating' ) ) {
+            $iBoni = 1000;
+        }
+
+        return $iBoni;
     }
 
     /**

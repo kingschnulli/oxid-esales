@@ -401,64 +401,6 @@ CREATE TABLE `oxcategories` (
 ) ENGINE=MyISAM;
 
 #
-# Table structure for table `oxcategories`
-#
-
-DROP TABLE IF EXISTS `oxcategories`;
-
-CREATE TABLE `oxcategories` (
-  `OXID` char(32) character set latin1 collate latin1_general_ci NOT NULL,
-  `OXPARENTID` char(32) character set latin1 collate latin1_general_ci NOT NULL default 'oxrootid',
-  `OXLEFT` int(11) NOT NULL default '0',
-  `OXRIGHT` int(11) NOT NULL default '0',
-  `OXROOTID` char(32) character set latin1 collate latin1_general_ci NOT NULL default '',
-  `OXSORT` int(11) NOT NULL default '9999',
-  `OXACTIVE` tinyint(1) NOT NULL default '1',
-  `OXHIDDEN` tinyint(1) NOT NULL default '0',
-  `OXSHOPID` varchar(32) character set latin1 collate latin1_general_ci NOT NULL default '',
-  `OXTITLE` varchar(254) NOT NULL default '',
-  `OXDESC` varchar(255) NOT NULL default '',
-  `OXLONGDESC` text NOT NULL,
-  `OXTHUMB` varchar(128) NOT NULL default '',
-  `OXTHUMB_1` VARCHAR(128) NOT NULL DEFAULT '',
-  `OXTHUMB_2` VARCHAR(128) NOT NULL DEFAULT '',
-  `OXTHUMB_3` VARCHAR(128) NOT NULL DEFAULT '',
-  `OXEXTLINK` varchar(255) NOT NULL default '',
-  `OXTEMPLATE` varchar(128) NOT NULL default '',
-  `OXDEFSORT` varchar(64) NOT NULL default '',
-  `OXDEFSORTMODE` tinyint(1) NOT NULL default '0',
-  `OXPRICEFROM` double default NULL,
-  `OXPRICETO` double default NULL,
-  `OXACTIVE_1` tinyint(1) NOT NULL default '0',
-  `OXTITLE_1` varchar(255) NOT NULL default '',
-  `OXDESC_1` varchar(255) NOT NULL default '',
-  `OXLONGDESC_1` text NOT NULL,
-  `OXACTIVE_2` tinyint(1) NOT NULL default '0',
-  `OXTITLE_2` varchar(255) NOT NULL default '',
-  `OXDESC_2` varchar(255) NOT NULL default '',
-  `OXLONGDESC_2` text NOT NULL,
-  `OXACTIVE_3` tinyint(1) NOT NULL default '0',
-  `OXTITLE_3` varchar(255) NOT NULL default '',
-  `OXDESC_3` varchar(255) NOT NULL default '',
-  `OXLONGDESC_3` text NOT NULL,
-  `OXICON` varchar(128) NOT NULL default '',
-  `OXPROMOICON` varchar(128) NOT NULL default '',
-  `OXVAT` FLOAT NULL DEFAULT NULL,
-  `OXSKIPDISCOUNTS` tinyint(1) NOT NULL default '0',
-  `OXSHOWSUFFIX` tinyint(1) NOT NULL default '1',
-  `OXTIMESTAMP` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
-   PRIMARY KEY  (`OXID`),
-   KEY `OXROOTID` (`OXROOTID`),
-   KEY `OXPARENTID` (`OXPARENTID`),
-   KEY `OXPRICEFROM` (`OXPRICEFROM`),
-   KEY `OXPRICETO` (`OXPRICETO`),
-   KEY `OXHIDDEN` (`OXHIDDEN`),
-   KEY `OXSHOPID` (`OXSHOPID`),
-   KEY `OXSORT` (`OXSORT`),
-   KEY `OXVAT` (`OXVAT`)
-) ENGINE=MyISAM;
-
-#
 # Table structure for table `oxcategory2attribute`
 #
 

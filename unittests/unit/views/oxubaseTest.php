@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxubaseTest.php 53102 2012-12-18 14:58:05Z aurimas.gladutis $
+ * @version   SVN: $Id: oxubaseTest.php 53460 2013-01-07 16:14:59Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -480,7 +480,6 @@ class Unit_Views_oxubaseTest extends OxidTestCase
         $oView->prepareSortColumns();
 
         //checking view data
-        $this->assertEquals( true, $oView->isSortingActive() );
         $this->assertEquals( array('oxid', 'oxprice'), $oView->getSortColumns() );
         $this->assertEquals( 'oxid asc', $oView->getSortingSql( 'xxx' ) );
     }
@@ -1010,7 +1009,7 @@ class Unit_Views_oxubaseTest extends OxidTestCase
         $oView = new oxubase();
         $oView->setItemSorting( 'xxx', 'oxid', 'asc' );
 
-        $this->assertNull( $oView->getSorting( 'yyy' ) );
+        $this->assertEquals( $oView->getDefaultSorting(), $oView->getSorting( 'yyy' ) );
 
         $this->assertEquals( $aSorting, $oView->getSorting( 'xxx' ) );
         $this->assertEquals( implode( ' ', $aSorting ), $oView->getSortingSql( 'xxx' ) );
@@ -1184,7 +1183,7 @@ class Unit_Views_oxubaseTest extends OxidTestCase
     {
         $oView = $this->getProxyClass( 'oxubase' );
         $oView->prepareSortColumns();
-        $this->assertTrue( $oView->isSortingActive() );
+        $this->assertNull( $oView->isSortingActive() );
     }
 
     public function testGetSortColumns()

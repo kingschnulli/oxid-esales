@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   lang
- * @copyright (C) OXID eSales AG 2003-2012
+ * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 52927 2012-12-14 10:35:35Z juergen.busch $
+ * @version   SVN: $Id: lang.php 53484 2013-01-08 14:28:26Z aurimas.gladutis $
  */
 
 /*
@@ -410,6 +410,7 @@ $aLang = array(
 'ARTICLE_LIST_ALLPRODUCTS'                                 => 'all Products',
 'ARTICLE_LIST_MENUSUBITEM'                                 => 'Product',
 'ARTICLE_MAIN_ERRORSAVINGARTICLE'                          => 'Attention: Product already exists!',
+'ARTICLE_MAIN_INVALIDTAGSFOUND'                            => 'Attention: Invalid tags removed',
 'ARTICLE_MAIN_ALDPRICE'                                    => 'Alt. Prices',
 'ARTICLE_MAIN_NONE'                                        => '-- none --',
 'ARTICLE_MAIN_GOTO'                                        => 'Go to',

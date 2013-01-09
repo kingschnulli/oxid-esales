@@ -869,7 +869,7 @@ class Unit_Core_oxuserTest extends OxidTestCase
     $this->_aUsers[$sShopId][] = '_testUser';
         try {
             $oUser = new oxuser();
-        $oUser->setId('_testUser');
+            $oUser->setId('_testUser');
             $oUser->checkValues( 'aaa@bbb.lt', '', '', $aInvAdress, array() );
             $oUser->oxuser__oxusername = new oxField('aaa@bbb.lt', oxField::T_RAW);
             $oUser->oxuser__oxpassword = new oxField('', oxField::T_RAW);
@@ -2122,16 +2122,6 @@ class Unit_Core_oxuserTest extends OxidTestCase
     { // bad input
         $oUser = oxNew( 'oxuser' );
         $this->assertEquals( '1981-01-01', $oUser->convertBirthday( array( 'year'=> 1981 ) ) );
-    }
-
-
-    /**
-     * Testing Boni index
-     */
-    public function testGetBoni()
-    {
-        $oUser = oxNew( 'oxuser' );
-        $this->assertEquals( 1000, $oUser->getBoni() );
     }
 
 
@@ -3765,6 +3755,18 @@ class Unit_Core_oxuserTest extends OxidTestCase
         $this->assertTrue($oUser->isPriceViewModeNetto() );
     }
 
+    /**
+     * Test configurable user credit rating (getBoni());
+     * Config option for this: iCreditRating;
+     */
+    public function testUserCreditRating()
+    {
+        $oUser = new oxUser();
+        $this->assertEquals( 1000, $oUser->getBoni() );
+
+        $this->getConfig()->setConfigParam('iCreditRating', 100);
+        $this->assertEquals( 100, $oUser->getBoni() );
+    }
 
 
 }
