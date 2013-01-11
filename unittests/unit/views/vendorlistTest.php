@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: vendorlistTest.php 53478 2013-01-08 12:37:12Z aurimas.gladutis $
+ * @version   SVN: $Id: vendorlistTest.php 53539 2013-01-10 08:32:14Z aurimas.gladutis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -375,7 +375,7 @@ class Unit_Views_vendorlistTest extends OxidTestCase
     public function testSetMetaDescriptionIfPathNotSet()
     {
             $sVendorId = '68342e2955d7401e6.18967838';
-            $sRez = 'By Distributor - Dolch &quot;Die Medusa&quot;';
+            $sRez = 'By Distributor - Brieföffner mit Drachenwandhalter';
 
         $oVendor = new oxVendor();
         $oVendor->load($sVendorId);

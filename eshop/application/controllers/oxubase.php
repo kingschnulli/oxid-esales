@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
- * @version   SVN: $Id: oxubase.php 53459 2013-01-07 16:14:39Z linas.kukulskis $
+ * @version   SVN: $Id: oxubase.php 53516 2013-01-09 14:35:43Z linas.kukulskis $
  */
 
 /**
@@ -936,7 +936,7 @@ class oxUBase extends oxView
      */
     public function getDefaultSorting()
     {
-        $aSorting = array ( 'sortby' => 'oxtitle', 'sortdir' => 'desc' );
+        $aSorting = array ( 'sortby' => 'oxtitle', 'sortdir' => 'asc' );
         return $aSorting;
     }
 

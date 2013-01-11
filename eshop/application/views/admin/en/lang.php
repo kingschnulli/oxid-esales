@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 53484 2013-01-08 14:28:26Z aurimas.gladutis $
+ * @version   SVN: $Id: lang.php 53504 2013-01-09 13:01:16Z arturas.sevcenko $
  */
 
 /*
@@ -690,7 +690,7 @@ $aLang = array(
 'DYN_TRUSTED_CREDIT_CARD'                                  => 'Kreditkarte',
 'DYN_TRUSTED_INVOICE'                                      => 'Rechnung',
 'DYN_TRUSTED_CASH_ON_DELIVERY'                             => 'Nachnahme',
-'DYN_TRUSTED_PREPAYMENT'                                   => 'Vorauskasse / Überweisung',
+'DYN_TRUSTED_PREPAYMENT'                                   => 'Vorauskasse / ï¿½berweisung',
 'DYN_TRUSTED_CHEQUE'                                       => 'Verrechnungsscheck',
 'DYN_TRUSTED_PAYBOX'                                       => 'Paybox',
 'DYN_TRUSTED_PAYPAL'                                       => 'PayPal',
@@ -702,7 +702,7 @@ $aLang = array(
 'DYN_TRUSTED_GIROPAY'                                      => 'Giropay',
 'DYN_TRUSTED_GOOGLE_CHECKOUT'                              => 'Google Checkout',
 'DYN_TRUSTED_SHOP_CARD'                                    => 'Online Shop Zahlungskarte',
-'DYN_TRUSTED_DIRECT_E_BANKING'                             => 'Sofortüberweisung.de',
+'DYN_TRUSTED_DIRECT_E_BANKING'                             => 'Sofortï¿½berweisung.de',
 'DYN_TRUSTED_OTHER'                                        => 'Andere Zahlungsart',
 'DYN_TRUSTED_INVALID_TS_ID'                                => 'The certificate does not exist',
 'DYN_TRUSTED_CANCELLED'                                    => 'The certificate has expired',
@@ -717,7 +717,7 @@ $aLang = array(
 'DYN_TRUSTED_RATINGS_ORDERSENDEMAIL'                       => 'In order sent notification e-mail',
 'DYN_TRUSTED_RATINGS_COMMENT'                              => 'Decide where you would like to invite your customer to leave feedback.',
 'DYN_TRUSTED_RATINGS_ERR_INVALID_TSID'                     => 'Invalid Trusted Shops ID. Please sign up here or contact <u>service@trustedshops.co.uk</u>.',
-'DYN_TRUSTED_RATINGS_ERR_WRONG_WSUSERNAME_WSPASSWORD'      => 'Interne Rückmeldung an Shopsystem/Entwickler, keine Rückmeldung im Frontend.',
+'DYN_TRUSTED_RATINGS_ERR_WRONG_WSUSERNAME_WSPASSWORD'      => 'Interne Rï¿½ckmeldung an Shopsystem/Entwickler, keine Rï¿½ckmeldung im Frontend.',
 'DYN_TRUSTED_RATINGS_ERR_NOT_REGISTERED_FOR_TRUSTEDRATING' => 'Trusted Shops Customer Ratings are not yet activated for this Trusted Shops ID. Please sign up here or contact <u>service@trustedshops.co.uk</u>.',
 'DYN_TRUSTED_RATINGS_CONFIGFILE'                           => '<b>NOTICE:</b> config.inc.php file contains additional configuration options. In case you need to customize Trusted Shops Customer Ratings or add additional language support (default configuration supports DE and EN) please adjust your config file.',
 'DYNBASE_ADDCATTOCAMPAIGN'                                 => 'Add category to campaign parameter',
@@ -774,7 +774,7 @@ $aLang = array(
 'THEME_VERSION'                                            => 'Version',
 'THEME_ACTIVATE'                                           => 'Activate',
 'THEME_PARENT_THEME_TITLE'                                 => 'Parent theme',
-'THEME_PARENT_VERSIONS'                                    => 'Comapatible parent theme versions',
+'THEME_PARENT_VERSIONS'                                    => 'Compatible parent theme versions',
 'MODULE_AUTHOR'                                            => 'Author',
 'MODULE_VERSION'                                           => 'Version',
 'MODULE_ACTIVATE'                                          => 'Activate',
