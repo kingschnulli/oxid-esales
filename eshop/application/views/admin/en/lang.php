@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 53504 2013-01-09 13:01:16Z arturas.sevcenko $
+ * @version   SVN: $Id: lang.php 53760 2013-01-14 08:17:12Z aurimas.gladutis $
  */
 
 /*
@@ -410,6 +410,7 @@ $aLang = array(
 'ARTICLE_LIST_ALLPRODUCTS'                                 => 'all Products',
 'ARTICLE_LIST_MENUSUBITEM'                                 => 'Product',
 'ARTICLE_MAIN_ERRORSAVINGARTICLE'                          => 'Attention: Product already exists!',
+'ARTICLE_MAIN_PARENTNOTBUYABLE'                            => 'Attention: Parent Product can not be purchased.',
 'ARTICLE_MAIN_INVALIDTAGSFOUND'                            => 'Attention: Invalid tags removed',
 'ARTICLE_MAIN_ALDPRICE'                                    => 'Alt. Prices',
 'ARTICLE_MAIN_NONE'                                        => '-- none --',

@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
- * @version   SVN: $Id: oxtagcloud.php 53490 2013-01-08 16:04:12Z aurimas.gladutis $
+ * @version   SVN: $Id: oxtagcloud.php 53779 2013-01-14 12:36:55Z aurimas.gladutis $
  */
 
 if (!defined('OXTAGCLOUD_MINFONT')) {
@@ -231,7 +231,8 @@ class oxTagCloud extends oxSuperCfg
      */
     public function setCloudArray( $aTagCloudArray )
     {
-        $this->_aCloudArray = $aTagCloudArray;
+        $sCacheIdent = $this->_formCacheKey();
+        $this->_aCloudArray[$sCacheIdent] = $aTagCloudArray;
     }
 
     /**
@@ -257,16 +258,17 @@ class oxTagCloud extends oxSuperCfg
         if ( $blExtended !== null ) {
             $this->setExtendedMode($blExtended);
         }
-        if ( !isset( $this->_aCloudArray ) ) {
+        $sCacheIdent = $this->_formCacheKey();
+        if ( !isset( $this->_aCloudArray[ $sCacheIdent ] ) ) {
             $oTagList = $this->getTagList();
             // used to make deprecated functionality working
             if ( $oTagList === null ) {
                 $oTagList = oxNew('oxTagList');
                 $oTagList->setLanguage( $this->getLanguageId() );
             }
-            $this->setCloudArray( $this->formCloudArray( $oTagList ) );
+            $this->_aCloudArray[$sCacheIdent] = $this->formCloudArray( $oTagList );
         }
-        return $this->_aCloudArray;
+        return $this->_aCloudArray[$sCacheIdent];
     }
 
     /**
@@ -368,6 +370,8 @@ class oxTagCloud extends oxSuperCfg
         }
 
         $myUtils->toFileCache( $this->_formCacheKey( $sCacheId ), null );
+
+        $this->_aCloudArray = null;
     }
 
     /**

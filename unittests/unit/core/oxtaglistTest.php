@@ -69,4 +69,16 @@ class Unit_Core_oxtaglistTest extends OxidTestCase
 
         $this->assertEquals( $iExpt, count( $oTagSet->get() ) );
     }
+
+    /**
+     * Tests cache formation
+     */
+    public function testgetCacheId()
+    {
+        $oTagList = new oxTagList();
+        $oTagList->setLanguage(1);
+        $this->assertEquals( 'tag_list_1', $oTagList->getCacheId() );
+        $oTagList->setLanguage(2);
+        $this->assertEquals( 'tag_list_2', $oTagList->getCacheId() );
+    }
 }

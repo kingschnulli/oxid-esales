@@ -219,6 +219,13 @@ window.onload = function ()
                     </td>
                   </tr>
 
+                  [{if $edit->isParentNotBuyable()}]
+                  <tr>
+                    <td colspan="2">
+                      <div class="errorbox">[{ oxmultilang ident="ARTICLE_MAIN_PARENTNOTBUYABLE" }]</div>
+                    </td>
+                  </tr>
+                  [{/if}]
                     <tr>
                       <td class="edittext">
                         [{ oxmultilang ident="ARTICLE_MAIN_PRICE" }] ([{ $oActCur->sign }])
