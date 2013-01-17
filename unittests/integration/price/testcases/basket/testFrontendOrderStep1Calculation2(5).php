@@ -22,11 +22,9 @@
  * Short description: test added from selenium test (testFrontendOrderStep1Calculation2) ;Is testing basked Step1 Calculation
  */
 $aData = array(
-//test is mark as shipped because need to check why calculation  is not corect, if price is 101 and discount is 5 abs for product, calculation for product total should be 101-5=96.
-    'skipped' => 1,
     'articles' => array (
             0 => array (
-                    'oxid'                     => 1001,
+                    'oxid'                     => 10016,
                     'oxprice'                  => 101,
                     'oxvat'                    => 10,
                     'amount'                   => 1,
@@ -61,7 +59,7 @@ $aData = array(
                     'oxamount'     => 1,
                     'oxamountto'   => 99999,
                     'oxactive'     => 1,
-                    'oxarticles'   => array ( 1001, 1000 ),
+                    'oxarticles'   => array ( 10016, 1000 ),
             ),
     ),
 	
@@ -94,7 +92,7 @@ $aData = array(
     ),
     'expected' => array (
         'articles' => array (
-                1001 => array ( '96,00', '96,00' ),
+                10016 => array ( '96,00', '96,00' ),
 				//Discount is not used because product price is <100
                 1002 => array ( '67,00', '67,00' ),
         ),
