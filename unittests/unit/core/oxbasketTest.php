@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxbasketTest.php 53488 2013-01-08 15:49:02Z aurimas.gladutis $
+ * @version   SVN: $Id: oxbasketTest.php 53966 2013-01-17 09:05:09Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -522,13 +522,33 @@ class Unit_Core_oxbasketTest extends OxidTestCase
      */
     public function testIsBelowMinOrderPrice()
     {
-        modConfig::getInstance()->setConfigParam( "iMinOrderPrice", 2 );
+        $oConfig = $this->getConfig();
+
+        $oConfig->setConfigParam( "iMinOrderPrice", 2 );
 
         $oBasket = $this->getMock( "oxbasket", array( "getProductsCount", "getDiscountedProductsBruttoPrice" ) );
-        $oBasket->expects( $this->once() )->method( 'getProductsCount')->will( $this->returnValue( 1 ) );
-        $oBasket->expects( $this->once() )->method( 'getDiscountedProductsBruttoPrice')->will( $this->returnValue( 1 ) );
+        $oBasket->expects( $this->any() )->method( 'getProductsCount')->will( $this->returnValue( 1 ) );
+        $oBasket->expects( $this->any() )->method( 'getDiscountedProductsBruttoPrice')->will( $this->returnValue( 1 ) );
 
         $this->assertTrue( $oBasket->isBelowMinOrderPrice() );
+
+        $oConfig->setConfigParam( "iMinOrderPrice", 10.5 );
+
+        $oBasket = $this->getMock( "oxbasket", array( "getProductsCount", "getDiscountedProductsBruttoPrice" ) );
+        $oBasket->expects( $this->any() )->method( 'getProductsCount')->will( $this->returnValue( 1 ) );
+        $oBasket->expects( $this->any() )->method( 'getDiscountedProductsBruttoPrice')->will( $this->returnValue( 10 ) );
+
+        $this->assertTrue( $oBasket->isBelowMinOrderPrice() );
+
+        $oConfig->setConfigParam( "iMinOrderPrice", 10.21 );
+
+        $oBasket = $this->getMock( "oxbasket", array( "getProductsCount", "getDiscountedProductsBruttoPrice" ) );
+        $oBasket->expects( $this->any() )->method( 'getProductsCount')->will( $this->returnValue( 1 ) );
+        $oBasket->expects( $this->any() )->method( 'getDiscountedProductsBruttoPrice')->will( $this->returnValue( 10.2 ) );
+
+        $this->assertTrue( $oBasket->isBelowMinOrderPrice() );
+
+
     }
 
     /**
