@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   views
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: forgotpwd.php 35529 2011-05-23 07:31:20Z arunas.paskevicius $
+ * @version   SVN: $Id: forgotpwd.php 51859 2012-11-15 12:33:47Z aurimas.gladutis $
  */
 
 /**
@@ -85,8 +85,13 @@ class ForgotPwd extends oxUBase
         $oEmail = oxNew( 'oxemail' );
 
         // problems sending passwd reminder ?
-        if ( !$sEmail || !$oEmail->sendForgotPwdEmail( $sEmail ) ) {
-            oxUtilsView::getInstance()->addErrorToDisplay('FORGOTPWD_ERRUNABLETOSEND', false, true);
+        $iSuccess = false;
+        if ( $sEmail ) {
+            $iSuccess = $oEmail->sendForgotPwdEmail( $sEmail );
+        }
+        if ( $iSuccess !== true ) {
+            $sError = ($iSuccess === false)? 'FORGOTPWD_ERREMAILINVALID' : 'FORGOTPWD_ERRUNABLETOSEND';
+            oxUtilsView::getInstance()->addErrorToDisplay($sError, false, true);
             $this->_sForgotEmail = false;
         }
     }

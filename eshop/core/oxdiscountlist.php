@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxdiscountlist.php 49762 2012-09-25 15:12:13Z tomas $
+ * @version   SVN: $Id: oxdiscountlist.php 51589 2012-11-09 09:06:30Z linas.kukulskis $
  */
 
 /**
@@ -238,7 +238,9 @@ class oxDiscountList extends oxList
     public function getBasketItemDiscounts( $oArticle, $oBasket, $oUser = null )
     {
         $aList = array();
-        foreach ( $this->_getList( $oUser ) as $oDiscount ) {
+        $aDiscounts = $this->_getList( $oUser )->getArray();
+        reset($aDiscounts);
+        foreach ( $aDiscounts as $oDiscount ) {
             if ( $oDiscount->isForBasketItem( $oArticle ) && $oDiscount->isForBasketAmount( $oBasket ) ) {
                 $aList[$oDiscount->getId()] = $oDiscount;
             }
@@ -340,6 +342,49 @@ class oxDiscountList extends oxList
     {
         $aDiscLog = array();
         reset( $aDiscounts );
+        //#3587
+        $oPrice->multiply($dAmount);
+
+        // price object to correctly perform calculations
+        $dOldPrice = $oPrice->getBruttoPrice();
+
+        while (list( , $oDiscount ) = each( $aDiscounts ) ) {
+            //#3587
+            $oDiscount->applyDiscount( $oPrice, $dAmount );
+            $dNewPrice = $oPrice->getBruttoPrice();
+
+            if ( !isset( $aDiscLog[$oDiscount->getId()] ) ) {
+                $aDiscLog[$oDiscount->getId()] = $oDiscount->getSimpleDiscount();
+            }
+
+            $aDiscLog[$oDiscount->getId()]->dDiscount += $dOldPrice - $dNewPrice;
+            ////#3587
+            //$aDiscLog[$oDiscount->getId()]->dDiscount *= $dAmount;
+            $dOldPrice = $dNewPrice;
+        }
+        ////#3587
+        $oPrice->divide($dAmount);
+
+        return $aDiscLog;
+    }
+    /**
+     * Applies discounts which are supposed to be applied on amounts greater than zero.
+     * Returns applied discounts.
+     *
+     * @param oxPrice $oPrice     Old article price
+     * @param array   $aDiscounts Discount array
+     * @param amount  $dAmount    Amount in basket
+     *
+     * @return array
+     */       /*
+    public function applyBasketDiscounts( oxPrice $oPrice, $aDiscounts, $dAmount = 1 )
+    {
+        $aDiscLog = array();
+        reset( $aDiscounts );
+
+        //$oPriceCopy = clone $oPrice;
+
+        $oPrice->multiply($dAmount);
 
         // price object to correctly perform calculations
         $dOldPrice = $oPrice->getBruttoPrice();
@@ -354,11 +399,18 @@ class oxDiscountList extends oxList
             }
 
             $aDiscLog[$oDiscount->getId()]->dDiscount += $dOldPrice - $dNewPrice;
-            $aDiscLog[$oDiscount->getId()]->dDiscount *= $dAmount;
+            //$aDiscLog[$oDiscount->getId()]->dDiscount *= $dAmount;
             $dOldPrice = $dNewPrice;
         }
+
+        //setting the correct $oPrice value
+        $oPrice->divide($dAmount);
+
+        //$oPrice = clone $oPriceCopy;
+
         return $aDiscLog;
-    }
+    }        */
+
     /**
      * Checks if any category has "skip discounts" status
      *

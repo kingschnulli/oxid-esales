@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   core
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxerptype.php 39205 2011-10-12 13:30:36Z arvydas.vapsva $
+ * @version   SVN: $Id: oxerptype.php 52714 2012-12-05 15:00:42Z aurimas.gladutis $
  */
 
 /**
@@ -454,6 +454,9 @@ class oxERPType
     public function getRightFields()
     {
         $aRParams = array();
+        if (!$this->_aFieldList) {
+            $this->getFieldList();
+        }
 
         foreach ($this->_aFieldList as $sField) {
             $aRParams[] = strtolower($this->_sTableName.'__'.$sField);
@@ -515,13 +518,13 @@ class oxERPType
             return null;
         }
 
-        $oDB = oxDb::getDb();
+        $oDb = oxDb::getDb();
 
         $aWhere = array();
         $blAllKeys = true;
         foreach ($this->getKeyFields() as $sKey) {
             if (array_key_exists($sKey, $aData)) {
-                $aWhere[] = $sKey.'='.$oDB->qstr($aData[$sKey]);
+                $aWhere[] = $sKey.'='.$oDb->qstr($aData[$sKey]);
             } else {
                 $blAllKeys = false;
             }
@@ -529,7 +532,7 @@ class oxERPType
 
         if ($blAllKeys) {
             $sSelect = 'SELECT OXID FROM '.$this->getTableName().' WHERE '.implode(' AND ', $aWhere);
-            return $oDB->getOne($sSelect);
+            return $oDb->getOne( $sSelect );
         }
 
         return null;

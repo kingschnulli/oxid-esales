@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: order_overview.php 41852 2012-01-28 13:54:58Z arvydas.vapsva $
+ * @version   SVN: $Id: order_overview.php 46721 2012-06-27 09:43:51Z arturas.sevcenko $
  */
 
 /**
@@ -137,13 +137,13 @@ class Order_Overview extends oxAdminDetails
             $oOrder = oxNew( "oxorder" );
             if ( $oOrder->load( $soxId ) ) {
                 $oUtils = oxUtils::getInstance();
-                $sFilename = $oOrder->oxorder__oxordernr->value . "_" . $oOrder->oxorder__oxbilllname->getRawValue() . ".pdf";
-
+                $sTrimmedBillName = trim($oOrder->oxorder__oxbilllname->getRawValue());
+                $sFilename = $oOrder->oxorder__oxordernr->value . "_" . $sTrimmedBillName . ".pdf";
+                $sFilename = str_replace(" ", "_", $sFilename);
                 ob_start();
                 $oOrder->genPDF( $sFilename, oxConfig::getParameter( "pdflanguage" ) );
                 $sPDF = ob_get_contents();
                 ob_end_clean();
-
                 $oUtils->setHeader( "Pragma: public" );
                 $oUtils->setHeader( "Cache-Control: must-revalidate, post-check=0, pre-check=0" );
                 $oUtils->setHeader( "Expires: 0" );
@@ -264,12 +264,14 @@ class Order_Overview extends oxAdminDetails
     {
         $blCan = false;
         //V #529: check if PDF invoice module is active
-        if ( oxUtilsObject::getInstance()->isModuleActive( 'oxorder', 'myorder' ) ) {
+        $oModule = oxNew('oxmodule');
+        $oModule->load('invoicepdf');
+        if ( $oModule->isActive() ) {
             $oDb = oxDb::getDb();
             $sOrderId = $this->getEditObjectId();
             $sTable = getViewName( "oxorderarticles" );
             $sQ = "select count(oxid) from {$sTable} where oxorderid = ".$oDb->quote( $sOrderId )." and oxstorno = 0";
-            $blCan = (bool) $oDb->getOne( $sQ );
+            $blCan = (bool) $oDb->getOne( $sQ, false, false );
         }
         return $blCan;
     }

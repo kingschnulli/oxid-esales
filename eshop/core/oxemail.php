@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxemail.php 42546 2012-02-29 16:14:53Z saulius.stasiukaitis $
+ * @version   SVN: $Id: oxemail.php 52485 2012-11-27 15:35:24Z aurimas.gladutis $
  */
 /**
  * Includes PHP mailer class.
@@ -111,6 +111,20 @@ class oxEmail extends PHPMailer
      * @var string
      */
     protected $_sSenedNowTemplatePlain = "email/plain/sendednow.tpl";
+
+    /**
+     * Send ordered download links mail template
+     *
+     * @var string
+     */
+    protected $_sSendDownloadsTemplate = "email/html/senddownloadlinks.tpl";
+
+    /**
+     * Send ordered download links plain mail template
+     *
+     * @var string
+     */
+    protected $_sSendDownloadsTemplatePlain = "email/plain/senddownloadlinks.tpl";
 
     /**
      * Wishlist mail template
@@ -523,6 +537,10 @@ class oxEmail extends PHPMailer
         $oSmarty = $this->_getSmarty();
         $this->setViewData( "order", $oOrder);
 
+        if ( $myConfig->getConfigParam( "bl_perfLoadReviews" ) ) {
+            $this->setViewData( "blShowReviewLink", true );
+        }
+
         // Process view data array through oxoutput processor
         $this->_processViewArray();
 
@@ -612,9 +630,10 @@ class oxEmail extends PHPMailer
         $this->setSubject( $sSubject );
         $this->setRecipient( $oShop->oxshops__oxowneremail->value, $oLang->translateString("order") );
 
-        if ( $oUser->oxuser__oxusername->value != "admin" )
+        if ( $oUser->oxuser__oxusername->value != "admin" ) {
             $sFullName = $oUser->oxuser__oxfname->getRawValue() . " " . $oUser->oxuser__oxlname->getRawValue();
             $this->setReplyTo( $oUser->oxuser__oxusername->value, $sFullName );
+        }
 
         $blSuccess = $this->send();
 
@@ -700,7 +719,7 @@ class oxEmail extends PHPMailer
      * @param string $sEmailAddress user email address
      * @param string $sSubject      user defined subject [optional]
      *
-     * @return bool
+     * @return mixed true - success, false - user not found, -1 - could not send
      */
     public function sendForgotPwdEmail( $sEmailAddress, $sSubject = null )
     {
@@ -726,8 +745,8 @@ class oxEmail extends PHPMailer
         }
 
         $sSelect = "select oxid from oxuser where $sWhere $sOrder";
-        if ( ( $sOxId = $oDb->getOne( $sSelect ) ) ) {
 
+        if ( ( $sOxId = $oDb->getOne( $sSelect ) ) ) {
             $oUser = oxNew( 'oxuser' );
             if ( $oUser->load($sOxId) ) {
                 // create messages
@@ -749,11 +768,14 @@ class oxEmail extends PHPMailer
                 $this->setRecipient( $sEmailAddress, $sFullName );
                 $this->setReplyTo( $oShop->oxshops__oxorderemail->value, $oShop->oxshops__oxname->getRawValue() );
 
-                return $this->send();
+                if ( !$this->send() ) {
+                    return -1; // failed to send
+                }
+                return true; // success
             }
         }
 
-        return false;
+        return false; // user with this email not found
     }
 
     /**
@@ -779,7 +801,7 @@ class oxEmail extends PHPMailer
         $this->setSubject( $sSubject );
 
         $this->setRecipient( $oShop->oxshops__oxinfoemail->value, "" );
-        $this->setFrom( $sEmailAddress, "" );
+        $this->setFrom( $oShop->oxshops__oxowneremail->value, $oShop->oxshops__oxname->getRawValue() );
         $this->setReplyTo( $sEmailAddress, "" );
 
         return $this->send();
@@ -809,7 +831,8 @@ class oxEmail extends PHPMailer
 
         // create messages
         $oSmarty = $this->_getSmarty();
-        $this->setViewData( "subscribeLink", $this->_getNewsSubsLink($oUser->oxuser__oxid->value) );
+        $sConfirmCode = md5($oUser->oxuser__oxusername->value.$oUser->oxuser__oxpasssalt->value);
+        $this->setViewData( "subscribeLink", $this->_getNewsSubsLink($oUser->oxuser__oxid->value, $sConfirmCode ) );
         $this->setUser( $oUser );
 
         // Process view data array through oxoutput processor
@@ -831,17 +854,19 @@ class oxEmail extends PHPMailer
     /**
      * Returns newsletter subscription link
      *
-     * @param string $sId user id
+     * @param string $sId          user id
+     * @param string $sConfirmCode confirmation code
      *
      * @return string $sUrl
      */
-    protected function _getNewsSubsLink( $sId )
+    protected function _getNewsSubsLink( $sId, $sConfirmCode = null )
     {
         $myConfig = $this->getConfig();
         $iActShopLang = $myConfig->getActiveShop()->getLanguage();
 
         $sUrl = $myConfig->getShopHomeURL().'cl=newsletter&amp;fnc=addme&amp;uid='.$sId;
         $sUrl.= ( $iActShopLang ) ? '&amp;lang='.$iActShopLang : "";
+        $sUrl.= ( $sConfirmCode ) ? '&amp;confirm='.$sConfirmCode : "";
         return $sUrl;
     }
 
@@ -1029,9 +1054,12 @@ class oxEmail extends PHPMailer
         $this->setViewData( "order", $oOrder );
         $this->setViewData( "shopTemplateDir", $myConfig->getTemplateDir(false) );
 
-        //deprecated var
-        $oUser = oxNew( 'oxuser' );
-        $this->setViewData( "reviewuserhash", $oUser->getReviewUserHash($oOrder->oxorder__oxuserid->value) );
+        if ( $myConfig->getConfigParam( "bl_perfLoadReviews" ) ) {
+            $this->setViewData( "blShowReviewLink", true );
+            //deprecated var
+            $oUser = oxNew( 'oxuser' );
+            $this->setViewData( "reviewuserhash", $oUser->getReviewUserHash($oOrder->oxorder__oxuserid->value) );
+        }
 
         // Process view data array through oxoutput processor
         $this->_processViewArray();
@@ -1057,6 +1085,70 @@ class oxEmail extends PHPMailer
 
         //Sets subject to email
         $this->setSubject( ( $sSubject !== null ) ? $sSubject : $oShop->oxshops__oxsendednowsubject->getRawValue() );
+
+        $sFullName = $oOrder->oxorder__oxbillfname->getRawValue() . " " . $oOrder->oxorder__oxbilllname->getRawValue();
+
+        $this->setRecipient( $oOrder->oxorder__oxbillemail->value, $sFullName );
+        $this->setReplyTo( $oShop->oxshops__oxorderemail->value, $oShop->oxshops__oxname->getRawValue() );
+
+        return $this->send();
+    }
+
+    /**
+     * Sets mailer additional settings and sends "SendDownloadLinks" mail to user.
+     * Returns true on success.
+     *
+     * @param oxOrder $oOrder   order object
+     * @param string  $sSubject user defined subject [optional]
+     *
+     * @return bool
+     */
+    public function sendDownloadLinksMail( $oOrder, $sSubject = null )
+    {
+        $myConfig = $this->getConfig();
+
+        $iOrderLang = (int) ( isset( $oOrder->oxorder__oxlang->value ) ? $oOrder->oxorder__oxlang->value : 0 );
+
+        // shop info
+        $oShop = $this->_getShop( $iOrderLang );
+
+        //set mail params (from, fromName, smtp)
+        $this->_setMailParams( $oShop );
+
+        //create messages
+        $oLang = oxLang::getInstance();
+        $oSmarty = $this->_getSmarty();
+        $this->setViewData( "order", $oOrder );
+        $this->setViewData( "shopTemplateDir", $myConfig->getTemplateDir(false) );
+
+        //deprecated var
+        $oUser = oxNew( 'oxuser' );
+        $this->setViewData( "reviewuserhash", $oUser->getReviewUserHash($oOrder->oxorder__oxuserid->value) );
+
+        // Process view data array through oxoutput processor
+        $this->_processViewArray();
+
+        // dodger #1469 - we need to patch security here as we do not use standard template dir, so smarty stops working
+        $aStore['INCLUDE_ANY'] = $oSmarty->security_settings['INCLUDE_ANY'];
+        //V send email in order language
+        $iOldTplLang = $oLang->getTplLanguage();
+        $iOldBaseLang = $oLang->getTplLanguage();
+        $oLang->setTplLanguage( $iOrderLang );
+        $oLang->setBaseLanguage( $iOrderLang );
+
+        $oSmarty->security_settings['INCLUDE_ANY'] = true;
+        // force non admin to get correct paths (tpl, img)
+        $myConfig->setAdminMode( false );
+        $this->setBody( $oSmarty->fetch( $this->_sSendDownloadsTemplate ) );
+        $this->setAltBody( $oSmarty->fetch( $this->_sSendDownloadsTemplatePlain ) );
+        $myConfig->setAdminMode( true );
+        $oLang->setTplLanguage( $iOldTplLang );
+        $oLang->setBaseLanguage( $iOldBaseLang );
+        // set it back
+        $oSmarty->security_settings['INCLUDE_ANY'] = $aStore['INCLUDE_ANY'] ;
+
+        //Sets subject to email
+        $this->setSubject( ( $sSubject !== null ) ? $sSubject : $oLang->translateString("EMAIL_SENDDOWNLOADS_SUBJECT") );
 
         $sFullName = $oOrder->oxorder__oxbillfname->getRawValue() . " " . $oOrder->oxorder__oxbilllname->getRawValue();
 
@@ -1934,21 +2026,26 @@ class oxEmail extends PHPMailer
      */
     protected function _getShop( $iLangId = null, $iShopId = null )
     {
-
-        if ( isset( $this->_oShop ) ) {
-            return $this->_oShop;
+        if ( $iLangId === null && $iShopId === null ) {
+            if ( isset( $this->_oShop ) ) {
+                return $this->_oShop;
+            } else {
+                return $this->_oShop = $this->getConfig()->getActiveShop();
+            }
         }
 
         $myConfig = $this->getConfig();
 
-        if ( $iLangId === null ) {
-            $oShop = $myConfig->getActiveShop();
-        } else {
-            $oShop = oxNew( 'oxshop' );
-            $oShop->loadInLang( $iLangId, $myConfig->getShopId() );
+        $oShop = oxNew( 'oxshop' );
+        if ( $iShopId !== null ) {
+            $oShop->setShopId($iShopId);
         }
+        if ( $iLangId !== null ) {
+            $oShop->setLanguage($iLangId);
+        }
+        $oShop->load($myConfig->getShopId());
 
-        return $this->_oShop = $oShop;
+        return $oShop;
     }
 
     /**
@@ -2167,6 +2264,21 @@ class oxEmail extends PHPMailer
     public function getUser()
     {
         return $this->_aViewData["oUser"];
+    }
+
+    /**
+     * Get order files
+     *
+     * @param string $sOrderId order id
+     *
+     * @return oxOrderFileList
+     */
+    public function getOrderFileList( $sOrderId )
+    {
+        $oOrderList = oxNew('oxOrderFileList');
+        $oOrderList->loadOrderFiles( $sOrderId );
+
+        return $oOrderList;
     }
 
 }

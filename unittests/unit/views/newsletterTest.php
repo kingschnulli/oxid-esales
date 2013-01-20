@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: newsletterTest.php 44471 2012-04-27 12:06:58Z vaidas.matulevicius $
+ * @version   SVN: $Id: newsletterTest.php 52485 2012-11-27 15:35:24Z aurimas.gladutis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -132,12 +132,21 @@ class Unit_Views_newsletterTest extends OxidTestCase
      */
     public function testGetNewsletterStatusAfterAddme()
     {
+        $oUser = oxNew( 'oxuser' );
+        $oUser->setId('testAddMe');
+        $oUser->oxuser__oxusername = new oxField('test@addme.com', oxField::T_RAW);
+        $oUser->oxuser__oxpasssalt = new oxField('salt', oxField::T_RAW);
+        $oUser->save();
+
         $oTestNews = oxNew( "NewsLetter" );
-        modConfig::setParameter( 'uid', 'test' );
+        modConfig::setParameter( 'uid', 'testAddMe' );
+        modConfig::setParameter( 'confirm', md5( 'test@addme.comsalt' ) );
         $oTestNews->addme();
         $iStatus = $oTestNews->getNewsletterStatus();
 
         $this->assertEquals(2, $iStatus );
+
+        $oUser->delete();
     }
 
     /**
@@ -274,7 +283,7 @@ class Unit_Views_newsletterTest extends OxidTestCase
         oxTestModules::addFunction( "oxemail", "send", "{return true;}" );
         oxTestModules::addFunction( "oxemail", "sendNewsletterDbOptInMail", "{return true;}" );
 
-        $oDB = oxDb::getDb( true );
+        $oDB = oxDb::getDb( oxDB::FETCH_MODE_ASSOC );
         $sSql = "select oxusername from oxuser where oxusername='test@test.de'";
         $sUserName = $oDB->getOne( $sSql );
         $this->assertFalse( $sUserName );

@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxlistTest.php 44374 2012-04-25 13:20:11Z linas.kukulskis $
+ * @version   SVN: $Id: oxlistTest.php 52488 2012-11-27 15:39:28Z aurimas.gladutis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -341,6 +341,11 @@ class Unit_Core_oxlistTest extends OxidTestCase
         $this->assertEquals($sCoreTable . "__" . $sFieldName, $oSubj->UNITgetFieldLongName($sFieldName));
     }
 
+    /**
+     * Testing oxList::unset() in foreach loop
+     *
+     * @return null
+     */
     public function testUnsetForeach()
     {
         $oList = new oxlist();
@@ -360,6 +365,34 @@ class Unit_Core_oxlistTest extends OxidTestCase
         }
     }
 
+    /**
+     * Testing oxList::unset() before foreach loop
+     *
+     * @return null
+     */
+    public function testUnsetBeforeForeach()
+    {
+        $oList = new oxlist();
+        $oList->offsetSet( 'k1', 'cnt4' );
+        $oList->offsetSet( 'k2', 'cnt3' );
+        $oList->offsetSet( 'k3', 'cnt2' );
+        $oList->offsetSet( 'k4', 'cnt1' );
+
+        $oList->offsetUnset('k1');
+        $iTotal = $oList->count();
+        $iCount = 0;
+
+        foreach ($oList as $sVal) {
+            $iCount++;
+        }
+        $this->assertEquals( $iTotal, $iCount );
+    }
+
+    /**
+     * Testing oxList::unset() in while loop
+     *
+     * @return null
+     */
     public function testUnsetWhile()
     {
         $oList = new oxlist();
@@ -378,5 +411,30 @@ class Unit_Core_oxlistTest extends OxidTestCase
             $iTotal--;
             unset($oList[$sKey]);
         }
+    }
+
+    /**
+     * Testing oxList::unset() before while loop
+     *
+     * @return null
+     */
+    public function testUnsetBeforeWhile()
+    {
+        $oList = new oxlist();
+        $oList->offsetSet( 'k1', 'cnt4' );
+        $oList->offsetSet( 'k2', 'cnt3' );
+        $oList->offsetSet( 'k3', 'cnt2' );
+        $oList->offsetSet( 'k4', 'cnt1' );
+
+        $oList->offsetUnset('k1');
+        $iTotal = $oList->count();
+        $iCount = 0;
+
+        $oList->rewind();
+        while ($oList->valid()) {
+            $iCount++;
+            $oList->next();
+        }
+        $this->assertEquals( $iTotal, $iCount );
     }
 }

@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   admin
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: payment_main.php 39930 2011-11-14 08:55:04Z arvydas.vapsva $
+ * @version   SVN: $Id: payment_main.php 51584 2012-11-09 08:29:36Z aurimas.gladutis $
  */
 
 /**
@@ -84,10 +84,8 @@ class Payment_Main extends oxAdminDetails
         }
 
         if ( oxConfig::getParameter("aoc") ) {
-
-            $aColumns = array();
-            include_once 'inc/'.strtolower(__CLASS__).'.inc.php';
-            $this->_aViewData['oxajax'] = $aColumns;
+            $oPaymentMainAjax = oxNew( 'payment_main_ajax' );
+            $this->_aViewData['oxajax'] = $oPaymentMainAjax->getColumns();
 
             return "popups/payment_main.tpl";
         }
@@ -128,6 +126,10 @@ class Payment_Main extends oxAdminDetails
 
         // setting add sum calculation rules
         $aRules = (array) oxConfig::getParameter( "oxpayments__oxaddsumrules" );
+        // if sum eqals 0, show notice, that default value will be used.
+        if ( empty($aRules) ) {
+            $this->_aViewData["noticeoxaddsumrules"] = 1;
+        }
         $oPayment->oxpayments__oxaddsumrules = new oxField( array_sum( $aRules ) );
 
         //#708

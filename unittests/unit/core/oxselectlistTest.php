@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxselectlistTest.php 34391 2011-04-07 14:07:05Z arvydas.vapsva $
+ * @version   SVN: $Id: oxselectlistTest.php 52708 2012-12-05 11:57:49Z aurimas.gladutis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -204,12 +204,12 @@ class Unit_Core_oxselectlistTest extends OxidTestCase
         modConfig::getInstance()->setParameter( 'cur', 2 );
         $aSelections = array( new oxSelection( "test1, 10", 0, false, true ),
                               new oxSelection( "test2, 10", 1, false, false ),
-                              new oxSelection( "test3, 10", 2, false, false ),
+                              new oxSelection( "test3', 10", 2, false, false ),
                              );
 
         // valdesc is set
         $oSelectList = new oxselectlist();
-        $oSelectList->oxselectlist__oxvaldesc = new oxField( 'test1, 10!P!10__@@test2, 10!P!10__@@test3, 10!P!10__@@' );
+        $oSelectList->oxselectlist__oxvaldesc = new oxField( 'test1, 10!P!10__@@test2, 10!P!10__@@test3\', 10!P!10__@@' );
 
         $this->assertEquals( $aSelections, $oSelectList->getSelections() );
     }

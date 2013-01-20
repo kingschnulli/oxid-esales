@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: OxidTestCase.php 44813 2012-05-10 12:42:46Z vilma $
+ * @version   SVN: $Id: OxidTestCase.php 44829 2012-05-10 13:47:03Z linas.kukulskis $
  */
 
 

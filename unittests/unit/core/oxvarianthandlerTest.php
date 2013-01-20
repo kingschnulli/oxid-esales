@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxvarianthandlerTest.php 34401 2011-04-07 14:56:31Z arvydas.vapsva $
+ * @version   SVN: $Id: oxvarianthandlerTest.php 51713 2012-11-12 14:11:46Z andrius.silgalis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -181,12 +181,13 @@ class Unit_Core_oxvarianthandlerTest extends OxidTestCase
 
     public function testCreateNewVariant()
     {
-        $aParams = array('oxarticles__oxvarselect'   => "_testVar",
-                         'oxarticles__oxartnum'      => "123",
-                         'oxarticles__oxprice'       => "10",
-                         'oxarticles__oxvarselect_1' => "_testVar_1",
-                         'oxarticles__oxid'          => "_testVar"
-                         );
+        $aParams = array('oxarticles__oxvarselect'      => "_testVar",
+                         'oxarticles__oxartnum'         => "123",
+                         'oxarticles__oxprice'          => "10",
+                         'oxarticles__oxvarselect_1'    => "_testVar_1",
+                         'oxarticles__oxid'             => "_testVar",
+                         'oxarticles__oxisconfigurable' => "1"
+        );
         $oVariantHandler = oxNew("oxVariantHandler");
         $sVariantId = $oVariantHandler->UNITcreateNewVariant( $aParams, "_testArt" );
         $oVariant = oxNew("oxarticle");
@@ -196,6 +197,7 @@ class Unit_Core_oxvarianthandlerTest extends OxidTestCase
         $this->assertEquals( "_testArt", $oVariant->oxarticles__oxparentid->value);
         $this->assertEquals( "123", $oVariant->oxarticles__oxartnum->value);
         $this->assertEquals( "10", $oVariant->oxarticles__oxprice->value);
+        $this->assertEquals( "1", $oVariant->oxarticles__oxisconfigurable->value);
 
         $oVariant = oxNew("oxarticle");
         $oVariant->loadInLang( 1, $sVariantId );
@@ -295,14 +297,21 @@ class Unit_Core_oxvarianthandlerTest extends OxidTestCase
     public function testApplyVariantSelectionsFilter()
     {
         // test data
-        $aArray["test1"][] = array( 'name' => 'a', 'disabled' => null, 'active' => false, 'hash' => md5( 'a' ) );
-        $aArray["test1"][] = array( 'name' => 'b', 'disabled' => null, 'active' => false, 'hash' => md5( 'b' ) );
+        $aArray["test1"][] = array( 'name' => 'a1', 'disabled' => null, 'active' => false, 'hash' => md5( 'a1' ) );
+        $aArray["test1"][] = array( 'name' => 'b1', 'disabled' => null, 'active' => false, 'hash' => md5( 'b1' ) );
+        $aArray["test1"][] = array( 'name' => 'c1',  'disabled' => null,  'active' => false, 'hash' => md5( 'c1' ) );
 
-        $aArray["test2"][] = array( 'name' => 'a', 'disabled' => null, 'active' => false, 'hash' => md5( 'a' ) );
-        $aArray["test2"][] = array( 'name' => 'b', 'disabled' => null, 'active' => false, 'hash' => md5( 'b' ) );
+        $aArray["test2"][] = array( 'name' => 'a1', 'disabled' => null, 'active' => false, 'hash' => md5( 'a1' ) );
+        $aArray["test2"][] = array( 'name' => 'b2', 'disabled' => null, 'active' => false, 'hash' => md5( 'b2' ) );
+        $aArray["test2"][] = array( 'name' => 'c2',  'disabled' => null,  'active' => false, 'hash' => md5( 'c2' ) );
 
-        $aArray["test3"][] = array( 'name' => 'a', 'disabled' => null, 'active' => false, 'hash' => md5( 'a' ) );
-        $aArray["test3"][] = array( 'name' => '',  'disabled' => null,  'active' => false, 'hash' => md5( '' ) );
+        $aArray["test3"][] = array( 'name' => 'a2', 'disabled' => null, 'active' => false, 'hash' => md5( 'a2' ) );
+        $aArray["test3"][] = array( 'name' => 'b2',  'disabled' => null,  'active' => false, 'hash' => md5( 'b2' ) );
+        $aArray["test3"][] = array( 'name' => 'c3',  'disabled' => null,  'active' => false, 'hash' => md5( 'c3' ) );
+
+        $aArray["test4"][] = array( 'name' => 'a1', 'disabled' => null, 'active' => false, 'hash' => md5( 'a1' ) );
+        $aArray["test4"][] = array( 'name' => '',  'disabled' => null,  'active' => false, 'hash' => md5( '' ) );
+        $aArray["test4"][] = array( 'name' => '',  'disabled' => null,  'active' => false, 'hash' => md5( '' ) );
 
         $oHandler = new oxVariantHandler();
 
@@ -313,48 +322,116 @@ class Unit_Core_oxvarianthandlerTest extends OxidTestCase
         // filter 1
         // expected result
         $aResult = array();
-        $aResult["test1"][] = array( 'name' => 'a', 'disabled' => false, 'active' => true, 'hash' => md5( 'a' ) );
-        $aResult["test1"][] = array( 'name' => 'b', 'disabled' => false, 'active' => false, 'hash' => md5( 'b' ) );
+        $aResult["test1"][] = array( 'name' => 'a1', 'disabled' => null, 'active' => true, 'hash' => md5( 'a1' ) );
+        $aResult["test1"][] = array( 'name' => 'b1', 'disabled' => false, 'active' => false, 'hash' => md5( 'b1' ) );
+        $aResult["test1"][] = array( 'name' => 'c1',  'disabled' => false,  'active' => false, 'hash' => md5( 'c1' ) );
 
-        $aResult["test2"][] = array( 'name' => 'a', 'disabled' => false, 'active' => true, 'hash' => md5( 'a' ) );
-        $aResult["test2"][] = array( 'name' => 'b', 'disabled' => false, 'active' => false, 'hash' => md5( 'b' ) );
+        $aResult["test2"][] = array( 'name' => 'a1', 'disabled' => null, 'active' => true, 'hash' => md5( 'a1' ) );
+        $aResult["test2"][] = array( 'name' => 'b2', 'disabled' => false, 'active' => false, 'hash' => md5( 'b2' ) );
+        $aResult["test2"][] = array( 'name' => 'c2',  'disabled' => false,  'active' => false, 'hash' => md5( 'c2' ) );
 
-        $aResult["test3"][] = array( 'name' => 'a', 'disabled' => false, 'active' => true, 'hash' => md5( 'a' ) );
-        $aResult["test3"][] = array( 'name' => '',  'disabled' => null,  'active' => false, 'hash' => md5( '' ) );
+        $aResult["test3"][] = array( 'name' => 'a2', 'disabled' => null, 'active' => false, 'hash' => md5( 'a2' ) );
+        $aResult["test3"][] = array( 'name' => 'b2',  'disabled' => true,  'active' => false, 'hash' => md5( 'b2' ) );
+        $aResult["test3"][] = array( 'name' => 'c3',  'disabled' => true,  'active' => false, 'hash' => md5( 'c3' ) );
 
-        $aFilter = array( md5( 'a' ), '' );
+        $aResult["test4"][] = array( 'name' => 'a1', 'disabled' => null, 'active' => true, 'hash' => md5( 'a1' ) );
+        $aResult["test4"][] = array( 'name' => '',  'disabled' => false,  'active' => false, 'hash' => md5( '' ) );
+        $aResult["test4"][] = array( 'name' => '',  'disabled' => false,  'active' => false, 'hash' => md5( '' ) );
+
+        $aFilter = array( md5( 'a1' ), '', '');
         $this->assertEquals( array( $aResult, "test1", false ), $oHandler->UNITapplyVariantSelectionsFilter( $aArray, $aFilter ) );
 
         // filter 2
         // expected result
         $aResult = array();
-        $aResult["test1"][] = array( 'name' => 'a', 'disabled' => false, 'active' => false, 'hash' => md5( 'a' ) );
-        $aResult["test1"][] = array( 'name' => 'b', 'disabled' => false, 'active' => true,  'hash' => md5( 'b' ) );
+        $aResult["test1"][] = array( 'name' => 'a1', 'disabled' => false, 'active' => false, 'hash' => md5( 'a1' ) );
+        $aResult["test1"][] = array( 'name' => 'b1', 'disabled' => null, 'active' => true, 'hash' => md5( 'b1' ) );
+        $aResult["test1"][] = array( 'name' => 'c1',  'disabled' => false,  'active' => false, 'hash' => md5( 'c1' ) );
 
-        $aResult["test2"][] = array( 'name' => 'a', 'disabled' => false, 'active' => false, 'hash' => md5( 'a' ) );
-        $aResult["test2"][] = array( 'name' => 'b', 'disabled' => false, 'active' => true,  'hash' => md5( 'b' ) );
+        $aResult["test2"][] = array( 'name' => 'a1', 'disabled' => true, 'active' => false, 'hash' => md5( 'a1' ) );
+        $aResult["test2"][] = array( 'name' => 'b2', 'disabled' => null, 'active' => false, 'hash' => md5( 'b2' ) );
+        $aResult["test2"][] = array( 'name' => 'c2',  'disabled' => true,  'active' => false, 'hash' => md5( 'c2' ) );
 
-        $aResult["test3"][] = array( 'name' => 'a', 'disabled' => true,  'active' => false, 'hash' => md5( 'a' ) );
-        $aResult["test3"][] = array( 'name' => '',  'disabled' => null,  'active' => false, 'hash' => md5( '' ) );
+        $aResult["test3"][] = array( 'name' => 'a2', 'disabled' => true, 'active' => false, 'hash' => md5( 'a2' ) );
+        $aResult["test3"][] = array( 'name' => 'b2',  'disabled' => null,  'active' => false, 'hash' => md5( 'b2' ) );
+        $aResult["test3"][] = array( 'name' => 'c3',  'disabled' => true,  'active' => false, 'hash' => md5( 'c3' ) );
 
-        $aFilter = array( '', md5( 'b' ) );
+        $aResult["test4"][] = array( 'name' => 'a1', 'disabled' => true, 'active' => false, 'hash' => md5( 'a1' ) );
+        $aResult["test4"][] = array( 'name' => '',  'disabled' => null,  'active' => false, 'hash' => md5( '' ) );
+        $aResult["test4"][] = array( 'name' => '',  'disabled' => true,  'active' => false, 'hash' => md5( '' ) );
+
+        $aFilter = array( '', md5( 'b1' ) );
         $this->assertEquals( array( $aResult, "test1", false ), $oHandler->UNITapplyVariantSelectionsFilter( $aArray, $aFilter ) );
 
         // filter 3
         // expected result
         $aResult = array();
-        $aResult["test1"][] = array( 'name' => 'a', 'disabled' => false, 'active' => true, 'hash' => md5( 'a' ) );
-        $aResult["test1"][] = array( 'name' => 'b', 'disabled' => false, 'active' => true, 'hash' => md5( 'b' ) );
+        $aResult["test1"][] = array( 'name' => 'a1', 'disabled' => null, 'active' => true, 'hash' => md5( 'a1' ) );
+        $aResult["test1"][] = array( 'name' => 'b1', 'disabled' => null, 'active' => true, 'hash' => md5( 'b1' ) );
+        $aResult["test1"][] = array( 'name' => 'c1', 'disabled' => false,  'active' => false, 'hash' => md5( 'c1' ) );
 
-        $aResult["test2"][] = array( 'name' => 'a', 'disabled' => false, 'active' => true, 'hash' => md5( 'a' ) );
-        $aResult["test2"][] = array( 'name' => 'b', 'disabled' => false, 'active' => true, 'hash' => md5( 'b' ) );
+        $aResult["test2"][] = array( 'name' => 'a1', 'disabled' => true, 'active' => true, 'hash' => md5( 'a1' ) );
+        $aResult["test2"][] = array( 'name' => 'b2', 'disabled' => null, 'active' => false, 'hash' => md5( 'b2' ) );
+        $aResult["test2"][] = array( 'name' => 'c2', 'disabled' => true,  'active' => false, 'hash' => md5( 'c2' ) );
 
-        $aResult["test3"][] = array( 'name' => 'a', 'disabled' => true,  'active' => true,  'hash' => md5( 'a' ) );
-        $aResult["test3"][] = array( 'name' => '',  'disabled' => false, 'active' => false, 'hash' => md5( '' ) );
+        $aResult["test3"][] = array( 'name' => 'a2', 'disabled' => true, 'active' => false, 'hash' => md5( 'a2' ) );
+        $aResult["test3"][] = array( 'name' => 'b2', 'disabled' => true,  'active' => false, 'hash' => md5( 'b2' ) );
+        $aResult["test3"][] = array( 'name' => 'c3', 'disabled' => true,  'active' => false, 'hash' => md5( 'c3' ) );
 
-        $aFilter = array( md5( 'a' ), md5( 'b' ) );
+        $aResult["test4"][] = array( 'name' => 'a1', 'disabled' => true, 'active' => true, 'hash' => md5( 'a1' ) );
+        $aResult["test4"][] = array( 'name' => '',  'disabled' => null,  'active' => false, 'hash' => md5( '' ) );
+        $aResult["test4"][] = array( 'name' => '',  'disabled' => true,  'active' => false, 'hash' => md5( '' ) );
 
-        $this->assertEquals( array( $aResult, "test1", true ), $oHandler->UNITapplyVariantSelectionsFilter( $aArray, $aFilter ) );
+        $aFilter = array( md5( 'a1' ), md5( 'b1' ) );
+
+        $this->assertEquals( array( $aResult, "test1", false ), $oHandler->UNITapplyVariantSelectionsFilter( $aArray, $aFilter ) );
+
+        // filter 4
+        // expected result
+        $aResult = array();
+        $aResult["test1"][] = array( 'name' => 'a1', 'disabled' => true, 'active' => true, 'hash' => md5( 'a1' ) );
+        $aResult["test1"][] = array( 'name' => 'b1', 'disabled' => null, 'active' => false, 'hash' => md5( 'b1' ) );
+        $aResult["test1"][] = array( 'name' => 'c1',  'disabled' => true,  'active' => false, 'hash' => md5( 'c1' ) );
+
+        $aResult["test2"][] = array( 'name' => 'a1', 'disabled' => null, 'active' => true, 'hash' => md5( 'a1' ) );
+        $aResult["test2"][] = array( 'name' => 'b2', 'disabled' => null, 'active' => true, 'hash' => md5( 'b2' ) );
+        $aResult["test2"][] = array( 'name' => 'c2',  'disabled' => false,  'active' => false, 'hash' => md5( 'c2' ) );
+
+        $aResult["test3"][] = array( 'name' => 'a2', 'disabled' => null, 'active' => false, 'hash' => md5( 'a2' ) );
+        $aResult["test3"][] = array( 'name' => 'b2',  'disabled' => true,  'active' => true, 'hash' => md5( 'b2' ) );
+        $aResult["test3"][] = array( 'name' => 'c3',  'disabled' => true,  'active' => false, 'hash' => md5( 'c3' ) );
+
+        $aResult["test4"][] = array( 'name' => 'a1', 'disabled' => true, 'active' => true, 'hash' => md5( 'a1' ) );
+        $aResult["test4"][] = array( 'name' => '',  'disabled' => null,  'active' => false, 'hash' => md5( '' ) );
+        $aResult["test4"][] = array( 'name' => '',  'disabled' => true,  'active' => false, 'hash' => md5( '' ) );
+
+        $aFilter = array( md5( 'a1' ), md5( 'b2' ) );
+
+        $this->assertEquals( array( $aResult, "test2", false ), $oHandler->UNITapplyVariantSelectionsFilter( $aArray, $aFilter ) );
+
+        // filter 5
+        // expected result
+        $aResult = array();
+        $aResult["test1"][] = array( 'name' => 'a1', 'disabled' => true, 'active' => false, 'hash' => md5( 'a1' ) );
+        $aResult["test1"][] = array( 'name' => 'b1', 'disabled' => true, 'active' => false, 'hash' => md5( 'b1' ) );
+        $aResult["test1"][] = array( 'name' => 'c1',  'disabled' => true,  'active' => false, 'hash' => md5( 'c1' ) );
+
+        $aResult["test2"][] = array( 'name' => 'a1', 'disabled' => true, 'active' => false, 'hash' => md5( 'a1' ) );
+        $aResult["test2"][] = array( 'name' => 'b2', 'disabled' => true, 'active' => true, 'hash' => md5( 'b2' ) );
+        $aResult["test2"][] = array( 'name' => 'c2',  'disabled' => true,  'active' => false, 'hash' => md5( 'c2' ) );
+
+        $aResult["test3"][] = array( 'name' => 'a2', 'disabled' => null, 'active' => true, 'hash' => md5( 'a2' ) );
+        $aResult["test3"][] = array( 'name' => 'b2',  'disabled' => null,  'active' => true, 'hash' => md5( 'b2' ) );
+        $aResult["test3"][] = array( 'name' => 'c3',  'disabled' => null,  'active' => true, 'hash' => md5( 'c3' ) );
+
+        $aResult["test4"][] = array( 'name' => 'a1', 'disabled' => true, 'active' => false, 'hash' => md5( 'a1' ) );
+        $aResult["test4"][] = array( 'name' => '',  'disabled' => true,  'active' => false, 'hash' => md5( '' ) );
+        $aResult["test4"][] = array( 'name' => '',  'disabled' => true,  'active' => false, 'hash' => md5( '' ) );
+
+        $aFilter = array( md5( 'a2' ), md5( 'b2' ), md5( 'c3' ) );
+
+        $this->assertEquals( array( $aResult, "test3", true ), $oHandler->UNITapplyVariantSelectionsFilter( $aArray, $aFilter ) );
+
     }
 
     /**

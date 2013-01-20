@@ -25,10 +25,13 @@
 if (getenv('oxPATH')) {
     define ('oxPATH', getenv('oxPATH'));
 } else {
-    if (!defined('oxPATH')) {
-        die('oxPATH is not defined');
-    }
 }
+
+if (!defined('oxPATH')) {
+        die('oxPATH is not defined');
+}
+
+
 
 if (!defined('OXID_VERSION_SUFIX')) {
     define('OXID_VERSION_SUFIX', '');

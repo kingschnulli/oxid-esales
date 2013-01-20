@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: articlepicturesTest.php 37096 2011-07-15 14:25:01Z arvydas.vapsva $
+ * @version   SVN: $Id: articlepicturesTest.php 40264 2011-11-24 14:04:45Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -185,7 +185,7 @@ class Unit_Admin_ArticlePicturesTest extends OxidTestCase
         modConfig::setParameter( "oxid", "_testArtId" );
         modConfig::setParameter( "masterPicIndex", "ICO" );
 
-        $oDb = oxDb::getDb( true );
+        $oDb = oxDb::getDb( oxDB::FETCH_MODE_ASSOC );
 
         $oArtPic = $this->getMock( "Article_Pictures", array( "_deleteThumbnail", "_deleteMasterPicture" ) );
         $oArtPic->expects( $this->never() )->method( '_deleteThumbnail' );
@@ -208,7 +208,7 @@ class Unit_Admin_ArticlePicturesTest extends OxidTestCase
     {
         modConfig::setParameter( "oxid", "_testArtId" );
         modConfig::setParameter( "masterPicIndex", "TH" );
-        $oDb = oxDb::getDb( true );
+        $oDb = oxDb::getDb( oxDB::FETCH_MODE_ASSOC );
 
         $oArtPic = $this->getMock( "Article_Pictures", array( "_deleteMainIcon", "_deleteMasterPicture" ) );
         $oArtPic->expects( $this->never() )->method( '_deleteMainIcon' );
@@ -231,7 +231,7 @@ class Unit_Admin_ArticlePicturesTest extends OxidTestCase
     {
         modConfig::setParameter( "oxid", "_testArtId" );
         modConfig::setParameter( "masterPicIndex", "2" );
-        $oDb = oxDb::getDb( true );
+        $oDb = oxDb::getDb( oxDB::FETCH_MODE_ASSOC );
 
         $oArtPic = $this->getMock( "Article_Pictures", array( "_deleteMainIcon", "_deleteThumbnail" ) );
         $oArtPic->expects( $this->never() )->method( '_deleteMainIcon' );

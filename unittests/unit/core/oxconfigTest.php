@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxconfigTest.php 50464 2012-10-12 13:37:50Z vilma $
+ * @version   SVN: $Id: oxconfigTest.php 51662 2012-11-12 09:33:47Z aurimas.gladutis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -30,6 +30,19 @@ class modForTestGetBaseTplDirExpectsDefault extends oxConfig
     public function getShopId()
     {
         return 'xxx';
+    }
+}
+
+
+class modForTestInitLoadingPriority extends oxConfig
+{
+    public $iDebug;
+
+    protected function _loadVarsFromDb($sShopID, $aOnlyVars = null, $sModule = '')
+    {
+        $this->iDebug = 33;
+
+        return true;
     }
 }
 
@@ -155,6 +168,11 @@ class Unit_Core_oxconfigTest extends OxidTestCase
         $sDir = oxConfig::getInstance()->getConfigParam( 'sShopDir' )."/out/en/tpl";
         if (is_dir(realpath($sDir))) {
             oxUtilsFile::getInstance()->deleteDir($sDir);
+        }
+
+        $sCustConfigPath = getShopBasePath() . "/cust_config.inc.php";
+        if ( file_exists( $sCustConfigPath ) ) {
+            unlink($sCustConfigPath);
         }
 
         $this->cleanUpTable('oxconfig');
@@ -308,7 +326,7 @@ class Unit_Core_oxconfigTest extends OxidTestCase
     public function testInit_noConnection()
     {
         $oConfig = $this->getMock( "oxconfig", array( "_loadVarsFromDb" ) );
-        $oEx = $oEx = oxNew( "oxConnectionException" );
+        $oEx = oxNew( "oxConnectionException" );
         $oConfig->expects( $this->once() )->method( '_loadVarsFromDb')->will( $this->throwException( $oEx ) );
 
         $this->assertFalse( $oConfig->init() );
@@ -585,7 +603,7 @@ class Unit_Core_oxconfigTest extends OxidTestCase
         $oConfig->init();
         $sShopId  = $oConfig->getShopId();
         $sConfKey = $oConfig->getConfigParam( 'sConfigKey' );
-        $oDb = oxDb::getDb(true);
+        $oDb = oxDb::getDb( oxDB::FETCH_MODE_ASSOC );
 
         $aVars = array( "theme:basic#iNewBasketItemMessage",
                         "theme:azure#iNewBasketItemMessage",
@@ -825,6 +843,76 @@ class Unit_Core_oxconfigTest extends OxidTestCase
             $oConfig->saveShopConfVar( 'bool', "testVar", "false" );
             $this->assertFalse( $oConfig->getShopConfVar( "testVar" ) );
             $this->assertFalse( $oConfig->getConfigParam( "testVar" ) );
+        } catch (Exception $oE) {
+            // rethrow later
+        }
+        oxDb::getDb()->execute("delete from oxconfig where oxvarname='testVar'");
+        if ($oE) {
+            throw $oE;
+        }
+    }
+
+
+    /**
+     * Testing if shop var saver writes num value with valid string to config correctly
+     */
+    public function testsaveShopConfVarNumValidString()
+    {
+        $oConfig = new oxConfig();
+        $oConfig->init();
+
+        $oE = null;
+        try {
+            $oConfig->saveShopConfVar( 'num', "testVar", "10.000,5989" );
+            $this->assertEquals( 10000.5989, $oConfig->getShopConfVar( "testVar" ) );
+            $this->assertEquals( 10000.5989, $oConfig->getConfigParam( "testVar" ) );
+            $oConfig->saveShopConfVar( 'num', "testVar", "20,000.5989" );
+            $this->assertEquals( 20000.5989, $oConfig->getShopConfVar( "testVar" ) );
+            $this->assertEquals( 20000.5989, $oConfig->getConfigParam( "testVar" ) );
+        } catch (Exception $oE) {
+            // rethrow later
+        }
+        oxDb::getDb()->execute("delete from oxconfig where oxvarname='testVar'");
+        if ($oE) {
+            throw $oE;
+        }
+    }
+
+    /**
+     * Testing if shop var saver writes num value with invalid string to config correctly
+     */
+    public function testsaveShopConfVarNumInvalidString()
+    {
+        $oConfig = new oxConfig();
+        $oConfig->init();
+
+        $oE = null;
+        try {
+            $oConfig->saveShopConfVar( 'num', "testVar", "abc" );
+            $this->assertEquals( 0, $oConfig->getShopConfVar( "testVar" ) );
+            $this->assertEquals( 0, $oConfig->getConfigParam( "testVar" ) );
+        } catch (Exception $oE) {
+            // rethrow later
+        }
+        oxDb::getDb()->execute("delete from oxconfig where oxvarname='testVar'");
+        if ($oE) {
+            throw $oE;
+        }
+    }
+
+    /**
+     * Testing if shop var saver writes num value with float to config correctly
+     */
+    public function testsaveShopConfVarNumFloat()
+    {
+        $oConfig = new oxConfig();
+        $oConfig->init();
+
+        $oE = null;
+        try {
+            $oConfig->saveShopConfVar( 'num', "testVar", 50.009 );
+            $this->assertEquals( 50.009, $oConfig->getShopConfVar( "testVar" ) );
+            $this->assertEquals( 50.009, $oConfig->getConfigParam( "testVar" ) );
         } catch (Exception $oE) {
             // rethrow later
         }
@@ -1548,15 +1636,14 @@ class Unit_Core_oxconfigTest extends OxidTestCase
         $oConfig = new modForTestGetBaseTemplateDirAdminSsl();
         $oConfig->init();
         $oConfig->setConfigParam( 'sSSLShopURL', 'https://www.example.com/' );
-        $this->assertEquals( 'https://www.example.com/index.php?', $oConfig->getShopCurrentUrl() );
+        $this->assertEquals( 0, strpos( $oConfig->getShopCurrentUrl(), 'https://www.example.com/index.php?') );
     }
     public function testGetShopCurrentUrlNoSsl()
     {
         $oConfig = new modForTestGetBaseTemplateDirNonAdminNonSsl();
         $oConfig->init();
         $oConfig->setConfigParam( 'sShopURL', 'http://www.example.com/' );
-        $this->assertEquals( 'http://www.example.com/index.php?', $oConfig->getShopCurrentUrl() );
-
+        $this->assertEquals( 0, strpos( $oConfig->getShopCurrentUrl(), 'http://www.example.com/index.php?') );
     }
 
 
@@ -1955,6 +2042,7 @@ class Unit_Core_oxconfigTest extends OxidTestCase
 
 
 
+
     public function testGetOutDir()
     {
         $oConfig = new oxConfig();
@@ -2208,7 +2296,7 @@ class Unit_Core_oxconfigTest extends OxidTestCase
         $this->assertEquals( $sQ, $oConfig->getDecodeValueQuery() );
     }
 
-     public function testGetShopMainUrl()
+    public function testGetShopMainUrl()
     {
         $oConfig = $this->getProxyClass( "oxConfig" );
 
@@ -2224,6 +2312,120 @@ class Unit_Core_oxconfigTest extends OxidTestCase
         $oConfig->setNonPublicVar("_blIsSsl", true );
         $this->assertEquals( $sSSLUrl, $oConfig->getShopMainUrl() );
 
+    }
+
+    /**
+     * Checks if config variables loaded from congfig.inc.php file
+     * takes higher priority compared to the ones loaded from db.
+     * This is a test case for bug #3427
+     */
+    public function testConfigFilePriority()
+    {
+        $oConfig = new modForTestInitLoadingPriority();
+        $oConfig->init();
+        $this->assertNotEquals(33, $oConfig->iDebug);
+    }
+
+    /**
+     * Checks if shop license has demo mode
+     */
+    public function testHasDemoKey()
+    {
+            return;
+        // all modules off
+        $oSerial = $this->getMock( 'oxSerial', array( "isFlagEnabled" ) );
+        $oSerial->expects( $this->once() )->method( 'isFlagEnabled')->will( $this->returnValue( true ) );
+
+        $oConfig = $this->getMock( 'oxconfig', array( "getSerial" ) );
+        $oConfig->expects( $this->once() )->method( 'getSerial')->will( $this->returnValue( $oSerial ) );
+
+        $this->assertTrue( $oConfig->hasDemoKey() );
+    }
+
+
+    /**
+     * oxmodule::getAllModules() test case
+     *
+     * @return null
+     */
+    public function testGetAllModules()
+    {
+        $aModules = array(
+            'oxorder'  => 'testExt1/module1&testExt2/module1',
+            'oxnews'   => 'testExt2/module2'
+        );
+
+        $aResult = array(
+            'oxorder'  => array( 'testExt1/module1', 'testExt2/module1' ),
+            'oxnews'   => array( 'testExt2/module2' )
+        );
+
+        $oConfig = $this->getMock( 'oxconfig', array( "getConfigParam" ) );
+        $oConfig->expects( $this->once() )->method( 'getConfigParam')->with( $this->equalTo( "aModules" ) )->will( $this->returnValue( $aModules ) );
+
+        $this->assertEquals( $aResult, $oConfig->getAllModules() );
+    }
+
+    /**
+     * oxmodule::parseModuleChains() test case, empty
+     *
+     * @return null
+     */
+    public function testParseModuleChainsEmpty()
+    {
+        $oConfig = $this->getProxyClass('oxconfig');
+
+        $aModules = array();
+        $aModulesArray  = array();
+        $this->assertEquals($aModulesArray, $oConfig->parseModuleChains($aModules));
+    }
+
+    /**
+     * oxmodule::parseModuleChains() test case, single
+     *
+     * @return null
+     */
+    public function testParseModuleChainsSigle()
+    {
+        $oConfig = $this->getProxyClass('oxconfig');
+        $aModules = array('oxtest' => 'test/mytest');
+        $aModulesArray  = array('oxtest' => array('test/mytest'));
+        $this->assertEquals($aModulesArray, $oConfig->parseModuleChains($aModules));
+    }
+
+    /**
+     * oxmodule::parseModuleChains() test case
+     *
+     * @return null
+     */
+    public function testParseModuleChains()
+    {
+        $oConfig = $this->getProxyClass('oxconfig');
+        $aModules = array('oxtest' => 'test/mytest&test1/mytest1');
+        $aModulesArray  = array('oxtest' => array('test/mytest','test1/mytest1'));
+        $this->assertEquals($aModulesArray, $oConfig->parseModuleChains($aModules));
+    }
+
+    /**
+     * Tests that custom config is being set and variables from it are reachable
+     *
+     */
+    public function testLoadCustomConfig()
+    {
+        $sDir = getShopBasePath();
+        $sCustConfig = $sDir . "/cust_config.inc.php";
+
+        $handle = fopen( $sCustConfig, "w" );
+        chmod($sCustConfig, 0777);
+
+        $data = '<?php $this->custVar = test;';
+        fwrite( $handle, $data );
+
+        $oConfig = $this->getProxyClass( 'oxconfig' );
+        $oConfig->_loadVarsFromFile();
+        $sVar = $oConfig->getConfigParam( "custVar" );
+
+        $this->assertSame("test", $sVar);
     }
 
 

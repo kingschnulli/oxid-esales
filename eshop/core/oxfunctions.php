@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxfunctions.php 46477 2012-06-20 13:27:50Z edvardas.gineika $
+ * @version   SVN: $Id: oxfunctions.php 46478 2012-06-20 13:45:36Z rimvydas.paskevicius $
  */
 
 /**
@@ -91,6 +91,31 @@ function oxAutoload( $sClass )
         }
     }
 
+    // Files registered by modules
+    $aModuleFiles = oxConfig::getInstance()->getConfigParam( 'aModuleFiles' );
+    if ( is_array( $aModuleFiles ) ) {
+        $sBasePath   = getShopBasePath();
+        $oModulelist = oxNew('oxmodulelist');
+        $aActiveModuleInfo = $oModulelist->getActiveModuleInfo();
+        if (is_array($aActiveModuleInfo)) {
+            foreach ($aModuleFiles as $sModuleId => $aModules) {
+                if (isset($aModules[$sClass]) && isset($aActiveModuleInfo[$sModuleId])) {
+                    $sPath = $aModules[$sClass];
+                    $sFilename = $sBasePath. 'modules/'.  $sPath;
+                    if ( file_exists( $sFilename ) ) {
+                        if (!isset($aClassPaths[$sClass])) {
+                            $aClassPaths[$sClass] = $sFilename;
+                            oxUtils::getInstance()->toPhpFileCache("class_file_paths", $aClassPaths);
+                        }
+                        stopProfile("oxAutoload");
+                        include $sFilename;
+                        return;
+                    }
+                }
+            }
+        }
+    }
+
     // in case module parent class (*_parent) is required
     $sClass = preg_replace( '/_parent$/i', '', $sClass );
 
@@ -104,8 +129,8 @@ function oxAutoload( $sClass )
                 $myUtilsObject->getClassName( $sParentName );
                 break;
             }
+            $aTriedClasses[] = $sClass;
         }
-        $aTriedClasses[] = $sClass;
     }
 
     stopProfile("oxAutoload");

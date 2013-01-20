@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxtagcloud.php 43575 2012-04-06 09:45:38Z vilma $
+ * @version   SVN: $Id: oxtagcloud.php 53210 2012-12-21 11:51:53Z aurimas.gladutis $
  */
 
 if (!defined('OXTAGCLOUD_MINFONT')) {
@@ -82,11 +82,19 @@ class oxTagCloud extends oxSuperCfg
 
     /**
      * Tag separator.
-     * Separator as space is deprecated. The default value is  ','
+     * @deprecated since 5.0.0,  Separator as space is not used any more. The default value is  ','
      *
      * @var string
      */
     protected $_sSeparator = ' ';
+
+    /**
+     * Maximum tag's length
+     * Maximum size of one tag in admin area and limits tag input field in front end
+     *
+     * @var int
+     */
+    protected $_iTagMaxLength = 60;
 
     /**
      * Meta characters.
@@ -94,7 +102,8 @@ class oxTagCloud extends oxSuperCfg
      *
      * @var array
      */
-    protected $_aMetaChars = array('+','-','>','<','(',')','~','*','"','\'','\\');
+
+    protected $_aMetaChars = array('+','-','>','<','(',')','~','*','"','\'','\\','[',']','{','}',';',':','.','/','|','!','@','#','$','%','^','&','?','=','`');
 
     /**
      * Object constructor. Initializes separator.
@@ -167,6 +176,16 @@ class oxTagCloud extends oxSuperCfg
     }
 
     /**
+     * Returns current maximum tag length
+     *
+     * @return int
+     */
+    public function getTagMaxLength()
+    {
+        return $this->_iTagMaxLength;
+    }
+
+    /**
      * Extended mode getter
      *
      * @return bool
@@ -180,7 +199,7 @@ class oxTagCloud extends oxSuperCfg
      * Returns extended tag cloud array
      *
      * @param string $sProductId product id [optional]
-     * @param bool   $blExtended extended clour array mode [optional]
+     * @param bool   $blExtended extended cloud array mode [optional]
      * @param int    $iLang      language id [optional]
      *
      * @return array
@@ -193,7 +212,10 @@ class oxTagCloud extends oxSuperCfg
         $sProductId = ( $sProductId === null ) ? (string) $this->getProductId() : $sProductId;
 
         // checking if current data is allready loaded
-        $sCacheIdent = $this->_getCacheKey( $blExtended, $iLang )."_".$sProductId;
+        $sCacheIdent = $this->_getCacheKey( $blExtended, $iLang );
+        if ($sProductId ) {
+            $sCacheIdent .= "_".$sProductId;
+        }
         if ( !isset( $this->_aCloudArray[$sCacheIdent] ) ) {
 
             $myUtils = oxUtils::getInstance();
@@ -287,7 +309,8 @@ class oxTagCloud extends oxSuperCfg
      */
     public function getTags( $sArtId = null, $blExtended = false, $iLang = null )
     {
-        $oDb = oxDb::getDb(true);
+        $oDb = oxDb::getDb( oxDb::FETCH_MODE_ASSOC );
+
         if ($blExtended) {
             $iAmount = OXTAGCLOUD_EXTENDEDCOUNT;
         } else {
@@ -297,19 +320,24 @@ class oxTagCloud extends oxSuperCfg
         $sArtView  = getViewName( 'oxarticles', $iLang );
         $sViewName = getViewName( 'oxartextends', $iLang );
 
-        $sArticleSelect = " 1 ";
-        if ( $sArtId ) {
-            $sArticleSelect = " oxarticles.oxid = ".$oDb->quote( $sArtId )." ";
-            $iAmount = 0;
-        }
-
         // check if article is still active
         $oArticle   = oxNew( 'oxarticle' );
         $oArticle->setLanguage( $iLang );
         $sArtActive = $oArticle->getActiveCheckQuery(true);
 
-        $sQ = "select {$sViewName}.oxtags as oxtags from $sArtView as oxarticles left join {$sViewName} on oxarticles.oxid={$sViewName}.oxid where $sArtActive AND $sArticleSelect";
-        $rs = $oDb->execute( $sQ );
+
+        $sQ = "SELECT {$sViewName}.`oxtags` AS `oxtags`
+            FROM {$sArtView} AS `oxarticles`
+                LEFT JOIN {$sViewName} ON `oxarticles`.`oxid` = {$sViewName}.`oxid`
+            WHERE `oxarticles`.`oxactive` = 1 AND $sArtActive";
+
+        if ( $sArtId ) {
+            $sQ = "SELECT {$sViewName}.`oxtags` AS `oxtags` FROM {$sViewName} WHERE `oxid` = " . $oDb->quote( $sArtId );
+            $iAmount = 0;
+        }
+
+        $oDb->setFetchMode( oxDb::FETCH_MODE_ASSOC );
+        $rs = $oDb->select( $sQ );
         $aTags = array();
         while ( $rs && $rs->recordCount() && !$rs->EOF ) {
             $sTags = $this->trimTags( $rs->fields['oxtags'] );
@@ -343,7 +371,7 @@ class oxTagCloud extends oxSuperCfg
     protected function _sortTags( $aTags, $iLang = null )
     {
         if ( is_array( $aTags ) && count( $aTags ) ) {
-            $oDb = oxDb::getDb( true );
+            $oDb = oxDb::getDb( oxDb::FETCH_MODE_ASSOC );
             $sSubQ = '';
             foreach ( $aTags as $sKey => $sTag ) {
                 if ( $sSubQ ) {
@@ -359,7 +387,8 @@ class oxTagCloud extends oxSuperCfg
             $sQ = "select _oxtable._oxsort, _oxtable._oxval from ( {$sSubQ} ) as _oxtable order by _oxtable._oxsort desc";
 
             $aTags = array();
-            $oRs = $oDb->execute( $sQ );
+            $oDb->setFetchMode( oxDb::FETCH_MODE_ASSOC );
+            $oRs = $oDb->select( $sQ );
             while ( $oRs && $oRs->recordCount() && !$oRs->EOF ) {
                 if ( $oRs->fields['_oxval'] != 'ox_skip' ) {
                     $aTags[$oRs->fields['_oxsort']] = $oRs->fields['_oxval'];
@@ -441,6 +470,7 @@ class oxTagCloud extends oxSuperCfg
     /**
      * Takes tags string, checks each tag length and makes shorter tags longer if needed.
      * This is needed for FULLTEXT index
+     * Also if tag is longer than tag's max length - cuts it.
      *
      * @param string $sTags given tag
      *
@@ -456,6 +486,11 @@ class oxTagCloud extends oxSuperCfg
         foreach ( $aTags as $sTag ) {
             if ( ( $sTag = trim( $sTag ) ) ) {
                 $sRes = '';
+                $iLen = $oStr->strlen( $sTag );
+                if ( $iLen > $this->_iTagMaxLength ) {
+                    $sTag = $oStr->substr($sTag, 0, $this->_iTagMaxLength);
+                }
+                $sTag = trim( $sTag );
                 $aMatches = explode(' ', $sTag);
                 foreach ( $aMatches as $iKey => $sMatch ) {
                     $sRes .= $oStr->strtolower( $this->_fixTagLength($sMatch ) )." ";
@@ -468,7 +503,7 @@ class oxTagCloud extends oxSuperCfg
     }
 
     /**
-     * Trims underscores and spaces from tags.
+     * Trims spaces from tags, removes unnecessary commas, dashes and underscores.
      *
      * @param string $sTags given tag
      *
@@ -522,7 +557,7 @@ class oxTagCloud extends oxSuperCfg
      */
     protected function _getCacheKey( $blExtended, $iLang = null )
     {
-        return $this->_sCacheKey."_".$this->getConfig()->getShopId()."_".( ( $iLang !== null ) ? $iLang : oxLang::getInstance()->getBaseLanguage() ) ."_".$blExtended;
+        return $this->_sCacheKey."_".$this->getConfig()->getShopId()."_".( ( $iLang !== null ) ? $iLang : oxLang::getInstance()->getBaseLanguage() ) ."_".($blExtended?1:0);
     }
 
     /**

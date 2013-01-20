@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutilspic.php 51431 2012-11-06 15:29:38Z aurimas.gladutis $
+ * @version   SVN: $Id: oxutilspic.php 51021 2012-10-29 07:42:11Z aurimas.gladutis $
  */
 
 /**
@@ -170,7 +170,7 @@ class oxUtilsPic extends oxSuperCfg
         }
 
         $oDb = oxDb::getDb();
-        $iCountUsed = $oDb->getOne( "select count(*) from $sTable where $sField = ".$oDb->quote( $sPicName ). " group by $sField " );
+        $iCountUsed = $oDb->getOne( "select count(*) from $sTable where $sField = ".$oDb->quote( $sPicName ). " group by $sField ", false, false);
         return $iCountUsed > 1 ? false : true;
     }
 
@@ -194,7 +194,7 @@ class oxUtilsPic extends oxSuperCfg
         if ( isset( $oObject->{$sPic} ) &&
              ( $_FILES['myfile']['size'][$sPicType.'@'.$sPic] > 0 || $aParams[$sPic] != $oObject->{$sPic}->value ) ) {
 
-            $sImgDir = $sAbsDynImageDir . $sPicDir;
+            $sImgDir = $sAbsDynImageDir . oxUtilsFile::getInstance()->getImageDirByType($sPicType);
             $blDelete = $this->safePictureDelete($oObject->{$sPic}->value, $sImgDir, $sPicTable, $sPicField );
         }
 

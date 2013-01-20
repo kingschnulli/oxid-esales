@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: orderoverviewTest.php 40128 2011-11-22 13:48:49Z ramunas.skarbalius $
+ * @version   SVN: $Id: orderoverviewTest.php 47317 2012-07-13 07:59:49Z rimvydas.paskevicius $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -38,6 +38,7 @@ class Unit_Admin_OrderOverviewTest extends OxidTestCase
     protected function tearDown()
     {
         $this->cleanUpTable( 'oxorder' );
+        $this->cleanUpTable( "oxorderarticles" );
         parent::tearDown();
     }
 
@@ -141,6 +142,7 @@ class Unit_Admin_OrderOverviewTest extends OxidTestCase
         $oOrder->oxorder__oxcurrency      = new oxField( "EUR" );
         $oOrder->oxorder__oxcurrate       = new oxField( 1 );
         $oOrder->oxorder__oxdeltype       = new oxField( "oxidstandard" );
+        $oOrder->oxorder__oxordernr       = new oxField( 1 );
         $oOrder->save();
         modConfig::setParameter( "oxid", $soxId );
         oxTestModules::addFunction( 'oxUtils', 'setHeader', '{ if ( !isset( $this->_aHeaderData ) ) { $this->_aHeaderData = array();} $this->_aHeaderData[] = $aA[0]; }');
@@ -196,6 +198,7 @@ class Unit_Admin_OrderOverviewTest extends OxidTestCase
         $oOrder->oxorder__oxcurrency      = new oxField( "EUR" );
         $oOrder->oxorder__oxcurrate       = new oxField( 1 );
         $oOrder->oxorder__oxdeltype       = new oxField( "oxidstandard" );
+        $oOrder->oxorder__oxordernr       = new oxField( 1 );
         $oOrder->save();
         modConfig::setParameter( "ordernr", 1 );
         oxTestModules::addFunction( 'oxUtils', 'setHeader', '{ if ( !isset( $this->_aHeaderData ) ) { $this->_aHeaderData = array();} $this->_aHeaderData[] = $aA[0]; }');
@@ -264,11 +267,24 @@ class Unit_Admin_OrderOverviewTest extends OxidTestCase
      */
     public function testCanExport()
     {
-        oxTestModules::addFunction( 'oxUtilsObject', 'isModuleActive', '{ return true; }');
+        oxTestModules::addFunction( 'oxModule', 'isActive', '{ return true; }');
+
+        $oBase = new oxbase();
+        $oBase->init( "oxorderarticles" );
+        $oBase->setId( "_testOrderArticleId");
+        $oBase->oxorderarticles__oxorderid = new oxField( "testOrderId" );
+        $oBase->oxorderarticles__oxamount  = new oxField( 1 );
+        $oBase->oxorderarticles__oxartid   = new oxField( "1126" );
+        $oBase->oxorderarticles__oxordershopid = new oxField( oxConfig::getInstance()->getShopId() );
+        $oBase->save();
 
         // testing..
         $oView = new Order_Overview();
-        $this->assertFalse( $oView->canExport() );
+
+        $oView = $this->getMock( "Order_Overview", array( "getEditObjectId" ) );
+        $oView->expects( $this->any() )->method( 'getEditObjectId')->will( $this->returnValue( 'testOrderId' ) );
+
+        $this->assertTrue( $oView->canExport() );
     }
 
     /**

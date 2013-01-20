@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: userTest.php 38199 2011-08-17 14:04:12Z arunas.paskevicius $
+ * @version   SVN: $Id: userTest.php 44250 2012-04-24 11:41:42Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -112,15 +112,15 @@ class Unit_Views_userTest extends OxidTestCase
      * Tests User::getOrderRemark() when not logged in and form was't submited
      */
     public function testGetOrderRemarkNoRemark()
-    {             
+    {
         // get user returns false (not logged in)
         $oUserView = $this->getMock( 'user', array( 'getUser' ) );
         $oUserView->expects( $this->once() )->method( 'getUser' )->will( $this->returnValue( false ) );
-        
+
         // not connected and no post (will return false)
-        $this->assertFalse( $oUserView->getOrderRemark() );         
+        $this->assertFalse( $oUserView->getOrderRemark() );
     }
-    
+
     /**
      * Tests User::getOrderRemark() when logged in
      */
@@ -128,11 +128,11 @@ class Unit_Views_userTest extends OxidTestCase
     {
         // gettin order remark from post (when not logged in)
         modConfig::setParameter( 'order_remark', 'test' );
-        
+
         // get user returns false (not logged in)
         $oUserView = $this->getMock( 'user', array( 'getUser' ) );
         $oUserView->expects( $this->once() )->method( 'getUser' )->will( $this->returnValue( false ) );
-        $this->assertEquals( 'test', $oUserView->getOrderRemark() );                    
+        $this->assertEquals( 'test', $oUserView->getOrderRemark() );
     }
     /**
      * Tests User::getOrderRemark() when not logged in and form was submited
@@ -143,9 +143,9 @@ class Unit_Views_userTest extends OxidTestCase
         modSession::getInstance()->setVar( 'ordrem', "test" );
         $oUserView = $this->getMock( 'user', array( 'getUser' ) );
         $oUserView->expects( $this->once() )->method( 'getUser' )->will( $this->returnValue( true ) );
-        $this->assertEquals( 'test', $oUserView->getOrderRemark() );                
+        $this->assertEquals( 'test', $oUserView->getOrderRemark() );
     }
-    
+
     public function testIsNewsSubscribed()
     {
          modConfig::setParameter( 'blnewssubscribed', null );
@@ -224,7 +224,7 @@ class Unit_Views_userTest extends OxidTestCase
     }
     public function testRenderReturnsToBasketIfReservationOnAndBasketEmpty()
     {
-        oxTestModules::addFunction('oxutils', 'redirect($url)', '{throw new Exception($url);}');
+        oxTestModules::addFunction('oxutils', 'redirect($url, $blAddRedirectParam = true, $iHeaderCode = 301)', '{throw new Exception($url);}');
         modInstances::addMod('oxutils', oxNew('oxutils'));
 
         modConfig::getInstance()->setConfigParam('blPsBasketReservationEnabled', true);
@@ -343,5 +343,95 @@ class Unit_Views_userTest extends OxidTestCase
         $aViewData = $oView->getNonPublicVar( "_aViewData" );
         $this->assertEquals( "testValue1", $aViewData["invadr"]["oxuser__oxfname"] );
         $this->assertEquals( "testValue2",  $aViewData["invadr"]["oxuser__oxlname"] );
+    }
+
+    public function testIsDownloadableProductWarning()
+    {
+        $myConfig = modConfig::getInstance();
+        $myConfig->setConfigParam( "blEnableDownloads", true );
+
+        $oB = $this->getMock('oxbasket', array('hasDownloadableProducts'));
+        $oB->expects($this->once())->method('hasDownloadableProducts')->will($this->returnValue(true));
+
+        $oS = $this->getMock('oxsession', array('getBasket'));
+        $oS->expects($this->any())->method('getBasket')->will($this->returnValue($oB));
+
+        $oO = $this->getMock('user', array('getSession'));
+        $oO->expects($this->any())->method('getSession')->will($this->returnValue($oS));
+
+        $this->assertTrue($oO->isDownloadableProductWarning());
+    }
+
+    public function testISDownloadableProductWarningFalse()
+    {
+        $myConfig = modConfig::getInstance();
+        $myConfig->setConfigParam( "blEnableDownloads", true );
+
+        $oS = $this->getMock('oxsession', array('getBasket'));
+        $oS->expects($this->any())->method('getBasket')->will($this->returnValue(false));
+
+        $oO = $this->getMock('user', array('getSession'));
+        $oO->expects($this->any())->method('getSession')->will($this->returnValue($oS));
+
+        $this->assertFalse($oO->isDownloadableProductWarning());
+    }
+
+    public function testIsDownloadableProductWarningFeatureOff()
+    {
+        $myConfig = modConfig::getInstance();
+        $myConfig->setConfigParam( "blEnableDownloads", false );
+
+        $oB = new oxBasket();
+
+        $oS = $this->getMock('oxsession', array('getBasket'));
+        $oS->expects($this->any())->method('getBasket')->will($this->returnValue($oB));
+
+        $oO = $this->getMock('user', array('getSession'));
+        $oO->expects($this->any())->method('getSession')->will($this->returnValue($oS));
+
+        $this->assertFalse($oO->isDownloadableProductWarning());
+    }
+
+    /**
+     * Testing user::getBreadCrumb()
+     *
+     * @return null
+     */
+    public function testGetBreadCrumb()
+    {
+        $oUser    = new User();
+        $aResult  = array();
+        $aResults = array();
+
+        $aResult["title"] = oxLang::getInstance()->translateString( 'PAGE_CHECKOUT_USER', oxLang::getInstance()->getBaseLanguage(), false );
+        $aResult["link"]  = $oUser->getLink();
+
+        $aResults[] = $aResult;
+
+        $this->assertEquals( $aResults, $oUser->getBreadCrumb() );
+    }
+
+    /**
+     * Testing user::getCountryList()
+     *
+     * @return null
+     */
+    public function testGetCountryList()
+    {
+        $oUser = new User();
+        $this->assertTrue( count( $oUser->getCountryList() ) > 0 );
+    }
+
+    /**
+     * Testing user::modifyBillAddress()
+     *
+     * @return null
+     */
+    public function testModifyBillAddress()
+    {
+        oxConfig::getInstance()->setParameter('blnewssubscribed', true);
+
+        $oUser = new User();
+        $this->assertEquals( oxConfig::getInstance()->getParameter('blnewssubscribed'), $oUser->modifyBillAddress() );
     }
 }

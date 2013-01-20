@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: article_stock.php 41966 2012-02-01 13:45:29Z arvydas.vapsva $
+ * @version   SVN: $Id: article_stock.php 52897 2012-12-13 12:40:39Z aurimas.gladutis $
  */
 
 /**
@@ -70,7 +70,6 @@ class Article_Stock extends oxAdminDetails
             if ( $oArticle->oxarticles__oxparentid->value) {
                 $oParentArticle = oxNew( "oxarticle");
                 $oParentArticle->load( $oArticle->oxarticles__oxparentid->value);
-                $oArticle->oxarticles__oxremindactive = new oxField( $oParentArticle->oxarticles__oxremindactive->value );
                 $this->_aViewData["parentarticle"] =  $oParentArticle;
                 $this->_aViewData["oxparentid"] =  $oArticle->oxarticles__oxparentid->value;
             }
@@ -106,11 +105,6 @@ class Article_Stock extends oxAdminDetails
         $soxId = $this->getEditObjectId();
         $aParams = oxConfig::getParameter( "editval");
 
-        // checkbox handling
-        if ( !isset( $aParams['oxarticles__oxremindactive'])) {
-            $aParams['oxarticles__oxremindactive'] = 0;
-        }
-
             // shopid
             $sShopID = oxSession::getVar( "actshop");
             $aParams['oxarticles__oxshopid'] = $sShopID;
@@ -118,42 +112,63 @@ class Article_Stock extends oxAdminDetails
         $oArticle = oxNew( "oxarticle");
         $oArticle->loadInLang( $this->_iEditLang, $soxId );
         $oArticle->setLanguage( 0 );
+
+        // checkbox handling
+        if ( !$oArticle->oxarticles__oxparentid->value && !isset( $aParams['oxarticles__oxremindactive'])) {
+            $aParams['oxarticles__oxremindactive'] = 0;
+        }
+
         $oArticle->assign( $aParams );
 
         //tells to article to save in different language
         $oArticle->setLanguage( $this->_iEditLang );
         $oArticle = oxUtilsFile::getInstance()->processFiles( $oArticle );
 
-        if ( $oArticle->oxarticles__oxremindactive->value &&
-             $oArticle->oxarticles__oxremindamount->value <= $oArticle->oxarticles__oxstock->value ) {
-            $oArticle->oxarticles__oxremindactive->value = 1;
-        }
+        $oArticle->resetRemindStatus();
+
+        $oArticle->updateVariantsRemind();
 
         $oArticle->save();
     }
 
-    /**
-     * Adds amount price to article
-     *
+     /**
+     * Adds or updates amount price to article
+      * 
+     * @param string $sOXID         Object ID
+     * @param array  $aUpdateParams Parameters
+      * 
      * @return null
      */
-    public function addprice()
+    public function addprice( $sOXID = null, $aUpdateParams = null )
     {
         $myConfig = $this->getConfig();
 
 
-        $soxId = $this->getEditObjectId();
+        $sOxArtId = $this->getEditObjectId();
+        
         $aParams = oxConfig::getParameter( "editval" );
 
+        if ( !is_array($aParams) ) {
+            return;
+        }
+        
+        if ( isset( $aUpdateParams ) && is_array( $aUpdateParams ) ) {
+            $aParams = array_merge( $aParams, $aUpdateParams );
+        }
+        
         //replacing commas
         foreach ( $aParams as $key => $sParam ) {
             $aParams[$key] = str_replace( ",", ".", $sParam );
         }
 
-            $sShopID = $myConfig->getShopID();
-            $aParams['oxprice2article__oxshopid'] = $sShopID;
+        $sShopID = $myConfig->getShopID();
+        $aParams['oxprice2article__oxshopid'] = $sShopID;
 
-        $aParams['oxprice2article__oxartid'] = $soxId;
+        if ( isset( $sOXID ) ) {
+            $aParams['oxprice2article__oxid'] = $sOXID;
+        }
+        
+        $aParams['oxprice2article__oxartid'] = $sOxArtId;
         if ( !isset( $aParams['oxprice2article__oxamount'] ) || !$aParams['oxprice2article__oxamount'] ) {
             $aParams['oxprice2article__oxamount'] = "1";
         }
@@ -165,7 +180,7 @@ class Article_Stock extends oxAdminDetails
 
         $dPrice = $aParams['price'];
         $sType = $aParams['pricetype'];
-
+        
         $oArticlePrice = oxNew( "oxbase" );
         $oArticlePrice->init( "oxprice2article" );
         $oArticlePrice->assign( $aParams );
@@ -186,7 +201,24 @@ class Article_Stock extends oxAdminDetails
         }
 
     }
-
+    
+    /**
+     * Updates all amount prices for article at once
+     *
+     * @return null
+     */
+    public function updateprices() 
+    {
+        $aParams = oxConfig::getParameter( "updateval" );
+        if ( is_array( $aParams ) ) {
+            foreach ( $aParams as $soxId => $aStockParams ) {
+                $this->addprice( $soxId, $aStockParams );
+            }
+        }
+    }
+    
+   
+    
     /**
      * Adds amount price to article
      *

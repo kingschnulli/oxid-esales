@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxI18nTest.php 39362 2011-10-13 12:51:10Z arvydas.vapsva $
+ * @version   SVN: $Id: oxI18nTest.php 49684 2012-09-21 11:20:48Z tomas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -378,7 +378,7 @@ class Unit_Core_oxi18ntest extends OxidTestCase
         $oObj->setLanguage(0);
 
 
-            $sExpRes = "oxid = '',oxshopid = '',oxtitle = '',oxpos = ''";
+            $sExpRes = "oxid = '',oxshopid = '',oxtitle = '',oxpos = '9999'";
 
         $this->assertEquals($sExpRes, $oObj->UNITgetUpdateFields());
 
@@ -404,7 +404,7 @@ class Unit_Core_oxi18ntest extends OxidTestCase
         $oObj->setLanguage(1);
 
 
-            $sExpRes = "oxid = '',oxshopid = '',oxtitle_1 = '',oxpos = ''";
+            $sExpRes = "oxid = '',oxshopid = '',oxtitle_1 = '',oxpos = '9999'";
 
         $this->assertEquals($sExpRes, $oObj->UNITgetUpdateFields());
     }
@@ -430,7 +430,7 @@ class Unit_Core_oxi18ntest extends OxidTestCase
         $oObj->setLanguage(1);
 
 
-            $sExpRes = "oxid = '',oxshopid = '',oxtitle = '',oxtitle_1 = '',oxtitle_2 = '',oxtitle_3 = '',oxpos = ''";
+            $sExpRes = "oxid = '',oxshopid = '',oxtitle = '',oxtitle_1 = '',oxtitle_2 = '',oxtitle_3 = '',oxpos = '9999'";
 
         $this->assertEquals($sExpRes, $oObj->UNITgetUpdateFields());
     }
@@ -754,9 +754,10 @@ class Unit_Core_oxi18ntest extends OxidTestCase
         $oObj->setId("test_insert");
         $oObj->oxstates__oxtitle = new oxField('test_x');
 
-        $oDb = $this->getMock('stdclass', array('execute', 'quote'));
+        $oDb = $this->getMock('stdclass', array('execute', 'quote', 'getOne'));
         $oDb->expects($this->any())->method('execute')->will($this->evalFunction('{Unit_Core_oxi18ntest::$aLoggedSqls[] = $args[0];return true;}'));
         $oDb->expects($this->any())->method('quote')->will($this->evalFunction('{return "\'".mysql_real_escape_string($args[0])."\'";}'));
+        $oDb->expects($this->any())->method('getOne');
         modDb::getInstance()->modAttach($oDb);
 
         $oObj->setLanguage(0);
@@ -882,7 +883,7 @@ class Unit_Core_oxi18ntest extends OxidTestCase
      */
     protected function _insertTestLanguage()
     {
-        $oDb = oxDb::getDb(true);
+        $oDb = oxDb::getDb( oxDB::FETCH_MODE_ASSOC );
 
         $this->_aLangTables["oxactions"]  = "oxactions";
         $this->_aLangTables["oxcategory"] = "oxcategories";
@@ -971,7 +972,7 @@ class Unit_Core_oxi18ntest extends OxidTestCase
     protected function _deleteTestLanguage()
     {
         // dropping language set tables
-        $oDb = oxDb::getDb(true);
+        $oDb = oxDb::getDb( oxDB::FETCH_MODE_ASSOC );
         foreach ( $this->_aLangTables as $sTable ) {
             $oDb->execute( "drop table {$sTable}_set1" );
             $oDb->execute( "delete from {$sTable} where oxid like '_test%'" );
@@ -986,7 +987,7 @@ class Unit_Core_oxi18ntest extends OxidTestCase
     public function testMultilangObjectDeletion()
     {
         $sId = "_testRecordForTest";
-        $oDb = oxDb::getDb(true);
+        $oDb = oxDb::getDb( oxDB::FETCH_MODE_ASSOC );
 
         modConfig::getInstance()->setConfigParam( "iLangPerTable", 4 );
         oxTestModules::addFunction( "oxLang", "getLanguageIds", "{return array('0' => 'de', '1' => 'de', '2' => 'lt', '3' => 'ru', '4' => 'pl', '5' => 'cz');}");
@@ -1011,4 +1012,7 @@ class Unit_Core_oxi18ntest extends OxidTestCase
             $this->assertFalse( (bool) $oDb->getOne( "select 1 from {$sTableName}_set1 where oxid = '{$sId}'" ), "Not cleaned {$sTableName}_set1 table" );
         }
     }
+
+
+
 }

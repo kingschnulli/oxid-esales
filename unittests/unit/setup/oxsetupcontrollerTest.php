@@ -54,7 +54,8 @@ class Unit_Setup_oxSetupControllerTest extends OxidTestCase
         $oView->expects( $this->at( 0 ) )->method( "setTitle" )->with( $this->equalTo( 'STEP_0_TITLE' ) );
         $oView->expects( $this->at( 1 ) )->method( "setViewParam" )->with( $this->equalTo( 'blContinue' ) );
         $oView->expects( $this->at( 2 ) )->method( "setViewParam" )->with( $this->equalTo( 'aGroupModuleInfo' ) );
-        $oView->expects( $this->at( 3 ) )->method( "setViewParam" )->with( $this->equalTo( 'sSetupLang' ), $this->equalTo( "testLangId" ) );
+        $oView->expects( $this->at( 3 ) )->method( "setViewParam" )->with( $this->equalTo( 'aLanguages' ) );
+        $oView->expects( $this->at( 4 ) )->method( "setViewParam" )->with( $this->equalTo( 'sSetupLang' ), $this->equalTo( "testLangId" ) );
 
         $oSetup = $this->getMock( "oxStdClass", array( "getModuleClass" ) );
         $oSetup->expects( $this->any() )->method( "getModuleClass" )->will( $this->returnValue( "testModuleClass" ) );
@@ -97,9 +98,11 @@ class Unit_Setup_oxSetupControllerTest extends OxidTestCase
         $oView->expects( $this->at( 0 ) )->method( "setTitle" )->with( $this->equalTo( 'STEP_1_TITLE' ) );
         $oView->expects( $this->at( 1 ) )->method( "setViewParam" )->with( $this->equalTo( 'aCountries' ) );
         $oView->expects( $this->at( 2 ) )->method( "setViewParam" )->with( $this->equalTo( 'aLocations' ) );
-        $oView->expects( $this->at( 3 ) )->method( "setViewParam" )->with( $this->equalTo( 'sSetupLang' ) );
-        $oView->expects( $this->at( 4 ) )->method( "setViewParam" )->with( $this->equalTo( 'sLocationLang' ) );
-        $oView->expects( $this->at( 5 ) )->method( "setViewParam" )->with( $this->equalTo( 'sCountryLang' ) );
+        $oView->expects( $this->at( 3 ) )->method( "setViewParam" )->with( $this->equalTo( 'aLanguages' ) );
+        $oView->expects( $this->at( 4 ) )->method( "setViewParam" )->with( $this->equalTo( 'sShopLang' ) );
+        $oView->expects( $this->at( 5 ) )->method( "setViewParam" )->with( $this->equalTo( 'sSetupLang' ) );
+        $oView->expects( $this->at( 6 ) )->method( "setViewParam" )->with( $this->equalTo( 'sLocationLang' ) );
+        $oView->expects( $this->at( 7 ) )->method( "setViewParam" )->with( $this->equalTo( 'sCountryLang' ) );
 
         $oLang = $this->getMock( "oxStdClass", array( "getSetupLang" ) );
         $oLang->expects( $this->once() )->method( "getSetupLang" )->will( $this->returnValue( "oxidadminlanguage" ) );

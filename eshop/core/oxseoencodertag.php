@@ -17,7 +17,7 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   core
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
  * @version   SVN: $Id: oxseoencodercontent.php 17768 2009-04-02 10:52:12Z sarunas $
  */
@@ -99,7 +99,7 @@ class oxSeoEncoderTag extends oxSeoEncoder
 
         $sStdUrl   = $this->_trimUrl( $sStdUrl );
         $sObjectId = $this->getDynamicObjectId( $iShopId, $sStdUrl );
-        $sSeoUrl   = $this->_prepareUri( $this->addLanguageParam( $sSeoUrl, $iLang ) );
+        $sSeoUrl   = $this->_prepareUri( $this->addLanguageParam( $sSeoUrl, $iLang ), $iLang );
 
         //load details link from DB
         $sOldSeoUrl = $this->_loadFromDb( 'dynamic', $sObjectId, $iLang );
@@ -112,25 +112,26 @@ class oxSeoEncoderTag extends oxSeoEncoder
                 $this->_copyToHistory( $sObjectId, $iShopId, $iLang, 'dynamic' );
             }
 
-            $oTagCloud = oxNew('oxtagcloud');
+            // disabling check if there are any tags used, as it should always generate seo url.
+            /*$oTagCloud = oxNew('oxtagcloud');
+            $oDb = oxDb::getDb();
             $sTag = $oTagCloud->prepareTags($sTag);
             $sViewName = getViewName( 'oxartextends', $iLang );
-            $sQ = "select 1 from {$sViewName} where match ( {$sViewName}.oxtags )
-                   against( ".oxDb::getDb()->quote( "\"".$sTag."\"" )." IN BOOLEAN MODE )";
+            $sQ = "select 1 from {$sViewName} where {$sViewName}.oxtags LIKE ".$oDb->quote( "%$sTag%" )."";
 
             if ( $sOxid ) {
-                $sQ .= " and oxid = " . oxDb::getDb()->quote( $sOxid );
-            }
+                $sQ .= " and oxid = " . $oDb->quote( $sOxid );
+            }*/
 
-            if ( oxDb::getDb()->getOne( $sQ ) ) {
+            //if ( $oDb->getOne( $sQ ) ) {
                 // creating unique
                 $sSeoUrl = $this->_processSeoUrl( $sSeoUrl, $sObjectId, $iLang );
 
                 // inserting
                 $this->_saveToDb( 'dynamic', $sObjectId, $sStdUrl, $sSeoUrl, $iLang, $iShopId );
-            } else {
+            /*} else {
                 $sSeoUrl = false;
-            }
+            }*/
         }
 
         return $sSeoUrl;

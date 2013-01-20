@@ -17,13 +17,10 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   lang
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
  * @version   SVN: $Id: lang.php 28697 2010-06-29 11:09:58Z vilma $
  */
-
-$sLangName  = "English";
-
 
 $aMap = array(
 'ACCOUNT_LOGIN_BACKTOSHOP'                                    => 'BACK_TO_SHOP',
@@ -46,7 +43,7 @@ $aMap = array(
 'ACCOUNT_NOTICELIST_LOCATION'                                 => 'MY_ACCOUNT_4',
 'ACCOUNT_NOTICELIST_MYWISHLIST'                               => 'MY_WISH_LIST',
 'ACCOUNT_NOTICELIST_TITLE'                                    => 'MY_WISH_LIST',
-'ACCOUNT_ORDER_ADDTOCART'                                     => 'ADD_TO_CART_2',
+'ACCOUNT_ORDER_ADDTOCART'                                     => 'ADD_TO_CART',
 'ACCOUNT_ORDER_BACKTOSHOP'                                    => 'BACK_TO_SHOP',
 'ACCOUNT_ORDER_CART'                                          => 'CART_2',
 'ACCOUNT_ORDER_DATE'                                          => 'ORDER_DATE',
@@ -84,6 +81,7 @@ $aMap = array(
 'ACCOUNT_PASSWORD_SAVE'                                       => 'SAVE',
 'ACCOUNT_PASSWORD_TITLE'                                      => 'PERSONAL_SETTINGS',
 'ACCOUNT_PASSWORD_TOCHANGEPASSWORD'                           => 'CHANGE_PASSWORD_2',
+'ACCOUNT_PASSWORD_ERRINCORRECTCURRENTPASSW'                   => 'ERROR_MESSAGE_CURRENT_PASSWORD_INVALID',
 'ACCOUNT_RECOMM_BACKTOSHOP'                                   => 'BACK_TO_SHOP',
 'ACCOUNT_RECOMM_LISTAUTHOR'                                   => 'AUTHOR',
 'ACCOUNT_RECOMM_LISTDESC'                                     => 'INTRODUCTION',
@@ -157,7 +155,6 @@ $aMap = array(
 'ADD_RECOMM_ALLLISTS'                                         => 'ALL_LISTMANIA',
 'ADD_RECOMM_SELECTLIST'                                       => 'SELECT_LISTMANIA_LIST',
 'ADD_RECOMM_YOURCOMMENT'                                      => 'ADD_YOUR_COMMENTS',
-'ALIST_META_DESCRIPTION_PREFIX'                               => 'YOU_ARE_HERE_2',
 'BASKET_ARTICEL'                                              => 'PRODUCT',
 'BASKET_ARTNOMBER'                                            => 'PRODUCT_NO',
 'BASKET_BASKET'                                               => 'BASKET_2',
@@ -405,13 +402,13 @@ $aMap = array(
 'ERR_EXPIRED_DAYS_OXIDESHOPERROR'                             => 'ERROR_MESSAGE_OXID_SHOP_ERROR2',
 'ERR_EXPIRED_DAYS_TITLE'                                      => 'ERROR_MESSAGE_OXID_SHOP_ERROR',
 'ERR_EXPIRED_DAYS_VERSIONEXPIRED1'                            => 'ERROR_MESSAGE_VERSION_EXPIRED1',
-'ERR_EXPIRED_DAYS_VERSIONEXPIRED2'                            => 'ERROR_MESSAGE_VERSION_EXPIRED2',
-'ERR_EXPIRED_DAYS_VERSIONEXPIRED3'                            => 'ERROR_MESSAGE_VERSION_EXPIRED3',
+'ERR_EXPIRED_DAYS_VERSIONEXPIRED2'                            => 'ERROR_MESSAGE_OXID_ESALES',
+'ERR_EXPIRED_DAYS_VERSIONEXPIRED3'                            => 'ERROR_MESSAGE_VERSION_EXPIRED2',
 'ERR_MANDATES_EXCEEDED_OXIDESHOPERROR'                        => 'ERROR_MESSAGE_OXID_SHOP_ERROR2',
 'ERR_MANDATES_EXCEEDED_TITLE'                                 => 'ERROR_MESSAGE_OXID_SHOP_ERROR',
 'ERR_MANDATES_EXCEEDED_VERSIONEXPIRED1'                       => 'ERROR_MESSAGE_MANDATES_EXCEEDED1',
-'ERR_MANDATES_EXCEEDED_VERSIONEXPIRED2'                       => 'ERROR_MESSAGE_VERSION_EXPIRED2',
-'ERR_MANDATES_EXCEEDED_VERSIONEXPIRED3'                       => 'ERROR_MESSAGE_VERSION_EXPIRED3',
+'ERR_MANDATES_EXCEEDED_VERSIONEXPIRED2'                       => 'ERROR_MESSAGE_OXID_ESALES',
+'ERR_MANDATES_EXCEEDED_VERSIONEXPIRED3'                       => 'ERROR_MESSAGE_MANDATES_EXCEEDED2',
 'ERR_NO_COOKIE_SUPPORT'                                       => 'MESSAGE_REQUIRES_COOKIE_SUPPORT',
 'ERR_SETUP_OXIDESHOPERROR'                                    => 'ERROR_MESSAGE_OXID_SHOP_ERROR2',
 'ERR_SETUP_TITLE'                                             => 'ERROR_MESSAGE_OXID_SHOP_ERROR',
@@ -423,8 +420,8 @@ $aMap = array(
 'ERR_UNLICENSED_OXIDESHOPERROR'                               => 'ERROR_MESSAGE_OXID_SHOP_ERROR2',
 'ERR_UNLICENSED_TITLE'                                        => 'ERROR_MESSAGE_OXID_SHOP_ERROR',
 'ERR_UNLICENSED_VERSIONEXPIRED1'                              => 'ERROR_MESSAGE_UNLICENSED1',
-'ERR_UNLICENSED_VERSIONEXPIRED2'                              => 'ERROR_MESSAGE_VERSION_EXPIRED2',
-'ERR_UNLICENSED_VERSIONEXPIRED3'                              => 'ERROR_MESSAGE_VERSION_EXPIRED3',
+'ERR_UNLICENSED_VERSIONEXPIRED2'                              => 'ERROR_MESSAGE_OXID_ESALES',
+'ERR_UNLICENSED_VERSIONEXPIRED3'                              => 'ERROR_MESSAGE_UNLICENSED2',
 'ERR_UPDATE_DELETEDIRECTORY1'                                 => 'MESSAGE_PLEASE_DELETE_FOLLOWING_DIRECTORY',
 'ERR_UPDATE_DELETEDIRECTORY2'                                 => 'MESSAGE_PLEASE_DELETE_DIRECTORY_UPDATEAPP',
 'ERR_UPDATE_OXIDESHOPERROR'                                   => 'ERROR_MESSAGE_ERROR_OCCURED',
@@ -475,7 +472,6 @@ $aMap = array(
 'EXCEPTION_VOUCHER_NOTVALIDUSERGROUP'                         => 'ERROR_MESSAGE_VOUCHER_NOTVALIDUSERGROUP',
 'EXCEPTION_VOUCHER_NOVOUCHER'                                 => 'ERROR_MESSAGE_VOUCHER_NOVOUCHER',
 'EXCEPTION_VOUCHER_TOTALBELOWZERO'                            => 'ERROR_MESSAGE_VOUCHER_TOTALBELOWZERO',
-'FACEBOOK_CHAT'                                               => 'FACEBOOK_LIVE_STREAM',
 'FACEBOOK_INVITEBUTTONTEXT'                                   => 'FACEBOOK_OPEN_WEBSITE',
 'FACEBOOK_INVITEHEADER'                                       => 'FACEBOOK_INVITE_YOUR_FRIENDS',
 'FACEBOOK_POPUP_CANCELBTN'                                    => 'CANCEL',
@@ -584,7 +580,7 @@ $aMap = array(
 'INC_COMPARE_LOCATOR_PAGE'                                    => 'PAGE',
 'INC_DETAILS_LOCATOR_BACKTOOVERVIEW'                          => 'BACK_TO_OVERVIEW',
 'INC_DETAILS_LOCATOR_NEXTPRODUCT'                             => 'NEXT_PRODUCT',
-'INC_DETAILS_LOCATOR_PREVIUOSPRODUCT'                         => 'PREVIUOS_PRODUCT',
+'INC_DETAILS_LOCATOR_PREVIOUSPRODUCT'                         => 'PREVIOUS_PRODUCT',
 'INC_DETAILS_LOCATOR_PRODUCT'                                 => 'PRODUCT',
 'INC_FOOTER_CART'                                             => 'CART',
 'INC_FOOTER_CONTACT'                                          => 'CONTACT',
@@ -1037,7 +1033,7 @@ $aMap = array(
 'USER_TITLE'                                                  => 'TITLE_2',
 'USER_TITLE2'                                                 => 'TITLE_2',
 'USER_VATID'                                                  => 'VAT_ID_NUMBER',
-'USER_YOURMESSAGE'                                            => 'WHAT_I_WANT_TO_SAY',
+'USER_YOURMESSAGE'                                            => 'WHAT_I_WANTED_TO_SAY',
 'WISHLIST_TITLE'                                              => 'GIFT_REGISTRY',
 'WISHLIST_WELCOME'                                            => 'GIFT_REGISTRY_OF_3',
 'WISHLIST_WISHLISTEMPTY'                                      => 'GIFT_REGISTRY_EMPTY',
@@ -1050,5 +1046,5 @@ $aMap = array(
 'WRAPPING_NOGREETINGCARD'                                     => 'NO_GREETING_CARD',
 'WRAPPING_PERSONALMESSAGE'                                    => 'WRAPPING_DESCRIPTION',
 'WRAPPING_PRODUCT'                                            => 'PRODUCT',
-
+'FACEBOOK_ENABLEBUTTONTEXT'                                       => 'ENABLE'
 );

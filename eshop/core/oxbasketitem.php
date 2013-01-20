@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxbasketitem.php 44113 2012-04-20 11:52:27Z mindaugas.rimgaila $
+ * @version   SVN: $Id: oxbasketitem.php 49697 2012-09-21 14:30:21Z tomas $
  */
 
 /**
@@ -326,7 +326,7 @@ class oxBasketItem extends oxSuperCfg
             throw $oEx;
         }
 
-        $oArticle = $this->getArticle();
+        $oArticle = $this->getArticle( true );
 
 
         // setting default
@@ -363,6 +363,7 @@ class oxBasketItem extends oxSuperCfg
             $oEx->setArticleNr( $oArticle->oxarticles__oxartnum->value );
             $oEx->setProductId( $oArticle->getProductId() );
             $oEx->setRemainingAmount( $this->_dAmount );
+            $oEx->setBasketIndex( $sItemKey );
             throw $oEx;
         }
     }
@@ -390,6 +391,8 @@ class oxBasketItem extends oxSuperCfg
 
     /**
      * Getter which returns image path according to SSL mode
+     *
+     * @deprecated since 2011.11.07 not used any more, call getIconUrl() instead
      *
      * @return string
      */
@@ -421,7 +424,7 @@ class oxBasketItem extends oxSuperCfg
      * Retrieves the article .Throws an execption if article does not exist,
      * is not buyable or visible.
      *
-     * @param bool   $blCheckProduct       checks if product is buyable and visible
+     * @param bool   $blCheckProduct       checks if product is buyable and visible.
      * @param string $sProductId           product id
      * @param bool   $blDisableLazyLoading disable lazy loading
      *
@@ -558,6 +561,8 @@ class oxBasketItem extends oxSuperCfg
 
     /**
      * Returns product icon URL
+     *
+     * @deprecated 2011.11.07 not used any more, call getIconUrl() instead
      *
      * @return string
      */

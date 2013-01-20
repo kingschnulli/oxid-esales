@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxsysrequirements.php 46262 2012-06-18 14:08:29Z edvardas.gineika $
+ * @version   SVN: $Id: oxsysrequirements.php 46329 2012-06-19 13:55:01Z alfonsas $
  */
 
 /**
@@ -114,7 +114,7 @@ class oxSysRequirements
      *
      * @var array
      */
-    protected $_aInfoMap    = array( "php_version"        => "PHP_version_at_least_5.2.0",
+    protected $_aInfoMap    = array( "php_version"        => "PHP_version_at_least_5.2.10",
                                      "lib_xml2"           => "LIB_XML2",
                                      "php_xml"            => "DOM",
                                      "open_ssl"           => "OpenSSL",
@@ -133,10 +133,12 @@ class oxSysRequirements
                                      "register_globals"   => "register_globals_must_be_off",
                                      "memory_limit"       => "PHP_Memory_limit_.28min._14MB.2C_30MB_recommended.29",
                                      "unicode_support"    => "UTF-8_support",
+                                     "file_uploads"       => "file_uploads_on",
                                      "mod_rewrite"        => "apache_mod_rewrite_module",
                                      "server_permissions" => "Files_.26_Folder_Permission_Setup",
                                      "zend_optimizer"     => "Zend_Optimizer",
                                      "bug53632"           => "Not_recommended_PHP_versions",
+                                     "session_autostart"  => "session.auto_start_must_be_off",
                                      // "zend_platform_or_server"
                                       );
 
@@ -225,7 +227,9 @@ class oxSysRequirements
                                        'ini_set',
                                        'register_globals',
                                        'memory_limit',
-                                       'unicode_support'
+                                       'unicode_support',
+                                       'file_uploads',
+                                       'session_autostart',
                                    );
 
             $aRequiredServerConfigs = array(
@@ -397,7 +401,7 @@ class oxSysRequirements
      * @return array
      */
     protected function _getShopSSLHostInfoFromConfig()
-    {    	
+    {
         $sSSLShopURL = $this->getConfig()->getConfigParam( 'sSSLShopURL' );
         if (preg_match('#^(https?://)?([^/:]+)(:([0-9]+))?(/.*)?$#i', $sSSLShopURL, $m)) {
             $sHost = $m[2];
@@ -478,10 +482,10 @@ class oxSysRequirements
     public function checkModRewrite()
     {
         $iModStat = null;
-        $aHostInfo = $this->_getShopHostInfo();        
-        $iModStat = $this->_checkModRewrite( $aHostInfo );        
-        
-        $aSSLHostInfo = $this->_getShopSSLHostInfo();       
+        $aHostInfo = $this->_getShopHostInfo();
+        $iModStat = $this->_checkModRewrite( $aHostInfo );
+
+        $aSSLHostInfo = $this->_getShopSSLHostInfo();
         // Don't need to check if mod status is already failed.
         if ( 0 != $iModStat && $aSSLHostInfo ) {
             $iSSLModStat = $this->_checkModRewrite( $aSSLHostInfo );
@@ -492,10 +496,10 @@ class oxSysRequirements
             } elseif ( 1 == $iSSLModStat || 1 == $iModStat ) {
                 return 1;
             }
-            
+
             return min( $iModStat, $iSSLModStat );
         }
-        
+
         return $iModStat;
     }
 
@@ -533,7 +537,7 @@ class oxSysRequirements
                 $iModStat = -1;
             }
         }
-        return $iModStat;    	
+        return $iModStat;
     }
 
     /**
@@ -570,15 +574,18 @@ class oxSysRequirements
     }
 
     /**
-     * Checks PHP version. PHP 5.2.0 or higher.
-     * Due to performance matters, PHP 5.2.6 recommended.
+     * Checks PHP version.
+     * < PHP 5.2.0 - red.
+     * PHP 5.2.0-5.2.9 - yellow.
+     * PHP 5.2.10 or higher - green.
      *
      * @return integer
      */
     public function checkPhpVersion()
     {
-        $iModStat = ( version_compare( PHP_VERSION, '5.1', '>' ) ) ? 1 : 0;
-        $iModStat = ( $iModStat == 0 ) ? $iModStat : ( version_compare( PHP_VERSION, '5.2', '>=' ) ? 2 : 1 );
+        $iModStat = ( version_compare( PHP_VERSION, '5.2', '<' ) ) ? 0 : false;
+        $iModStat = ( $iModStat !== false ) ? $iModStat : ( (version_compare( PHP_VERSION, '5.2.0', '>=' ) && version_compare( PHP_VERSION, '5.2.10', '<' )) ? 1 : false );
+        $iModStat = ( $iModStat !== false ) ? $iModStat : ( version_compare( PHP_VERSION, '5.2.10', '>=' ) ? 2 : 1 );
         return $iModStat;
     }
 
@@ -893,6 +900,25 @@ class oxSysRequirements
     }
 
     /**
+     * Checks if php_admin_flag file_uploads is ON
+     *
+     * @return integer
+     */
+    public function checkFileUploads()
+    {
+        $dUploadFile = -1;
+        $sFileUploads = @ini_get('file_uploads');
+        if ( $sFileUploads !== false ) {
+            if ( $sFileUploads && ( $sFileUploads == '1' || strtolower($sFileUploads) == 'on') ) {
+                $dUploadFile = 2;
+            } else {
+                $dUploadFile = 1;
+            }
+        }
+        return $dUploadFile;
+    }
+
+    /**
      * Checks system requirements status
      *
      * @return bool
@@ -1014,7 +1040,11 @@ class oxSysRequirements
     {
         $sTplFile = $this->getConfig()->getTemplatePath($sTemplate, false);
         if (!$sTplFile || !file_exists($sTplFile)) {
-            return false;
+            // check if file is in admin theme
+            $sTplFile = $this->getConfig()->getTemplatePath($sTemplate, true);
+            if (!$sTplFile || !file_exists($sTplFile)) {
+                return false;
+            }
         }
 
         $sFile = file_get_contents($sTplFile);
@@ -1033,13 +1063,15 @@ class oxSysRequirements
      */
     public function getMissingTemplateBlocks()
     {
-        $oDb = oxDb::getDb( true );
+        $oDb = oxDb::getDb( oxDb::FETCH_MODE_ASSOC );
         $aCache = array();
         $oConfig = $this->getConfig();
 
         $sShpIdParam = $oDb->quote($oConfig->getShopId());
         $sSql = "select * from oxtplblocks where oxactive=1 and oxshopid=$sShpIdParam";
         $rs = $oDb->execute($sSql);
+
+
         $aRet = array();
         if ($rs != false && $rs->recordCount() > 0) {
             while (!$rs->EOF) {
@@ -1063,5 +1095,16 @@ class oxSysRequirements
         }
 
         return $aRet;
+    }
+
+    /**
+     * Check if correct AutoStart setting.
+     *
+     * @return bool
+     */
+    public function checkSessionAutostart()
+    {
+        $sStatus = ( strtolower( (string) @ini_get( 'session.auto_start' ) ) );
+        return in_array( $sStatus, array( 'on', '1' ) ) ? 0 : 2;
     }
 }

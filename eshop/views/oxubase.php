@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxubase.php 51387 2012-11-06 09:11:01Z andrius.silgalis $
+ * @version   SVN: $Id: oxubase.php 52646 2012-12-03 11:05:12Z aurimas.gladutis $
  */
 
 /**
@@ -1034,6 +1034,9 @@ class oxUBase extends oxView
         if (!is_array($this->_aRssLinks)) {
             $this->_aRssLinks = array();
         }
+
+        $sUrl = oxUtilsUrl::getInstance()->prepareUrlForNoSession($sUrl);
+
         if ($key === null) {
             $this->_aRssLinks[] = array('title'=>$sTitle, 'link' => $sUrl);
         } else {
@@ -1239,7 +1242,7 @@ class oxUBase extends oxView
     }
 
     /**
-     * Get active language
+     * Get active currency
      *
      * @return object
      */
@@ -1249,7 +1252,7 @@ class oxUBase extends oxView
     }
 
     /**
-     * Active language setter
+     * Active currency setter
      *
      * @param object $oCur corrency object
      *
@@ -2066,12 +2069,15 @@ class oxUBase extends oxView
     }
 
     /**
-     * Returns current view title. Default is null
+     * Returns current view title. Default is search for translation of PAGE_TITLE_{view_class_name}
      *
-     * @return null
+     * @return string
      */
     public function getTitle()
     {
+        $sTranslationName = 'PAGE_TITLE_'.strtoupper($this->getConfig()->getActiveView()->getClassName());
+        $sTranslated = oxLang::getInstance()->translateString( $sTranslationName, oxLang::getInstance()->getBaseLanguage(), false );
+        return $sTranslationName == $sTranslated? null : $sTranslated;
     }
 
     /**
@@ -3136,7 +3142,8 @@ class oxUBase extends oxView
     {
         if ( $this->_aDeliveryAddress == null ) {
             $aAddress = oxConfig::getParameter( 'deladr');
-            if ( $aAddress ) {
+            //do not show deladr if address was reloaded
+            if ( $aAddress && !oxConfig::getParameter( 'reloadaddress' )) {
                 $this->_aDeliveryAddress = $aAddress;
             }
         }
@@ -3258,18 +3265,25 @@ class oxUBase extends oxView
      *
      * @return boolean
      */
-    public function isFbWidgetWisible()
+    public function isFbWidgetVisible()
     {
         if ( $this->_blFbWidgetsOn === null ) {
             $oUtils = oxUtilsServer::getInstance();
 
             // reading ..
             $this->_blFbWidgetsOn = (bool) $oUtils->getOxCookie( "fbwidgetson" );
-
-            // .. and setting back
-            $oUtils->setOxCookie( "fbwidgetson", $this->_blFbWidgetsOn ? 1 : 0 );
         }
         return $this->_blFbWidgetsOn;
+    }
+
+    /**
+     * Checks if downloadable files are turned on
+     *
+     * @return bool
+     */
+    public function isEnabledDownloadableFiles()
+    {
+        return (bool) $this->getConfig()->getConfigParam( "blEnableDownloads" );
     }
 
     /**
@@ -3279,6 +3293,39 @@ class oxUBase extends oxView
      */
     public function showRememberMe()
     {
-        return (bool)$this->getConfig()->getConfigParam('blShowRememberMe');
+        return (bool) $this->getConfig()->getConfigParam('blShowRememberMe');
     }
+
+    /**
+     * Returns true if articles shown in shop with VAT.
+     * Checks users VAT and options.
+     *
+     * @return boolean
+     */
+    public function isVatIncluded()
+    {
+        $blResult = true;
+        $oUser = $this->getUser();
+        $oVatSelector = oxNew( 'oxVatSelector' );
+        $oConfig = $this->getConfig();
+
+        if ( $oConfig->getConfigParam( 'blEnterNetPrice' ) && $oConfig->getConfigParam( 'bl_perfCalcVatOnlyForBasketOrder' ) ) {
+            $blResult = false;
+        } elseif ( $oUser && !$oVatSelector->getUserVat( $oUser ) ) {
+            $blResult = false;
+        }
+
+        return $blResult;
+    }
+
+    /**
+     * Returns true if price calculation is activated
+     *
+     * @return boolean
+     */
+    public function isPriceCalculated()
+    {
+        return (bool) $this->getConfig()->getConfigParam( 'bl_perfLoadPrice' );
+    }
+
 }

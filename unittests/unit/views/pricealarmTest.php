@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: pricealarmTest.php 34362 2011-04-07 11:44:14Z arvydas.vapsva $
+ * @version   SVN: $Id: pricealarmTest.php 40264 2011-11-24 14:04:45Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -117,7 +117,7 @@ class Unit_Views_pricealarmTest extends OxidTestCase
 
         $sSql = "select * from oxpricealarm";
 
-        $oDb = oxDb::getDb( true );
+        $oDb = oxDb::getDb( oxDB::FETCH_MODE_ASSOC );
         $aAlarm = $oDb->getRow( $sSql );
 
         $this->assertEquals( $aParams["email"], $aAlarm["OXEMAIL"] );
@@ -130,7 +130,7 @@ class Unit_Views_pricealarmTest extends OxidTestCase
 
     public function testAddme_savesCurrentActiveLang()
     {
-        $oDb = oxDb::getDb( true );
+        $oDb = oxDb::getDb( oxDB::FETCH_MODE_ASSOC );
 
         $oPriceAlarm = $this->getProxyClass( 'pricealarm' );
         oxTestModules::addFunction('oxCaptcha', 'pass', '{return true;}');

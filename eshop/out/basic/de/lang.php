@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 43474 2012-04-03 15:20:41Z juergen.busch $
+ * @version   SVN: $Id: lang.php 52941 2012-12-14 13:12:29Z juergen.busch $
  */
 
 
@@ -38,7 +38,6 @@ $sLangName  = "Deutsch";
 // -------------------------------
 $aLang = array(
 'ACCOUNT_PASSWORD_CONFIRMPASSWORD'                            => "Passwort wiederholen:",
-'ACCOUNT_PASSWORD_ERRINCORRECTCURRENTPASSW'                   => "Fehler: Ihr aktuelles Passwort ist falsch.",
 'ACCOUNT_PASSWORD_PASSWORDMINLENGTH'                          => "Die Mindestlänge des Passwortes beträgt 6 Zeichen.",
 'ACCOUNT_RECOMM_LISTTITLE'                                    => "Überschrift",
 'ACCOUNT_USER_BILLINGADDRESS'                                 => "Rechnungsadresse",
@@ -232,7 +231,7 @@ $aLang = array(
 'ORDER_YOURMESSAGE'                                           => "Ihr Text:",
 'PAYMENT_ACCOUNTNUMBER'                                       => "Kontonummer:",
 'PAYMENT_COMLETEALLFIELDS'                                    => "Bitte alle Felder richtig ausfüllen!",
-'PAYMENT_EMPTY_TEXT'                                          => '<p>Derzeit ist keine Versandart für dieses Land definiert.</p> <p>Wir werden versuchen, Liefermöglichkeiten zu finden und Sie über die Versandkosten informieren.</p> <p>Falls Sie hiermit einverstanden sind, wählen Sie "Weiter zum nächsten Schritt".</p>',
+'PAYMENT_EMPTY_TEXT'                                          => '<p>Derzeit ist keine Versandart für dieses Land definiert.</p> <p>Wir werden versuchen, Liefermöglichkeiten zu finden und Sie über die Versandkosten informieren.</p>',
 'PAYMENT_INCLUDEVAT'                                          => "inkl. MwSt.",
 'PAYMENT_PLUSCODCHARGE1'                                      => "zuzüglich",
 'PAYMENT_PLUSCODCHARGE2'                                      => "Nachnahmegebühr",
@@ -254,7 +253,6 @@ $aLang = array(
 'PROMO_WILLENDIN_PREFIX'                                      => "Endet in ",
 'PROMO_WILLENDIN_SUFFIX'                                      => "!",
 'PROMO_WILLSTARTIN_PREFIX'                                    => "Startet in ",
-'PROMO_WILLSTARTIN_SUFFIX'                                    => "",
 'RECOMMLIST_LISTREVIEW'                                       => "Kommentare",
 'RECOMMLIST_LOGGINTOWRITEREVIEW'                              => "Melden Sie sich hier an, um einen Kommentar zu schreiben.",
 'RECOMMLIST_RATETHISLIST'                                     => "Bewerten Sie diese Lieblingsliste!",

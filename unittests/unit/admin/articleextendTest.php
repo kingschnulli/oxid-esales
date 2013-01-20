@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: articleextendTest.php 38538 2011-09-05 09:03:51Z linas.kukulskis $
+ * @version   SVN: $Id: articleextendTest.php 46040 2012-06-08 15:32:56Z edvardas.gineika $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -139,12 +139,13 @@ class Unit_Admin_ArticleExtendTest extends OxidTestCase
         modConfig::setParameter( "mediaUrl", "testUrl" );
         modConfig::setParameter( "mediaDesc", "testDesc" );
 
-        $oConfig = $this->getMock( "oxStdClass", array( "getUploadedFile" ) );
-        $oConfig->expects( $this->once() )->method( 'getUploadedFile' )->will( $this->returnValue( array( "name" => "testName" ) ) );
+        $oConfig = $this->getMock( "oxStdClass", array( "getUploadedFile" ,"isDemoShop" ) );
+        $oConfig->expects( $this->exactly(2) )->method( 'getUploadedFile' )->will( $this->returnValue( array( "name" => "testName" ) ) );
+        $oConfig->expects( $this->once() )->method( 'isDemoShop' )->will( $this->returnValue( false ) );
 
         // testing..
         $oView = $this->getMock( "Article_Extend", array( "getConfig", "resetContentCache" ), array(), '', false );
-        $oView->expects( $this->once() )->method( 'getConfig' )->will( $this->returnValue( $oConfig ) );
+        $oView->expects( $this->any() )->method( 'getConfig' )->will( $this->returnValue( $oConfig ) );
         $oView->expects( $this->any() )->method( 'resetContentCache' );
         $this->assertEquals( "handleUploadedFile", $oView->save() );
     }
@@ -164,12 +165,13 @@ class Unit_Admin_ArticleExtendTest extends OxidTestCase
         modConfig::setParameter( "mediaUrl", "testUrl" );
         modConfig::setParameter( "mediaDesc", "testDesc" );
 
-        $oConfig = $this->getMock( "oxStdClass", array( "getUploadedFile" ) );
-        $oConfig->expects( $this->once() )->method( 'getUploadedFile' )->will( $this->returnValue( array( "name" => "testName" ) ) );
+        $oConfig = $this->getMock( "oxStdClass", array( "getUploadedFile", "isDemoShop" ) );
+        $oConfig->expects( $this->exactly(2) )->method( 'getUploadedFile' )->will( $this->returnValue( array( "name" => "testName" ) ) );
+        $oConfig->expects( $this->once() )->method( 'isDemoShop' )->will( $this->returnValue( false ) );
 
         // testing..
         $oView = $this->getMock( "Article_Extend", array( "getConfig", "resetContentCache" ), array(), '', false );
-        $oView->expects( $this->once() )->method( 'getConfig' )->will( $this->returnValue( $oConfig ) );
+        $oView->expects( $this->any() )->method( 'getConfig' )->will( $this->returnValue( $oConfig ) );
         $oView->expects( $this->any() )->method( 'resetContentCache' );
 
 
@@ -181,6 +183,28 @@ class Unit_Admin_ArticleExtendTest extends OxidTestCase
             return;
         }
         $this->fail( "error in Article_Extend::save()" );
+    }
+    
+ /**
+     * Article_Extend::Save() test case when demoShop = true and upload file
+     *
+     * @return null
+     */
+    public function testSaveDemoShopFileUpload()
+    {
+        $oConfig = $this->getMock( "oxStdClass", array( "getUploadedFile", "isDemoShop" ) );
+        $oConfig->expects( $this->once() )->method( 'isDemoShop' )->will( $this->returnValue( true ) );
+        $oConfig->expects( $this->exactly(2) )->method( 'getUploadedFile' )->will( $this->onConsecutiveCalls( 
+            array( "name" => array('FL@oxarticles__oxfile' => "testFile") ), array( "name" => "testName") ) );
+        // testing..
+        $oView = $this->getMock( "Article_Extend", array( "getConfig", "resetContentCache" ), array(), '', false );
+        $oView->expects( $this->any() )->method( 'getConfig' )->will( $this->returnValue( $oConfig ) );
+        $oView->expects( $this->any() )->method( 'resetContentCache' );
+        $oView->save();
+        // testing..
+        $aErr = oxSession::getVar( 'Errors' );
+        $oErr = unserialize($aErr['default'][0]);
+        $this->assertEquals( 'ARTICLE_EXTEND_UPLOADISDISABLED', $oErr->getOxMessage());
     }
 
     /**
@@ -240,4 +264,16 @@ class Unit_Admin_ArticleExtendTest extends OxidTestCase
         $this->assertTrue( (bool) oxDb::getDb()->getOne( "select 1 from oxmediaurls where oxurl = 'testUrl' and oxdesc='testDesc' ") );
     }
 
+    /**
+     * Test case for Article_Extend::getUnitsArray()
+     *
+     * @return null
+     */
+    public function testGetUnitsArray()
+    {
+        $aArray = oxLang::getInstance()->getSimilarByKey( "_UNIT_", 0, false );
+        $oView = new Article_Extend();
+
+        $this->assertEquals( $aArray, $oView->getUnitsArray() );
+    }
 }

@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   admin
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: discount_main.php 39911 2011-11-14 08:38:57Z arvydas.vapsva $
+ * @version   SVN: $Id: discount_main.php 45813 2012-06-04 07:45:24Z vaidas.matulevicius $
  */
 
 /**
@@ -72,17 +72,18 @@ class Discount_Main extends oxAdminDetails
         }
 
         if ( ( $iAoc = oxConfig::getParameter("aoc") ) ) {
-            $aColumns = array();
             if ( $iAoc == "1" ) {
-                include_once 'inc/'.strtolower(__CLASS__).'.inc.php';
-                $this->_aViewData['oxajax'] = $aColumns;
+                $oDiscountMainAjax = oxNew( 'discount_main_ajax' );                
+                $this->_aViewData['oxajax'] = $oDiscountMainAjax->getColumns();
+                
                 return "popups/discount_main.tpl";
             } elseif ( $iAoc == "2" ) {
                 // generating category tree for artikel choose select list
                 $this->_getCategoryTree( "artcattree", null );
-
-                include_once 'inc/discount_item.inc.php';
-                $this->_aViewData['oxajax'] = $aColumns;
+                
+                $oDiscountItemAjax = oxNew( 'discount_item_ajax' );
+                $this->_aViewData['oxajax'] = $oDiscountItemAjax->getColumns();
+                
                 return "popups/discount_item.tpl";
             }
         }
@@ -104,7 +105,7 @@ class Discount_Main extends oxAdminDetails
             $sQ = "select concat( $sViewName.oxartnum, ' ', $sViewName.oxtitle ) from oxdiscount
                    left join $sViewName on $sViewName.oxid=oxdiscount.oxitmartid
                    where oxdiscount.oxitmartid != '' and oxdiscount.oxid=" . $oDb->quote( $sOxId );
-            $sTitle = $oDb->getOne( $sQ );
+            $sTitle = $oDb->getOne( $sQ, false, false );
         }
 
         return $sTitle ? $sTitle : " -- ";

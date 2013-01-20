@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxdiscountlistTest.php 49762 2012-09-25 15:12:13Z tomas $
+ * @version   SVN: $Id: oxdiscountlistTest.php 52174 2012-11-23 11:02:05Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -193,7 +193,7 @@ class Unit_Core_oxDiscountlistTest extends OxidTestCase
 
         $this->assertEquals( 1, count($oResDiscount) );
         $this->assertEquals( '_testDiscountId', $aResDiscountKeys[0] );
-        $this->assertEquals( '_testDiscountId', $oResDiscount->sOXID );
+        $this->assertEquals( '_testDiscountId', $oResDiscount->sOXID);
         $this->assertEquals( 'testDiscountTitle', $oResDiscount->sDiscount );
         $this->assertEquals( 2.5, $oResDiscount->dDiscount );
         $this->assertEquals( 23.75, $oPrice->getBruttoPrice());
@@ -244,8 +244,6 @@ class Unit_Core_oxDiscountlistTest extends OxidTestCase
      */
     public function testApplyBaskketDiscountsLargeAmountDiscountPrecission()
     {
-
-        $this->markTestSkipped("Skipped due to #3587 rollback");
         //INIT
         $dInitialPrice = 2.98;
         $dDiscountValue = 2;//%
@@ -281,8 +279,6 @@ class Unit_Core_oxDiscountlistTest extends OxidTestCase
      */
     public function testApplyBaskketDiscountsLargeAmountDiscountPrecissionCombined()
     {
-        $this->markTestSkipped("Skipped due to #3587 rollback");
-
         //INIT
         $dInitialPrice = 2.98;
         $dDiscountValue1 = 2;//%
@@ -516,8 +512,11 @@ class Unit_Core_oxDiscountlistTest extends OxidTestCase
         $aDiscounts[4]->oxdiscount__oxaddsumtype = new oxField('itm', oxField::T_RAW);
         $aDiscounts[4]->expects( $this->never() )->method( 'isForBasketAmount' );
 
+        $oDList = $this->getMock( 'oxList', array( 'getArray' ) );
+        $oDList->expects( $this->once() )->method( 'getArray' )->will( $this->returnValue( $aDiscounts ) );
+
         $oList = $this->getMock( 'oxdiscountlist', array( '_getList' ) );
-        $oList->expects( $this->once() )->method( '_getList' )->will( $this->returnValue( $aDiscounts ) );
+        $oList->expects( $this->once() )->method( '_getList' )->will( $this->returnValue( $oDList ) );
 
         // now proceeding to disocunt id check
         $this->assertEquals( array( 'xxx' => $aDiscounts[0], 'yyy' => $aDiscounts[1] ), $oList->getBasketItemDiscounts( $oArticle, $oBasket ) );
@@ -661,4 +660,6 @@ class Unit_Core_oxDiscountlistTest extends OxidTestCase
         oxDiscountList::getInstance()->forceReload();
         $this->assertTrue( oxDiscountList::getInstance()->hasSkipDiscountCategories() );
     }
+
+
 }

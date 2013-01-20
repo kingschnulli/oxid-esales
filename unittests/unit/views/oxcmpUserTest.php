@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcmpUserTest.php 44474 2012-04-27 12:26:32Z mindaugas.rimgaila $
+ * @version   SVN: $Id: oxcmpUserTest.php 53116 2012-12-19 08:50:55Z aurimas.gladutis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -393,8 +393,8 @@ class Unit_Views_oxcmpUserTest extends OxidTestCase
     public function testGetLogoutLink()
     {
         // note: modConfig mock fails for php 520
-        $oConfig = $this->getMock( 'oxConfig', array( 'getShopSecureHomeUrl', 'isSsl' ) );
-        $oConfig->expects( $this->any() )->method( 'getShopSecureHomeUrl' )->will( $this->returnValue( 'shopurl/?' ) );
+        $oConfig = $this->getMock( 'oxConfig', array( 'getShopHomeUrl', 'isSsl' ) );
+        $oConfig->expects( $this->any() )->method( 'getShopHomeUrl' )->will( $this->returnValue( 'shopurl/?' ) );
         $oConfig->expects( $this->any() )->method( 'isSsl' )->will( $this->returnValue( false ) );
 
         $oView = $this->getMock( 'modcmp_user', array( 'getConfig' ) );
@@ -405,18 +405,24 @@ class Unit_Views_oxcmpUserTest extends OxidTestCase
         modConfig::setParameter('mnid', 'manId');
         modConfig::setParameter('anid', 'artid');
         modConfig::setParameter('tpl', 'test');
+        modConfig::setParameter('recommid', 'recommid');
         $sLink = $oView->getLogoutLink();
         $sExpLink = "shopurl/?cl=testclass&amp;searchparam=a&amp;anid=artid&amp;cnid=catid&amp;mnid=manId" .
-                    "&amp;tpl=test&amp;fnc=logout";
+                    "&amp;tpl=test&amp;recommid=recommid&amp;fnc=logout";
 
         $this->assertEquals( $sExpLink, $sLink );
     }
 
+    /**
+     * Tests forming of logout link when in ssl page
+     *
+     * @return null
+     */
     public function testGetLogoutLinkIfSsl()
     {
         $oConfig = $this->getMock( 'oxConfig', array( 'getShopSecureHomeUrl', 'getShopHomeUrl', 'isSsl' ) );
-        $oConfig->expects( $this->any() )->method( 'getShopSecureHomeUrl' )->will( $this->returnValue( 'shopurl' ) );
-        $oConfig->expects( $this->any() )->method( 'getShopHomeUrl' )->will( $this->returnValue( 'sslshopurl/?' ) );
+        $oConfig->expects( $this->any() )->method( 'getShopHomeUrl' )->will( $this->returnValue( 'shopurl' ) );
+        $oConfig->expects( $this->any() )->method( 'getShopSecureHomeUrl' )->will( $this->returnValue( 'sslshopurl/?' ) );
         $oConfig->expects( $this->any() )->method( 'isSsl' )->will( $this->returnValue( true ) );
 
         $oView = $this->getMock( 'modcmp_user', array( 'getConfig') );
@@ -758,7 +764,7 @@ class Unit_Views_oxcmpUserTest extends OxidTestCase
     {
         $oUserView = $this->getMock( 'oxcmp_user', array( '_changeUser_noRedirect' ) );
         $oUserView->expects( $this->once() )->method( '_changeUser_noRedirect' )->will( $this->returnValue( true ) );
-        $this->assertNull( $oUserView->changeuser_testvalues() );
+        $this->assertEquals( 'account_user', $oUserView->changeuser_testvalues() );
     }
 
     /**
