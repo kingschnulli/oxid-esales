@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxubaseTest.php 53541 2013-01-10 09:01:28Z aurimas.gladutis $
+ * @version   SVN: $Id: oxubaseTest.php 54058 2013-01-21 11:50:53Z aurimas.gladutis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -370,6 +370,24 @@ class Unit_Views_oxubaseTest extends OxidTestCase
 
 
             $this->assertEquals( "ox|1|1|0|0", $sId );
+    }
+
+    /*
+     * Test getting view ID with SSL enabled
+     */
+    public function testGetViewIdWithSSL()
+    {
+        $myConfig = oxConfig::getInstance();
+        $myConfig->setIsSsl(true);
+
+        $oView = new oxubase();
+        $sId = $oView->getViewId();
+
+        $sShopURL = $myConfig->getShopUrl();
+        $sShopID  = $myConfig->getShopId();
+
+
+            $this->assertEquals( "ox|0|0|0|0|ssl", $sId );
     }
 
     public function testGetMetaDescriptionForStartView()

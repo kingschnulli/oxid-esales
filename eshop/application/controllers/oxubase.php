@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
- * @version   SVN: $Id: oxubase.php 53516 2013-01-09 14:35:43Z linas.kukulskis $
+ * @version   SVN: $Id: oxubase.php 54058 2013-01-21 11:50:53Z aurimas.gladutis $
  */
 
 /**
@@ -628,6 +628,11 @@ class oxUBase extends oxView
 
         $this->_sViewId .= "|".( (int) $this->_blForceNoIndex ).'|'.((int)$this->isRootCatChanged());
 
+        // #0004798: SSL should be included in viewId
+        if ($myConfig->isSsl()) {
+            $this->_sViewId .= "|ssl";
+        }
+
         // #0002866: external global viewID addition
         if (function_exists('customGetViewId')) {
             $oExtViewId = customGetViewId();
@@ -636,7 +641,6 @@ class oxUBase extends oxView
                 $this->_sViewId .= '|'.md5(serialize($oExtViewId));
             }
         }
-
         return $this->_sViewId;
     }
 
