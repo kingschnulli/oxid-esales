@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticleTest.php 52897 2012-12-13 12:40:39Z aurimas.gladutis $
+ * @version   SVN: $Id: oxarticleTest.php 54032 2013-01-21 08:23:57Z aurimas.gladutis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -7152,16 +7152,17 @@ class Unit_Core_oxarticleTest extends OxidTestCase
     {
         oxTestModules::addFunction("oxVariantHandler", "buildVariantSelections", "{return 'buildVariantSelections';}");
         $oVariantHandler = $this->getMock('oxVariantHandler', array("buildVariantSelections"));
+        $aVariantSelections = array('selections' => 'asd', 'rawselections' => 'asd');
         $oVariantHandler->expects($this->once())->method("buildVariantSelections")
             ->with($this->equalTo('varname'), $this->equalTo('variants'), $this->equalTo(1), $this->equalTo(2), $this->equalTo(3))
-            ->will($this->returnValue("asd"));
+            ->will($this->returnValue($aVariantSelections));
         oxTestModules::addModuleObject("oxVariantHandler", $oVariantHandler);
 
         $oProduct = $this->getMock( "oxArticle", array( "getVariants" ) );
         $oProduct->expects( $this->once() )->method( 'getVariants' )->will( $this->returnValue( 'variants' ) );
         $oProduct->oxarticles__oxvarcount = new oxField( 3 );
         $oProduct->oxarticles__oxvarname  = new oxField( 'varname' );
-        $this->assertEquals( 'asd', $oProduct->getVariantSelections(1, 2, 3) );
+        $this->assertEquals( $aVariantSelections, $oProduct->getVariantSelections(1, 2, 3) );
     }
 
     /**
