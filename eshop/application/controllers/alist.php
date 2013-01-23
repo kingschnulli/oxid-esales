@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
- * @version   SVN: $Id: alist.php 53443 2013-01-07 14:55:55Z linas.kukulskis $
+ * @version   SVN: $Id: alist.php 54111 2013-01-22 08:24:08Z linas.kukulskis $
  */
 
 /**
@@ -689,18 +689,6 @@ class aList extends oxUBase
     {
         $aSorting = parent::getSorting( $sCnid );
         return $aSorting;
-    }
-
-    /**
-     * Template variable getter. Returns sorting columns
-     *
-     * @return array
-     */
-    public function getSortColumns()
-    {
-        $this->setSortColumns( $this->getConfig()->getConfigParam( 'aSortCols' ) );
-
-        return $this->_aSortColumns;
     }
 
     /**

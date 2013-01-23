@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
- * @version   SVN: $Id: oxubase.php 54058 2013-01-21 11:50:53Z aurimas.gladutis $
+ * @version   SVN: $Id: oxubase.php 54111 2013-01-22 08:24:08Z linas.kukulskis $
  */
 
 /**
@@ -504,6 +504,14 @@ class oxUBase extends oxView
      */
     protected $_blLoadComponents = true;
 
+
+    /**
+     * Sorting columns list
+     *
+     * @var array
+     */
+    protected $_aSortColumns = null;
+
     /**
      * Returns component names
      *
@@ -960,7 +968,7 @@ class oxUBase extends oxView
         $sSortBy  = $oConfig->getParameter( $this->getSortOrderByParameterName() );
         $sSortDir = $oConfig->getParameter( $this->getSortOrderParameterName() );
 
-        if ( $sSortBy && oxDb::getInstance()->isValidFieldName( $sSortBy ) && in_array( $oStr->strtolower($sSortBy), $aSortColumns ) &&
+        if ( $sSortBy && oxDb::getInstance()->isValidFieldName( $sSortBy ) && /*in_array( $oStr->strtolower($sSortBy), $aSortColumns ) &&*/
             $sSortDir && oxRegistry::getUtils()->isValidAlpha( $sSortDir ) && in_array( $oStr->strtolower($sSortDir), $aSortDirections ) ) {
             $aSorting = array ( 'sortby' => $sSortBy, 'sortdir' => $sSortDir );
         }
@@ -1867,6 +1875,9 @@ class oxUBase extends oxView
      */
     public function getSortColumns()
     {
+        if ( $this->_aSortColumns === null ) {
+            $this->setSortColumns( $this->getConfig()->getConfigParam( 'aSortCols' ) );
+        }
         return $this->_aSortColumns;
     }
 

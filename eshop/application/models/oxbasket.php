@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
- * @version   SVN: $Id: oxbasket.php 53965 2013-01-17 09:04:52Z linas.kukulskis $
+ * @version   SVN: $Id: oxbasket.php 54117 2013-01-22 09:11:41Z linas.kukulskis $
  */
 
 /**
@@ -1229,9 +1229,19 @@ class oxBasket extends oxSuperCfg
         $dOldprice = $this->_oDiscountProductsPriceList->getSum( $this->isCalculationModeNetto() );
 
         // add basket discounts
-        $aDiscounts = oxRegistry::get("oxDiscountList")->getBasketDiscounts( $this, $this->getBasketUser() );
+        if ( $oTotalPrice = $this->getTotalDiscount() ) {
+            //if total discutn was setted on order recalculation
+            $oDiscount = oxNew('oxDiscount');
+            $oDiscount->oxdiscount__oxaddsum = new oxField( $oTotalPrice->getPrice() );
+            $oDiscount->oxdiscount__oxaddsumtype = new oxField( 'abs' );
+            $aDiscounts[] = $oDiscount;
+        } else {
+            // discounts for basket
+            $aDiscounts = oxRegistry::get("oxDiscountList")->getBasketDiscounts( $this, $this->getBasketUser() );
+        }
+
         if ( $oPriceList = $this->getDiscountProductsPrice() ) {
-            $this->_aDiscountedVats = $oPriceList->getVatInfo( $this->isCalculationModeNetto() );
+                $this->_aDiscountedVats = $oPriceList->getVatInfo( $this->isCalculationModeNetto() );
         }
 
         foreach ( $aDiscounts as $oDiscount ) {

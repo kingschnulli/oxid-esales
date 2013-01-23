@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxwservicemenuTest.php 51853 2012-11-15 11:28:55Z vilma $
+ * @version   SVN: $Id: oxwservicemenuTest.php 54162 2013-01-22 14:48:12Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';

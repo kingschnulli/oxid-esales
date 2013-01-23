@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
- * @version   SVN: $Id: guestbook.php 53434 2013-01-07 13:47:23Z linas.kukulskis $
+ * @version   SVN: $Id: guestbook.php 54111 2013-01-22 08:24:08Z linas.kukulskis $
  */
 
 /**
@@ -44,7 +44,7 @@ class GuestBook extends oxUBase
      * Array of sorting columns
      * @var array
      */
-    protected $_aSortColumns = false;
+    protected $_aSortColumns = null;
 
     /**
      * Order by
@@ -130,7 +130,9 @@ class GuestBook extends oxUBase
      */
     public function getSortColumns()
     {
-        $this->setSortColumns( array( 'author', 'date' ) );
+        if ( $this->_aSortColumns === null) {
+            $this->setSortColumns( array( 'author', 'date' ) );
+        }
         return $this->_aSortColumns;
     }
 

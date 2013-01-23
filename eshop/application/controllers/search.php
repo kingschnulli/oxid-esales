@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
- * @version   SVN: $Id: search.php 53429 2013-01-07 13:38:08Z linas.kukulskis $
+ * @version   SVN: $Id: search.php 54111 2013-01-22 08:24:08Z linas.kukulskis $
  */
 
 /**
@@ -267,7 +267,7 @@ class Search extends oxUBase
      * @param string $sSortBy    sort field
      * @param string $sSortOrder sort order
      *
-	 * @deprecated since v4.7.3/5.0.3 (2013-01-07); dublicated code
+     * @deprecated since v4.7.3/5.0.3 (2013-01-07); dublicated code
      *
      * @return null
      */
@@ -281,7 +281,7 @@ class Search extends oxUBase
      *
      * @param string $sCnid sortable item id
      *
-     * @deprecated since v4.7.3/5.0.3 (2013-01-07); dublicated code 
+     * @deprecated since v4.7.3/5.0.3 (2013-01-07); dublicated code
      *
      * @return string
      */
@@ -496,16 +496,5 @@ class Search extends oxUBase
     public function getArticleCount()
     {
         return $this->_iAllArtCnt;
-    }
-
-    /**
-     * Returns sorting columns
-     *
-     * @return array
-     */
-    public function getSortColumns()
-    {
-        $this->setSortColumns( $this->getConfig()->getConfigParam( 'aSortCols' ) );
-        return $this->_aSortColumns;
     }
 }
