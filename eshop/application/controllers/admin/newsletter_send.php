@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: newsletter_send.php 48458 2012-08-10 06:59:10Z linas.kukulskis $
+ * @version   SVN: $Id: newsletter_send.php 51745 2012-11-13 10:54:30Z aurimas.gladutis $
  */
 
 /**
@@ -86,7 +86,8 @@ class Newsletter_Send extends Newsletter_Selection
                from oxnewssubscribed left join oxobject2group on
                oxobject2group.oxobjectid = oxnewssubscribed.oxuserid where
                ( oxobject2group.oxshopid = '{$sShopId}' or oxobject2group.oxshopid is null ) and
-               $sQGroups and oxnewssubscribed.oxdboptin = 1 group by oxnewssubscribed.oxemail";
+               $sQGroups and oxnewssubscribed.oxdboptin = 1 and oxnewssubscribed.oxshopid = '{$sShopId}'
+               group by oxnewssubscribed.oxemail";
 
         $oRs = $oDB->selectLimit( $sQ, 100, $iStart );
         $blContinue = ( $oRs != false && $oRs->recordCount() > 0 );

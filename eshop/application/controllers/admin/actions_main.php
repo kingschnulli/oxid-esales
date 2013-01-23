@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: actions_main.php 48727 2012-08-16 09:09:02Z tomas $
+ * @version   SVN: $Id: actions_main.php 51588 2012-11-09 08:56:56Z aurimas.gladutis $
  */
 
 /**
@@ -72,8 +72,7 @@ class Actions_Main extends oxAdminDetails
 
         if ( oxConfig::getParameter("aoc") ) {
             // generating category tree for select list
-            $sChosenArtCat = oxConfig::getParameter( "artcat");
-            $sChosenArtCat = $this->_getCategoryTree( "artcattree", $sChosenArtCat, $soxId);
+            $this->_createCategoryTree( "artcattree", $soxId);
 
             $oActionsMainAjax = oxNew( 'actions_main_ajax' );
             $this->_aViewData['oxajax'] = $oActionsMainAjax->getColumns();
@@ -89,8 +88,7 @@ class Actions_Main extends oxAdminDetails
                     switch( $iAoc ) {
                         case 'article':
                             // generating category tree for select list
-                            $sChosenArtCat = oxConfig::getParameter( "artcat");
-                            $sChosenArtCat = $this->_getCategoryTree( "artcattree", $sChosenArtCat, $soxId);
+                            $this->_createCategoryTree( "artcattree", $soxId);
 
                             if ($oArticle = $oPromotion->getBannerArticle()) {
                                 $this->_aViewData['actionarticle_artnum'] = $oArticle->oxarticles__oxartnum->value;

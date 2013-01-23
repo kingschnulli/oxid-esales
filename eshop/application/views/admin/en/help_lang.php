@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: help_lang.php 52929 2012-12-14 10:37:20Z juergen.busch $
+ * @version   SVN: $Id: help_lang.php 53019 2012-12-17 14:04:32Z aurimas.gladutis $
  */
 
 /**

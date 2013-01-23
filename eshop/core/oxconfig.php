@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxconfig.php 52793 2012-12-10 14:04:16Z saulius.stasiukaitis $
+ * @version   SVN: $Id: oxconfig.php 53024 2012-12-17 14:40:05Z saulius.stasiukaitis $
  */
 
 //max integer
@@ -1918,7 +1918,6 @@ class oxConfig extends oxSuperCfg
 
         $sQ = "insert into oxconfig (oxid, oxshopid, oxmodule, oxvarname, oxvartype, oxvarvalue)
                values($sNewOXIDdQuoted, $sShopIdQuoted, $sModuleQuoted, $sVarNameQuoted, $sVarTypeQuoted, ENCODE( $sVarValueQuoted, $sConfigKeyQuoted) )";
-
         $oDb->execute( $sQ );
 
 

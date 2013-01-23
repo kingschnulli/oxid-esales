@@ -13,7 +13,7 @@
         [{ oxmultilang ident="EMAIL_SENDEDNOW_HTML_ORDERNOMBER" }] [{ $order->oxorder__oxordernr->value }]
     [{/block}]
 
-    [{ if $oOrderFileList }]
+    [{ if $oOrderFileList and $oOrderFileList|count }]
         [{block name="email_html_senddownloadlinks_download_header"}]
             [{ oxmultilang ident="EMAIL_SENDDOWNLOADS_DOWNLOADS_DESC" }]
         [{/block}]

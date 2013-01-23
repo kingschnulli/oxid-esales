@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: start.php 51870 2012-11-15 12:46:36Z linas.kukulskis $
+ * @version   SVN: $Id: start.php 52308 2012-11-23 16:02:00Z linas.kukulskis $
  */
 
 /**

@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: language_main.php 51851 2012-11-15 11:06:55Z aurimas.gladutis $
+ * @version   SVN: $Id: language_main.php 51852 2012-11-15 11:08:57Z aurimas.gladutis $
  */
 
 /**

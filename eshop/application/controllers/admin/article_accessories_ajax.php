@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: article_accessories_ajax.php 52579 2012-11-29 12:19:21Z aurimas.gladutis $
+ * @version   SVN: $Id: article_accessories_ajax.php 52581 2012-11-29 12:20:57Z aurimas.gladutis $
  */
 
 /**

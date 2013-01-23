@@ -8,9 +8,10 @@
         [{/foreach}]
     </p>
 
-    <p class="tagError">[{oxmultilang ident="PAGE_DETAILS_TAGS_ALREADYADDEDTAG"}]</p>
+    <p class="tagError inlist" >[{oxmultilang ident="PAGE_DETAILS_TAGS_ALREADYADDEDTAG"}]: <span></span></p>
+    <p class="tagError invalid">[{oxmultilang ident="INVALID_TAGS_REMOVED"}]: <span></span></p>
     <form action="[{$oViewConf->getSelfActionLink()}]#tags" method="post" id="tagsForm" >
-        <div>
+    <div>
         [{$oViewConf->getHiddenSid()}]
         [{$oViewConf->getNavFormParams()}]
         <input type="hidden" name="cl" value="[{$oViewConf->getActiveClassName()}]">

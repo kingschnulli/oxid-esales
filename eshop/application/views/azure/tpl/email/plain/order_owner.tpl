@@ -14,9 +14,9 @@
 [{/if}]
 [{/block}]
 
-[{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_ORDERNOMBER" }] [{ $order->oxorder__oxordernr->value }]
+[{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_ORDERNUMBER" }] [{ $order->oxorder__oxordernr->value }]
 
-[{block name="email_plain_order_ownervoucherdiscount"}]
+[{block name="email_plain_order_owner_voucherdiscount"}]
 [{if $oViewConf->getShowVouchers() }]
 [{ foreach from=$order->getVoucherList() item=voucher}]
 [{ assign var="voucherseries" value=$voucher->getSerie() }]
@@ -101,7 +101,7 @@
 [{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_TOTALGROSS" }] [{ $basket->getFProductsPrice() }] [{ $currency->name}]
 [{/block}]
 [{/if}]
-[{block name="email_plain_order_ownervoucherdiscount"}]
+[{block name="email_plain_order_owner_voucherdiscount"}]
 [{* voucher discounts *}]
 [{if $oViewConf->getShowVouchers() && $basket->getVoucherDiscValue() }]
 [{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_COUPON" }] [{ if $basket->getFVoucherDiscountValue() > 0 }]-[{/if}][{ $basket->getFVoucherDiscountValue()|replace:"-":"" }] [{ $currency->name}]

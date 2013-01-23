@@ -59,11 +59,10 @@
         [{ assign var="oManufacturer" value=$oView->getManufacturer()}]
         <div class="productMainInfo[{if $oManufacturer->oxmanufacturers__oxicon->value}] hasBrand[{/if}]">
 
-            [{oxscript include="js/widgets/oxarticleactionlinksselect.js" priority=10 }]
-            [{oxscript add="$( '#productTitle' ).oxArticleActionLinksSelect();"}]
-
             [{* Product title *}]
             [{block name="details_productmain_title"}]
+                [{oxscript include="js/widgets/oxarticleactionlinksselect.js" priority=10 }]
+                [{oxscript add="$( '#productTitle' ).oxArticleActionLinksSelect();"}]
                 <h1 id="productTitle"><span>[{$oDetailsProduct->oxarticles__oxtitle->value}] [{$oDetailsProduct->oxarticles__oxvarselect->value}]</span></h1>
             [{/block}]
 
@@ -221,9 +220,7 @@
 
             [{block name="details_productmain_tprice"}]
                 [{oxhasrights ident="SHOWARTICLEPRICE"}]
-                    [{assign var=tprice value=$oDetailsProduct->getTPrice()}]
-                    [{assign var=price  value=$oDetailsProduct->getPrice()}]
-                    [{if $tprice && $tprice->getBruttoPrice() > $price->getBruttoPrice()}]
+                    [{if $oDetailsProduct->getTPrice()}]
                         <p class="oldPrice">
                             <strong>[{oxmultilang ident="DETAILS_REDUCEDFROM"}] <del>[{$oDetailsProduct->getFTPrice()}] [{$currency->sign}]</del></strong>
                         </p>
@@ -248,7 +245,7 @@
                                     <span>[{$sFrom}] [{$fPrice}]</span>
                                     <span>[{ $currency->sign}]</span>
                                     [{if $oView->isVatIncluded() }]
-                                    <span>*</>
+                                    <span>*</span>
                                     [{/if}]
                                 </strong>
                             </label>

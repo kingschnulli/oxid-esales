@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   views
- * @copyright (C) OXID eSales AG 2003-2012
+ * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
- * @version   SVN: $Id: alist.php 52435 2012-11-26 07:22:18Z aurimas.gladutis $
+ * @version   SVN: $Id: alist.php 53628 2013-01-10 15:42:55Z linas.kukulskis $
  */
 
 /**
@@ -183,7 +183,7 @@ class aList extends oxUBase
         $this->_blIsCat = false;
 
         // A. checking for fake "more" category
-        if ( 'oxmore' == oxConfig::getParameter( 'cnid' ) ) {
+        if ( 'oxmore' == $myConfig->getRequestParameter( 'cnid' ) ) {
             // overriding some standard value and parameters
             $this->_sThisTemplate = $this->_sThisMoreTemplate;
             $oCategory = oxNew( 'oxcategory' );
@@ -357,7 +357,7 @@ class aList extends oxUBase
         // load only articles which we show on screen
         $oArtList = oxNew( 'oxarticlelist' );
         $oArtList->setSqlLimit( $iNrofCatArticles * $this->_getRequestPageNr(), $iNrofCatArticles );
-        $oArtList->setCustomSorting( $this->getSortingSql( $oCategory->getId() ) );
+        $oArtList->setCustomSorting( $this->getSortingSql( $this->getSortIdent() ) );
 
         if ( $oCategory->isPriceCategory() ) {
             $dPriceFrom = $oCategory->oxcategories__oxpricefrom->value;
@@ -681,22 +681,47 @@ class aList extends oxUBase
      *
      * @param string $sCnid sortable item id
      *
+     * @deprecated since v4.7.3/5.0.3 (2013-01-07); dublicated code
+     *
      * @return string
      */
     public function getSorting( $sCnid )
     {
-        // category has own sorting
         $aSorting = parent::getSorting( $sCnid );
+        return $aSorting;
+    }
+
+    /**
+     * Template variable getter. Returns sorting columns
+     *
+     * @return array
+     */
+    public function getSortColumns()
+    {
+        $this->setSortColumns( $this->getConfig()->getConfigParam( 'aSortCols' ) );
+
+        return $this->_aSortColumns;
+    }
+
+    /**
+     * Returns default category sorting for selected category
+     *
+     * @return array
+     */
+    public function getDefaultSorting()
+    {
         $oActCat = $this->getActCategory();
-        if ( !$aSorting && $oActCat && $oActCat->oxcategories__oxdefsort->value ) {
+
+        if ( $oActCat && $oActCat->oxcategories__oxdefsort->value ) {
             $sSortBy  = $oActCat->oxcategories__oxdefsort->value;
             $sSortDir = ( $oActCat->oxcategories__oxdefsortmode->value ) ? "desc" : "asc";
-
-            $this->setItemSorting( $sCnid, $sSortBy, $sSortDir );
             $aSorting = array ( 'sortby' => $sSortBy, 'sortdir' => $sSortDir );
+        } else {
+            $aSorting = parent::getDefaultSorting();
         }
         return $aSorting;
     }
+
 
     /**
      * Returns title suffix used in template
@@ -808,7 +833,7 @@ class aList extends oxUBase
     public function getCatTreePath()
     {
         if ( $this->_sCatTreePath === null ) {
-             $this->_sCatTreePath = false;
+            $this->_sCatTreePath = false;
             // category path
             if ( $oCatTree = $this->getCategoryTree() ) {
                 $this->_sCatTreePath = $oCatTree->getPath();

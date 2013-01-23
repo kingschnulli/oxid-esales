@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxnewssubscribedTest.php 42987 2012-03-19 08:54:54Z linas.kukulskis $
+ * @version   SVN: $Id: oxnewssubscribedTest.php 51745 2012-11-13 10:54:30Z aurimas.gladutis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -151,6 +151,13 @@ class Unit_Core_oxnewssubscribedTest extends OxidTestCase
     }
 
     /**
+     * Testing subscription loading by userid in different shops
+     */
+    public function testLoadFromUserIdDifferentShops()
+    {
+    }
+
+    /**
      * Testing if insert updates timestamp field value
      */
     public function testInsert()
@@ -165,7 +172,6 @@ class Unit_Core_oxnewssubscribedTest extends OxidTestCase
         $oNewsSubscribed->load( '_testNewsSubscr2Id' );
         $this->assertTrue( ($oNewsSubscribed->oxnewssubscribed__oxsubscribed->value >= $sNow) );
     }
-
 
     /**
      * Testing update. If user was subscribed already and unsubscribing him

@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxorderTest.php 51916 2012-11-16 08:51:43Z saulius.stasiukaitis $
+ * @version   SVN: $Id: oxorderTest.php 53164 2012-12-20 09:55:31Z aurimas.gladutis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -304,9 +304,9 @@ class Unit_Core_oxorderTest extends OxidTestCase
         $oUser->oxuser__oxfax = new oxField( "fax" );
         $oUser->oxuser__oxsal = new oxField( "sal" );
 
-        $sUserAddress = 'companyusernamefnamelnamestreetstreetnraddinfoustidcitycountryidstatidzipfonfaxsal';
-        $sDelAddress = 'companyfnamelnamestreetstreetnraddinfocitycountryidstatidzipfonfaxsal';
-        modConfig::setParameter( 'sDeliveryAddressMD5', md5($sUserAddress.$sDelAddress) );
+        $sUserAddress = $oUser->getEncodedDeliveryAddress();
+        $sDelAddress = $oDelAddress->getEncodedDeliveryAddress();
+        modConfig::setParameter( 'sDeliveryAddressMD5', $sUserAddress.$sDelAddress );
 
         $oOrder = $this->getMock( "oxorder", array( "getDelAddressInfo" ) );
         $oOrder->expects( $this->any() )->method( 'getDelAddressInfo')->will( $this->returnValue( $oDelAddress ) );

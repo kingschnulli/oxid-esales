@@ -86,7 +86,7 @@
                         <div>
                             [{foreach from=$Errors.basket item=oEr key=key }]
                                 [{if $oEr->getErrorClassType() == 'oxVoucherException'}]
-                                    [{ oxmultilang ident="PAGE_CHECKOUT_ORDER_COUPONNOTACCEPTED1" }] [{ $oEr->getValue('voucherNr') }] [{ oxmultilang ident="PAGE_CHECKOUT_ORDER_COUPONNOTACCEPTED2" }]<br>
+                                    [{ oxmultilang ident="COUPON_NOT_ACCEPTED" args=$oEr->getValue('voucherNr') }]<br>
                                     [{ oxmultilang ident="PAGE_CHECKOUT_ORDER_REASON" }]
                                     [{ $oEr->getOxMessage() }]<br>
                                 [{/if}]

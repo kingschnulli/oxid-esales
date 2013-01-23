@@ -37,7 +37,7 @@
 
 --></script>
 <span id="[{$divId}]" class=stateSelector>
-  <select name="[{$stateSelectName}]" id="[{$stateSelectId}]">
+  <select name="[{$stateSelectName}]" id="[{$stateSelectId}]" data-fieldsize="normal">
       <option value="">[{oxmultilang ident="FORM_FIELDSET_STATE_PROMTSTRING"}]</option>
   </select>
 </span>

@@ -21,7 +21,7 @@
         <ul class="clear">
             <li>
                 <input id="orderConfirmAgb" type="checkbox" name="ord_agb" value="1">
-                <label id="confirmLabel">[{oxifcontent ident="oxrighttocancellegend" object="oContent"}]
+                <label id="confirmLabel" for="orderConfirmAgb">[{oxifcontent ident="oxrighttocancellegend" object="oContent"}]
                     [{ $oContent->oxcontents__oxcontent->value }]
                     [{/oxifcontent}]</label>
             </li>

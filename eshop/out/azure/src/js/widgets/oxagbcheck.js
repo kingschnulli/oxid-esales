@@ -16,7 +16,7 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   out
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
  * @version   SVN: $Id: oxagbcheck.js 35529 2011-05-23 07:31:20Z vilma $
  */
@@ -31,7 +31,7 @@
                 el      = self.element;
 
              el.closest('form').submit(function() {
-                if( el.attr('checked') ){
+                if( el.prop('checked') ){
                     return true;
                 } else {
                     $("p[name='agbError']").show();
@@ -41,11 +41,11 @@
             });
 
             el.click(function() {
-                if( el.attr('checked') ){
-                    el.attr('checked', true);
+                if( el.prop('checked') ){
+                    el.prop('checked', true);
                     $("p[name='agbError']").hide();
                 } else {
-                    el.attr('checked', false);
+                    el.prop('checked', false);
                 }
             });
         }

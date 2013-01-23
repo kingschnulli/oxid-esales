@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: paymentTest.php 51960 2012-11-19 09:11:15Z vilma $
+ * @version   SVN: $Id: paymentTest.php 51898 2012-11-15 15:00:00Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';

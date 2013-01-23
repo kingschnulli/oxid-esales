@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxdbmetadatahandler.php 51491 2012-11-07 11:37:05Z aurimas.gladutis $
+ * @version   SVN: $Id: oxdbmetadatahandler.php 53140 2012-12-19 13:25:47Z aurimas.gladutis $
  */
 
 /**
@@ -190,6 +190,8 @@ class oxDbMetaDataHandler extends oxSuperCfg
         $aRes = oxDb::getDb()->getAll( "show create table {$sTable}" );
         $sTableSql = $aRes[0][1];
 
+        // removing comments;
+        $sTableSql = preg_replace('/COMMENT \\\'.*?\\\'/', '', $sTableSql);
         preg_match( "/.*,\s+(['`]?".preg_quote($sField, '/')."['`]?\s+[^,]+),.*/", $sTableSql, $aMatch );
         $sFieldSql = $aMatch[1];
 

@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: discount_articles_ajax.php 52041 2012-11-20 13:02:38Z vilma $
+ * @version   SVN: $Id: discount_articles_ajax.php 52038 2012-11-20 12:01:59Z vilma $
  */
 
 /**

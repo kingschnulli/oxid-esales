@@ -17,7 +17,7 @@
                     [{oxcontent ident="oxadminorderemail"}]
                 [{/if}]
 
-                [{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_ORDERNOMBER" }] <b>[{ $order->oxorder__oxordernr->value }]</b>
+                [{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_ORDERNUMBER" }] <b>[{ $order->oxorder__oxordernr->value }]</b>
             </p>
         [{/block}]
 

@@ -17,7 +17,7 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   lang
- * @copyright (C) OXID eSales AG 2003-2012
+ * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
  * @version   SVN: $Id: lang.php 28697 2010-06-29 11:09:58Z vilma $
  */
@@ -51,6 +51,7 @@ $aLang = array(
 'ALL'                                                         => "All",
 'ALL_LISTMANIA'                                               => "all Listmania",
 'ALREADY_ADDED_TAG'                                           => "You already tagged this text",
+'INVALID_TAGS_REMOVED'                                        => "Invalid tags removed",
 'ALREADY_CUSTOMER'                                            => "I am already customer",
 'APPLAY'                                                      => "Apply",
 'ARTNUM'                                                      => "Product number",
@@ -126,8 +127,7 @@ $aLang = array(
 'COUNTRY'                                                     => "Country:",
 'COUPON'                                                      => "Coupon",
 'COUPON_2'                                                    => "Coupon:",
-'COUPON_NOT_ACCEPTED1'                                        => "Your Coupon",
-'COUPON_NOT_ACCEPTED2'                                        => "couldn't be accepted.",
+'COUPON_NOT_ACCEPTED'                                         => "Your Coupon \"%s\" couldn't be accepted.",
 'CREATE_PASSWORD'                                             => "Create Password",
 'CREDITCARD'                                                  => "Credit Card:",
 'CURRENT_PRODUCT'                                             => "Current product",
@@ -258,6 +258,8 @@ $aLang = array(
 'FIRST_NAME'                                                  => "First name:",
 'FIRST_NAME_2'                                                => "First Name:",
 'FORGOT_PASSWORD'                                             => "Forgot password?",
+'FORM_REGISTER_IAGREETOTERMS1'                                => "I agree to the",
+'FORM_REGISTER_IAGREETOTERMS2'                                => "",
 'FROM'                                                        => "From",
 'FROM_2'                                                      => "From:",
 'FROM_3'                                                      => "from",
@@ -427,6 +429,7 @@ $aLang = array(
 'MY_COMPARE'                                                  => "My Product Compare",
 'MY_GIFT_REGISTRY'                                            => "My Gift Registry",
 'MY_LISTMANIA'                                                => "My Listmania List",
+'MY_ORDER_HISTORY'                                            => "My Order History",
 'MY_PRODUCT_COMPARISON'                                       => "My Product Comparison",
 'MY_WISHLIST_BY'                                              => "My wishlist by",
 'MY_WISH_LIST'                                                => "My Wish List",
@@ -740,7 +743,6 @@ $aLang = array(
 'OXVAT'                                                       => 'Product VAT',
 'OXTHUMB'                                                     => 'Preview Picture',
 'OXICON'                                                      => 'oxicon',
-'OXPICSGENERATED'                                             => 'Pictures generated',
 'OXPIC1'                                                      => 'Picture1',
 'OXPIC2'                                                      => 'Picture2',
 'OXPIC3'                                                      => 'Picture3',
@@ -850,7 +852,6 @@ $aLang = array(
 'COOKIE_NOTE'                                                 => 'This online shop is using cookies to give you the best shopping expierience. Thereby for example the session information or language setting are stored on your computer. Without cookies the range of the online shop\'s functionality is limited.',
 'COOKIE_NOTE_DISAGREE'                                        => 'If you do not agree, please click here.',
 'COOKIE_NOTE_CLOSE'                                           => 'Close',
-
 'BASKET_TOTAL_WRAPPING_COSTS'                                 => "Gift Wrapping",
 'BASKET_TOTAL_GIFTCARD_COSTS'                                 => "Greeting Card",
 'BASKET_TOTAL_WRAPPING_COSTS_NET'                             => "Gift Wrapping (net)",
@@ -859,7 +860,6 @@ $aLang = array(
 'BASKET_TOTAL_PLUS_PROPORTIONAL_VAT'                          => "plus VAT (proportionally calculated)",
 'PROPORTIONALLY_CALCULATED'                                   => 'Proportionally calculated',
 'PRICE_FROM'                                                  => 'from',
-
 'PAGE_TITLE_BASKET'                                           => 'Cart',
 'PAGE_TITLE_USER'                                             => 'Shipping Address',
 'PAGE_TITLE_PAYMENT'                                          => 'Payment Methods',
@@ -880,4 +880,5 @@ $aLang = array(
 'PAGE_TITLE_WISHLIST'                                         => 'Wishlist',
 'PAGE_TITLE_CONTACT'                                          => 'Contact',
 'PAGE_TITLE_LINKS'                                            => 'Links',
+'WISHLIST_PRODUCTS'                                           => "These products are on the wish list of %s. If you want to please him/her, purchase one or multiple of these products.",
 );

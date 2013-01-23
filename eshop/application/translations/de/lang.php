@@ -17,7 +17,7 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   lang
- * @copyright (C) OXID eSales AG 2003-2012
+ * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
  * @version   SVN: $Id: lang.php 28697 2010-06-29 11:09:58Z vilma $
  */
@@ -51,6 +51,7 @@ $aLang = array(
 'ALL'                                                         => "Alle",
 'ALL_LISTMANIA'                                               => "alle Lieblingslisten",
 'ALREADY_ADDED_TAG'                                           => "Tag wurde bereits einmal vergeben",
+'INVALID_TAGS_REMOVED'                                        => "[TR]Invalid tags removed",
 'ALREADY_CUSTOMER'                                            => "Ich bin bereits Kunde",
 'APPLAY'                                                      => "Übernehmen",
 'ARTNUM'                                                      => "Artikelnummer",
@@ -126,8 +127,7 @@ $aLang = array(
 'COUNTRY'                                                     => "Land:",
 'COUPON'                                                      => "Gutschein",
 'COUPON_2'                                                    => "Gutschein:",
-'COUPON_NOT_ACCEPTED1'                                        => "Der Gutschein",
-'COUPON_NOT_ACCEPTED2'                                        => "kann nicht akzeptiert werden.",
+'COUPON_NOT_ACCEPTED'                                         => "Der Gutschein \"%s\" kann nicht akzeptiert werden.",
 'CREATE_PASSWORD'                                             => "Passwort erstellen",
 'CREDITCARD'                                                  => "Karte:",
 'CURRENT_PRODUCT'                                             => "Aktueller Artikel",
@@ -258,6 +258,8 @@ $aLang = array(
 'FIRST_NAME'                                                  => "Vorname:",
 'FIRST_NAME_2'                                                => "Vorname:",
 'FORGOT_PASSWORD'                                             => "Passwort vergessen?",
+'FORM_REGISTER_IAGREETOTERMS1'                                => "Ich habe die",
+'FORM_REGISTER_IAGREETOTERMS2'                                => "gelesen und erkläre mich mit ihnen einverstanden.",
 'FROM'                                                        => "Von",
 'FROM_2'                                                      => "Von:",
 'FROM_3'                                                      => "ab",
@@ -427,6 +429,7 @@ $aLang = array(
 'MY_COMPARE'                                                  => "Mein Artikelvergleich",
 'MY_GIFT_REGISTRY'                                            => "Mein Wunschzettel",
 'MY_LISTMANIA'                                                => "Meine Lieblingslisten",
+'MY_ORDER_HISTORY'                                            => "Meine Bestellhistorie",
 'MY_PRODUCT_COMPARISON'                                       => "Mein Artikelvergleich",
 'MY_WISHLIST_BY'                                              => "Mein Wunschzettel bei",
 'MY_WISH_LIST'                                                => "Mein Merkzettel",
@@ -740,7 +743,6 @@ $aLang = array(
 'OXVAT'                                                       => 'Artikel MwSt.',
 'OXTHUMB'                                                     => 'Vorschaubild',
 'OXICON'                                                      => 'oxicon',
-'OXPICSGENERATED'                                             => 'Bilder erzeugt',
 'OXPIC1'                                                      => 'Bild1',
 'OXPIC2'                                                      => 'Bild2',
 'OXPIC3'                                                      => 'Bild3',
@@ -859,7 +861,6 @@ $aLang = array(
 'BASKET_TOTAL_PLUS_PROPORTIONAL_VAT'                          => "plus MwSt. (anteilig berechnet)",
 'PROPORTIONALLY_CALCULATED'                                   => 'Anteilig berechnet',
 'PRICE_FROM'                                                  => 'ab',
-
 'PAGE_TITLE_BASKET'                                           => 'Warenkorb',
 'PAGE_TITLE_USER'                                             => 'Lieferadresse',
 'PAGE_TITLE_PAYMENT'                                          => 'Versand & Zahlungsart ',
@@ -880,4 +881,5 @@ $aLang = array(
 'PAGE_TITLE_WISHLIST'                                         => 'Merkzettel',
 'PAGE_TITLE_CONTACT'                                          => 'Kontakt',
 'PAGE_TITLE_LINKS'                                            => 'Links',
+'WISHLIST_PRODUCTS'                                           => "Diese Artikel hat sich %s gewünscht. Wenn Sie ihr/ihm eine Freude machen wollen, dann kaufen Sie einen oder mehrere von diesen Artikeln.",
 );

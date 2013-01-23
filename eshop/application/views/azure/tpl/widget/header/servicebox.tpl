@@ -20,6 +20,7 @@
                 [{block name="widget_header_servicebox_items"}]
                     <li class="active"><a href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=account" }]"><span>[{oxmultilang ident="WIDGET_SERVICES_ACCOUNT"}]</span></a></li>
                     <li><a href="[{ oxgetseourl ident=$oViewConf->getSslSelfLink()|cat:"cl=account" }]" rel="nofollow"><span>[{oxmultilang ident="LAYOUT_HEADER_ACCOUNT_LINK"}]</span></a></li>
+                    <li><a href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=account_order" }]" rel="nofollow"><span>[{oxmultilang ident="LAYOUT_HEADER_ORDER_HISTORY_LINK"}]</span></a></li>
                     [{if $oViewConf->getShowCompareList() }]
                         <li><a href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=compare" }]" rel="nofollow"><span>[{oxmultilang ident="LAYOUT_HEADER_COMPARE_LINK"}]</span>[{ if $oView->getCompareItemsCnt() }]<span class="counter FXgradOrange">[{ $oView->getCompareItemsCnt() }]</span>[{/if}]</a></li>
                         [{if $oView->getCompareItemsCnt()}]

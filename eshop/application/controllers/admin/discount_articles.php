@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: discount_articles.php 48458 2012-08-10 06:59:10Z linas.kukulskis $
+ * @version   SVN: $Id: discount_articles.php 51588 2012-11-09 08:56:56Z aurimas.gladutis $
  */
 
 /**
@@ -53,7 +53,7 @@ class Discount_Articles extends oxAdminDetails
                 $this->_aViewData['readonly'] =  true;
 
             // generating category tree for artikel choose select list
-            $this->_getCategoryTree( "artcattree", null );
+            $this->_createCategoryTree( "artcattree" );
         }
 
         $iAoc = oxConfig::getParameter("aoc");

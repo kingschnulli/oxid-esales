@@ -82,18 +82,24 @@
 
         <div class="tobasket">
             [{oxhasrights ident="SHOWARTICLEPRICE"}]
-                [{assign var=tprice value=$product->getTPrice()}]
-                [{assign var=price  value=$product->getPrice()}]
-                [{if $tprice && $tprice->getBruttoPrice() > $price->getBruttoPrice()}]
+                [{if $product->getTPrice()}]
                     <p class="oldPrice">
                         <strong>[{oxmultilang ident="DETAILS_REDUCEDFROM"}] <del>[{$product->getFTPrice()}] [{$currency->sign}]</del></strong>
                     </p>
-                 [{/if}]
+                [{/if}]
             [{/oxhasrights}]
             <div class="tobasketFunction clear">
                 [{oxhasrights ident="SHOWARTICLEPRICE"}]
+                    [{assign var="sFrom" value=""}]
+                    [{assign var="fPrice" value=$product->getFPrice()}]
+                    [{if $product->isParentNotBuyable() }]
+                        [{assign var="fPrice" value=$product->getFVarMinPrice()}]
+                        [{if $product->isRangePrice() }]
+                            [{assign var="sFrom" value="PRICE_FROM"|oxmultilangassign}]
+                        [{/if}]
+                    [{/if}]
                     <label id="productPrice_[{$testid}]" class="price">
-                        <strong>[{$product->getFPrice()}] [{$currency->sign}] [{ if $blShowToBasket }]*[{/if}]</strong>
+                        <strong>[{$sFrom}] [{$fPrice}] [{$currency->sign}] [{ if $blShowToBasket }]*[{/if}]</strong>
                     </label>
                     [{if $product->loadAmountPriceInfo()}]
                         [{oxscript include="js/widgets/oxamountpriceselect.js" priority=10 }]

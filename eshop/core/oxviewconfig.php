@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxviewconfig.php 52009 2012-11-19 15:12:31Z linas.kukulskis $
+ * @version   SVN: $Id: oxviewconfig.php 53164 2012-12-20 09:55:31Z aurimas.gladutis $
  */
 
 /**
@@ -153,8 +153,8 @@ class oxViewConfig extends oxSuperCfg
         $sRecommId      = $this->getActRecommendationId();
         $sListType      = $this->getActListType();
 
-
-        return $this->getConfig()->getShopHomeURL()
+        $oConfig = $this->getConfig();
+        return ( $oConfig->isSsl()? $oConfig->getShopSecureHomeUrl() : $oConfig->getShopHomeUrl() )
             ."cl={$sClass}"
             . ( $sCatnid ? "&amp;cnid={$sCatnid}" : '' )
             . ( $sArtnid ? "&amp;anid={$sArtnid}" : '' )
@@ -770,11 +770,13 @@ class oxViewConfig extends oxSuperCfg
     /**
      * Returns config param "blShowFinalStep" value
      *
-     * @return string
+     * @deprecated since 2012-11-19. Option blShowFinalStep is removed
+     *
+     * @return bool
      */
     public function showFinalStep()
     {
-        return $this->getConfig()->getConfigParam( 'blShowFinalStep' );
+        return true;
     }
 
     /**

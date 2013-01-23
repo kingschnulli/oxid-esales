@@ -1,9 +1,7 @@
 [{capture append="oxidBlock_content"}]
 
-    [{if $oView->showFinalStep()}]
-        [{* ordering steps *}]
-        [{include file="page/checkout/inc/steps.tpl" active=5 }]
-    [{/if}]
+    [{* ordering steps *}]
+    [{include file="page/checkout/inc/steps.tpl" active=5 }]
 
     [{block name="checkout_thankyou_main"}]
         [{assign var="order" value=$oView->getOrder()}]
@@ -126,14 +124,12 @@
                 [{/if}]
             [{/block}]
 
-            [{if $oView->showFinalStep()}]
-                [{if $oView->getAlsoBoughtTheseProducts()}]
-                    <br><br>
-                    <h1 class="pageHead">
-                         [{ oxmultilang ident="PAGE_CHECKOUT_THANKYOU_ALSOBOUGHT" }]
-                    </h1>
-                    [{include file="widget/product/list.tpl" type=$oView->getListDisplayType() listId="alsoBoughtThankyou" products=$oView->getAlsoBoughtTheseProducts() blDisableToCart=true}]
-                [{/if}]
+            [{if $oView->getAlsoBoughtTheseProducts()}]
+                <br><br>
+                <h1 class="pageHead">
+                     [{ oxmultilang ident="PAGE_CHECKOUT_THANKYOU_ALSOBOUGHT" }]
+                </h1>
+                [{include file="widget/product/list.tpl" type=$oView->getListDisplayType() listId="alsoBoughtThankyou" products=$oView->getAlsoBoughtTheseProducts() blDisableToCart=true}]
             [{/if}]
         </div>
     [{/block}]

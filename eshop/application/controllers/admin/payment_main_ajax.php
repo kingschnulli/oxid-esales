@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: payment_main_ajax.php 52139 2012-11-22 10:49:37Z vaidas.matulevicius $
+ * @version   SVN: $Id: payment_main_ajax.php 52407 2012-11-23 16:22:19Z linas.kukulskis $
  */
 
 /**

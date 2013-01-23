@@ -34,7 +34,7 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- *  $Id: oxemosadapter.php 52845 2012-12-12 12:25:23Z linas.kukulskis $
+ *  $Id: oxemosadapter.php 53019 2012-12-17 14:04:32Z aurimas.gladutis $
  */
 
 

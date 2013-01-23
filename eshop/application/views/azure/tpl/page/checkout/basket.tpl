@@ -41,7 +41,7 @@
 
             <div class="lineBox">
                 [{include file="page/checkout/inc/basketcontents.tpl" editable=true}]
-                
+
                 [{if $oViewConf->getShowVouchers()}]
                     [{block name="checkout_basket_vouchers"}]
                         [{oxscript include="js/widgets/oxinputvalidator.js" priority=10 }]
@@ -52,7 +52,7 @@
                                     [{foreach from=$Errors.basket item=oEr key=key}]
                                         [{if $oEr->getErrorClassType() == 'oxVoucherException'}]
                                             <div class="inlineError">
-                                                [{ oxmultilang ident="PAGE_CHECKOUT_BASKET_COUPONNOTACCEPTED1" }] <strong>&ldquo;[{ $oEr->getValue('voucherNr') }]&rdquo;</strong> [{ oxmultilang ident="PAGE_CHECKOUT_BASKET_COUPONNOTACCEPTED2" }]<br>
+                                                [{ oxmultilang ident="COUPON_NOT_ACCEPTED" args=$oEr->getValue('voucherNr') }]
                                                 <strong>[{ oxmultilang ident="PAGE_CHECKOUT_BASKET_REASON" }]</strong>
                                                 [{ $oEr->getOxMessage() }]
                                             </div>
@@ -75,7 +75,7 @@
                 [{/if}]
             </div>
 
-            
+
             <div class="lineBox clear">
                 [{if $oView->showBackToShop()}]
                     [{block name="checkout_basket_backtoshop_bottom"}]

@@ -72,8 +72,6 @@ $aLang = array(
 'FORM_REGISTER_COMPLETEMARKEDFIELDS'                          => "(Please fill in all mandatory fields labeled in bold.)",
 'FORM_REGISTER_IAGREETORIGHTOFWITHDRAWAL1'                    => "I have been informed about my",
 'FORM_REGISTER_IAGREETORIGHTOFWITHDRAWAL3'                    => "",
-'FORM_REGISTER_IAGREETOTERMS1'                                => "I agree to the",
-'FORM_REGISTER_IAGREETOTERMS3'                                => "",
 'FORM_FIELDSET_USER_BILLING_ADDITIONALINFO_TOOLTIP'           => "",
 'FORM_FIELDSET_USER_SHIPPING_ADDITIONALINFO2_TOOLTIP'         => "",
 'FORM_SUGGEST_MESSAGE1'                                       => "Hello, I was looking at",
@@ -105,8 +103,8 @@ $aLang = array(
 'PAGE_DETAILS_THANKYOUMESSAGE4'                               => ".",
 'PAGE_INFO_CONTACT_THANKYOU1'                                 => "Thank you.",
 'PAGE_INFO_CONTACT_THANKYOU2'                                 => " appreciates your comments.",
-'PAGE_WISHLIST_PRODUCTS_PRODUCTS1'                            => "These products are on the wish list of",
-'PAGE_WISHLIST_PRODUCTS_PRODUCTS2'                            => ". If you want to please him/her, purchase one or multiple of these products.",
+
+
 'allBrands'                                                   => "All Brands",
 'byBrand'                                                     => "By Brand",
 'byManufacturer'                                              => "By Manufacturer",

@@ -14,7 +14,7 @@
         [{ include file="form/fieldset/user_account.tpl" }]
         [{if $oView->isActive('PsLogin') }]
             <li>
-                <label>[{ oxmultilang ident="FORM_REGISTER_IAGREETOTERMS2" }]</label>
+                <label for="orderConfirmAgbBottom">[{ oxmultilang ident="TERMS_AND_CONDITIONS" }]</label>
                 <input type="hidden" name="ord_agb" value="0">
                 <input id="orderConfirmAgbBottom" type="checkbox" class="checkbox" name="ord_agb" value="1">
                 <span class="inputNote agb">
@@ -22,8 +22,8 @@
                         [{oxscript include="js/widgets/oxmodalpopup.js" priority=10 }]
                         [{oxscript add="$( '#orderOpenAgbBottom' ).oxModalPopup({target: '#popup1'});"}]
                         [{oxmultilang ident="FORM_REGISTER_IAGREETOTERMS1" }]
-                        <a id="orderOpenAgbBottom" rel="nofollow" href="#">[{ oxmultilang ident="FORM_REGISTER_IAGREETOTERMS2" }]</a>
-                        [{ oxmultilang ident="FORM_REGISTER_IAGREETOTERMS3" }],&nbsp;
+                        <a id="orderOpenAgbBottom" rel="nofollow" href="#">[{ oxmultilang ident="TERMS_AND_CONDITIONS" }]</a>
+                        [{ oxmultilang ident="FORM_REGISTER_IAGREETOTERMS2" }],&nbsp;
                     [{/oxifcontent}]
                     [{oxifcontent ident="oxrightofwithdrawal" object="oCont"}]
                         [{oxscript include="js/widgets/oxmodalpopup.js" priority=10 }]

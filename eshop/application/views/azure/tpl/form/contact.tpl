@@ -12,11 +12,15 @@
     <ul class="form clear">
         <li>
             <label>[{ oxmultilang ident="FORM_CONTACT_TITLE" }]</label>
-            [{include file="form/fieldset/salutation.tpl" name="editval[oxuser__oxsal]" value=$editval.oxuser__oxsal }]
+            [{if $oxcmp_user && !$editval.oxuser__oxsal}]
+                [{include file="form/fieldset/salutation.tpl" name="editval[oxuser__oxsal]" value=$oxcmp_user->oxuser__oxsal->value }]
+            [{else}]
+                [{include file="form/fieldset/salutation.tpl" name="editval[oxuser__oxsal]" value=$editval.oxuser__oxsal }]
+            [{/if}]
         </li>
         <li [{if $aErrors.oxuser__oxfname}]class="oxInValid"[{/if}]>
             <label class="req">[{ oxmultilang ident="FORM_CONTACT_FIRSTNAME" }]</label>
-            <input type="text" name="editval[oxuser__oxfname]" size="70" maxlength="40" value="[{$editval.oxuser__oxfname}]" class="js-oxValidate js-oxValidate_notEmpty">
+            <input type="text" name="editval[oxuser__oxfname]" size="70" maxlength="40" value="[{if $oxcmp_user && !$editval.oxuser__oxfname}][{$oxcmp_user->oxuser__oxfname->value}][{else}][{$editval.oxuser__oxfname}][{/if}]" class="js-oxValidate js-oxValidate_notEmpty">
             <p class="oxValidateError">
                 <span class="js-oxError_notEmpty">[{ oxmultilang ident="EXCEPTION_INPUT_NOTALLFIELDS" }]</span>
                 [{include file="message/inputvalidation.tpl" aErrors=$aErrors.oxuser__oxfname}]
@@ -24,14 +28,14 @@
         </li>
         <li [{if $aErrors.oxuser__oxlname}]class="oxInValid"[{/if}]>
             <label class="req">[{ oxmultilang ident="FORM_CONTACT_LASTNAME" }]</label>
-            <input type="text" name="editval[oxuser__oxlname]" size=70 maxlength=40 value="[{$editval.oxuser__oxlname}]" class="js-oxValidate js-oxValidate_notEmpty">
+            <input type="text" name="editval[oxuser__oxlname]" size=70 maxlength=40 value="[{if $oxcmp_user && !$editval.oxuser__oxlname}][{$oxcmp_user->oxuser__oxlname->value}][{else}][{$editval.oxuser__oxlname}][{/if}]" class="js-oxValidate js-oxValidate_notEmpty">
             <p class="oxValidateError">
                 <span class="js-oxError_notEmpty">[{ oxmultilang ident="EXCEPTION_INPUT_NOTALLFIELDS" }]</span>
             </p>
         </li>
         <li [{if $aErrors.oxuser__oxusername}]class="oxInValid"[{/if}]>
             <label class="req">[{ oxmultilang ident="FORM_CONTACT_EMAIL2" }]</label>
-            <input id="contactEmail" type="text" name="editval[oxuser__oxusername]"  size=70 maxlength=40 value="[{$editval.oxuser__oxusername}]" class="js-oxValidate js-oxValidate_notEmpty js-oxValidate_email">
+            <input id="contactEmail" type="text" name="editval[oxuser__oxusername]"  size=70 maxlength=40 value="[{if $oxcmp_user && !$editval.oxuser__oxusername}][{$oxcmp_user->oxuser__oxusername->value}][{else}][{$editval.oxuser__oxusername}][{/if}]" class="js-oxValidate js-oxValidate_notEmpty js-oxValidate_email">
             <p class="oxValidateError">
                 <span class="js-oxError_notEmpty">[{ oxmultilang ident="EXCEPTION_INPUT_NOTALLFIELDS" }]</span>
                 <span class="js-oxError_email">[{ oxmultilang ident="EXCEPTION_INPUT_NOVALIDEMAIL" }]</span>

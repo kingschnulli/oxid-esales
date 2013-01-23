@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: article_crossselling_ajax.php 52575 2012-11-29 11:40:49Z aurimas.gladutis $
+ * @version   SVN: $Id: article_crossselling_ajax.php 52577 2012-11-29 11:50:08Z aurimas.gladutis $
  */
 
 /**

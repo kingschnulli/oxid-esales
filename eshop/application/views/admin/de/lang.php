@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   lang
- * @copyright (C) OXID eSales AG 2003-2012
+ * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 52926 2012-12-14 10:34:54Z juergen.busch $
+ * @version   SVN: $Id: lang.php 53943 2013-01-16 14:15:40Z aurimas.gladutis $
  */
 
 $sLangName  = 'Deutsch';
@@ -96,7 +96,6 @@ $aLang = array(
 'GENERAL_ARTICLE_OXVAT'                                    => 'Artikel MwSt.',
 'GENERAL_ARTICLE_OXTHUMB'                                  => 'Vorschaubild',
 'GENERAL_ARTICLE_OXICON'                                   => 'Icon',
-'GENERAL_ARTICLE_OXPICSGENERATED'                          => 'Bilder erzeugt',
 'GENERAL_ARTICLE_PICTURES'                                 => 'Artikelbilder',
 'GENERAL_ARTICLE_OXPIC1'                                   => 'Bild1',
 'GENERAL_ARTICLE_OXPIC2'                                   => 'Bild2',
@@ -406,6 +405,8 @@ $aLang = array(
 'ARTICLE_LIST_ALLPRODUCTS'                                 => 'alle Artikel',
 'ARTICLE_LIST_MENUSUBITEM'                                 => 'Artikel',
 'ARTICLE_MAIN_ERRORSAVINGARTICLE'                          => 'Warnung: Artikelnummer bereits vorhanden!',
+'ARTICLE_MAIN_PARENTNOTBUYABLE'                            => '[TR]Attention: Parent Product can not be purchased.',
+'ARTICLE_MAIN_INVALIDTAGSFOUND'                            => '[TR]Attention: Invalid tags removed',
 'ARTICLE_MAIN_ALDPRICE'                                    => 'Alt. Preise',
 'ARTICLE_MAIN_NONE'                                        => '-- keine --',
 'ARTICLE_MAIN_GOTO'                                        => 'Gehe zu',

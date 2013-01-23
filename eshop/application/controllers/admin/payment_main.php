@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: payment_main.php 51586 2012-11-09 08:36:11Z aurimas.gladutis $
+ * @version   SVN: $Id: payment_main.php 51583 2012-11-09 08:25:24Z aurimas.gladutis $
  */
 
 /**
@@ -131,6 +131,7 @@ class Payment_Main extends oxAdminDetails
             $this->_aViewData["noticeoxaddsumrules"] = 1;
         }
         $oPayment->oxpayments__oxaddsumrules = new oxField( array_sum( $aRules ) );
+
 
         //#708
         if ( !is_array( $this->_aFieldArray))

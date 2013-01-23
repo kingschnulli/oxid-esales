@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: deliveryset_country_ajax.php 52048 2012-11-20 13:33:41Z vaidas.matulevicius $
+ * @version   SVN: $Id: deliveryset_country_ajax.php 52365 2012-11-23 16:14:49Z linas.kukulskis $
  */
 
 /**

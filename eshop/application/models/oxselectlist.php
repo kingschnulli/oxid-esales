@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxselectlist.php 52709 2012-12-05 11:59:55Z aurimas.gladutis $
+ * @version   SVN: $Id: oxselectlist.php 52711 2012-12-05 12:02:03Z aurimas.gladutis $
  */
 
 /**

@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: langFileIntegrityTest.php 51568 2012-11-08 15:37:32Z saulius.stasiukaitis $
+ * @version   SVN: $Id: langFileIntegrityTest.php 52207 2012-11-23 14:48:32Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';

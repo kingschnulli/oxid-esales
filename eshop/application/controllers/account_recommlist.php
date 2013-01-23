@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: account_recommlist.php 52182 2012-11-23 12:19:31Z aurimas.gladutis $
+ * @version   SVN: $Id: account_recommlist.php 52183 2012-11-23 12:20:40Z aurimas.gladutis $
  */
 
 /**

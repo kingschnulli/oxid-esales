@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: forgotpwd.php 51862 2012-11-15 12:41:21Z aurimas.gladutis $
+ * @version   SVN: $Id: forgotpwd.php 51868 2012-11-15 12:45:50Z aurimas.gladutis $
  */
 
 /**

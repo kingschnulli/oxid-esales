@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: article_extend.php 48767 2012-08-16 17:33:56Z tomas $
+ * @version   SVN: $Id: article_extend.php 51904 2012-11-15 15:45:30Z aurimas.gladutis $
  */
 
 /**
@@ -51,9 +51,8 @@ class Article_Extend extends oxAdminDetails
         $this->_aViewData['edit'] = $oArticle = oxNew( 'oxarticle' );
 
         $soxId = $this->getEditObjectId();
-        $sCatView = getViewName( 'oxcategories' );
 
-        $sChosenArtCat = $this->_getCategoryTree( "artcattree", oxConfig::getParameter( "artcat"));
+        $this->_createCategoryTree( "artcattree");
 
         // all categories
         if ( $soxId != "-1" && isset( $soxId ) ) {
@@ -152,7 +151,7 @@ class Article_Extend extends oxAdminDetails
         }
 
         $soxId = $this->getEditObjectId();
-        $aParams = oxConfig::getParameter( "editval");
+        $aParams = oxRegistry::getConfig()->getRequestParameter( "editval");
         // checkbox handling
         if ( !isset( $aParams['oxarticles__oxissearch'])) {
             $aParams['oxarticles__oxissearch'] = 0;

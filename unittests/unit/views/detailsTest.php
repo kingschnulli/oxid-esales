@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: detailsTest.php 52016 2012-11-19 16:02:27Z aurimas.gladutis $
+ * @version   SVN: $Id: detailsTest.php 53777 2013-01-14 11:42:22Z aurimas.gladutis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -427,6 +427,96 @@ class Unit_Views_detailsTest extends OxidTestCase
         $oDetails->setNonPublicVar( "_oProduct", $oArticle );
         $oDetails->addTags();
         $this->assertTrue( $oDetails->getTagCloudManager() instanceof oxTagCloud );
+    }
+
+    /**
+     * Test adding of tags
+     *
+     * @return null
+     */
+    public function testAddTags()
+    {
+        $this->setRequestParam( 'newTags', "tag1,tag2,tag3,tag3,tag3" );
+        $oArticle = new oxArticle();
+        $oArticle->setId("_testArt");
+
+        $oDetails = $this->getMock( 'details', array( 'getProduct' ));
+        $oDetails->expects( $this->any() )->method( 'getProduct')->will($this->returnValue( $oArticle ));
+
+        $oDetails->addTags();
+
+        $oArticleTagList = new oxArticleTagList();
+        $oArticleTagList->load('_testArt');
+
+        $aTags = array(
+            'tag1' => new oxTag('tag1'),
+            'tag2' => new oxTag('tag2'),
+            'tag3' => new oxTag('tag3'),
+        );
+
+        $this->assertEquals( $aTags, $oArticleTagList->getArray() );
+    }
+
+    /**
+     * Test adding of tags and getting error with ajax enabled
+     *
+     * @return null
+     */
+    public function testAddTagsErrorAjax()
+    {
+        $this->setRequestParam( 'blAjax', true );
+        $this->setRequestParam( 'newTags', "admin,tag1,tag2,tag3,tag3,tag3" );
+
+        $oArticle = new oxArticle();
+        $oArticle->setId("_testArt");
+
+        $oDetails = $this->getMock( 'details', array( 'getProduct' ));
+        $oDetails->expects( $this->any() )
+                 ->method( 'getProduct')
+                 ->will($this->returnValue( $oArticle ));
+
+        $sResult = '{"tags":["tag1","tag2","tag3"],"invalid":["admin"],"inlist":[]}';
+
+        $oUtils = $this->getMock('oxUtils', array('showMessageAndExit'));
+        $oUtils->expects( $this->any() )
+               ->method( 'showMessageAndExit')
+               ->with( $this->equalTo( $sResult ) );
+
+        oxRegistry::set( "oxUtils", $oUtils );
+
+        $oDetails->addTags();
+    }
+
+    /**
+     * Test highlighting tags.
+     * If tag does not exists, it should be created.
+     *
+     * @return null
+     */
+    public function testAddTagsHighlight()
+    {
+        $oArticleTagList = new oxArticleTagList();
+        $oArticleTagList->load('_testArt');
+        $oArticleTagList->addTag('tag1');
+        $oArticleTagList->save();
+
+        $this->setRequestParam( 'highTags', "tag1,tag1,tag2,tag2" );
+        $oArticle = new oxArticle();
+        $oArticle->setId("_testArt");
+
+        $oDetails = $this->getMock( 'details', array( 'getProduct' ));
+        $oDetails->expects( $this->any() )->method( 'getProduct')->will($this->returnValue( $oArticle ));
+
+        $oDetails->addTags();
+
+        $oArticleTagList->load('_testArt');
+
+        $oTag =  new oxTag('tag1');
+        $oTag->setHitCount(2);
+
+        $aTags = array( 'tag1' => $oTag, 'tag2' => new oxTag('tag2') );
+
+        $this->assertEquals( $aTags, $oArticleTagList->getArray() );
     }
 
     /**
@@ -1077,6 +1167,30 @@ class Unit_Views_detailsTest extends OxidTestCase
     }
 
     /**
+     * Test meta meta desctionio generation when short desc is empty (should use long desc).
+     *
+     * @return null
+     */
+    public function testMetaDescriptionWithLongDescWithSmartyParsing()
+    {
+        modConfig::getInstance()->setConfigParam( 'bl_perfParseLongDescinSmarty', true );
+
+        $oProduct = $this->getMock('oxarticle', array('getLongDesc', 'getLongDescription'));
+        $oProduct->expects( $this->once() )->method( 'getLongDesc')->will( $this->returnValue( 'parsed description' ) );
+        $oProduct->expects( $this->never() )->method( 'getLongDescription')->will( $this->returnValue( 'not parsed description' ) );
+        $oProduct->oxarticles__oxshortdesc =  new oxField( 'Short description', oxField::T_RAW);
+        $oProduct->oxarticles__oxtitle =  new oxField( 'Title', oxField::T_RAW);
+
+        $oDetails = $this->getMock( 'details', array( 'getProduct' ) );
+        $oDetails->expects( $this->once() )->method( 'getProduct')->will( $this->returnValue( $oProduct ) );
+
+        $sMeta = 'Title - parsed description';
+
+        $oView = new oxubase();
+        $this->assertEquals( $oView->UNITprepareMetaDescription( $sMeta, 200, false ), $oDetails->UNITprepareMetaDescription( null ) );
+    }
+
+    /**
      * Test search title setter/getter.
      *
      * @return null
@@ -1575,11 +1689,12 @@ class Unit_Views_detailsTest extends OxidTestCase
 
     public function testCancelTags()
     {
-
         $this->setRequestParam( 'blAjax', false );
-        $oTagCloud = $this->getMock( 'oxTagCloud', array( 'getTags' ) );
-        $oTagCloud->expects( $this->once() )->method( 'getTags' )->with( $this->equalTo( 'test_artid' ) )->will( $this->returnValue( 'test_tags' ) );
-        oxTestModules::addModuleObject('oxTagCloud', $oTagCloud);
+
+        $oArticleTagList = $this->getMock( 'oxArticleTagList', array( 'load') );
+        $oArticleTagList->expects( $this->any() )->method( 'load' )->with( $this->equalTo( 'test_artid' ) )->will( $this->returnValue( true ) );
+        $oArticleTagList->set('testtags');
+        oxTestModules::addModuleObject('oxArticleTagList', $oArticleTagList);
 
         $oProduct = $this->getMock( 'oxArticle', array( 'getId' ) );
         $oProduct->expects( $this->once() )->method( 'getId' )->will( $this->returnValue( 'test_artid' ) );
@@ -1589,16 +1704,18 @@ class Unit_Views_detailsTest extends OxidTestCase
         $oView->expects( $this->once() )->method( 'getProduct' )->will( $this->returnValue( $oProduct ) );
         $oView->cancelTags();
 
-        $this->assertSame( 'test_tags', $oView->getNonPublicVar( '_aTags' ) );
+        $this->assertEquals( array('testtags' => new oxTag('testtags') ), $oView->getNonPublicVar( '_aTags' ) );
         $this->assertSame( false, $oView->getNonPublicVar( '_blEditTags' ) );
     }
 
     public function testCancelTags_ajaxcall()
     {
         $this->setRequestParam( 'blAjax', true );
-        $oTagCloud = $this->getMock( 'oxTagCloud', array( 'getTags' ) );
-        $oTagCloud->expects( $this->once() )->method( 'getTags' )->with( $this->equalTo( 'test_artid' ) )->will( $this->returnValue( 'test_tags' ) );
-        oxTestModules::addModuleObject('oxTagCloud', $oTagCloud);
+
+        $oArticleTagList = $this->getMock( 'oxArticleTagList', array( 'load') );
+        $oArticleTagList->expects( $this->any() )->method( 'load' )->with( $this->equalTo( 'test_artid' ) )->will( $this->returnValue( true ) );
+        $oArticleTagList->set('testtags');
+        oxTestModules::addModuleObject('oxArticleTagList', $oArticleTagList);
 
         $oProduct = $this->getMock( 'oxArticle', array( 'getId' ) );
         $oProduct->expects( $this->once() )->method( 'getId' )->will( $this->returnValue( 'test_artid' ) );
@@ -1622,7 +1739,7 @@ class Unit_Views_detailsTest extends OxidTestCase
         $oView->expects( $this->once() )->method( 'getViewId' )->will( $this->returnValue( 'test_viewId' ) );
         $oView->cancelTags();
 
-        $this->assertSame( 'test_tags', $oView->getNonPublicVar( '_aTags' ) );
+        $this->assertEquals( array('testtags' => new oxTag('testtags') ), $oView->getNonPublicVar( '_aTags' ) );
         $this->assertSame( false, $oView->getNonPublicVar( '_blEditTags' ) );
     }
 
@@ -1640,9 +1757,11 @@ class Unit_Views_detailsTest extends OxidTestCase
     public function testEditTags_ajaxcall()
     {
         $this->setRequestParam( 'blAjax', true );
-        $oTagCloud = $this->getMock( 'oxTagCloud', array( 'getTags' ) );
-        $oTagCloud->expects( $this->once() )->method( 'getTags' )->with( $this->equalTo( 'test_artid' ) )->will( $this->returnValue( 'test_tags' ) );
-        oxTestModules::addModuleObject('oxTagCloud', $oTagCloud);
+
+        $oArticleTagList = $this->getMock( 'oxArticleTagList', array( 'load') );
+        $oArticleTagList->expects( $this->any() )->method( 'load' )->with( $this->equalTo( 'test_artid' ) )->will( $this->returnValue( true ) );
+        $oArticleTagList->set('testtags');
+        oxTestModules::addModuleObject('oxArticleTagList', $oArticleTagList);
 
         $oProduct = $this->getMock( 'oxArticle', array( 'getId' ) );
         $oProduct->expects( $this->once() )->method( 'getId' )->will( $this->returnValue( 'test_artid' ) );
@@ -1667,7 +1786,7 @@ class Unit_Views_detailsTest extends OxidTestCase
         $oView->expects( $this->once() )->method( 'getUser' )->will( $this->returnValue( true ) );
         $oView->editTags();
 
-        $this->assertSame( 'test_tags', $oView->getNonPublicVar( '_aTags' ) );
+        $this->assertEquals( array('testtags' => new oxTag('testtags') ), $oView->getNonPublicVar( '_aTags' ) );
         $this->assertSame( true, $oView->getNonPublicVar( '_blEditTags' ) );
     }
 

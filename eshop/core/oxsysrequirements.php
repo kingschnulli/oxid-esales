@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxsysrequirements.php 51905 2012-11-15 15:49:37Z aurimas.gladutis $
+ * @version   SVN: $Id: oxsysrequirements.php 51904 2012-11-15 15:45:30Z aurimas.gladutis $
  */
 
 /**

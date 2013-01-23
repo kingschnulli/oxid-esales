@@ -66,7 +66,7 @@
                         [{* product title & number *}]
                         <td>
                             <div>
-                                <a rel="nofllow" href="[{$basketitem->getLink()}]"><b>[{$basketitem->getTitle()}]</b></a>[{if $basketitem->isSkipDiscount() }] <sup><a rel="nofollow" href="#SkipDiscounts_link" >**</a></sup>[{/if}]
+                                <a rel="nofollow" href="[{$basketitem->getLink()}]"><b>[{$basketitem->getTitle()}]</b></a>[{if $basketitem->isSkipDiscount() }] <sup><a rel="nofollow" href="#SkipDiscounts_link" >**</a></sup>[{/if}]
                             </div>
                             <div class="smallFont">
                                 [{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_ARTNOMBER" }] [{ $basketproduct->oxarticles__oxartnum->value }]
@@ -82,15 +82,21 @@
                             </div>
 
                             [{if !$basketitem->isBundle() || !$basketitem->isDiscountArticle()}]
-                                [{if $oViewConf->showSelectListsInList()}]
-                                    [{assign var="oSelections" value=$basketproduct->getSelections(null,$basketitem->getSelList())}]
-                                    [{if $oSelections}]
-                                        <div class="selectorsBox clear" id="cartItemSelections_[{$smarty.foreach.basketContents.iteration}]">
-                                            [{foreach from=$oSelections item=oList name=selections}]
-                                                [{include file="widget/product/selectbox.tpl" oSelectionList=$oList sFieldName="aproducts[`$basketindex`][sel]" iKey=$smarty.foreach.selections.index blHideDefault=true sSelType="seldrop"}]
-                                            [{/foreach}]
-                                        </div>
-                                    [{/if}]
+                                [{assign var="oSelections" value=$basketproduct->getSelections(null,$basketitem->getSelList())}]
+                                [{if $oSelections}]
+                                    <div class="selectorsBox clear" id="cartItemSelections_[{$smarty.foreach.basketContents.iteration}]">
+                                    [{foreach from=$oSelections item=oList name=selections}]
+                                        [{if $oViewConf->showSelectListsInList()}]
+                                            [{include file="widget/product/selectbox.tpl" oSelectionList=$oList sFieldName="aproducts[`$basketindex`][sel]" iKey=$smarty.foreach.selections.index blHideDefault=true sSelType="seldrop"}]
+                                        [{else}]
+                                            [{assign var="oActiveSelection" value=$oList->getActiveSelection()}]
+                                            [{if $oActiveSelection}]
+                                                <input type="hidden" name="aproducts[[{$basketindex}]][sel][[{$smarty.foreach.selections.index}]]" value="[{if $oActiveSelection }][{$oActiveSelection->getValue()}][{/if}]">
+                                                <div>[{$oList->getLabel()}]: [{$oActiveSelection->getName()}]</div>
+                                            [{/if}]
+                                        [{/if}]
+                                    [{/foreach}]
+                                    </div>
                                 [{/if}]
                             [{/if }]
 
@@ -422,7 +428,7 @@
                                     [{if $oxcmp_basket->isProportionalCalculationOn() }]
                                         <th>[{ oxmultilang ident="BASKET_TOTAL_PLUS_PROPORTIONAL_VAT" }]:</th>
                                     [{else}]
-                                        <th>[{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_PAYMENTTAX1" }] [{ $oxcmp_basket->getPayCostVatPercent() }] [{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_PAYMENTTAX2" }]</th>
+                                        <th>[{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_PAYMENTTAX1" }][{ $oxcmp_basket->getPayCostVatPercent() }] [{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_PAYMENTTAX2" }]</th>
                                     [{/if}]
                                     <td id="basketPaymentVat">[{ $oxcmp_basket->getPayCostVat() }]&nbsp;[{ $currency->sign }]</td>
                                 </tr>

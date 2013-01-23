@@ -101,7 +101,7 @@
     [{block name="form_user_billing_country"}]
     <li [{if $aErrors.oxuser__oxcountryid}]class="oxInValid"[{/if}]>
         <label [{if $oView->isFieldRequired(oxuser__oxcountryid) }]class="req"[{/if}]>[{ oxmultilang ident="FORM_FIELDSET_USER_BILLING_COUNTRY" }]</label>
-          <select [{if $oView->isFieldRequired(oxuser__oxcountryid) }] class="js-oxValidate js-oxValidate_notEmpty" [{/if}] id="invCountrySelect" name="invadr[oxuser__oxcountryid]">
+          <select [{if $oView->isFieldRequired(oxuser__oxcountryid) }] class="js-oxValidate js-oxValidate_notEmpty" [{/if}] id="invCountrySelect" name="invadr[oxuser__oxcountryid]" data-fieldsize="normal">
               <option value="">-</option>
               [{assign var="blCountrySelected" value=false}]
               [{foreach from=$oViewConf->getCountryList() item=country key=country_id }]
@@ -178,9 +178,9 @@
     <li class="oxDate[{if $aErrors.oxuser__oxbirthdate}] oxInValid[{/if}]">
         <label [{if $oView->isFieldRequired(oxuser__oxbirthdate) }]class="req"[{/if}]>[{ oxmultilang ident="FORM_FIELDSET_USER_BILLING_BIRTHDATE" }]</label>
         <select class='oxMonth js-oxValidate js-oxValidate_date [{if $oView->isFieldRequired(oxuser__oxbirthdate) }] js-oxValidate_notEmpty [{/if}]' name='invadr[oxuser__oxbirthdate][month]'>
-            <option value="" label="-">-</option>
+            <option value="" >-</option>
             [{section name="month" start=1 loop=13 }]
-            <option value="[{$smarty.section.month.index}]" label="[{$smarty.section.month.index}]" [{if $iBirthdayMonth == $smarty.section.month.index}] selected="selected" [{/if}]>
+            <option value="[{$smarty.section.month.index}]" [{if $iBirthdayMonth == $smarty.section.month.index}] selected="selected" [{/if}]>
                 [{oxmultilang ident="MONTH_NAME_"|cat:$smarty.section.month.index}]
             </option>
             [{/section}]

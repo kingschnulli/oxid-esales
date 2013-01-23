@@ -16,7 +16,7 @@
 [{/if}]
 [{/block}]
 
-[{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_ORDERNOMBER" }] [{ $order->oxorder__oxordernr->value }]
+[{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_ORDERNUMBER" }] [{ $order->oxorder__oxordernr->value }]
 
 [{block name="email_plain_order_cust_voucherdiscount"}]
 [{if $oViewConf->getShowVouchers() }]
@@ -199,7 +199,7 @@
 [{/block}]
 
 [{block name="email_plain_order_cust_download_link"}]
-[{ if $oOrderFileList }]
+[{ if $oOrderFileList and $oOrderFileList|count }]
     [{ oxmultilang ident="MY_DOWNLOADS_DESC" }]
     [{foreach from=$oOrderFileList item="oOrderFile"}]
       [{if $order->oxorder__oxpaid->value || !$oOrderFile->oxorderfiles__oxpurchasedonly->value}]

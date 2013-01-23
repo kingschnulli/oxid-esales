@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: articlepicturesTest.php 48034 2012-07-31 12:37:40Z vilma $
+ * @version   SVN: $Id: articlepicturesTest.php 52515 2012-11-28 09:31:11Z aurimas.gladutis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -258,13 +258,11 @@ class Unit_Admin_ArticlePicturesTest extends OxidTestCase
         $oArtPic = $this->getMock( "Article_Pictures", array( "_resetMasterPicture" ) );
         $oArtPic->expects( $this->once() )->method( '_resetMasterPicture' );
 
-        $this->_oArticle->oxarticles__oxpicsgenerated = new oxField( 2 );
         $this->_oArticle->save();
 
         $oArtPic->deletePicture();
 
         $this->_oArticle->load( "_testArtId" );
-        $this->assertEquals( 0, $this->_oArticle->oxarticles__oxpicsgenerated->value );
     }
 
     /**

@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: delivery_articles.php 48458 2012-08-10 06:59:10Z linas.kukulskis $
+ * @version   SVN: $Id: delivery_articles.php 51588 2012-11-09 08:56:56Z aurimas.gladutis $
  */
 
 
@@ -45,10 +45,9 @@ class Delivery_Articles extends oxAdminDetails
         parent::render();
 
         $soxId = $this->getEditObjectId();
-        $sChosenArtCat2 = oxConfig::getParameter( "artcat2");
 
         if ( $soxId != "-1" && isset( $soxId)) {
-            $sChosenArtCat2 = $this->_getCategoryTree( "artcattree", $sChosenArtCat2);
+            $this->_createCategoryTree( "artcattree");
 
             // load object
             $oDelivery = oxNew( "oxdelivery" );
