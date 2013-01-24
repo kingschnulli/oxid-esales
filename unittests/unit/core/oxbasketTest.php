@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxbasketTest.php 53647 2013-01-10 15:46:46Z linas.kukulskis $
+ * @version   SVN: $Id: oxbasketTest.php 54247 2013-01-23 12:38:53Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -522,13 +522,33 @@ class Unit_Core_oxbasketTest extends OxidTestCase
      */
     public function testIsBelowMinOrderPrice()
     {
-        modConfig::getInstance()->setConfigParam( "iMinOrderPrice", 2 );
+        $oConfig = $this->getConfig();
+
+        $oConfig->setConfigParam( "iMinOrderPrice", 2 );
 
         $oBasket = $this->getMock( "oxbasket", array( "getProductsCount", "getDiscountedProductsBruttoPrice" ) );
-        $oBasket->expects( $this->once() )->method( 'getProductsCount')->will( $this->returnValue( 1 ) );
-        $oBasket->expects( $this->once() )->method( 'getDiscountedProductsBruttoPrice')->will( $this->returnValue( 1 ) );
+        $oBasket->expects( $this->any() )->method( 'getProductsCount')->will( $this->returnValue( 1 ) );
+        $oBasket->expects( $this->any() )->method( 'getDiscountedProductsBruttoPrice')->will( $this->returnValue( 1 ) );
 
         $this->assertTrue( $oBasket->isBelowMinOrderPrice() );
+
+        $oConfig->setConfigParam( "iMinOrderPrice", 10.5 );
+
+        $oBasket = $this->getMock( "oxbasket", array( "getProductsCount", "getDiscountedProductsBruttoPrice" ) );
+        $oBasket->expects( $this->any() )->method( 'getProductsCount')->will( $this->returnValue( 1 ) );
+        $oBasket->expects( $this->any() )->method( 'getDiscountedProductsBruttoPrice')->will( $this->returnValue( 10 ) );
+
+        $this->assertTrue( $oBasket->isBelowMinOrderPrice() );
+
+        $oConfig->setConfigParam( "iMinOrderPrice", 10.21 );
+
+        $oBasket = $this->getMock( "oxbasket", array( "getProductsCount", "getDiscountedProductsBruttoPrice" ) );
+        $oBasket->expects( $this->any() )->method( 'getProductsCount')->will( $this->returnValue( 1 ) );
+        $oBasket->expects( $this->any() )->method( 'getDiscountedProductsBruttoPrice')->will( $this->returnValue( 10.2 ) );
+
+        $this->assertTrue( $oBasket->isBelowMinOrderPrice() );
+
+
     }
 
     /**
@@ -687,10 +707,11 @@ class Unit_Core_oxbasketTest extends OxidTestCase
      */
     public function testBasketCalculationWithSpecUseCaseDescribedAbove()
     {
+        $this->markTestSkipped("move to integration test");
+
         modConfig::getInstance()->setConfigParam( 'bl_perfLoadSelectLists', true );
 
         $sArtId = '1126';
-            $sCatId = '8a142c3e4143562a5.46426637';
 
         $oBasket = new oxBasket();
         $oBasket->addToBasket( $sArtId, 1, array( 0 ) );
@@ -714,7 +735,7 @@ class Unit_Core_oxbasketTest extends OxidTestCase
      */
     public function testBasketCalculationWithSpecUseCaseDescribedAboveJustDiscountIsAppliedByPrice()
     {
-        $this->markTestSkipped("localy does not fail");
+        $this->markTestSkipped("move to integration test");
         $this->setConfigParam( 'bl_perfLoadSelectLists', true );
 
         // disabling amount, enabling price discounts
@@ -729,7 +750,6 @@ class Unit_Core_oxbasketTest extends OxidTestCase
         $oDiscount2->save();
 
         $sArtId = '1126';
-            $sCatId = '8a142c3e4143562a5.46426637';
 
         $oBasket = new oxBasket();
         $oBasket->addToBasket( $sArtId, 1, array( 0 ) );
