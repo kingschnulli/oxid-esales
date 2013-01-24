@@ -17,7 +17,7 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   lang
- * @copyright (C) OXID eSales AG 2003-2012
+ * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
  * @version   SVN: $Id: lang.php 28697 2010-06-29 11:09:58Z vilma $
  */
@@ -218,7 +218,6 @@ $aMap = array(
 'FORGOTPWD_ERRLINKEXPIRED'                                        => 'ERROR_MESSAGE_PASSWORD_LINK_EXPIRED',
 'FORGOTPWD_ERRPASSWDONOTMATCH'                                    => 'ERROR_MESSAGE_PASSWORD_DO_NOT_MATCH',
 'FORGOTPWD_ERRPASSWORDTOSHORT'                                    => 'ERROR_MESSAGE_PASSWORD_TOO_SHORT',
-'FORGOTPWD_ERREMAILINVALID'                                       => 'ERROR_MESSAGE_PASSWORD_EMAIL_INVALID',
 'FORGOTPWD_ERRUNABLETOSEND'                                       => 'MESSAGE_NOT_ABLE_TO_SEND_EMAIL',
 'FORM_CONTACT_COMPLETEMARKEDFIELDS2'                              => 'COMPLETE_MARKED_FIELDS',
 'FORM_CONTACT_EMAIL2'                                             => 'EMAIL_2',
