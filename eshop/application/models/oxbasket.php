@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
- * @version   SVN: $Id: oxbasket.php 54117 2013-01-22 09:11:41Z linas.kukulskis $
+ * @version   SVN: $Id: oxbasket.php 54334 2013-01-24 09:58:39Z linas.kukulskis $
  */
 
 /**
@@ -503,6 +503,8 @@ class oxBasket extends oxSuperCfg
     {
         // adding only if amount > 0
         if ( $oOrderArticle->oxorderarticles__oxamount->value > 0 && !$oOrderArticle->isBundle() ) {
+
+            $this->_isForOrderRecalculation = true;
             $sItemId = $oOrderArticle->getId();
 
             //inserting new
@@ -1229,8 +1231,9 @@ class oxBasket extends oxSuperCfg
         $dOldprice = $this->_oDiscountProductsPriceList->getSum( $this->isCalculationModeNetto() );
 
         // add basket discounts
-        if ( $oTotalPrice = $this->getTotalDiscount() ) {
+        if ( $this->_oTotalDiscount !== null  && isset($this->_isForOrderRecalculation) && $this->_isForOrderRecalculation ) {
             //if total discutn was setted on order recalculation
+            $oTotalPrice = $this->getTotalDiscount();
             $oDiscount = oxNew('oxDiscount');
             $oDiscount->oxdiscount__oxaddsum = new oxField( $oTotalPrice->getPrice() );
             $oDiscount->oxdiscount__oxaddsumtype = new oxField( 'abs' );
@@ -1450,7 +1453,6 @@ class oxBasket extends oxSuperCfg
         $this->_oNotDiscountedProductsPriceList = null;
         $this->_oProductsPriceList = null;
         $this->_oDiscountProductsPriceList = null;*/
-
 
         if ( !$this->isEnabled() ) {
             return;
