@@ -309,6 +309,7 @@ $aLang = array(
 'LAST_SEEN_PRODUCTS'                                          => "Last seen products",
 'LATEST_NEWS_AND_UPDATES'                                     => "Latest News and Updates",
 'LATEST_NEWS_AND_UPDATES_AT'                                  => "Latest News and Updates at",
+'LATEST_NEWS_NOACTIVENEWS'                                    => "There are no active news at the moment",
 'LINKS'                                                       => "Links",
 'LISTMANIA'                                                   => "Listmania",
 'LISTMANIA_2'                                                 => "Listmania/%s",
