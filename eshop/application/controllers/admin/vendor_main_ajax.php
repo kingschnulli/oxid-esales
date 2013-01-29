@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: vendor_main_ajax.php 52091 2012-11-21 11:38:52Z rimvydas.paskevicius $
+ * @version   SVN: $Id: vendor_main_ajax.php 48854 2012-08-20 14:59:23Z vilma $
  */
 
 /**
@@ -66,29 +66,31 @@ class vendor_main_ajax extends ajaxListComponent
      */
     protected function _getQuery()
     {
+        $myConfig = $this->getConfig();
+
         // looking for table/view
         $sArtTable = $this->_getViewName('oxarticles');
         $sO2CView  = $this->_getViewName('oxobject2category');
         $oDb = oxDb::getDb();
-        $oConfig = oxRegistry::getConfig();
-        $sVendorId      = $oConfig->getRequestParameter( 'oxid' );
-        $sSynchVendorId = $oConfig->getRequestParameter( 'synchoxid' );
+        $sVendorId      = oxConfig::getParameter( 'oxid' );
+        $sSynchVendorId = oxConfig::getParameter( 'synchoxid' );
 
         // vendor selected or not ?
         if ( !$sVendorId ) {
-            $sQAdd  = ' from '.$sArtTable.' where '.$sArtTable.'.oxshopid="'.$oConfig->getShopId().'" and 1 ';
-            $sQAdd .= $oConfig->getConfigParam( 'blVariantsSelection' ) ?'':" and $sArtTable.oxparentid = '' and $sArtTable.oxvendorid != ".$oDb->quote( $sSynchVendorId );
+            // dodger performance
+            $sQAdd  = ' from '.$sArtTable.' where '.$sArtTable.'.oxshopid="'.$myConfig->getShopId().'" and 1 ';
+            $sQAdd .= $myConfig->getConfigParam( 'blVariantsSelection' ) ?'':" and $sArtTable.oxparentid = '' and $sArtTable.oxvendorid != ".$oDb->quote( $sSynchVendorId );
         } else {
             // selected category ?
             if ( $sSynchVendorId && $sSynchVendorId != $sVendorId ) {
                 $sQAdd  = " from $sO2CView left join $sArtTable on ";
-                $sQAdd .= $oConfig->getConfigParam( 'blVariantsSelection' )?" ( $sArtTable.oxid = $sO2CView.oxobjectid or $sArtTable.oxparentid = oxobject2category.oxobjectid )":" $sArtTable.oxid = $sO2CView.oxobjectid ";
-                $sQAdd .= 'where '.$sArtTable.'.oxshopid="'.$oConfig->getShopId().'" and '.$sO2CView.'.oxcatnid = '.$oDb->quote( $sVendorId ).' and '.$sArtTable.'.oxvendorid != '. $oDb->quote( $sSynchVendorId );
+                $sQAdd .= $myConfig->getConfigParam( 'blVariantsSelection' )?" ( $sArtTable.oxid = $sO2CView.oxobjectid or $sArtTable.oxparentid = oxobject2category.oxobjectid )":" $sArtTable.oxid = $sO2CView.oxobjectid ";
+                $sQAdd .= 'where '.$sArtTable.'.oxshopid="'.$myConfig->getShopId().'" and '.$sO2CView.'.oxcatnid = '.$oDb->quote( $sVendorId ).' and '.$sArtTable.'.oxvendorid != '. $oDb->quote( $sSynchVendorId );
+                $sQAdd .= $myConfig->getConfigParam( 'blVariantsSelection' )?'':" and $sArtTable.oxparentid = '' ";
             } else {
                 $sQAdd  = " from $sArtTable where $sArtTable.oxvendorid = ".$oDb->quote( $sVendorId );
+                $sQAdd .= $myConfig->getConfigParam( 'blVariantsSelection' )?'':" and $sArtTable.oxparentid = '' ";
             }
-
-            $sQAdd .= $oConfig->getConfigParam( 'blVariantsSelection' )?'':" and $sArtTable.oxparentid = '' ";
         }
 
         return $sQAdd;
@@ -112,16 +114,16 @@ class vendor_main_ajax extends ajaxListComponent
     }
 
     /**
-     * Removes article from Vendor
+     * Removes article from Vendor config
      *
      * @return null
      */
     public function removeVendor()
     {
-        $oConfig    = $this->getConfig();
+        $myConfig   = $this->getConfig();
         $aRemoveArt = $this->_getActionIds( 'oxarticles.oxid' );
 
-        if ( $oConfig->getRequestParameter( 'all' ) ) {
+        if ( oxConfig::getParameter( 'all' ) ) {
             $sArtTable = $this->_getViewName( 'oxarticles' );
             $aRemoveArt = $this->_getAll( $this->_addFilter( "select $sArtTable.oxid ".$this->_getQuery() ) );
         }
@@ -129,7 +131,7 @@ class vendor_main_ajax extends ajaxListComponent
         if ( is_array(  $aRemoveArt ) ) {
             $sSelect = "update oxarticles set oxvendorid = null where oxid in ( ".implode(", ", oxDb::getInstance()->quoteArray( $aRemoveArt ) ) . ") ";
             oxDb::getDb()->Execute( $sSelect);
-            $this->resetCounter( "vendorArticle", $oConfig->getRequestParameter( 'oxid' ) );
+            $this->resetCounter( "vendorArticle", oxConfig::getParameter( 'oxid' ) );
         }
     }
 
@@ -140,12 +142,12 @@ class vendor_main_ajax extends ajaxListComponent
      */
     public function addVendor()
     {
-        $oConfig = $this->getConfig();
+        $myConfig = $this->getConfig();
 
         $aAddArticle = $this->_getActionIds( 'oxarticles.oxid' );
-        $soxId       = $oConfig->getRequestParameter( 'synchoxid' );
+        $soxId       = oxConfig::getParameter( 'synchoxid' );
 
-        if ( $oConfig->getRequestParameter( 'all' ) ) {
+        if ( oxConfig::getParameter( 'all' ) ) {
             $sArtTable = $this->_getViewName( 'oxarticles' );
             $aAddArticle = $this->_getAll( $this->_addFilter( "select $sArtTable.oxid ".$this->_getQuery() ) );
         }

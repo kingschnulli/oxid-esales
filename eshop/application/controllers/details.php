@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   views
- * @copyright (C) OXID eSales AG 2003-2013
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: details.php 53777 2013-01-14 11:42:22Z aurimas.gladutis $
+ * @version   SVN: $Id: details.php 52016 2012-11-19 16:02:27Z aurimas.gladutis $
  */
 
 /**
@@ -434,11 +434,7 @@ class Details extends oxUBase
         if ( !$sMeta ) {
             $oProduct = $this->getProduct();
 
-            if ( $this->getConfig()->getConfigParam( 'bl_perfParseLongDescinSmarty' ) ) {
-                $sMeta = $oProduct->getLongDesc();
-            } else {
-                $sMeta = $oProduct->getLongDescription()->value;
-            }
+            $sMeta = $oProduct->getLongDescription()->value;
             if ( $sMeta == '' ) {
                 $sMeta = $oProduct->oxarticles__oxshortdesc->value;
             }
@@ -589,75 +585,41 @@ class Details extends oxUBase
     }
 
     /**
-     * Adds tags from parameter
+     * Adds tag from parameter
      *
      * @return null;
      */
     public function addTags()
     {
-        $sTags  = $this->getConfig()->getRequestParameter('newTags', true );
-        $sHighTag  = $this->getConfig()->getRequestParameter( 'highTags', true );
-        if ( !$sTags && !$sHighTag) {
+        $sTag  = $this->getConfig()->getParameter('newTags', true );
+        $sHighTag  = $this->getConfig()->getParameter( 'highTags', true );
+        if ( !$sTag && !$sHighTag) {
             return;
         }
         if ( $sHighTag ) {
-            $sTags = getStr()->html_entity_decode( $sHighTag );
+            $sTag = getStr()->html_entity_decode( $sHighTag );
         }
+
+        //can tag only once per product and tags
+        $aTags = array();
         $oProduct = $this->getProduct();
-
-        // set current user added tags for this article for later checking
-        $aTaggedProducts = oxRegistry::getSession()->getVariable("aTaggedProducts");
-        $aAddedTags = $aTaggedProducts? $aTaggedProducts[$oProduct->getId()] : array();
-
-        $oArticleTagList = oxNew( "oxarticletaglist" );
-        $oArticleTagList->load( $oProduct->getId() );
-        $sSeparator = $oArticleTagList->get()->getSeparator();
-        $aTags = array_unique( explode( $sSeparator, $sTags ) );
-
-        $aResult = $this->_addTagsToList( $oArticleTagList, $aTags, $aAddedTags);
-
-        if ( !empty( $aResult['tags'] ) ) {
-            $oArticleTagList->save();
-            foreach ( $aResult['tags'] as $sTag) {
-                $aAddedTags[ $sTag ] = 1;
-            }
-            $aTaggedProducts[$oProduct->getId()] = $aAddedTags;
-            oxRegistry::getSession()->setVariable( 'aTaggedProducts', $aTaggedProducts);
+        $aTaggedProducts = oxSession::getVar("aTaggedProducts");
+        if ( $aTaggedProducts ) {
+            $aTags = $aTaggedProducts[$oProduct->getId()];
+        }
+        $blAddedTag = false;
+        //Checks if user already tagged it
+        if ( $aTags[$sTag] != 1 ) {
+            $oProduct->addTag( $sTag );
+            $aTags[$sTag] = 1;
+            $aTaggedProducts[$oProduct->getId()] = $aTags;
+            oxSession::setVar( 'aTaggedProducts', $aTaggedProducts);
+            $blAddedTag = true;
         }
         // for ajax call
-        if ( $this->getConfig()->getRequestParameter( 'blAjax', true ) ) {
-            oxRegistry::getUtils()->showMessageAndExit( json_encode( $aResult ) );
+        if ( oxConfig::getParameter( 'blAjax', true ) ) {
+            oxRegistry::getUtils()->showMessageAndExit( $blAddedTag );
         }
-    }
-
-    /**
-     * Adds tags to passed oxArticleTagList object
-     *
-     * @param oxArticleTagList $oArticleTagList article tags list object
-     * @param array            $aTags           tags array to add to list
-     * @param array            $aAddedTags      tags, which are already added to list
-     *
-     * @return array
-     */
-    protected function _addTagsToList( $oArticleTagList, $aTags, $aAddedTags)
-    {
-        $aResult = array( 'tags' => array(), 'invalid' => array(), 'inlist' => array() );
-
-        foreach ( $aTags as $sTag ) {
-            $oTag = oxNew( "oxtag", $sTag );
-            if ( $aAddedTags[$oTag->get()] != 1 ) {
-                if ( $oTag->isValid() ) {
-                    $oArticleTagList->addTag( $oTag );
-                    $aResult['tags'][] = $oTag->get();
-                } else {
-                    $aResult['invalid'][] = $oTag->get();
-                }
-            } else {
-                $aResult['inlist'][] = $oTag->get();
-            }
-        }
-
-        return $aResult;
     }
 
     /**
@@ -670,14 +632,12 @@ class Details extends oxUBase
         if ( !$this->getUser() ) {
             return;
         }
-        $oArticleTagList = oxNew("oxArticleTagList");
-        $oArticleTagList->load( $this->getProduct()->getId() );
-        $oTagSet = $oArticleTagList->get();
-        $this->_aTags = $oTagSet->get();
+        $oTagCloud = oxNew("oxTagCloud");
+        $this->_aTags = $oTagCloud->getTags( $this->getProduct()->getId() );
         $this->_blEditTags = true;
 
         // for ajax call
-        if ( $this->getConfig()->getRequestParameter( 'blAjax', true ) ) {
+        if ( oxConfig::getParameter( 'blAjax', true ) ) {
             oxRegistry::getUtils()->setHeader( "Content-Type: text/html; charset=".oxRegistry::getLang()->translateString( 'charset' ) );
             $oActView = oxNew( 'oxubase' );
             $oSmarty = oxRegistry::get("oxUtilsView")->getSmarty();
@@ -694,10 +654,8 @@ class Details extends oxUBase
      */
     public function cancelTags()
     {
-        $oArticleTagList = oxNew("oxArticleTagList");
-        $oArticleTagList->load( $this->getProduct()->getId() );
-        $oTagSet = $oArticleTagList->get();
-        $this->_aTags = $oTagSet->get();
+        $oTagCloud = oxNew("oxTagCloud");
+        $this->_aTags = $oTagCloud->getTags( $this->getProduct()->getId() );
         $this->_blEditTags = false;
 
         // for ajax call

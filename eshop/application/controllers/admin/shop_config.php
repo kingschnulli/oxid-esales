@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: shop_config.php 51682 2012-11-12 11:59:58Z aurimas.gladutis $
+ * @version   SVN: $Id: shop_config.php 51669 2012-11-12 10:31:49Z aurimas.gladutis $
  */
 
 /**
@@ -92,6 +92,7 @@ class Shop_Config extends oxAdminDetails
 
         $this->_aViewData["var_constraints"] = $aDbVariables['constraints'];
         $this->_aViewData["var_grouping"]    = $aDbVariables['grouping'];
+
         foreach ($this->_aConfParams as $sType => $sParam) {
             $this->_aViewData[$sParam] = $aConfVars[$sType];
         }
@@ -136,6 +137,7 @@ class Shop_Config extends oxAdminDetails
 
         $sShopId = $this->getEditObjectId();
         $sModule = $this->_getModuleForConfigVars();
+
         foreach ($this->_aConfParams as $sType => $sParam) {
             $aConfVars = oxConfig::getParameter($sParam);
             if (is_array($aConfVars)) {
@@ -213,6 +215,7 @@ class Shop_Config extends oxAdminDetails
             "arr"     => array(),
             "aarr"    => array(),
             "select"  => array(),
+            "num"     => array(),
         );
         $aVarConstraints = array();
         $aGrouping       = array();
@@ -311,8 +314,8 @@ class Shop_Config extends oxAdminDetails
 
             case "str":
             case "select":
-            case "num":
             case "int":
+            case "num":
                 $mData = $oStr->htmlentities( $sValue );
                 if (in_array($sName, $this->_aParseFloat)) {
                     $mData = str_replace( ',', '.', $mData );

@@ -9,6 +9,7 @@
 [{ assign var="sOrderId"   value=$order->getId() }]
 [{ assign var="oOrderFileList"   value=$oEmailView->getOrderFileList($sOrderId) }]
 
+
 [{include file="email/html/header.tpl" title=$shop->oxshops__oxordersubject->value}]
 
     [{block name="email_html_order_cust_orderemail"}]
@@ -24,7 +25,7 @@
         <table border="0" cellspacing="0" cellpadding="0" width="100%">
           <tr>
             <td height="15" width="100" style="padding: 5px; border-bottom: 4px solid #ddd;">
-                <p style="font-family: Arial, Helvetica, sans-serif; font-size: 12px; margin: 0; padding: 0;"><b>[{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_ORDERNUMBER" }] [{ $order->oxorder__oxordernr->value }]</b></p>
+                <p style="font-family: Arial, Helvetica, sans-serif; font-size: 12px; margin: 0; padding: 0;"><b>[{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_ORDERNOMBER" }] [{ $order->oxorder__oxordernr->value }]</b></p>
             </td>
             <td style="padding: 5px; border-bottom: 4px solid #ddd;">
               <p style="font-family: Arial, Helvetica, sans-serif; font-size: 12px; margin: 0; padding: 0; color: #555;"><b>[{ oxmultilang ident="EMAIL_ORDER_CUST_HTML_PRODUCT" }]</b></p>
@@ -673,7 +674,7 @@
     [{/block}]
 
     [{block name="email_html_order_cust_download_link"}]
-        [{ if $oOrderFileList and $oOrderFileList|count }]
+        [{ if $oOrderFileList }]
             <h3 style="font-weight: bold; margin: 20px 0 7px; padding: 0; line-height: 35px; font-size: 12px;font-family: Arial, Helvetica, sans-serif; text-transform: uppercase; border-bottom: 4px solid #ddd;">
                 [{ oxmultilang ident="MY_DOWNLOADS_DESC" }]
             </h3>

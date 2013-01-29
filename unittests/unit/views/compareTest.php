@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: compareTest.php 54271 2013-01-23 12:45:05Z linas.kukulskis $
+ * @version   SVN: $Id: compareTest.php 49497 2012-09-12 14:50:52Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -330,6 +330,18 @@ class Unit_Views_compareTest extends OxidTestCase
         $this->assertArrayNotHasKey("nonExistingVal", $oResList);
         $this->assertArrayHasKey("1127", $oResList);
 
+    }
+
+    /**
+     * Testing compare::isCacheable()
+     *
+     * @return null
+     */
+    public function testIsCacheable()
+    {
+            return;
+        $oCompare = new Compare();
+        $this->assertFalse( $oCompare->isCacheable() );
     }
 
 }

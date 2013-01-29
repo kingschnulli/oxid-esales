@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: vendormainTest.php 51693 2012-11-12 13:02:35Z aurimas.gladutis $
+ * @version   SVN: $Id: vendormainTest.php 33190 2011-02-10 15:56:27Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -40,8 +40,8 @@ class Unit_Admin_VendorMainTest extends OxidTestCase
         modConfig::setParameter( "oxid", "testId" );
 
         // testing..
-        $oView = $this->getMock( "Vendor_Main", array( "_createCategoryTree" ) );
-        $oView->expects( $this->once() )->method( '_createCategoryTree');
+        $oView = $this->getMock( "Vendor_Main", array( "_getCategoryTree" ) );
+        $oView->expects( $this->once() )->method( '_getCategoryTree');
         $this->assertEquals( 'vendor_main.tpl', $oView->render() );
         $aViewData = $oView->getViewData();
         $this->assertTrue( isset( $aViewData['edit'] ) );

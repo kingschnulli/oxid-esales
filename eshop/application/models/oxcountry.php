@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcountry.php 52251 2012-11-23 15:02:08Z linas.kukulskis $
+ * @version   SVN: $Id: oxcountry.php 51699 2012-11-12 13:11:47Z saulius.stasiukaitis $
  */
 
 

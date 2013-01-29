@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   lang
- * @copyright (C) OXID eSales AG 2003-2013
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 54221 2013-01-23 12:26:26Z linas.kukulskis $
+ * @version   SVN: $Id: lang.php 52927 2012-12-14 10:35:35Z juergen.busch $
  */
 
 /*
@@ -100,6 +100,7 @@ $aLang = array(
 'GENERAL_ARTICLE_OXVAT'                                    => 'Product VAT',
 'GENERAL_ARTICLE_OXTHUMB'                                  => 'Preview Picture',
 'GENERAL_ARTICLE_OXICON'                                   => 'Icon',
+'GENERAL_ARTICLE_OXPICSGENERATED'                          => 'Pictures generated',
 'GENERAL_ARTICLE_PICTURES'                                 => 'Product pictures',
 'GENERAL_ARTICLE_OXPIC1'                                   => 'Picture1',
 'GENERAL_ARTICLE_OXPIC2'                                   => 'Picture2',
@@ -409,8 +410,6 @@ $aLang = array(
 'ARTICLE_LIST_ALLPRODUCTS'                                 => 'all Products',
 'ARTICLE_LIST_MENUSUBITEM'                                 => 'Product',
 'ARTICLE_MAIN_ERRORSAVINGARTICLE'                          => 'Attention: Product already exists!',
-'ARTICLE_MAIN_PARENTNOTBUYABLE'                            => 'Attention: Parent Product can not be purchased.',
-'ARTICLE_MAIN_INVALIDTAGSFOUND'                            => 'Attention: Invalid tags removed',
 'ARTICLE_MAIN_ALDPRICE'                                    => 'Alt. Prices',
 'ARTICLE_MAIN_NONE'                                        => '-- none --',
 'ARTICLE_MAIN_GOTO'                                        => 'Go to',
@@ -774,7 +773,7 @@ $aLang = array(
 'THEME_VERSION'                                            => 'Version',
 'THEME_ACTIVATE'                                           => 'Activate',
 'THEME_PARENT_THEME_TITLE'                                 => 'Parent theme',
-'THEME_PARENT_VERSIONS'                                    => 'Compatible parent theme versions',
+'THEME_PARENT_VERSIONS'                                    => 'Comapatible parent theme versions',
 'MODULE_AUTHOR'                                            => 'Author',
 'MODULE_VERSION'                                           => 'Version',
 'MODULE_ACTIVATE'                                          => 'Activate',

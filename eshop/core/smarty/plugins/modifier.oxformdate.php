@@ -19,7 +19,7 @@
  * @package   smarty_plugins
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: modifier.oxformdate.php 52114 2012-11-21 15:47:56Z aurimas.gladutis $
+ * @version   SVN: $Id: modifier.oxformdate.php 52113 2012-11-21 15:46:41Z aurimas.gladutis $
  */
 
 /**

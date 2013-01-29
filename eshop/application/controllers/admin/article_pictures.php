@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: article_pictures.php 52515 2012-11-28 09:31:11Z aurimas.gladutis $
+ * @version   SVN: $Id: article_pictures.php 48767 2012-08-16 17:33:56Z tomas $
  */
 
 /**
@@ -136,6 +136,7 @@ class Article_Pictures extends oxAdminDetails
             if ( $iIndex > 0 ) {
                 // deleting master picture
                 $this->_resetMasterPicture( $oArticle, $iIndex, true );
+                $oArticle->oxarticles__oxpicsgenerated = new oxField( 0 );
             }
         }
 

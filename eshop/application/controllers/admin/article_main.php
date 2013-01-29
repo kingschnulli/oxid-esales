@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   admin
- * @copyright (C) OXID eSales AG 2003-2013
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: article_main.php 53646 2013-01-10 15:46:34Z linas.kukulskis $
+ * @version   SVN: $Id: article_main.php 51936 2012-11-16 13:49:16Z linas.kukulskis $
  */
 
 /**
@@ -84,9 +84,8 @@ class Article_Main extends oxAdminDetails
             $this->_formJumpList($oArticle, $oParentArticle );
 
             //loading tags
-            $oArticleTagList = oxNew( "oxarticletaglist" );
-            $oArticleTagList->loadInLang( $this->_iEditLang, $oArticle->getId() );
-            $oArticle->tags = $oArticleTagList->get();
+            $oTagCloud = oxNew("oxTagCloud");
+            $oArticle->tags = $oTagCloud->getTagTitle($oArticle->getTags());
 
             $aLang = array_diff (oxRegistry::getLang()->getLanguageNames(), $oOtherLang);
             if ( count( $aLang))
@@ -135,9 +134,9 @@ class Article_Main extends oxAdminDetails
     {
         parent::save();
 
-        $oConfig = $this->getConfig();
+        $myConfig = $this->getConfig();
         $soxId    = $this->getEditObjectId();
-        $aParams  = $oConfig->getRequestParameter( "editval" );
+        $aParams  = oxConfig::getParameter( "editval" );
 
         // default values
         $aParams = $this->addDefaultValues( $aParams );
@@ -148,7 +147,7 @@ class Article_Main extends oxAdminDetails
         }
 
         // varianthandling
-        $soxparentId = $oConfig->getRequestParameter( "oxparentid");
+        $soxparentId = oxConfig::getParameter( "oxparentid");
         if ( isset( $soxparentId) && $soxparentId && $soxparentId != "-1") {
             $aParams['oxarticles__oxparentid'] = $soxparentId;
         } else {
@@ -165,7 +164,7 @@ class Article_Main extends oxAdminDetails
             $aParams['oxarticles__oxissearch']  = 1;
             $aParams['oxarticles__oxstockflag'] = 1;
                 // shopid
-                $aParams['oxarticles__oxshopid'] = oxRegistry::getSession()->getVariable( "actshop");
+                $aParams['oxarticles__oxshopid'] = oxSession::getVar( "actshop");
 
             if (!isset($aParams['oxarticles__oxactive'])) {
                 $aParams['oxarticles__oxactive'] = 0;
@@ -174,7 +173,7 @@ class Article_Main extends oxAdminDetails
 
         //article number handling, warns for artnum dublicates
         if ( isset( $aParams['oxarticles__oxartnum']) && strlen($aParams['oxarticles__oxartnum']) > 0 &&
-            $oConfig->getConfigParam( 'blWarnOnSameArtNums' ) &&
+            $myConfig->getConfigParam( 'blWarnOnSameArtNums' ) &&
             $oArticle->oxarticles__oxartnum->value !=  $aParams['oxarticles__oxartnum']
             ) {
             $sSelect  = "select oxid from ".getViewName( 'oxarticles' );
@@ -191,8 +190,16 @@ class Article_Main extends oxAdminDetails
 
             $aResetIds = array();
             if ( isset($aParams['oxarticles__oxactive']) && $aParams['oxarticles__oxactive'] != $oArticle->oxarticles__oxactive->value) {
+                $oDb = oxDb::getDb();
                 //check categories
-                $this->_resetCategoriesCounter( $oArticle->oxarticles__oxid->value );
+                $sQ = "select oxcatnid from oxobject2category where oxobjectid = ".$oDb->quote( $oArticle->oxarticles__oxid->value );
+                $oRs = $oDb->execute($sQ);
+                if ( $oRs !== false && $oRs->recordCount() > 0 ) {
+                    while (!$oRs->EOF) {
+                        $this->resetCounter( "catArticle", $oRs->fields[0] );
+                        $oRs->moveNext();
+                    }
+                }
 
                 // vendors
                 $aResetIds['vendor'][$oArticle->oxarticles__oxvendorid->value] = 1;
@@ -229,22 +236,19 @@ class Article_Main extends oxAdminDetails
 
         // set oxid if inserted
         if ( $soxId == "-1") {
-            $sFastCat = $oConfig->getRequestParameter( "art_category");
+            $sFastCat = oxConfig::getParameter( "art_category");
             if ( $sFastCat != "-1") {
                 $this->addToCategory($sFastCat, $oArticle->getId());
             }
         }
 
-        //saving tags
         if (isset($aParams['tags'])) {
+            //saving tags
             $sTags = $aParams['tags'];
             if (!trim($sTags)) {
                 $sTags = $oArticle->oxarticles__oxsearchkeys->value;
             }
-            $aInvalidTags = $this->_setTags( $sTags, $oArticle->getId() );
-            if ( !empty( $aInvalidTags ) ) {
-                $this->_aViewData["invalid_tags"] = implode( ', ', $aInvalidTags );
-            }
+            $oArticle->saveTags($sTags);
         }
 
         $this->setEditObjectId( $oArticle->getId() );
@@ -267,44 +271,6 @@ class Article_Main extends oxAdminDetails
         $sValue = str_replace( '&lang=', '&amp;lang=', $sValue);
 
         return $sValue;
-    }
-
-    /**
-     * Resets article categories counters
-     *
-     * @param string $sArticleId Article id
-     *
-     * @return void
-     */
-    protected function _resetCategoriesCounter( $sArticleId )
-    {
-        $oDb = oxDb::getDb();
-        $sQ = "select oxcatnid from oxobject2category where oxobjectid = ".$oDb->quote( $sArticleId );
-        $oRs = $oDb->execute($sQ);
-        if ( $oRs !== false && $oRs->recordCount() > 0 ) {
-            while (!$oRs->EOF) {
-                $this->resetCounter( "catArticle", $oRs->fields[0] );
-                $oRs->moveNext();
-            }
-        }
-    }
-
-    /**
-     * Sets tags to article. Returns invalid tags array
-     *
-     * @param string $sTags      Tags string to set for article
-     * @param string $sArticleId Article id
-     *
-     * @return array of oxTag objects
-     */
-    protected function _setTags( $sTags, $sArticleId )
-    {
-        $oArticleTagList = oxNew('oxarticletaglist');
-        $oArticleTagList->loadInLang( $this->_iEditLang, $sArticleId );
-        $oArticleTagList->set( $sTags );
-        $oArticleTagList->save();
-
-        return $oArticleTagList->get()->getInvalidTags();
     }
 
     /**

@@ -17,7 +17,7 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   views
- * @copyright (C) OXID eSales AG 2003-2013
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
  * @version   SVN: $Id$
  */
@@ -98,6 +98,17 @@ class oxStart extends oxUBase
 
         //commit file cache
         oxRegistry::getUtils()->commitFileCache();
+    }
+
+    /**
+     * Prints out the OXID version and dies
+     *
+     * @return null
+     */
+    public function getVersion()
+    {
+        $oActShop = $this->getConfig()->getActiveShop();
+        oxRegistry::getUtils()->showMessageAndExit( 'ver:'.$oActShop->oxshops__oxversion->value );
     }
 
     /**

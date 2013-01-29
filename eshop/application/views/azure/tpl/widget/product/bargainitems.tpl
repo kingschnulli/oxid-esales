@@ -14,22 +14,16 @@
             <div class="price [{if $_product->getPricePerUnit()}]tight[{/if}]" id="priceBargain_[{$smarty.foreach.bargainList.iteration}]">
                 <div>
                 [{oxhasrights ident="SHOWARTICLEPRICE"}]
-                    [{if $_product->getTPrice()}]
-                        <span class="priceOld">
-                            [{ oxmultilang ident="WIDGET_PRODUCT_PRODUCT_REDUCEDFROM" }] <del>[{ $_product->getFTPrice()}] [{ $currency->sign}]</del>
-                        </span>
+                    [{assign var=tprice value=$_product->getTPrice()}]
+                    [{assign var=price  value=$_product->getPrice()}]
+                    [{if $tprice && $tprice->getPrice() > $price->getPrice()}]
+                    <span class="priceOld">
+                        [{ oxmultilang ident="WIDGET_PRODUCT_PRODUCT_REDUCEDFROM" }] <del>[{ $_product->getFTPrice()}] [{ $currency->sign}]</del>
+                    </span>
                     [{/if}]
                     [{if $_product->getFPrice()}]
                         [{assign var="currency" value=$oView->getActCurrency()}]
-                        [{assign var="sFrom" value=""}]
-                        [{assign var="fPrice" value=$_product->getFPrice()}]
-                        [{if $_product->isParentNotBuyable() }]
-                            [{assign var="fPrice" value=$_product->getFVarMinPrice()}]
-                            [{if $_product->isRangePrice() }]
-                                [{assign var="sFrom" value="PRICE_FROM"|oxmultilangassign}]
-                            [{/if}]
-                        [{/if}]
-                        <span class="priceValue">[{$sFrom}] [{$fPrice}] [{$currency->sign}]
+                         <span class="priceValue">[{$_product->getFPrice()}] [{$currency->sign}]
                          [{if $oView->isVatIncluded() }]
                              [{if !( $_product->hasMdVariants() || ($oViewConf->showSelectListsInList()&&$_product->getSelections(1)) || $_product->getVariants() )}]*[{/if}]
                          [{/if}]

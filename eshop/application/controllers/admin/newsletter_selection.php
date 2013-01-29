@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: newsletter_selection.php 51745 2012-11-13 10:54:30Z aurimas.gladutis $
+ * @version   SVN: $Id: newsletter_selection.php 48458 2012-08-10 06:59:10Z linas.kukulskis $
  */
 
 /**
@@ -99,14 +99,13 @@ class Newsletter_Selection extends oxAdminDetails
                 if ( !$blSep ) {
                     $sSelectGroups = " oxobject2group.oxobjectid is null ";
                 }
-                $sShopId = $this->getConfig()->getShopID();
+
                 $sQ = "select count(*) from ( select oxnewssubscribed.oxemail as _icnt from oxnewssubscribed left join
                        oxobject2group on oxobject2group.oxobjectid = oxnewssubscribed.oxuserid
-                       where ( oxobject2group.oxshopid = '{$sShopId}'
+                       where ( oxobject2group.oxshopid = '".$this->getConfig()->getShopID()."'
                        or oxobject2group.oxshopid is null ) and {$sSelectGroups} and
                        oxnewssubscribed.oxdboptin = 1 and ( not ( oxnewssubscribed.oxemailfailed = '1') )
-                       and (not(oxnewssubscribed.oxemailfailed = '1')) and oxnewssubscribed.oxshopid = '{$sShopId}'
-                       group by oxnewssubscribed.oxemail ) as _tmp";
+                       and (not(oxnewssubscribed.oxemailfailed = '1')) group by oxnewssubscribed.oxemail ) as _tmp";
 
                 $this->_iUserCount = $oDB->getOne( $sQ, false, false );
             }

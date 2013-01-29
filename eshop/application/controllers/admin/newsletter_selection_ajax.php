@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: newsletter_selection_ajax.php 52398 2012-11-23 16:20:47Z linas.kukulskis $
+ * @version   SVN: $Id: newsletter_selection_ajax.php 52117 2012-11-21 15:49:12Z vaidas.matulevicius $
  */
 
 /**

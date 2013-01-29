@@ -227,7 +227,7 @@ class Unit_utf8Test extends OxidTestCase
 
         $oArticle->saveTags( $sValue );
         $oArticle->addTag( 'sėkme Литовские für' );
-        //$this->assertEquals( $sResult, $oArticle->getTags() );
+        $this->assertEquals( $sResult, $oArticle->getTags() );
     }
 
     public function testOxArticleGetPersParam()
@@ -1403,23 +1403,17 @@ class Unit_utf8Test extends OxidTestCase
         $this->assertEquals( $sTagsToReturn, $oTagCloud->trimTags( $sTagsToProcess ) );
     }
 
-    public function testOxArticleTagListGet()
+    public function testOxTagCloudGetTagsArticle()
     {
         $oTestArticle = new oxarticle();
         $oTestArticle->setId( '_testArticle' );
         $oTestArticle->oxarticles__oxactive = new oxField( 1 );
         $oTestArticle->save();
         $oTestArticle->saveTags('ändern,andern,ondern');
-        $oArticleTagList = new oxArticleTagList();
-        $oArticleTagList->load('_testArticle');
-        $oTagSet = $oArticleTagList->get();
-        $aTags = $oTagSet->get();
+        $oTagCloud = new oxTagCloud();
+        $aTags = $oTagCloud->getTags('_testArticle');
 
-        $aTestTags = array(
-            'andern' => new oxTag('andern'),
-            'ändern' => new oxTag('ändern'),
-            'ondern' => new oxTag('ondern'),
-        );
+        $aTestTags = array('andern' => 1,'ändern' => 1,'ondern' => 1);
         $this->assertEquals( 3, count( $aTags ) );
         $this->assertEquals( $aTestTags, $aTags);
     }
@@ -1884,7 +1878,7 @@ class Unit_utf8Test extends OxidTestCase
         $oView = $this->getMock( 'details', array( 'getProduct' ) );
         $oView->expects( $this->any() )->method( 'getProduct' )->will( $this->returnValue( $oArt ) );
         $oView->addTags();
-        $this->assertEquals( array('agentūлитовfür' => new oxTag('agentūлитовfür') ), $oView->getTagCloudManager()->getCloudArray("_testArt") );
+        $this->assertEquals($oView->getTagCloudManager()->getCloudArray("_testArt"), array('agentūлитовfür' => 1));
     }
 
     /*

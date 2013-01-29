@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxrssfeed.php 53186 2012-12-20 11:40:43Z aurimas.gladutis $
+ * @version   SVN: $Id: oxrssfeed.php 51865 2012-11-15 12:43:58Z linas.kukulskis $
  */
 
 /**
@@ -83,13 +83,10 @@ class oxRssFeed extends oxSuperCfg
         $this->_aChannel['selflink'] = '';
         if ( oxRegistry::getUtils()->isValidEmail( $oShop->oxshops__oxinfoemail->value )) {
             $this->_aChannel['managingEditor'] = $oShop->oxshops__oxinfoemail->value;
-            if ( $oShop->oxshops__oxfname ) {
-                $this->_aChannel['managingEditor'] .= " ({$oShop->oxshops__oxfname} {$oShop->oxshops__oxlname})";
-            }
         }
         //$this->_aChannel['webMaster']      = '';
 
-        $this->_aChannel['generator']      = $oShop->oxshops__oxname->value;
+        $this->_aChannel['generator']      = 'OXID eShop '.$oShop->oxshops__oxversion->value;
         $this->_aChannel['image']['url']   = $this->getConfig()->getImageUrl().'logo.png';
 
 

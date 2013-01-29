@@ -3965,10 +3965,6 @@ dl.review .param {
     width: 190px;
 }
 
-.form select[data-fieldsize="normal"] {
-	width: 202px;
-}
-
 .form input[data-fieldsize="xsmall"] {
     width: 25px;
 }

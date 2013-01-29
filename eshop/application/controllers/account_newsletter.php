@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: account_newsletter.php 52140 2012-11-22 12:01:20Z aurimas.gladutis $
+ * @version   SVN: $Id: account_newsletter.php 48768 2012-08-16 17:56:23Z tomas $
  */
 
 /**
@@ -73,18 +73,25 @@ class Account_Newsletter extends Account
 
 
     /**
-     * Template variable getter. Returns 0 when newsletter had been changed.
+     * Template variable getter. Returns true when newsletter had been changed.
      *
-     * @return int
+     * @return bool
      */
     public function isNewsletter()
     {
-        $oUser = $this->getUser();
-        if ( !$oUser ) {
-            return false;
+        if ( $this->_blNewsletter === null ) {
+
+            // initiating status
+            $this->_blNewsletter = false;
+
+            // now checking real subscription status
+            $oUser = $this->getUser();
+            if ( $oUser &&  $oUser->inGroup( 'oxidnewsletter' ) && ( $oUser->getNewsSubscription()->getOptInStatus() == 1 ) ) {
+                $this->_blNewsletter = true;
+            }
         }
 
-        return $oUser->getNewsSubscription()->getOptInStatus();
+        return $this->_blNewsletter;
     }
 
     /**
@@ -100,11 +107,21 @@ class Account_Newsletter extends Account
         if ( !$oUser ) {
             return false;
         }
-
-        $iStatus = $this->getConfig()->getRequestParameter( 'status' );
-        if ( $oUser->setNewsSubscription( $iStatus, $this->getConfig()->getConfigParam( 'blOrderOptInEmail' ) ) ) {
-            $this->_iSubscriptionStatus = ($iStatus == 0 && $iStatus !== null)? -1 : 1;
-        }
+        
+        $oSubscription = $oUser->getNewsSubscription();
+        $iStatus = oxConfig::getParameter( 'status' );
+        
+        if ( $iStatus == 0 && $iStatus !== null ) {
+            $oUser->removeFromGroup( 'oxidnewsletter' );
+            $oSubscription->setOptInStatus( 0 );
+            $this->_iSubscriptionStatus = -1;
+        }  if ( $iStatus == 1 ) {
+            // assign user to newsletter group
+            $oUser->addToGroup( 'oxidnewsletter' );
+            $oSubscription->setOptInEmailStatus( 0 );
+            $oSubscription->setOptInStatus( 1 );
+            $this->_iSubscriptionStatus = 1;
+        } 
     }
 
     /**

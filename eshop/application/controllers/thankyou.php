@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: thankyou.php 52002 2012-11-19 14:35:25Z aurimas.gladutis $
+ * @version   SVN: $Id: thankyou.php 49522 2012-09-13 14:13:29Z vilma $
  */
 
 /**
@@ -33,6 +33,12 @@ class Thankyou extends oxUBase
      * @var object
      */
     protected $_oBasket = null;
+
+    /**
+     * Show final (5th) step
+     * @var bool
+     */
+    protected $_blShowFinalStep = null;
 
     /**
      * List of customer also bought thies products
@@ -168,13 +174,17 @@ class Thankyou extends oxUBase
     /**
      * Template variable getter. Returns if to show final (5th) step
      *
-     * @deprecated since 2012-11-19. Option blShowFinalStep is removed
-     *
      * @return string
      */
     public function showFinalStep()
     {
-        return true;
+        if ( $this->_blShowFinalStep === null ) {
+            $this->_blShowFinalStep = false;
+            if ( $this->getConfig()->getConfigParam( 'blShowFinalStep' ) ) {
+                $this->_blShowFinalStep = true;
+            }
+        }
+        return $this->_blShowFinalStep;
     }
 
     /**
@@ -187,10 +197,12 @@ class Thankyou extends oxUBase
         if ( $this->_aLastProducts === null ) {
             $this->_aLastProducts = false;
             // 5th order step
-            $aBasketContents = array_values($this->getBasket()->getContents());
-            if ( $oBasketItem = $aBasketContents[0] ) {
-                if ( $oProduct = $oBasketItem->getArticle(false) ) {
-                    $this->_aLastProducts = $oProduct->getCustomerAlsoBoughtThisProducts();
+            if ( $this->showFinalStep() ) {
+                $aBasketContents = array_values($this->getBasket()->getContents());
+                if ( $oBasketItem = $aBasketContents[0] ) {
+                    if ( $oProduct = $oBasketItem->getArticle(false) ) {
+                        $this->_aLastProducts = $oProduct->getCustomerAlsoBoughtThisProducts();
+                    }
                 }
             }
         }

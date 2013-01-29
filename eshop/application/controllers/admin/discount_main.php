@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: discount_main.php 51588 2012-11-09 08:56:56Z aurimas.gladutis $
+ * @version   SVN: $Id: discount_main.php 48727 2012-08-16 09:09:02Z tomas $
  */
 
 /**
@@ -79,7 +79,7 @@ class Discount_Main extends oxAdminDetails
                 return "popups/discount_main.tpl";
             } elseif ( $iAoc == "2" ) {
                 // generating category tree for artikel choose select list
-                $this->_createCategoryTree( "artcattree" );
+                $this->_getCategoryTree( "artcattree", null );
 
                 $oDiscountItemAjax = oxNew( 'discount_item_ajax' );
                 $this->_aViewData['oxajax'] = $oDiscountItemAjax->getColumns();

@@ -259,7 +259,7 @@ class oxFile extends oxBase
     }
 
     /**
-     * Checks whether the file has been uploaded over admin area.
+     * Checks whehter the file has been uploaded over admin area.
      * Returns true in case file is uploaded (and hashed) over admin area.
      * Returns false in case file is placed manually (ftp) to "out/downloads/uploads" dir.
      * It's similar so don't get confused here.

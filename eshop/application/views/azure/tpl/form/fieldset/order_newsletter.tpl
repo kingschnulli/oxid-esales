@@ -1,7 +1,7 @@
 [{if $blSubscribeNews}]
     <li>
         [{block name="user_billing_newsletter"}]
-        <label for="subscribeNewsletter">[{ oxmultilang ident="FORM_FIELDSET_USER_SUBSCRIBENEWSLETTER" }]</label>
+        <label>[{ oxmultilang ident="FORM_FIELDSET_USER_SUBSCRIBENEWSLETTER" }]</label>
         <input type="hidden" name="blnewssubscribed" value="0">
         <input id="subscribeNewsletter" type="checkbox" name="blnewssubscribed" value="1" [{if $oView->isNewsSubscribed()}]checked[{/if}]>
         <br>

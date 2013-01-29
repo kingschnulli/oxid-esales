@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: thankyouTest.php 52004 2012-11-19 14:39:30Z aurimas.gladutis $
+ * @version   SVN: $Id: thankyouTest.php 44733 2012-05-09 13:50:25Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -55,14 +55,12 @@ class Unit_Views_thankyouTest extends OxidTestCase
         $this->assertEquals( $oBasket, $oThankyou->getBasket());
     }
 
-    /* removing as this function is deprecated as of #0003283
     public function testShowFinalStep()
     {
         modConfig::getInstance()->setConfigParam( 'blShowFinalStep', true );
         $oThankyou = $this->getProxyClass( 'thankyou' );
         $this->assertTrue( $oThankyou->showFinalStep());
     }
-    */
 
     public function testGetCurrencyCovIndex()
     {
@@ -150,7 +148,6 @@ class Unit_Views_thankyouTest extends OxidTestCase
         $this->assertNull( $oThankyou->getAlsoBoughtTheseProducts());
     }
 
-    /* removed as shopFinalStep function is deprecated as of #0003283
     public function testGetAlsoBoughtTheseProductsIfDontShowFinalStep()
     {
         $oThankyou = $this->getMock( 'thankyou', array( 'showFinalStep' ) );
@@ -158,7 +155,6 @@ class Unit_Views_thankyouTest extends OxidTestCase
 
         $this->assertFalse( $oThankyou->getAlsoBoughtTheseProducts());
     }
-    */
 
     // #1276: If product is "If out out stock, offline" and remaining stock is ordered, "Shp offline" error is shown in Order step 5
     public function testRender()

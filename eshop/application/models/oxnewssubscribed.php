@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxnewssubscribed.php 51745 2012-11-13 10:54:30Z aurimas.gladutis $
+ * @version   SVN: $Id: oxnewssubscribed.php 47273 2012-07-12 12:47:43Z linas.kukulskis $
  */
 
 /**
@@ -111,7 +111,7 @@ class oxNewsSubscribed extends oxBase
     public function loadFromUserId( $sOxUserId )
     {
         $oDb = oxDb::getDb();
-        $sOxId = $oDb->getOne( "select oxid from oxnewssubscribed where oxuserid = {$oDb->quote( $sOxUserId )} and oxshopid = {$oDb->quote( $this->getConfig()->getShopId() )}" );
+        $sOxId = $oDb->getOne( "select oxid from oxnewssubscribed where oxuserid = " . $oDb->quote( $sOxUserId ) );
         return $this->load( $sOxId );
     }
 

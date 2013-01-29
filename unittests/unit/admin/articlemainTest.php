@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: articlemainTest.php 53600 2013-01-10 15:37:27Z linas.kukulskis $
+ * @version   SVN: $Id: articlemainTest.php 47972 2012-07-30 16:08:39Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -475,7 +475,7 @@ class Unit_Admin_ArticleMainTest extends OxidTestCase
     {
         oxTestModules::addFunction( 'oxarticle', 'save', '{ return true; }');
         oxTestModules::addFunction( 'oxarticle', 'assignRecord', '{ return true; }');
-        oxTestModules::addFunction( 'oxarticletaglist', 'save', '{ throw new Exception( "saveTags" ); }');
+        oxTestModules::addFunction( 'oxarticle', 'saveTags', '{ throw new Exception( "saveTags" ); }');
 
         modConfig::setParameter( "oxid", -1 );
         modConfig::setParameter( "oxparentid", "-1" );
@@ -501,7 +501,7 @@ class Unit_Admin_ArticleMainTest extends OxidTestCase
     {
         oxTestModules::addFunction( 'oxarticle', 'save', '{ return true; }');
         oxTestModules::addFunction( 'oxarticle', 'assignRecord', '{ return true; }');
-        oxTestModules::addFunction( 'oxarticletaglist', 'save', '{ throw new Exception( "saveTags" ); }');
+        oxTestModules::addFunction( 'oxarticle', 'saveTags', '{ throw new Exception( "saveTags" ); }');
 
         modConfig::setParameter( "oxid", -1 );
         modConfig::setParameter( "oxparentid", "132" );

@@ -12,10 +12,12 @@
     [{capture name=product_price}]
         [{block name="widget_product_listitem_grid_price"}]
             [{oxhasrights ident="SHOWARTICLEPRICE"}]
-                [{if $product->getTPrice()}]
-                    <span class="priceOld">
-                        [{ oxmultilang ident="WIDGET_PRODUCT_PRODUCT_REDUCEDFROM" }] <del>[{ $product->getFTPrice()}] [{ $currency->sign}]</del>
-                    </span>
+                [{assign var=tprice value=$product->getTPrice()}]
+                [{assign var=price  value=$product->getPrice()}]
+                [{if $tprice && $tprice->getBruttoPrice() > $price->getBruttoPrice()}]
+                <span class="priceOld">
+                    [{ oxmultilang ident="WIDGET_PRODUCT_PRODUCT_REDUCEDFROM" }] <del>[{ $product->getFTPrice()}] [{ $currency->sign}]</del>
+                </span>
                 [{/if}]
                 [{block name="widget_product_listitem_grid_price_value"}]
                     [{if $product->getFPrice()}]

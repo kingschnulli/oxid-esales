@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   views
- * @copyright (C) OXID eSales AG 2003-2013
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxlocator.php 53631 2013-01-10 15:43:19Z linas.kukulskis $
+ * @version   SVN: $Id: oxlocator.php 48767 2012-08-16 17:33:56Z tomas $
  */
 
 /**
@@ -82,7 +82,7 @@ class oxLocator extends oxSuperCfg
         // passing list type to view
         $oLocatorTarget->setListType( $this->_sType );
     }
-
+    
     /**
      * Sets details locator data for articles that came from regular list.
      *
@@ -98,10 +98,20 @@ class oxLocator extends oxSuperCfg
             $sCatId = $oCategory->getId();
 
             $sOrderBy = null;
-            if ( $oLocatorTarget->showSorting() ) {
-                $sOrderBy = $oLocatorTarget->getSortingSql( $oLocatorTarget->getSortIdent() );
+            if ( $oLocatorTarget->showSorting() ) {  
+                $aSorting = $oLocatorTarget->getSorting( $sCatId );
+                // checking if we have defined sorting parameters in the sessions                              
+                if ( !$aSorting && $oCategory->oxcategories__oxdefsort->value ) {
+                    // if no sorting parameters are set in the session and the category has default
+                    // sorting parameters, we use them instead
+                    $sSortBy  = getViewName( 'oxarticles' ) . ".{$oCategory->oxcategories__oxdefsort->value}";
+                    $sSortDir = ( $oCategory->oxcategories__oxdefsortmode->value ) ? "desc" : null;                                      
+                    $oLocatorTarget->setItemSorting( $sCatId, $sSortBy, $sSortDir );                   
+                }
+                $oLocatorTarget->prepareSortColumns();
+                $sOrderBy = $oLocatorTarget->getSortingSql( $sCatId );                                 
             }
-
+            
             $oIdList = $this->_loadIdsInList( $oCategory, $oCurrArticle, $sOrderBy );
 
             //page number
@@ -149,7 +159,8 @@ class oxLocator extends oxSuperCfg
             // loading data for article navigation
             $oIdList = oxNew( "oxarticlelist" );
             if ( $oLocatorTarget->showSorting() ) {
-                $oIdList->setCustomSorting( $oLocatorTarget->getSortingSql( $oLocatorTarget->getSortIdent() ) );
+                $oLocatorTarget->prepareSortColumns();
+                $oIdList->setCustomSorting( $oLocatorTarget->getSortingSql( "$sVendorId:vendor" ) );
             }
             $oIdList->loadVendorIds( $sVendorId );
 
@@ -203,7 +214,8 @@ class oxLocator extends oxSuperCfg
             // loading data for article navigation
             $oIdList = oxNew( "oxarticlelist" );
             if ( $oLocatorTarget->showSorting() ) {
-                $oIdList->setCustomSorting( $oLocatorTarget->getSortingSql( $oLocatorTarget->getSortIdent() ) );
+                $oLocatorTarget->prepareSortColumns();
+                $oIdList->setCustomSorting( $oLocatorTarget->getSortingSql( "$sManufacturerId:manufacturer" ) );
             }
             $oIdList->loadManufacturerIds( $sManufacturerId );
 
@@ -267,7 +279,8 @@ class oxLocator extends oxSuperCfg
             // loading data for article navigation
             $oIdList = oxNew( 'oxarticlelist' );
             if ( $oLocatorTarget->showSorting() ) {
-                $oIdList->setCustomSorting( $oLocatorTarget->getSortingSql( $oLocatorTarget->getSortIdent() ) );
+                $oLocatorTarget->prepareSortColumns();
+                $oIdList->setCustomSorting( $oLocatorTarget->getSortingSql( 'oxsearch' ) );
             }
             $oIdList->loadSearchIds( $sSearchParam, $sSearchCat, $sSearchVendor, $sSearchManufacturer );
 
@@ -323,7 +336,8 @@ class oxLocator extends oxSuperCfg
             $oLang = oxRegistry::getLang();
 
             if ( $oLocatorTarget->showSorting() ) {
-                $oIdList->setCustomSorting( $oLocatorTarget->getSortingSql( $oLocatorTarget->getSortIdent() ) );
+                $oLocatorTarget->prepareSortColumns();
+                $oIdList->setCustomSorting( $oLocatorTarget->getSortingSql( 'oxtags' ) );
             }
 
             $oIdList->getTagArticleIds( $oTag->sTag, $oLang->getBaseLanguage() );

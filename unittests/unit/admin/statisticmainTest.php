@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: statisticmainTest.php 53270 2013-01-02 14:43:17Z linas.kukulskis $
+ * @version   SVN: $Id: statisticmainTest.php 51722 2012-11-12 15:02:25Z saulius.stasiukaitis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -41,30 +41,6 @@ class Unit_Admin_StatisticMainTest extends OxidTestCase
         parent::tearDown();
     }
 
-
-    protected function _getAllReports()
-    {
-        $aReportFiles = array(
-            array( 'filename' => 'report_canceled_orders.php', 'name' => 'Bestellabbrueche' ),
-            array( 'filename' => 'report_conversion_rate.php', 'name' => 'Conversion Rate' ),
-            array( 'filename' => 'report_searchstrings.php', 'name' => 'Suchwörter' ),
-            array( 'filename' => 'report_top_clicked_categories.php', 'name' => 'Top geklickte Kategorien'),
-            array( 'filename' => 'report_top_viewed_products.php', 'name' => 'Top angesehene Artikel'),
-            array( 'filename' => 'report_user_per_group.php', 'name' => 'Kunden nach Benutzergruppen'),
-            array( 'filename' => 'report_visitor_absolute.php', 'name' => 'Kunden/Besucher'),
-        );
-
-        $aExpAllReports = array();
-        foreach ( $aReportFiles as $afile) {
-            $oStd = new stdClass();
-            $oStd->filename = $afile['filename'];
-            $oStd->name = $afile['name'];
-            $aExpAllReports[] = $oStd;
-        }
-
-        return $aExpAllReports;
-    }
-
     /**
      * Statistic_Main::Render() test case
      *
@@ -84,7 +60,7 @@ class Unit_Admin_StatisticMainTest extends OxidTestCase
 
         $sAllReports = $this->getSessionParam("allstat_reports");
         $sReports    = $this->getSessionParam("stat_reports_testId");
-        $this->assertEquals( $this->_getAllReports(), $sAllReports );
+        $this->assertEquals( array(), $sAllReports );
         $this->assertFalse( $sReports );
         $this->assertNull( $aViewData['ireports'] );
     }
@@ -125,7 +101,7 @@ class Unit_Admin_StatisticMainTest extends OxidTestCase
 
         $sAllReports = $this->getSessionParam("allstat_reports");
         $sReports    = $this->getSessionParam("stat_reports_testId");
-        $this->assertEquals( $this->_getAllReports(), $sAllReports );
+        $this->assertEquals( array(), $sAllReports );
         $this->assertEquals( array("testRes"), $sReports );
         $this->assertEquals( 1, $aViewData['ireports'] );
     }

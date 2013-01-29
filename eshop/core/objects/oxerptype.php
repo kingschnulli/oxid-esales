@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxerptype.php 52984 2012-12-17 09:25:15Z aurimas.gladutis $
+ * @version   SVN: $Id: oxerptype.php 52715 2012-12-05 15:01:54Z aurimas.gladutis $
  */
 
 /**

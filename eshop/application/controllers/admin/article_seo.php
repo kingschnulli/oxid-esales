@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   admin
- * @copyright (C) OXID eSales AG 2003-2013
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: article_seo.php 53614 2013-01-10 15:40:21Z linas.kukulskis $
+ * @version   SVN: $Id: article_seo.php 48768 2012-08-16 17:56:23Z tomas $
  */
 
 /**
@@ -232,14 +232,12 @@ class Article_Seo extends Object_Seo
      */
     protected function _getTagList( $oArticle, $iLang )
     {
-        $oArticleTagList = oxNew("oxarticletaglist");
-        $oArticleTagList->setLanguage( $iLang );
-        $oArticleTagList->load( $oArticle->getId() );
+        $oTagCloud = oxNew("oxTagCloud");
         $aTagsList = array();
-        if ( count( $aTags = $oArticleTagList->getArray() ) ) {
+        if ( count( $aTags = $oTagCloud->getTags( $oArticle->getId(), false, $iLang ) ) ) {
             $sShopId = $this->getConfig()->getShopId();
             $iProdId = $oArticle->getId();
-            foreach ( $aTags as $sTitle => $oTagObject ) {
+            foreach ( $aTags as $sTitle => $sValue ) {
                 // A. we do not have oxTag object yet, so reusing manufacturers for general interface
                 $oTag = oxNew( "oxManufacturer" );
                 $oTag->setLanguage( $iLang );

@@ -69,13 +69,7 @@ window.onload = function ()
                     </td>
                   </tr>
                   [{ /if}]
-                  [{ if $invalid_tags }]
-                  <tr>
-                    <td colspan="2">
-                      <div class="errorbox">[{ oxmultilang ident="ARTICLE_MAIN_INVALIDTAGSFOUND" }]: [{$invalid_tags}]</div>
-                    </td>
-                  </tr>
-                  [{ /if}]
+
                   [{ if $oxparentid }]
                   <tr>
                     <td class="edittext" width="120">
@@ -219,13 +213,6 @@ window.onload = function ()
                     </td>
                   </tr>
 
-                  [{if $edit->isParentNotBuyable()}]
-                  <tr>
-                    <td colspan="2">
-                      <div class="errorbox">[{ oxmultilang ident="ARTICLE_MAIN_PARENTNOTBUYABLE" }]</div>
-                    </td>
-                  </tr>
-                  [{/if}]
                     <tr>
                       <td class="edittext">
                         [{ oxmultilang ident="ARTICLE_MAIN_PRICE" }] ([{ $oActCur->sign }])

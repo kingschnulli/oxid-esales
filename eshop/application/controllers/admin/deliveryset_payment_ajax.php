@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: deliveryset_payment_ajax.php 52382 2012-11-23 16:17:55Z linas.kukulskis $
+ * @version   SVN: $Id: deliveryset_payment_ajax.php 52082 2012-11-21 10:50:35Z vaidas.matulevicius $
  */
 
 /**

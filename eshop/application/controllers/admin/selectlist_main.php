@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: selectlist_main.php 51588 2012-11-09 08:56:56Z aurimas.gladutis $
+ * @version   SVN: $Id: selectlist_main.php 48727 2012-08-16 09:09:02Z tomas $
  */
 
 DEFINE("ERR_SUCCESS", 1);
@@ -50,6 +50,7 @@ class SelectList_Main extends oxAdminDetails
         $myConfig = $this->getConfig();
         parent::render();
 
+
         $sOxId = $this->_aViewData["oxid"] = $this->getEditObjectId();
         $sArticleTable = getViewName('oxarticles');
 
@@ -60,7 +61,7 @@ class SelectList_Main extends oxAdminDetails
             // generating category tree for select list
             // A. hack - passing language by post as lists uses only language passed by POST/GET/SESSION
             $_POST["language"] = $this->_iEditLang;
-            $this->_createCategoryTree( "artcattree", $sOxId);
+            $sChosenArtCat = $this->_getCategoryTree( "artcattree", $sChosenArtCat, $sOxId);
 
             // load object
             $oAttr = oxNew( "oxselectlist" );

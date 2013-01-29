@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   core
- * @copyright (C) OXID eSales AG 2003-2013
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxpayment.php 54225 2013-01-23 12:29:09Z linas.kukulskis $
+ * @version   SVN: $Id: oxpayment.php 49842 2012-09-27 12:14:11Z linas.kukulskis $
  */
 
 /**
@@ -314,7 +314,7 @@ class oxPayment extends oxI18n
         //getting basket price with applied discounts and vouchers
         $dPrice = $this->getPaymentValue( $this->getBaseBasketPriceForPaymentCostCalc( $oBasket ) );
 
-        if ( $dPrice ) {
+        if ( $dPrice > 0 ) {
             // calculating total price
             $oPrice = oxNew( 'oxPrice' );
             if ( !$this->_blPaymentVatOnTop ) {
@@ -324,13 +324,10 @@ class oxPayment extends oxI18n
             }
 
             $oPrice->setPrice( $dPrice );
-            if ( $dPrice > 0 ) {
-                $oPrice->setVat( $oBasket->getAdditionalServicesVatPercent() );
-            }
+            $oPrice->setVat( $oBasket->getAdditionalServicesVatPercent() );
 
             $this->_oPrice = $oPrice;
         }
-
     }
 
 

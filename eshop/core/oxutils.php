@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutils.php 52319 2012-11-23 16:05:22Z linas.kukulskis $
+ * @version   SVN: $Id: oxutils.php 51910 2012-11-15 16:19:01Z linas.kukulskis $
  */
 
 /**
@@ -237,7 +237,7 @@ class oxUtils extends oxSuperCfg
      *
      * @param string $sValue Formatted price
      *
-     * @return float
+     * @return string
      */
     public function currency2Float( $sValue)
     {
@@ -253,6 +253,7 @@ class oxUtils extends oxSuperCfg
         $fRet = str_replace( ",", ".", $fRet);
         return (float) $fRet;
     }
+
 
     /**
      * Returns formatted float, according to formatting standards.

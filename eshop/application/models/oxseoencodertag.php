@@ -17,7 +17,7 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   core
- * @copyright (C) OXID eSales AG 2003-2013
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
  * @version   SVN: $Id: oxseoencodercontent.php 17768 2009-04-02 10:52:12Z sarunas $
  */
@@ -91,15 +91,32 @@ class oxSeoEncoderTag extends oxSeoEncoder
         if ( $sOldSeoUrl === $sSeoUrl ) {
             $sSeoUrl = $sOldSeoUrl;
         } else {
+
             if ( $sOldSeoUrl ) {
                 // old must be transferred to history
                 $this->_copyToHistory( $sObjectId, $iShopId, $iLang, 'dynamic' );
             }
-            // creating unique
-            $sSeoUrl = $this->_processSeoUrl( $sSeoUrl, $sObjectId, $iLang );
 
-            // inserting
-            $this->_saveToDb( 'dynamic', $sObjectId, $sStdUrl, $sSeoUrl, $iLang, $iShopId );
+            $oTagCloud = oxNew('oxtagcloud');
+            $sTag = $oTagCloud->prepareTags($sTag);
+            $sViewName = getViewName( 'oxartextends', $iLang );
+            $oDb = oxDb::getDb();
+            $sQ = "select 1 from {$sViewName} where match ( {$sViewName}.oxtags )
+                   against( ".$oDb->quote( "\"".$sTag."\"" )." IN BOOLEAN MODE )";
+
+            if ( $sOxid ) {
+                $sQ .= " and oxid = " . $oDb->quote( $sOxid );
+            }
+
+            if ( $oDb->getOne( $sQ ) ) {
+                // creating unique
+                $sSeoUrl = $this->_processSeoUrl( $sSeoUrl, $sObjectId, $iLang );
+
+                // inserting
+                $this->_saveToDb( 'dynamic', $sObjectId, $sStdUrl, $sSeoUrl, $iLang, $iShopId );
+            } else {
+                $sSeoUrl = false;
+            }
         }
 
         return $sSeoUrl;

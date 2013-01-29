@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   admin
- * @copyright (C) OXID eSales AG 2003-2013
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: statistic_main.php 53595 2013-01-10 15:36:13Z linas.kukulskis $
+ * @version   SVN: $Id: statistic_main.php 48786 2012-08-17 10:20:42Z tomas $
  */
 
 /**
@@ -56,7 +56,8 @@ class Statistic_Main extends oxAdminDetails
         }
 
         // setting all reports data: check for reports and load them
-        $sPath     = getShopBasePath(). "application/controllers/admin/reports";
+        //$sPath     = getShopBasePath().$myConfig->getConfigParam( 'sAdminDir' ) . "/reports";
+        $sPath     = getShopBasePath(). "aplication/controllers/admin/reports";
         $iLanguage = (int) oxConfig::getParameter("editlanguage");
         $aAllreports = array();
 

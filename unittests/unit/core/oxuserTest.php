@@ -869,7 +869,7 @@ class Unit_Core_oxuserTest extends OxidTestCase
     $this->_aUsers[$sShopId][] = '_testUser';
         try {
             $oUser = new oxuser();
-            $oUser->setId('_testUser');
+        $oUser->setId('_testUser');
             $oUser->checkValues( 'aaa@bbb.lt', '', '', $aInvAdress, array() );
             $oUser->oxuser__oxusername = new oxField('aaa@bbb.lt', oxField::T_RAW);
             $oUser->oxuser__oxpassword = new oxField('', oxField::T_RAW);
@@ -2126,6 +2126,16 @@ class Unit_Core_oxuserTest extends OxidTestCase
 
 
     /**
+     * Testing Boni index
+     */
+    public function testGetBoni()
+    {
+        $oUser = oxNew( 'oxuser' );
+        $this->assertEquals( 1000, $oUser->getBoni() );
+    }
+
+
+    /**
      * Testing automatical adding to dyn group
      */
     public function testAddDynGroupEmptyGroup()
@@ -2774,6 +2784,7 @@ class Unit_Core_oxuserTest extends OxidTestCase
      */
     public function testGetUser()
     {
+        $testUser = new oxuser();
         //not logged in
         $oActUser = new oxuser();
         $this->assertFalse($oActUser->loadActiveUser());
@@ -3247,32 +3258,6 @@ class Unit_Core_oxuserTest extends OxidTestCase
         $this->assertEquals( 11, $oUser->getWishListArtCnt() );
     }
 
-    /**
-     * Testing encoding of delivery address.
-     * Checks whether it generates different hashes for different data and
-     * eqal hashes for eqal data.
-     *
-     * @return null
-     */
-    public function testGetEncodedDeliveryAddress()
-    {
-        $oUser = new oxUser();
-        $oUser->oxuser__oxcompany   = new oxField('Company');
-        $oUser->oxuser__oxfname     = new oxField('First name');
-        $oUser->oxuser__oxlname     = new oxField('Last name');
-        $oUser->oxuser__oxstreet    = new oxField('Street');
-        $oUser->oxuser__oxstreetnr  = new oxField('Street number');
-        $sEncoded = $oUser->getEncodedDeliveryAddress();
-
-        $oUser->oxuser__oxstreetnr  = new oxField('Street 41');
-
-        $this->assertNotEquals( $sEncoded, $oUser->getEncodedDeliveryAddress() );
-
-        $oUser->oxuser__oxstreetnr  = new oxField('Street number');
-
-        $this->assertEquals( $sEncoded, $oUser->getEncodedDeliveryAddress() );
-    }
-
     public function testIsLoadedFromCookie()
     {
         $oUser = $this->getProxyClass( "oxuser" );
@@ -3385,10 +3370,10 @@ class Unit_Core_oxuserTest extends OxidTestCase
     }
 
     /**
-     * oxuser::laodActiveUser() test loading active user via facebook connect
-     * when user logged in to fb and user exists in db
+     * oxuser::laodActiveUser() test loading active user if use is connected
+     * via facebook connect
      */
-    public function testLoadActiveUser_FacebookConnectLoggedIn()
+    public function testLoadActiveUser_loggedInViaFacebookConnect()
     {
         oxTestModules::addFunction( "oxFb", "isConnected", "{return true;}" );
         oxTestModules::addFunction( "oxFb", "getUser", "{return 123456;}" );
@@ -3397,8 +3382,14 @@ class Unit_Core_oxuserTest extends OxidTestCase
         $aUsers  = current( $this->_aUsers );
         $sUserId = current( $aUsers );
 
+        oxDb::getDb()->execute( "update oxuser set oxactive = 1 where oxid='$sUserId' " );
+
+        //user does not has Facebook ID
+        $testUser = new oxuser();
+        $this->assertFalse( $testUser->loadActiveUser() );
+
         // Saving user Facebook ID
-        oxDb::getDb()->execute( "update oxuser set oxactive = 1, oxfbid='123456' where oxid='$sUserId' " );
+        oxDb::getDb()->execute( "update oxuser set oxfbid='123456' where oxid='$sUserId' " );
 
         $testUser = $this->getMock( 'oxuser', array( 'isAdmin' ) );
         $testUser->expects( $this->any() )->method( 'isAdmin')->will( $this->returnValue( false ) );
@@ -3408,52 +3399,8 @@ class Unit_Core_oxuserTest extends OxidTestCase
     }
 
     /**
-     * oxuser::laodActiveUser() test loading active user via facebook connect
-     * when user logged in to fb and no user exists in db
-     */
-    public function testLoadActiveUser_FacebookConnectLoggedInNoUser()
-    {
-        oxTestModules::addFunction( "oxFb", "isConnected", "{return true;}" );
-        oxTestModules::addFunction( "oxFb", "getUser", "{return 123456;}" );
-        modConfig::getInstance()->setConfigParam( "bl_showFbConnect", true );
-
-        $aUsers  = current( $this->_aUsers );
-        $sUserId = current( $aUsers );
-
-        // Saving user Facebook ID
-        oxDb::getDb()->execute( "update oxuser set oxactive = 1, oxfbid='' where oxid='$sUserId' " );
-
-        $testUser = $this->getMock( 'oxuser', array( 'isAdmin' ) );
-        $testUser->expects( $this->any() )->method( 'isAdmin')->will( $this->returnValue( false ) );
-
-        $this->assertFalse( $testUser->loadActiveUser() );
-    }
-
-    /**
-     * oxuser::laodActiveUser() test loading active user via facebook connect
-     * when user is not connected to fb, but exists in db
-     */
-    public function testLoadActiveUser_FacebookConnectNotLoggedIn()
-    {
-        oxTestModules::addFunction( "oxFb", "isConnected", "{return false;}" );
-        oxTestModules::addFunction( "oxFb", "getUser", "{return 123456;}" );
-        modConfig::getInstance()->setConfigParam( "bl_showFbConnect", true );
-
-        $aUsers  = current( $this->_aUsers );
-        $sUserId = current( $aUsers );
-
-        // Saving user Facebook ID
-        oxDb::getDb()->execute( "update oxuser set oxactive = 1, oxfbid='123456' where oxid='$sUserId' " );
-
-        $testUser = $this->getMock( 'oxuser', array( 'isAdmin' ) );
-        $testUser->expects( $this->any() )->method( 'isAdmin')->will( $this->returnValue( false ) );
-
-        $this->assertFalse( $testUser->loadActiveUser() );
-    }
-
-    /**
-     * oxuser::laodActiveUser() test loading active user via facebook connect
-     * when facebook connect is disabled
+     * oxuser::laodActiveUser() test loading active user if facebook connect
+     * is disabled
      */
     public function testLoadActiveUser_FacebookConnectDisabled()
     {
@@ -3474,53 +3421,25 @@ class Unit_Core_oxuserTest extends OxidTestCase
     }
 
     /**
-     * oxuser::laodActiveUser() test loading active user via cookie
-     * when user exists and cookie info is correct
+     * oxuser::laodActiveUser() test loading active user if facebook connect
+     * is disabled
      */
-    public function testLoadActiveUser_CookieLogin()
+    public function testLoadActiveUser_FacebookConnectNotLoggedIn()
     {
-        modConfig::getInstance()->setConfigParam( "blShowRememberMe", true );
+        oxTestModules::addFunction( "oxFb", "isConnected", "{return false;}" );
+        oxTestModules::addFunction( "oxFb", "getUser", "{return 123456;}" );
+        modConfig::getInstance()->setConfigParam( "bl_showFbConnect", true );
 
         $aUsers  = current( $this->_aUsers );
         $sUserId = current( $aUsers );
 
-        $oUser = new oxUser();
-        $oUser->load($sUserId);
-        $oUser->oxuser__oxactive = new oxField(1, oxField::T_RAW);
-        $oUser->setPassword('testPassword');
-        $oUser->save();
-
-        oxRegistry::get("oxUtilsServer")->setUserCookie(
-            $oUser->oxuser__oxusername->value,
-            $oUser->oxuser__oxpassword->value, null, 31536000, $oUser->oxuser__oxpasssalt->value
-        );
-
-        $sCookie = oxRegistry::get("oxUtilsServer")->getUserCookie();
-
-        $testUser = $this->getMock( 'oxuser', array( 'isAdmin' ) );
-        $testUser->expects( $this->any() )->method( 'isAdmin')->will( $this->returnValue( false ) );
-
-        $this->assertTrue( $testUser->loadActiveUser() );
-
-        $this->assertEquals( $sCookie, oxRegistry::get("oxUtilsServer")->getUserCookie() );
-    }
-
-    /**
-     * oxuser::laodActiveUser() test loading active user via cookie
-     * when user defined in cookie is not found
-     */
-    public function testLoadActiveUser_CookieResetting()
-    {
-        modConfig::getInstance()->setConfigParam( "blShowRememberMe", true );
-
-        oxRegistry::get("oxUtilsServer")->setUserCookie( 'RandomUserId', 'RandomPassword');
+        // Saving user Facebook ID
+        oxDb::getDb()->execute( "update oxuser set oxactive = 1, oxfbid='123456' where oxid='$sUserId' " );
 
         $testUser = $this->getMock( 'oxuser', array( 'isAdmin' ) );
         $testUser->expects( $this->any() )->method( 'isAdmin')->will( $this->returnValue( false ) );
 
         $this->assertFalse( $testUser->loadActiveUser() );
-
-        $this->assertNull( oxRegistry::get("oxUtilsServer")->getUserCookie() );
     }
 
 
@@ -3755,18 +3674,6 @@ class Unit_Core_oxuserTest extends OxidTestCase
         $this->assertTrue($oUser->isPriceViewModeNetto() );
     }
 
-    /**
-     * Test configurable user credit rating (getBoni());
-     * Config option for this: iCreditRating;
-     */
-    public function testUserCreditRating()
-    {
-        $oUser = new oxUser();
-        $this->assertEquals( 1000, $oUser->getBoni() );
-
-        $this->getConfig()->setConfigParam('iCreditRating', 100);
-        $this->assertEquals( 100, $oUser->getBoni() );
-    }
 
 
 }

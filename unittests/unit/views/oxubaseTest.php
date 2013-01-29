@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxubaseTest.php 54061 2013-01-21 12:10:12Z aurimas.gladutis $
+ * @version   SVN: $Id: oxubaseTest.php 52660 2012-12-03 14:34:50Z aurimas.gladutis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -372,24 +372,6 @@ class Unit_Views_oxubaseTest extends OxidTestCase
             $this->assertEquals( "ox|1|1|0|0", $sId );
     }
 
-    /*
-     * Test getting view ID with SSL enabled
-     */
-    public function testGetViewIdWithSSL()
-    {
-        $myConfig = oxConfig::getInstance();
-        $myConfig->setIsSsl(true);
-
-        $oView = new oxubase();
-        $sId = $oView->getViewId();
-
-        $sShopURL = $myConfig->getShopUrl();
-        $sShopID  = $myConfig->getShopId();
-
-
-            $this->assertEquals( "ox|0|0|0|0|ssl", $sId );
-    }
-
     public function testGetMetaDescriptionForStartView()
     {
         $sVal = 'Alles zum Thema Wassersport, Sportbekleidung und Mode. Umfangreiches Produktsortiment mit den neusten Trendprodukten. Blitzschneller Versand.';
@@ -498,6 +480,7 @@ class Unit_Views_oxubaseTest extends OxidTestCase
         $oView->prepareSortColumns();
 
         //checking view data
+        $this->assertEquals( true, $oView->isSortingActive() );
         $this->assertEquals( array('oxid', 'oxprice'), $oView->getSortColumns() );
         $this->assertEquals( 'oxid asc', $oView->getSortingSql( 'xxx' ) );
     }
@@ -1027,7 +1010,7 @@ class Unit_Views_oxubaseTest extends OxidTestCase
         $oView = new oxubase();
         $oView->setItemSorting( 'xxx', 'oxid', 'asc' );
 
-        $this->assertEquals( $oView->getDefaultSorting(), $oView->getSorting( 'yyy' ) );
+        $this->assertNull( $oView->getSorting( 'yyy' ) );
 
         $this->assertEquals( $aSorting, $oView->getSorting( 'xxx' ) );
         $this->assertEquals( implode( ' ', $aSorting ), $oView->getSortingSql( 'xxx' ) );
@@ -1201,7 +1184,7 @@ class Unit_Views_oxubaseTest extends OxidTestCase
     {
         $oView = $this->getProxyClass( 'oxubase' );
         $oView->prepareSortColumns();
-        $this->assertNull( $oView->isSortingActive() );
+        $this->assertTrue( $oView->isSortingActive() );
     }
 
     public function testGetSortColumns()
@@ -1945,18 +1928,6 @@ class Unit_Views_oxubaseTest extends OxidTestCase
         $this->setRequestParam( 'deladr', 'testAddress' );
 
         $this->assertEquals( 'testAddress', $oUbase->getDeliveryAddress() );
-    }
-
-    /**
-     * tests setting of delivery method
-     */
-    public function testSetDeliveryAddress()
-    {
-        $oUbase = new oxubase();
-        $aDelAddress = array('address' => 'TestAddress');
-        $oUbase->setDeliveryAddress($aDelAddress);
-
-        $this->assertEquals( $aDelAddress, $oUbase->getDeliveryAddress() );
     }
 
     public function testSetGetInvoiceAddress()

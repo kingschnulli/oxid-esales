@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   core
- * @copyright (C) OXID eSales AG 2003-2013
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxdiscount.php 54247 2013-01-23 12:38:53Z linas.kukulskis $
+ * @version   SVN: $Id: oxdiscount.php 51556 2012-11-08 15:08:48Z linas.kukulskis $
  */
 
 /**
@@ -383,7 +383,7 @@ class oxDiscount extends oxI18n
      */
     public function getPercentage( $dPrice )
     {
-        if ( $this->getAddSumType() == 'abs' && $dPrice > 0 ) {
+        if ( $this->getAddSumType() == 'abs' ) {
             return $this->getAddSum() / $dPrice * 100;
         } else {
             return $this->getAddSum();

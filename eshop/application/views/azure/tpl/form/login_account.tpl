@@ -38,8 +38,8 @@
             </li>
             [{if $oView->showRememberMe()}]
             <li>
-                <label for="loginCookie">[{ oxmultilang ident="FORM_LOGIN_ACCOUNT_KEEPLOGGEDIN" }]</label>
-                <input id="loginCookie" type="checkbox" class="checkbox" name="lgn_cook" value="1">
+                <label>[{ oxmultilang ident="FORM_LOGIN_ACCOUNT_KEEPLOGGEDIN" }]</label>
+                <input type="checkbox" class="checkbox" name="lgn_cook" value="1">
             </li>
             [{/if}]
 

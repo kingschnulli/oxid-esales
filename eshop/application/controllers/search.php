@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   views
- * @copyright (C) OXID eSales AG 2003-2013
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: search.php 54246 2013-01-23 12:38:38Z linas.kukulskis $
+ * @version   SVN: $Id: search.php 49261 2012-09-04 07:04:02Z vilma $
  */
 
 /**
@@ -168,7 +168,7 @@ class Search extends oxUBase
 
         // searching ..
         $oSearchHandler = oxNew( 'oxsearch' );
-        $oSearchList = $oSearchHandler->getSearchArticles( $sSearchParamForQuery, $sInitialSearchCat, $sInitialSearchVendor, $sInitialSearchManufacturer, $this->getSortingSql( $this->getSortIdent() ) );
+        $oSearchList = $oSearchHandler->getSearchArticles( $sSearchParamForQuery, $sInitialSearchCat, $sInitialSearchVendor, $sInitialSearchManufacturer, $this->getSortingSql( 'oxsearch' ) );
 
         // list of found articles
         $this->_aArticleList = $oSearchList;
@@ -267,13 +267,11 @@ class Search extends oxUBase
      * @param string $sSortBy    sort field
      * @param string $sSortOrder sort order
      *
-     * @deprecated since v4.7.3/5.0.3 (2013-01-07); dublicated code
-     *
      * @return null
      */
     public function setItemSorting( $sCnid, $sSortBy, $sSortOrder  = null )
     {
-        parent::setItemSorting( $sCnid, $sSortBy, $sSortOrder );
+        parent::setItemSorting( "oxsearch", $sSortBy, $sSortOrder );
     }
 
     /**
@@ -281,13 +279,11 @@ class Search extends oxUBase
      *
      * @param string $sCnid sortable item id
      *
-     * @deprecated since v4.7.3/5.0.3 (2013-01-07); dublicated code
-     *
      * @return string
      */
     public function getSorting( $sCnid )
     {
-        return parent::getSorting( $sCnid );
+        return parent::getSorting( "oxsearch" );
     }
 
     /**
@@ -497,4 +493,5 @@ class Search extends oxUBase
     {
         return $this->_iAllArtCnt;
     }
+
 }

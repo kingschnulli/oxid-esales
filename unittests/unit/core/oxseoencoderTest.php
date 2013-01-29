@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxseoencoderTest.php 53607 2013-01-10 15:39:02Z linas.kukulskis $
+ * @version   SVN: $Id: oxseoencoderTest.php 48249 2012-08-03 15:28:46Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -470,7 +470,7 @@ class Unit_Core_oxSeoEncoderTest extends OxidTestCase
             $sTag = "flaschen";
             $sTagUrl = "tag/flaschen/";
 
-        $this->assertEquals( $sShopUrl."tag/bar-equipment/", $oTagEncoder->getTagUrl( "bar equipment", 0 ) );
+        $this->assertFalse( $oTagEncoder->getTagUrl( "bar equipment", 0 ) );
         $this->assertEquals( $sShopUrl.$sTagUrl, $oTagEncoder->getTagUrl( $sTag, 0 ) );
 
         $oVendor = new oxVendor();

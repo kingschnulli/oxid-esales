@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxlistTest.php 52577 2012-11-29 11:50:08Z aurimas.gladutis $
+ * @version   SVN: $Id: oxlistTest.php 52493 2012-11-27 16:13:19Z aurimas.gladutis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -449,29 +449,4 @@ class Unit_Core_oxlistTest extends OxidTestCase
         }
         $this->assertEquals( $iTotal, $iCount );
     }
-
-    /**
-     * Testing oxList::rewind()
-     *
-     * @return null
-     */
-    public function testRewind()
-    {
-        $aArray = array( 1 => '1',
-                         2 => '2',
-                         3 => '3',
-                         4 => '4' );
-
-        $oList = new oxlist();
-        $oList->assign( $aArray );
-        foreach ($oList as $key => $val) {
-            if ($key == 3) {
-                break;
-            }
-        }
-        $this->assertEquals( 3, $oList->current() );
-        $oList->rewind();
-        $this->assertEquals( 1, $oList->current() );
-    }
-
 }

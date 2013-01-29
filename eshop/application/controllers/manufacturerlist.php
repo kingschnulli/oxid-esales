@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   views
- * @copyright (C) OXID eSales AG 2003-2013
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: manufacturerlist.php 53615 2013-01-10 15:40:31Z linas.kukulskis $
+ * @version   SVN: $Id: manufacturerlist.php 48727 2012-08-16 09:09:02Z tomas $
  */
 
 /**
@@ -137,13 +137,11 @@ class ManufacturerList extends aList
      * @param string $sSortBy  sort field
      * @param string $sSortDir sort direction (optional)
      *
-     * @deprecated since v4.7.3/5.0.3 (2013-01-07); dublicated code
-     *
      * @return null
      */
     public function setItemSorting( $sCnid, $sSortBy, $sSortDir = null )
     {
-        parent::setItemSorting( $sCnid, $sSortBy, $sSortDir );
+        parent::setItemSorting( oxConfig::getParameter( 'mnid' ) .':manufacturer', $sSortBy, $sSortDir );
     }
 
     /**
@@ -151,13 +149,11 @@ class ManufacturerList extends aList
      *
      * @param string $sCnid sortable item id
      *
-     * @deprecated since v4.7.3/5.0.3 (2013-01-07); dublicated code
-     *
      * @return string
      */
     public function getSorting( $sCnid )
     {
-        return parent::getSorting( $sCnid );
+        return parent::getSorting( oxConfig::getParameter( 'mnid' ) .':manufacturer' );
     }
 
     /**
@@ -177,7 +173,7 @@ class ManufacturerList extends aList
 
         $oArtList = oxNew( 'oxarticlelist' );
         $oArtList->setSqlLimit( $iNrofCatArticles * $this->_getRequestPageNr(), $iNrofCatArticles );
-        $oArtList->setCustomSorting( $this->getSortingSql( $this->getSortIdent() ) );
+        $oArtList->setCustomSorting( $this->getSortingSql( $sManufacturerId ) );
 
         // load the articles
         $this->_iAllArtCnt = $oArtList->loadManufacturerArticles( $sManufacturerId, $oManufacturer );

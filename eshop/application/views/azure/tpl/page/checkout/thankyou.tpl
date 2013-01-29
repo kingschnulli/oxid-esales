@@ -1,7 +1,9 @@
 [{capture append="oxidBlock_content"}]
 
-    [{* ordering steps *}]
-    [{include file="page/checkout/inc/steps.tpl" active=5 }]
+    [{if $oView->showFinalStep()}]
+        [{* ordering steps *}]
+        [{include file="page/checkout/inc/steps.tpl" active=5 }]
+    [{/if}]
 
     [{block name="checkout_thankyou_main"}]
         [{assign var="order" value=$oView->getOrder()}]
@@ -45,7 +47,10 @@
             [{/block}]
 
             [{block name="checkout_thankyou_partners"}]
-                [{if ( $oView->getTrustedShopId()) }]
+                [{if ( $oView->getTrustedShopId()) || $iswebmiles || $oxcmp_shop->oxshops__oxadbutlerid->value ||
+                       $oxcmp_shop->oxshops__oxaffilinetid->value || $oxcmp_shop->oxshops__oxsuperclicksid->value ||
+                       $oxcmp_shop->oxshops__oxaffiliweltid->value || $oxcmp_shop->oxshops__oxaffili24id->value }]
+
                     <h3 class="blockHead">[{ oxmultilang ident="PAGE_CHECKOUT_THANKYOU_PARTNERFROM" }]</h3>
                     [{if $oView->getTrustedShopId()}]
                         <div class="etrustlogocol">
@@ -69,15 +74,66 @@
                         </form>
                         <div class="clear"></div>
                     [{/if}]
+
+                    <!-- Anfang Tracking-Code fuer Partnerprogramme -->
+
+                    [{ if $oxcmp_shop->oxshops__oxadbutlerid->value }]
+                        <!--Adbutler-->
+                        [{assign var="discountnetprice" value=$basket->getDiscountedNettoPrice()}]
+                        [{assign var="currencycovindex" value=$oView->getCurrencyCovIndex()}]
+                        <img src="https://www1.belboon.de/adtracking/sale/[{$oxcmp_shop->oxshops__oxadbutlerid->value }].gif/oc=[{$order->oxorder__oxordernr->value }]&sale=[{ $discountnetprice * $currencycovindex|string_format:"%.2f"}]&belboon=[{$oView->getBelboonParam()}]" WIDTH="1" HEIGHT="1">
+                        <object type="application/x-shockwave-flash" data="http://www1.belboon.de/tracking/flash.swf" width="1" height="1" >
+                            <param name="flashvars" value="pgmid=[{$oxcmp_shop->oxshops__oxadbutlerid->value }]&etype=sale&tparam=sale&evalue=[{ $discountnetprice * $currencycovindex|string_format:"%.2f"}]&oc=[{$order->oxorder__oxordernr->value }]">
+                            <param name="movie" value="http://www1.belboon.de/tracking/flash.swf" />
+                        </object>
+                        <!--Adbutler ende-->
+                    [{/if}]
+
+                    [{ if $oxcmp_shop->oxshops__oxaffilinetid->value }]
+                        <!--Affilinet-->
+                        [{assign var="discountnetprice" value=$basket->getDiscountedNettoPrice()}]
+                        [{assign var="currencycovindex" value=$oView->getCurrencyCovIndex()}]
+                        <img src="https://partners.webmasterplan.com/registersale.asp?site=[{$oxcmp_shop->oxshops__oxaffilinetid->value }]&amp;order=[{$order->oxorder__oxordernr->value }]&amp;curr=[{$order->oxorder__oxcurrency->value}]&amp;price=[{$discountnetprice * $currencycovindex|string_format:"%.2f"}]" WIDTH="1" HEIGHT="1">
+                        <!--Affilinet Ende-->
+                    [{/if}]
+
+                    [{ if $oxcmp_shop->oxshops__oxsuperclicksid->value }]
+                        <!--Superclix-Code-->
+                        [{assign var="discountnetprice" value=$basket->getDiscountedNettoPrice()}]
+                        [{assign var="currencycovindex" value=$oView->getCurrencyCovIndex()}]
+                        <img src="https://clix.superclix.de/cgi-bin/code.cgi?pp=[{$oxcmp_shop->oxshops__oxsuperclicksid->value }]&amp;cashflow=[{$discountnetprice * $currencycovindex|string_format:"%.2f"}]&amp;tax=1.00&amp;goods=[{$order->oxorder__oxordernr->value }]" width="1" height="1">
+                        <!--Superclix Ende-->
+                    [{/if}]
+
+                    [{ if $oxcmp_shop->oxshops__oxaffiliweltid->value }]
+                        <!--Affiliwelt-Code-->
+                        <!--img src="https://www.affiliwelt.net/partner/sregistering.php3?ID=[{$oxcmp_shop->oxshops__oxaffiliweltid->value }]&track=[{$order->oxorder__oxordernr->value }]&wert=[{ $basket->getDiscountedNettoPrice()}]&mone=EUR" width="1" height="1" border="0"-->
+                        [{assign var="discountnetprice" value=$basket->getDiscountedNettoPrice()}]
+                        [{assign var="currencycovindex" value=$oView->getCurrencyCovIndex()}]
+                        <img src="https://www.affiliwelt.net/tracking.php?prid=[{$oxcmp_shop->oxshops__oxaffiliweltid->value }]&amp;bestid=[{$order->oxorder__oxordernr->value }]&amp;beschreibung=OXID&preis=[{ $discountnetprice * $currencycovindex|string_format:"%.2f"}]" width="1" height="1">
+                        <!--Affiliwelt Ende-->
+                    [{/if}]
+
+                    [{ if $oxcmp_shop->oxshops__oxaffili24id->value }]
+                        <!--Affili24.com-->
+                        [{assign var="discountnetprice" value=$basket->getDiscountedNettoPrice()}]
+                        [{assign var="currencycovindex" value=$oView->getCurrencyCovIndex()}]
+                        <img src="https://partners.affili24.com/registering.php?ID=[{$oxcmp_shop->oxshops__oxaffili24id->value }]&amp;track=[{$order->oxorder__oxordernr->value }]&amp;wert=[{ $discountnetprice * $currencycovindex|string_format:"%.2f"}]" width="1" height="1">
+                        <!--Affili24 Ende-->
+                    [{/if}]
+
+                    <!-- Ende Tracking-Code fuer Partnerprogramme -->
                 [{/if}]
             [{/block}]
 
-            [{if $oView->getAlsoBoughtTheseProducts()}]
-                <br><br>
-                <h1 class="pageHead">
-                     [{ oxmultilang ident="PAGE_CHECKOUT_THANKYOU_ALSOBOUGHT" }]
-                </h1>
-                [{include file="widget/product/list.tpl" type=$oView->getListDisplayType() listId="alsoBoughtThankyou" products=$oView->getAlsoBoughtTheseProducts() blDisableToCart=true}]
+            [{if $oView->showFinalStep()}]
+                [{if $oView->getAlsoBoughtTheseProducts()}]
+                    <br><br>
+                    <h1 class="pageHead">
+                         [{ oxmultilang ident="PAGE_CHECKOUT_THANKYOU_ALSOBOUGHT" }]
+                    </h1>
+                    [{include file="widget/product/list.tpl" type=$oView->getListDisplayType() listId="alsoBoughtThankyou" products=$oView->getAlsoBoughtTheseProducts() blDisableToCart=true}]
+                [{/if}]
             [{/if}]
         </div>
     [{/block}]

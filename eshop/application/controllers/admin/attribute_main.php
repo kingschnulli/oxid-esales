@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: attribute_main.php 51588 2012-11-09 08:56:56Z aurimas.gladutis $
+ * @version   SVN: $Id: attribute_main.php 48727 2012-08-16 09:09:02Z tomas $
  */
 
 /**
@@ -38,18 +38,18 @@ class Attribute_Main extends oxAdminDetails
      * @return string
      */
     public function render()
-    {
+    {   $myConfig = $this->getConfig();
+
         parent::render();
-
-        $myConfig = $this->getConfig();
-
         $oAttr = oxNew( "oxattribute" );
         $soxId = $this->_aViewData["oxid"] = $this->getEditObjectId();
+        $sArticleTable = getViewName('oxarticles');
 
         // copy this tree for our article choose
+        $sChosenArtCat = oxConfig::getParameter( "artcat");
         if ( $soxId != "-1" && isset( $soxId)) {
             // generating category tree for select list
-            $this->_createCategoryTree( "artcattree", $soxId);
+            $sChosenArtCat = $this->_getCategoryTree( "artcattree", $sChosenArtCat, $soxId);
             // load object
             $oAttr->loadInLang( $this->_iEditLang, $soxId );
 
@@ -75,7 +75,7 @@ class Attribute_Main extends oxAdminDetails
 
         $this->_aViewData["edit"] =  $oAttr;
 
-        if ( $myConfig->getRequestParameter("aoc") ) {
+        if ( oxConfig::getParameter("aoc") ) {
             $oAttributeMainAjax = oxNew( 'attribute_main_ajax' );
             $this->_aViewData['oxajax'] = $oAttributeMainAjax->getColumns();
 

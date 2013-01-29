@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   core
- * @copyright (C) OXID eSales AG 2003-2013
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxbasket.php 54247 2013-01-23 12:38:53Z linas.kukulskis $
+ * @version   SVN: $Id: oxbasket.php 52000 2012-11-19 14:03:53Z linas.kukulskis $
  */
 
 /**
@@ -1229,19 +1229,9 @@ class oxBasket extends oxSuperCfg
         $dOldprice = $this->_oDiscountProductsPriceList->getSum( $this->isCalculationModeNetto() );
 
         // add basket discounts
-        if ( $oTotalPrice = $this->getTotalDiscount() ) {
-            //if total discutn was setted on order recalculation
-            $oDiscount = oxNew('oxDiscount');
-            $oDiscount->oxdiscount__oxaddsum = new oxField( $oTotalPrice->getPrice() );
-            $oDiscount->oxdiscount__oxaddsumtype = new oxField( 'abs' );
-            $aDiscounts[] = $oDiscount;
-        } else {
-            // discounts for basket
-            $aDiscounts = oxRegistry::get("oxDiscountList")->getBasketDiscounts( $this, $this->getBasketUser() );
-        }
-
+        $aDiscounts = oxRegistry::get("oxDiscountList")->getBasketDiscounts( $this, $this->getBasketUser() );
         if ( $oPriceList = $this->getDiscountProductsPrice() ) {
-                $this->_aDiscountedVats = $oPriceList->getVatInfo( $this->isCalculationModeNetto() );
+            $this->_aDiscountedVats = $oPriceList->getVatInfo( $this->isCalculationModeNetto() );
         }
 
         foreach ( $aDiscounts as $oDiscount ) {
@@ -2745,7 +2735,7 @@ class oxBasket extends oxSuperCfg
         $blIsBelowMinOrderPrice = false;
         $sConfValue = $this->getConfig()->getConfigParam( 'iMinOrderPrice' );
         if ( is_numeric($sConfValue) && $this->getProductsCount() ) {
-            $dMinOrderPrice = oxPrice::getPriceInActCurrency( ( double ) $sConfValue );
+            $dMinOrderPrice = oxPrice::getPriceInActCurrency( ( int ) $sConfValue );
             $dNotDiscountedProductPrice = 0;
             if ( $oPrice = $this->getNotDiscountProductsPrice() ) {
                 $dNotDiscountedProductPrice = $oPrice->getBruttoSum();

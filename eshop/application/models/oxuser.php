@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   core
- * @copyright (C) OXID eSales AG 2003-2013
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxuser.php 53643 2013-01-10 15:45:34Z linas.kukulskis $
+ * @version   SVN: $Id: oxuser.php 52144 2012-11-22 13:29:36Z aurimas.gladutis $
  */
 
 /**
@@ -763,16 +763,6 @@ class oxUser extends oxBase
     }
 
     /**
-     * Returns encoded delivery address.
-     *
-     * @return string
-     */
-    public function getEncodedDeliveryAddress()
-    {
-        return md5($this->_getMergedAddressFields());
-    }
-
-    /**
      * Returns user country ID, but If delivery address is given - returns
      * delivery country.
      *
@@ -1012,17 +1002,14 @@ class oxUser extends oxBase
     }
 
     /**
-     * Return standart credit rating, can be set in config option iCreditRating;
+     * No logic set, only returns "1000". You should extend this function
+     * according your needs.
      *
      * @return integer
      */
     public function getBoni()
     {
-        if ( ! $iBoni = $this->getConfig()->getConfigParam( 'iCreditRating' ) ) {
-            $iBoni = 1000;
-        }
-
-        return $iBoni;
+        return 1000;
     }
 
     /**
@@ -1196,33 +1183,6 @@ class oxUser extends oxBase
             $sCountryId = isset( $aInvAddress['oxuser__oxcountryid'] )?$aInvAddress['oxuser__oxcountryid']:'';
             $this->_setAutoGroups( $sCountryId );
         }
-    }
-
-    /**
-     * Returns merged delivery address fields.
-     *
-     * @return string
-     */
-    protected function _getMergedAddressFields()
-    {
-        $sDelAddress = '';
-        $sDelAddress .= $this->oxuser__oxcompany;
-        $sDelAddress .= $this->oxuser__oxusername;
-        $sDelAddress .= $this->oxuser__oxfname;
-        $sDelAddress .= $this->oxuser__oxlname;
-        $sDelAddress .= $this->oxuser__oxstreet;
-        $sDelAddress .= $this->oxuser__oxstreetnr;
-        $sDelAddress .= $this->oxuser__oxaddinfo;
-        $sDelAddress .= $this->oxuser__oxustid;
-        $sDelAddress .= $this->oxuser__oxcity;
-        $sDelAddress .= $this->oxuser__oxcountryid;
-        $sDelAddress .= $this->oxuser__oxstateid;
-        $sDelAddress .= $this->oxuser__oxzip;
-        $sDelAddress .= $this->oxuser__oxfon;
-        $sDelAddress .= $this->oxuser__oxfax;
-        $sDelAddress .= $this->oxuser__oxsal;
-
-        return $sDelAddress;
     }
 
     /**
@@ -1453,23 +1413,53 @@ class oxUser extends oxBase
      */
     public function loadActiveUser( $blForceAdmin = false )
     {
-        $oConfig = $this->getConfig();
+        $myConfig = $this->getConfig();
 
         $blAdmin = $this->isAdmin() || $blForceAdmin;
+        $oDb = oxDb::getDb();
 
         // first - checking session info
-        $sUserID = $blAdmin ? oxRegistry::getSession()->getVariable( 'auth' ) : oxRegistry::getSession()->getVariable( 'usr' );
-
-        // trying automatic login (by 'remember me' cookie)
+        $sUserID = $blAdmin ? oxSession::getVar( 'auth' ) : oxSession::getVar( 'usr' );
         $blFoundInCookie = false;
-        if ( !$sUserID && !$blAdmin && $oConfig->getConfigParam('blShowRememberMe') ) {
-            $sUserID = $this->_getCookieUserId();
-            $blFoundInCookie = $sUserID? true : false;
+
+        //trying automatic login (by 'remember me' cookie)
+        if ( !$sUserID && !$blAdmin && $myConfig->getConfigParam('blShowRememberMe') ) {
+            $sShopID = $myConfig->getShopId();
+            if ( ( $sSet = oxRegistry::get("oxUtilsServer")->getUserCookie( $sShopID ) ) ) {
+                $aData = explode( '@@@', $sSet );
+                $sUser = $aData[0];
+                $sPWD  = @$aData[1];
+
+                $sSelect =  'select oxid, oxpassword, oxpasssalt from oxuser where oxuser.oxpassword != "" and  oxuser.oxactive = 1 and oxuser.oxusername = '.$oDb->quote($sUser);
+
+                $rs = $oDb->select( $sSelect );
+                if ( $rs != false && $rs->recordCount() > 0 ) {
+                    while (!$rs->EOF) {
+                        $sTest = crypt( $rs->fields[1], $rs->fields[2] );
+                        if ( $sTest == $sPWD ) {
+                            // found
+                            $sUserID = $rs->fields[0];
+                            $blFoundInCookie = true;
+                            break;
+                        }
+                        $rs->moveNext();
+                    }
+                }
+            }
         }
 
-        // If facebook connection is enabled, trying to login user using Facebook ID
-        if ( !$sUserID && !$blAdmin && $oConfig->getConfigParam( "bl_showFbConnect") ) {
-            $sUserID = $this->_getFacebookUserId();
+        // Checking if user is connected via Facebook connect.
+        // If yes, trying to login user using user Facebook ID
+        if ( $myConfig->getConfigParam( "bl_showFbConnect") && !$sUserID && !$blAdmin ) {
+            $oFb = oxRegistry::get("oxFb");
+            if ( $oFb->isConnected() && $oFb->getUser() ) {
+                $sUserSelect = "oxuser.oxfbid = " . $oDb->quote( $oFb->getUser() );
+                $sShopSelect = "";
+
+
+                $sSelect =  "select oxid from oxuser where oxuser.oxactive = 1 and {$sUserSelect} {$sShopSelect} ";
+                $sUserID = $oDb->getOne( $sSelect );
+            }
         }
 
         // checking user results
@@ -1477,9 +1467,9 @@ class oxUser extends oxBase
             if ( $this->load( $sUserID ) ) {
                 // storing into session
                 if ($blAdmin) {
-                    oxRegistry::getSession()->setVariable( 'auth', $sUserID );
+                    oxSession::setVar( 'auth', $sUserID );
                 } else {
-                    oxRegistry::getSession()->setVariable( 'usr', $sUserID );
+                    oxSession::setVar( 'usr', $sUserID );
                 }
 
                 // marking the way user was loaded
@@ -1489,71 +1479,13 @@ class oxUser extends oxBase
         } else {
             // no user
             if ($blAdmin) {
-                oxRegistry::getSession()->deleteVariable( 'auth' );
+                oxSession::deleteVar( 'auth' );
             } else {
-                oxRegistry::getSession()->deleteVariable( 'usr' );
+                oxSession::deleteVar( 'usr' );
             }
 
             return false;
         }
-    }
-
-    /**
-     * Checks if user is connected via Facebook connect and if so, returns user id.
-     *
-     * @return string
-     */
-    protected function _getFacebookUserId()
-    {
-        $oDb = oxDb::getDb();
-        $oFb = oxRegistry::get("oxFb");
-        $oConfig = $this->getConfig();
-        if ( $oFb->isConnected() && $oFb->getUser() ) {
-            $sUserSelect = "oxuser.oxfbid = " . $oDb->quote( $oFb->getUser() );
-            $sShopSelect = "";
-
-
-            $sSelect =  "select oxid from oxuser where oxuser.oxactive = 1 and {$sUserSelect} {$sShopSelect} ";
-            $sUserID = $oDb->getOne( $sSelect );
-        }
-        return $sUserID;
-    }
-
-    /**
-     * Checks if user is connected via cookies and if so, returns user id.
-     *
-     * @return string
-     */
-    protected function _getCookieUserId()
-    {
-        $oConfig = $this->getConfig();
-        $sShopID = $oConfig->getShopId();
-        if ( ( $sSet = oxRegistry::get("oxUtilsServer")->getUserCookie( $sShopID ) ) ) {
-            $oDb = oxDb::getDb();
-            $aData = explode( '@@@', $sSet );
-            $sUser = $aData[0];
-            $sPWD  = @$aData[1];
-
-            $sSelect =  'select oxid, oxpassword, oxpasssalt from oxuser where oxuser.oxpassword != "" and  oxuser.oxactive = 1 and oxuser.oxusername = '.$oDb->quote($sUser);
-
-            $rs = $oDb->select( $sSelect );
-            if ( $rs != false && $rs->recordCount() > 0 ) {
-                while (!$rs->EOF) {
-                    $sTest = crypt( $rs->fields[1], $rs->fields[2] );
-                    if ( $sTest == $sPWD ) {
-                        // found
-                        $sUserID = $rs->fields[0];
-                        break;
-                    }
-                    $rs->moveNext();
-                }
-            }
-            // if cookie info is not valid, remove it.
-            if ( !$sUserID ) {
-                oxRegistry::get('oxUtilsServer')->deleteUserCookie( $sShopID );
-            }
-        }
-        return $sUserID;
     }
 
     /**

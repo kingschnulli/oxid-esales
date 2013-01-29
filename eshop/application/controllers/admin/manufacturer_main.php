@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: manufacturer_main.php 51588 2012-11-09 08:56:56Z aurimas.gladutis $
+ * @version   SVN: $Id: manufacturer_main.php 48727 2012-08-16 09:09:02Z tomas $
  */
 
 /**
@@ -54,7 +54,7 @@ class Manufacturer_Main extends oxAdminDetails
             $this->_aViewData["edit"] =  $oManufacturer;
 
             // category tree
-            $this->_createCategoryTree( "artcattree");
+            $sChosenArtCat = $this->_getCategoryTree( "artcattree", oxConfig::getParameter( "artcat"));
 
             //Disable editing for derived articles
             if ($oManufacturer->isDerived())

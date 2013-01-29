@@ -32,7 +32,7 @@
             [{/if}]
             [{foreach from=$oSelections item=oSelection}]
                 <li class="[{if $oSelection->isDisabled()}]js-disabled disabled[{/if}]">
-                    <a data-selection-id="[{$oSelection->getValue()}]" href="[{$oSelection->getLink()}]" class="[{if $oSelection->isActive()}]selected[{/if}]">[{$oSelection->getName()}]</a>
+                    <a data-seletion-id="[{$oSelection->getValue()}]" href="[{$oSelection->getLink()}]" class="[{if $oSelection->isActive()}]selected[{/if}]">[{$oSelection->getName()}]</a>
                 </li>
             [{/foreach}]
         </ul>

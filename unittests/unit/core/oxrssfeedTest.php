@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxrssfeedTest.php 53186 2012-12-20 11:40:43Z aurimas.gladutis $
+ * @version   SVN: $Id: oxrssfeedTest.php 51863 2012-11-15 12:42:59Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -70,8 +70,6 @@ class Unit_Core_oxrssfeedTest extends OxidTestCase
         $oShop = new oxShop();
         $oShop->oxshops__oxname = new oxField('name');
         $oShop->oxshops__oxversion = new oxField('oxversion');
-        $oShop->oxshops__oxfname = new oxField('John');
-        $oShop->oxshops__oxlname = new oxField('Doe');
         $oCfg->expects($this->any())->method( 'getActiveShop')->will( $this->returnValue( $oShop ) );
         $oCfg->expects($this->any())->method( 'getShopUrl')->will( $this->returnValue( "http://homeurl/" ) );
         $oCfg->expects($this->any())->method( 'getImageUrl')->will( $this->returnValue( "http://homeurl/lalala/" ) );
@@ -85,7 +83,7 @@ class Unit_Core_oxrssfeedTest extends OxidTestCase
             'language' => 'bb',
             'copyright' => 'name',
             'selflink' => '',
-            'generator' => 'name',
+            'generator' => 'OXID eShop oxversion',
             'image' => array
                 (
                     'url' => 'http://homeurl/lalala/logo.png',
@@ -110,8 +108,8 @@ class Unit_Core_oxrssfeedTest extends OxidTestCase
             'language' => 'bb',
             'copyright' => 'name',
             'selflink' => '',
-            'managingEditor' => 'emaiail.com (John Doe)',
-            'generator' => 'name',
+            'managingEditor' => 'emaiail.com',
+            'generator' => 'OXID eShop oxversion',
             'image' => array(
                 'url' => 'http://homeurl/lalala/logo.png',
                 'title' => 'name',

@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcmpUserTest.php 53164 2012-12-20 09:55:31Z aurimas.gladutis $
+ * @version   SVN: $Id: oxcmpUserTest.php 52088 2012-11-21 11:36:04Z andrius.silgalis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -389,8 +389,8 @@ class Unit_Views_oxcmpUserTest extends OxidTestCase
     public function testGetLogoutLink()
     {
         // note: modConfig mock fails for php 520
-        $oConfig = $this->getMock( 'oxConfig', array( 'getShopHomeUrl', 'isSsl' ) );
-        $oConfig->expects( $this->any() )->method( 'getShopHomeUrl' )->will( $this->returnValue( 'shopurl/?' ) );
+        $oConfig = $this->getMock( 'oxConfig', array( 'getShopSecureHomeUrl', 'isSsl' ) );
+        $oConfig->expects( $this->any() )->method( 'getShopSecureHomeUrl' )->will( $this->returnValue( 'shopurl/?' ) );
         $oConfig->expects( $this->any() )->method( 'isSsl' )->will( $this->returnValue( false ) );
 
         $oView = $this->getMock( 'modcmp_user', array( 'getConfig' ) );
@@ -413,7 +413,8 @@ class Unit_Views_oxcmpUserTest extends OxidTestCase
     public function testGetLogoutLinkIfSsl()
     {
         $oConfig = $this->getMock( 'oxConfig', array( 'getShopSecureHomeUrl', 'getShopHomeUrl', 'isSsl' ) );
-        $oConfig->expects( $this->any() )->method( 'getShopSecureHomeUrl' )->will( $this->returnValue( 'sslshopurl/?' ) );
+        $oConfig->expects( $this->any() )->method( 'getShopSecureHomeUrl' )->will( $this->returnValue( 'shopurl' ) );
+        $oConfig->expects( $this->any() )->method( 'getShopHomeUrl' )->will( $this->returnValue( 'sslshopurl/?' ) );
         $oConfig->expects( $this->any() )->method( 'isSsl' )->will( $this->returnValue( true ) );
 
         $oView = $this->getMock( 'modcmp_user', array( 'getConfig') );

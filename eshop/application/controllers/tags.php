@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   views
- * @copyright (C) OXID eSales AG 2003-2013
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: tags.php 53614 2013-01-10 15:40:21Z linas.kukulskis $
+ * @version   SVN: $Id: tags.php 51853 2012-11-15 11:28:55Z vilma $
  */
 
 /**
@@ -56,11 +56,9 @@ class Tags extends oxUBase
      */
     public function getTagCloudManager()
     {
-        $oTagList = oxNew( "oxtaglist" );
-        $oTagCloud = oxNew( "oxTagCloud" );
-        $oTagCloud->setTagList($oTagList);
-        $oTagCloud->setExtendedMode( true );
-        return $oTagCloud;
+        $oManager = oxNew( "oxTagCloud" );
+        $oManager->setExtendedMode( true );
+        return $oManager;
     }
 
     /**

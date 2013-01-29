@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: payment.php 51898 2012-11-15 15:00:00Z vilma $
+ * @version   SVN: $Id: payment.php 51960 2012-11-19 09:11:15Z vilma $
  */
 
 /**
