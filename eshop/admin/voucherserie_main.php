@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: voucherserie_main.php 51407 2012-11-06 13:20:26Z aurimas.gladutis $
+ * @version   SVN: $Id: voucherserie_main.php 51452 2012-11-07 07:57:29Z aurimas.gladutis $
  */
 
 /**

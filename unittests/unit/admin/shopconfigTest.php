@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: shopconfigTest.php 50971 2012-10-26 13:59:00Z aurimas.gladutis $
+ * @version   SVN: $Id: shopconfigTest.php 44474 2012-04-27 12:26:32Z mindaugas.rimgaila $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -237,32 +237,6 @@ class Unit_Admin_ShopConfigTest extends OxidTestCase
         $this->assertEquals('a|bc|d', $oTest->p_serializeConstraint('select', array('a', 'bc', 'd')));
     }
 
-    /**
-     * _serializeConfVar test
-     *
-     * @return null
-     */
-    public function testSerializeConfVar()
-    {
-        $sCl = oxTestModules::publicize('Shop_Config', '_serializeConfVar');
-        $oTest = new $sCl;
-        $this->assertEquals('1.1', $oTest->p_serializeConfVar('str', 'iMinOrderPrice', '1,1'));
-        $this->assertEquals('2,2', $oTest->p_serializeConfVar('str', 'shouldNotChange', '2,2'));
-    }
-
-    /**
-     * _unserializeConfVar test
-     *
-     * @return null
-     */
-    public function testUnserializeConfVar()
-    {
-        $sCl = oxTestModules::publicize('Shop_Config', '_unserializeConfVar');
-        $oTest = new $sCl;
-        $this->assertEquals('1.1', $oTest->p_unserializeConfVar('str', 'iMinOrderPrice', '1,1'));
-        $this->assertEquals('2,2', $oTest->p_unserializeConfVar('str', 'shouldNotChange', '2,2'));
-    }
-
 
     /**
      * _loadConfVars test
@@ -271,8 +245,9 @@ class Unit_Admin_ShopConfigTest extends OxidTestCase
      */
     public function testLoadConfVars()
     {
-        $oTest = new Shop_Config;
-        $aDbConfig = $oTest->loadConfVars(oxConfig::getInstance()->getShopId(), '');
+        $sCl = oxTestModules::publicize('Shop_Config', '_loadConfVars');
+        $oTest = new $sCl;
+        $aDbConfig = $oTest->p_loadConfVars(oxConfig::getInstance()->getShopId(), '');
 
         $this->assertEquals(
             array('vars', 'constraints', 'grouping'),

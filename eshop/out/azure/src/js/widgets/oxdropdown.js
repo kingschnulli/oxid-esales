@@ -16,7 +16,7 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   out
- * @copyright (C) OXID eSales AG 2003-2012
+ * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
  * @version   SVN: $Id: oxdropdown.js 35529 2011-05-23 07:31:20Z vilma $
  */
@@ -91,7 +91,7 @@
          * @return null
          */
         select : function( oSelectLink ) {
-            this.selectedValue.val( oSelectLink.attr('data-seletion-id') );
+            this.selectedValue.val( oSelectLink.attr('rel') );
             this.selectedValueLabel.text( oSelectLink.text() );
             $('a', this.valueList).removeClass('selected');
             oSelectLink.addClass('selected');
@@ -166,4 +166,4 @@
 
    $.widget("ui.oxDropDown", oxDropDown );
 
-})( jQuery );
+})( jQuery )

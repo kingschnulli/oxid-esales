@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   core
- * @copyright (C) OXID eSales AG 2003-2012
+ * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxnewsletter.php 44060 2012-04-19 07:51:59Z vaidas.matulevicius $
+ * @version   SVN: $Id: oxnewsletter.php 40592 2011-12-14 09:30:59Z arvydas.vapsva $
  */
 
 /**
@@ -163,6 +163,7 @@ class oxNewsletter extends oxBase
 
         // add currency
         $this->_setUser( $sUserid );
+
         $this->_setParams( $blPerfLoadAktion );
 
         // restoring mode ..
@@ -170,17 +171,23 @@ class oxNewsletter extends oxBase
     }
 
     /**
-     * Creates oxemail object, calls mail sending function (oxEMail::sendNewsletterMail()
-     * (#2542 added subject field)),
-     * returns true on success.
+     * Creates oxemail object, calls mail sending function (oxEMail::sendNewsletterMail()),
+     * returns true on success (if mailing function was unable to complete, sets emailing to
+     * user failure status in DB).
      *
      * @return bool
      */
     public function send()
     {
         $oxEMail = oxNew( 'oxemail' );
-        $blSend = $oxEMail->sendNewsletterMail( $this, $this->_oUser, $this->oxnewsletter__oxsubject->value );
-       
+        $blSend = $oxEMail->sendNewsletterMail( $this, $this->_oUser );
+        //print_r($oxEMail);
+        // store failed info
+        if ( !$blSend ) {
+            $oDb = oxDb::getDb();
+            $oDb->execute( "update oxnewssubscribed set oxemailfailed = '1' where oxemail = ".$oDb->quote( $this->_oUser->oxuser__oxusername->value ) );
+        }
+
         return $blSend;
     }
 
@@ -211,7 +218,7 @@ class oxNewsletter extends oxBase
         $oView->addTplParam( 'myuser', $this->_oUser );
 
         $this->_assignProducts( $oView, $blPerfLoadAktion );
-        
+
         $aInput[] = array( $this->getId().'html', $this->oxnewsletter__oxtemplate->value );
         $aInput[] = array( $this->getId().'plain', $this->oxnewsletter__oxplaintemplate->value );
         $aRes = oxUtilsView::getInstance()->parseThroughSmarty( $aInput, null, $oView, true );

@@ -245,7 +245,6 @@ class dbMaintenance
     public function dumpDB()
     {
         $sDbName = oxConfig::getInstance()->getConfigParam('dbName');
-
         $time = microtime (true);
         $this->myDB = oxDb::getDb();
         $myConfig = oxConfig::getInstance();
@@ -319,8 +318,8 @@ class dbMaintenance
                 $sEntry = 'null';
                 $sValues.='null,';
             } else {
-                $sEntry = oxDb::getDb(oxDb::FETCH_MODE_ASSOC)->quote( $sEntry );
-                $sValues.= $sEntry.',';
+                $sEntry = mysql_real_escape_string($sEntry);
+                $sValues.='"'.$sEntry.'",';
             }
 
         }
@@ -328,9 +327,7 @@ class dbMaintenance
         $sValues = substr($sValues, 0, strlen($sValues)-1);
         $sColumns.=')';
         $sValues.=')';
-
         $sSQL .=$sColumns.' VALUES '.$sValues;
-
 
         return $sSQL;
     }

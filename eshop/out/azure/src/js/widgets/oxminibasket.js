@@ -65,6 +65,7 @@
             $("#countdown").countdown(
                 function(count, element, container) {
                     if (count <= 1) {
+                        //alert('aa');
                         //closing and emptying the basket
                         $(element).parents("#basketFlyout").hide();
                         $("#countValue").parent('span').remove();

@@ -1380,6 +1380,28 @@ class Unit_Core_oxuserTest extends OxidTestCase
     }
 
     /**
+     * Testing method which sets customer number
+     */
+    public function testSetRecordNumber()
+    {
+        $myUtils  = oxUtils::getInstance();
+        $myDB     = oxDb::getDB();
+        $myConfig = oxConfig::getInstance();
+
+        // getting possible next number
+        $sQ = 'select (max(oxcustnr) + 1) as umax from oxuser';
+        $iNext = (int) $myDB->getOne( $sQ );
+
+        $sUserID = $this->_aUsers[ $this->_aShops[ rand(0, count( $this->_aShops ) - 1 ) ] ][ rand( 0, count( $this->_aUsers[ 0 ] ) - 1 ) ];
+        $oUser = $this->getProxyClass("oxUser");
+        $oUser->Load( $sUserID );
+        $oUser->UNITsetRecordNumber( 'oxcustnr' );
+
+        // testing
+        $this->assertEquals( $iNext, $oUser->oxuser__oxcustnr->value );
+    }
+
+    /**
      * Testing if inGroup method works OK
      */
     public function testInGroupWrongGroup()
@@ -3489,10 +3511,10 @@ class Unit_Core_oxuserTest extends OxidTestCase
     }
 
     /**
-     * oxuser::laodActiveUser() test loading active user via facebook connect
-     * when user logged in to fb and user exists in db
+     * oxuser::laodActiveUser() test loading active user if use is connected
+     * via facebook connect
      */
-    public function testLoadActiveUser_FacebookConnectLoggedIn()
+    public function testLoadActiveUser_loggedInViaFacebookConnect()
     {
         oxTestModules::addFunction( "oxFb", "isConnected", "{return true;}" );
         oxTestModules::addFunction( "oxFb", "getUser", "{return 123456;}" );
@@ -3501,8 +3523,14 @@ class Unit_Core_oxuserTest extends OxidTestCase
         $aUsers  = current( $this->_aUsers );
         $sUserId = current( $aUsers );
 
+        oxDb::getDb()->execute( "update oxuser set oxactive = 1 where oxid='$sUserId' " );
+
+        //user does not has Facebook ID
+        $testUser = new oxuser();
+        $this->assertFalse( $testUser->loadActiveUser() );
+
         // Saving user Facebook ID
-        oxDb::getDb()->execute( "update oxuser set oxactive = 1, oxfbid='123456' where oxid='$sUserId' " );
+        oxDb::getDb()->execute( "update oxuser set oxfbid='123456' where oxid='$sUserId' " );
 
         $testUser = $this->getMock( 'oxuser', array( 'isAdmin' ) );
         $testUser->expects( $this->any() )->method( 'isAdmin')->will( $this->returnValue( false ) );
@@ -3512,52 +3540,8 @@ class Unit_Core_oxuserTest extends OxidTestCase
     }
 
     /**
-     * oxuser::laodActiveUser() test loading active user via facebook connect
-     * when user logged in to fb and no user exists in db
-     */
-    public function testLoadActiveUser_FacebookConnectLoggedInNoUser()
-    {
-        oxTestModules::addFunction( "oxFb", "isConnected", "{return true;}" );
-        oxTestModules::addFunction( "oxFb", "getUser", "{return 123456;}" );
-        modConfig::getInstance()->setConfigParam( "bl_showFbConnect", true );
-
-        $aUsers  = current( $this->_aUsers );
-        $sUserId = current( $aUsers );
-
-        // Saving user Facebook ID
-        oxDb::getDb()->execute( "update oxuser set oxactive = 1, oxfbid='' where oxid='$sUserId' " );
-
-        $testUser = $this->getMock( 'oxuser', array( 'isAdmin' ) );
-        $testUser->expects( $this->any() )->method( 'isAdmin')->will( $this->returnValue( false ) );
-
-        $this->assertFalse( $testUser->loadActiveUser() );
-    }
-
-    /**
-     * oxuser::laodActiveUser() test loading active user via facebook connect
-     * when user is not connected to fb, but exists in db
-     */
-    public function testLoadActiveUser_FacebookConnectNotLoggedIn()
-    {
-        oxTestModules::addFunction( "oxFb", "isConnected", "{return false;}" );
-        oxTestModules::addFunction( "oxFb", "getUser", "{return 123456;}" );
-        modConfig::getInstance()->setConfigParam( "bl_showFbConnect", true );
-
-        $aUsers  = current( $this->_aUsers );
-        $sUserId = current( $aUsers );
-
-        // Saving user Facebook ID
-        oxDb::getDb()->execute( "update oxuser set oxactive = 1, oxfbid='123456' where oxid='$sUserId' " );
-
-        $testUser = $this->getMock( 'oxuser', array( 'isAdmin' ) );
-        $testUser->expects( $this->any() )->method( 'isAdmin')->will( $this->returnValue( false ) );
-
-        $this->assertFalse( $testUser->loadActiveUser() );
-    }
-
-    /**
-     * oxuser::laodActiveUser() test loading active user via facebook connect
-     * when facebook connect is disabled
+     * oxuser::laodActiveUser() test loading active user if facebook connect
+     * is disabled
      */
     public function testLoadActiveUser_FacebookConnectDisabled()
     {
@@ -3578,81 +3562,27 @@ class Unit_Core_oxuserTest extends OxidTestCase
     }
 
     /**
-     * oxuser::laodActiveUser() test loading active user via cookie
-     * when user exists and cookie info is correct
+     * oxuser::laodActiveUser() test loading active user if facebook connect
+     * is disabled
      */
-    public function testLoadActiveUser_CookieLogin()
+    public function testLoadActiveUser_FacebookConnectNotLoggedIn()
     {
-        modConfig::getInstance()->setConfigParam( "blShowRememberMe", true );
+        oxTestModules::addFunction( "oxFb", "isConnected", "{return false;}" );
+        oxTestModules::addFunction( "oxFb", "getUser", "{return 123456;}" );
+        modConfig::getInstance()->setConfigParam( "bl_showFbConnect", true );
 
         $aUsers  = current( $this->_aUsers );
         $sUserId = current( $aUsers );
 
-        $oUser = new oxUser();
-        $oUser->load($sUserId);
-        $oUser->oxuser__oxactive = new oxField(1, oxField::T_RAW);
-        $oUser->setPassword('testPassword');
-        $oUser->save();
-
-        oxUtilsServer::getInstance()->setUserCookie(
-            $oUser->oxuser__oxusername->value,
-            $oUser->oxuser__oxpassword->value, null, 31536000, $oUser->oxuser__oxpasssalt->value
-        );
-
-        $sCookie = oxUtilsServer::getInstance()->getUserCookie();
-
-        $testUser = $this->getMock( 'oxuser', array( 'isAdmin' ) );
-        $testUser->expects( $this->any() )->method( 'isAdmin')->will( $this->returnValue( false ) );
-
-        $this->assertTrue( $testUser->loadActiveUser() );
-
-        $this->assertEquals( $sCookie, oxUtilsServer::getInstance()->getUserCookie() );
-    }
-
-    /**
-     * oxuser::laodActiveUser() test loading active user via cookie
-     * when user defined in cookie is not found
-     */
-    public function testLoadActiveUser_CookieResetting()
-    {
-        modConfig::getInstance()->setConfigParam( "blShowRememberMe", true );
-
-        oxUtilsServer::getInstance()->setUserCookie( 'RandomUserId', 'RandomPassword');
+        // Saving user Facebook ID
+        oxDb::getDb()->execute( "update oxuser set oxactive = 1, oxfbid='123456' where oxid='$sUserId' " );
 
         $testUser = $this->getMock( 'oxuser', array( 'isAdmin' ) );
         $testUser->expects( $this->any() )->method( 'isAdmin')->will( $this->returnValue( false ) );
 
         $this->assertFalse( $testUser->loadActiveUser() );
-
-        $this->assertNull( oxUtilsServer::getInstance()->getUserCookie() );
     }
 
-    
-    /**
-     * Testing getLoginQuery to return correct shop select sql for admin
-     *
-     * @return null
-     */
-    public function testGetLoginQueryShopSelectAdmin()
-    {
-        $sShopID   = "shopid";
-        $oDb       = oxDb::getDb();
-        $oUser = new oxUser();
-        // case if mall users set to true should not change shopselect
-        modConfig::getInstance()->setConfigParam( "blMallUsers", true ); 
-        $blAdmin = true;
-        
-        $sWhat = "oxid";
-        
-        $sShopSelect = " and ( oxrights != 'user' ) ";
-        
-        $sLoginQuery  = "select {$sWhat} from oxuser where oxuser.oxactive = 1 and  ";
-        $sLoginQuery .= "oxuser.oxpassword = MD5( CONCAT( ".$oDb->quote( oxADMIN_PASSWD ).", UNHEX( oxuser.oxpasssalt ) ) )  and ";
-        $sLoginQuery .= "oxuser.oxusername = " . $oDb->quote( oxADMIN_LOGIN ) . " ";
-        $sLoginQuery .= "$sShopSelect ";
-        
-        $this->assertEquals( $sLoginQuery, $oUser->UNITgetLoginQuery( oxADMIN_LOGIN, oxADMIN_PASSWD, $sShopID, $blAdmin ) );
-    }
 
     public function testGetWishListId()
     {
@@ -3680,7 +3610,7 @@ class Unit_Core_oxuserTest extends OxidTestCase
         $oUser->load("oxdefaultadmin");
         $oUser->updateInvitationStatistics( $aRecEmails );
 
-        $aRec = oxDb::getDb( oxDB::FETCH_MODE_ASSOC )->getAll( "select * from oxinvitations order by oxemail");
+        $aRec = oxDb::getDb( true )->getAll( "select * from oxinvitations order by oxemail");
 
         $this->assertEquals( "oxdefaultadmin", $aRec[0]["OXUSERID"] );
         $this->assertEquals( "test1@oxid-esales.com", $aRec[0]["OXEMAIL"] );
@@ -3728,72 +3658,36 @@ class Unit_Core_oxuserTest extends OxidTestCase
         $this->assertEquals( $sQ, $oUser->UNITgetLoginQuery( 1, $sPassword, $sShopID, $blAdmin ) );
 
         // admin
-        //
-
         $sQ  = "select {$sWhat} from oxuser where oxuser.oxactive = 1 and  ";
         $sQ .= "oxuser.oxpassword = MD5( CONCAT( ".$oDb->quote( $sPassword ).", UNHEX( oxuser.oxpasssalt ) ) )  and ";
         $sQ .= "oxuser.oxusername = " . $oDb->quote( $sUser ) . " ";
         $sQ .= " and ( oxrights != 'user' )  ";
         $this->assertEquals( $sQ, $oUser->UNITgetLoginQuery( $sUser, $sPassword, $sShopID, true ) );
 
-    }
-
-    /**
-     * Test case for oxUSer::_getLoginQuery() - demoshop + admin mode
-     *
-     * @return null
-     */
-    public function testGetLoginQuery_demoShopAdminMode()
-    {
         // demoshop + admin
+        $oConfig = $this->getMock( "oxConfig", array( "isDemoShop", "getConfigParam" ) );
+        $oConfig->expects( $this->once() )->method( 'isDemoShop')->will( $this->returnValue( true ) );
 
-            $oConfig = $this->getMock( "oxConfig", array( "isDemoShop" ) );
-            $oConfig->expects( $this->once() )->method( 'isDemoShop')->will( $this->returnValue( true ) );
-            $sWhat = "oxid";
+            $oConfig->expects( $this->never() )->method( 'getConfigParam');
 
         $oUser = $this->getMock( "oxUser", array( "getConfig" ), array(), '', false );
         $oUser->expects( $this->once() )->method( 'getConfig')->will( $this->returnValue( $oConfig ) );
+        $sQ = "select $sWhat from oxuser where oxrights = 'malladmin'  and ( oxrights != 'user' )  ";
+        $this->assertEquals( $sQ, $oUser->UNITgetLoginQuery( "admin", "admin", $sShopID, true ) );
 
-        $sQ = "select $sWhat from oxuser where oxrights = 'malladmin' ";
+        // demoshop + admin, but pass or user name are not "admin"
+        $oConfig = $this->getMock( "oxConfig", array( "getConfigParam", "isDemoShop" ) );
+            $oConfig->expects( $this->never() )->method( 'getConfigParam');
+        $oConfig->expects( $this->once() )->method( 'isDemoShop')->will( $this->returnValue( true ) );
 
-        $this->assertEquals( $sQ, $oUser->UNITgetLoginQuery( "admin", "admin", "testShopId", true ) );
-    }
+        try {
+            $oUser = $this->getMock( "oxUser", array( "getConfig" ), array(), '', false );
+            $oUser->expects( $this->once() )->method( 'getConfig')->will( $this->returnValue( $oConfig ) );
+            $oUser->UNITgetLoginQuery( $sUser, $sPassword, $sShopID, true );
+        } catch ( oxUserException $oExcp ) {
+            //
+        }
 
-    /**
-     * Test case for oxUSer::_getLoginQuery() - staging mode
-     *
-     * @return null
-     */
-    public function testGetLoginQuery_demoShopAdminMode_InvalidLogin()
-    {
-        // demoshop + admin
-
-            $oConfig = $this->getMock( "oxConfig", array( "isDemoShop" ) );
-            $oConfig->expects( $this->once() )->method( 'isDemoShop')->will( $this->returnValue( true ) );
-
-        $oUser = $this->getMock( "oxUser", array( "getConfig" ), array(), '', false );
-        $oUser->expects( $this->once() )->method( 'getConfig')->will( $this->returnValue( $oConfig ) );
-
-        $this->setExpectedException( 'oxUserException' );
-        $oUser->UNITgetLoginQuery( "notadmin", "notadmin", "testShopId", true );
-    }
-
-    /**
-     * Test case for oxUSer::_getLoginQuery() - staging mode
-     *
-     * @return null
-     */
-    public function testGetLoginQuery_stagingMode()
-    {
-    }
-
-    /**
-     * Test case for oxUSer::_getLoginQuery() - staging mode
-     *
-     * @return null
-     */
-    public function testGetLoginQuery_stagingMode_InvalidLogin()
-    {
     }
 
     /**

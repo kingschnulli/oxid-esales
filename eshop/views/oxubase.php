@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   views
- * @copyright (C) OXID eSales AG 2003-2013
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxubase.php 54128 2013-01-22 11:06:15Z aurimas.gladutis $
+ * @version   SVN: $Id: oxubase.php 51387 2012-11-06 09:11:01Z andrius.silgalis $
  */
 
 /**
@@ -669,11 +669,6 @@ class oxUBase extends oxView
 
         $this->_sViewId .= "|".( (int) $this->_blForceNoIndex ).'|'.((int)$this->isRootCatChanged());
 
-        // #0004798: SSL should be included in viewId
-        if ($myConfig->isSsl()) {
-            $this->_sViewId .= "|ssl";
-        }
-
         // #0002866: external global viewID addition
         if (function_exists('customGetViewId')) {
             $oExtViewId = customGetViewId();
@@ -1039,9 +1034,6 @@ class oxUBase extends oxView
         if (!is_array($this->_aRssLinks)) {
             $this->_aRssLinks = array();
         }
-
-        $sUrl = oxUtilsUrl::getInstance()->prepareUrlForNoSession($sUrl);
-
         if ($key === null) {
             $this->_aRssLinks[] = array('title'=>$sTitle, 'link' => $sUrl);
         } else {
@@ -1247,7 +1239,7 @@ class oxUBase extends oxView
     }
 
     /**
-     * Get active currency
+     * Get active language
      *
      * @return object
      */
@@ -1257,7 +1249,7 @@ class oxUBase extends oxView
     }
 
     /**
-     * Active currency setter
+     * Active language setter
      *
      * @param object $oCur corrency object
      *
@@ -2074,15 +2066,12 @@ class oxUBase extends oxView
     }
 
     /**
-     * Returns current view title. Default is search for translation of PAGE_TITLE_{view_class_name}
+     * Returns current view title. Default is null
      *
-     * @return string
+     * @return null
      */
     public function getTitle()
     {
-        $sTranslationName = 'PAGE_TITLE_'.strtoupper($this->getConfig()->getActiveView()->getClassName());
-        $sTranslated = oxLang::getInstance()->translateString( $sTranslationName, oxLang::getInstance()->getBaseLanguage(), false );
-        return $sTranslationName == $sTranslated? null : $sTranslated;
     }
 
     /**
@@ -3147,8 +3136,7 @@ class oxUBase extends oxView
     {
         if ( $this->_aDeliveryAddress == null ) {
             $aAddress = oxConfig::getParameter( 'deladr');
-            //do not show deladr if address was reloaded
-            if ( $aAddress && !oxConfig::getParameter( 'reloadaddress' )) {
+            if ( $aAddress ) {
                 $this->_aDeliveryAddress = $aAddress;
             }
         }
@@ -3270,25 +3258,18 @@ class oxUBase extends oxView
      *
      * @return boolean
      */
-    public function isFbWidgetVisible()
+    public function isFbWidgetWisible()
     {
         if ( $this->_blFbWidgetsOn === null ) {
             $oUtils = oxUtilsServer::getInstance();
 
             // reading ..
             $this->_blFbWidgetsOn = (bool) $oUtils->getOxCookie( "fbwidgetson" );
+
+            // .. and setting back
+            $oUtils->setOxCookie( "fbwidgetson", $this->_blFbWidgetsOn ? 1 : 0 );
         }
         return $this->_blFbWidgetsOn;
-    }
-
-    /**
-     * Checks if downloadable files are turned on
-     *
-     * @return bool
-     */
-    public function isEnabledDownloadableFiles()
-    {
-        return (bool) $this->getConfig()->getConfigParam( "blEnableDownloads" );
     }
 
     /**
@@ -3298,39 +3279,6 @@ class oxUBase extends oxView
      */
     public function showRememberMe()
     {
-        return (bool) $this->getConfig()->getConfigParam('blShowRememberMe');
+        return (bool)$this->getConfig()->getConfigParam('blShowRememberMe');
     }
-
-    /**
-     * Returns true if articles shown in shop with VAT.
-     * Checks users VAT and options.
-     *
-     * @return boolean
-     */
-    public function isVatIncluded()
-    {
-        $blResult = true;
-        $oUser = $this->getUser();
-        $oVatSelector = oxNew( 'oxVatSelector' );
-        $oConfig = $this->getConfig();
-
-        if ( $oConfig->getConfigParam( 'blEnterNetPrice' ) && $oConfig->getConfigParam( 'bl_perfCalcVatOnlyForBasketOrder' ) ) {
-            $blResult = false;
-        } elseif ( $oUser && !$oVatSelector->getUserVat( $oUser ) ) {
-            $blResult = false;
-        }
-
-        return $blResult;
-    }
-
-    /**
-     * Returns true if price calculation is activated
-     *
-     * @return boolean
-     */
-    public function isPriceCalculated()
-    {
-        return (bool) $this->getConfig()->getConfigParam( 'bl_perfLoadPrice' );
-    }
-
 }

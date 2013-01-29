@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   core
- * @copyright (C) OXID eSales AG 2003-2012
+ * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxmediaurl.php 46874 2012-07-02 14:31:37Z arturas.sevcenko $
+ * @version   SVN: $Id: oxmediaurl.php 38536 2011-09-05 09:02:38Z linas.kukulskis $
  */
 
 /**
@@ -54,7 +54,7 @@ class oxMediaUrl extends oxI18n
     {
         $sUrl = $this->oxmediaurls__oxurl->value;
         //youtube link
-        if (  strpos( $sUrl, 'youtube.com' ) || strpos( $sUrl, 'youtu.be' ) ) {
+        if (strpos($sUrl, 'youtube.com')) {
             return $this->_getYoutubeHtml();
         }
 
@@ -90,7 +90,7 @@ class oxMediaUrl extends oxI18n
         if ( $this->oxmediaurls__oxisuploaded->value ) {
             $sUrl = $this->getConfig()->isSsl() ? $this->getConfig()->getSslShopUrl() : $this->getConfig()->getShopUrl();
             $sUrl .= 'out/media/';
-            $sUrl .= basename($this->oxmediaurls__oxurl->value);
+            $sUrl .= $this->oxmediaurls__oxurl->value;
         } else {
             $sUrl = $this->oxmediaurls__oxurl->value;
         }
@@ -108,12 +108,10 @@ class oxMediaUrl extends oxI18n
     public function delete( $sOXID = null )
     {
         $sFilePath = $this->getConfig()->getConfigParam('sShopDir') . "/out/media/" .
-                     basename($this->oxmediaurls__oxurl->value);
+                     $this->oxmediaurls__oxurl->value;
 
-        if ($this->oxmediaurls__oxisuploaded->value) {
-            if (file_exists($sFilePath)) {
-                unlink($sFilePath);
-            }
+        if ($this->oxmediaurls__oxisuploaded->value && file_exists($sFilePath)) {
+            unlink($sFilePath);
         }
 
         return parent::delete( $sOXID );
@@ -128,17 +126,15 @@ class oxMediaUrl extends oxI18n
     {
         $sUrl = $this->oxmediaurls__oxurl->value;
         $sDesc = $this->oxmediaurls__oxdesc->value;
-        
-        if ( strpos( $sUrl, 'youtube.com' ) ) {
-            $sYoutubeUrl = str_replace( "www.youtube.com/watch?v=", "www.youtube.com/embed/", $sUrl );
-            $sYoutubeUrl = preg_replace( '/&amp;/', '?', $sYoutubeUrl, 1 );
-        }
-        if ( strpos( $sUrl, 'youtu.be' ) ) {
-            $sYoutubeUrl = str_replace( "youtu.be/", "www.youtube.com/embed/", $sUrl );
-        }
 
-        $sYoutubeTemplate = '%s<br><iframe width="425" height="344" src="%s" frameborder="0" allowfullscreen></iframe>';
-        $sYoutubeHtml = sprintf( $sYoutubeTemplate, $sDesc, $sYoutubeUrl, $sYoutubeUrl );
+        //http://www.youtube.com/watch?v=J0oE3X4cgIc&feature=related
+        //to
+        //<object width="425" height="344"><param name="movie" value="http://www.youtube.com/v/J0oE3X4cgIc&hl=en"></param><embed src="http://www.youtube.com/v/Fx--jNQYNgA&hl=en" type="application/x-shockwave-flash" width="425" height="344"></embed></object>
+
+        $sYoutubeUrl = str_replace("www.youtube.com/watch?v=", "www.youtube.com/v/", $sUrl);
+
+        $sYoutubeTemplate = '%s<br><object type="application/x-shockwave-flash" data="%s" width="425" height="344"><param name="movie" value="%s"></object>';
+        $sYoutubeHtml = sprintf($sYoutubeTemplate, $sDesc, $sYoutubeUrl, $sYoutubeUrl);
 
         return $sYoutubeHtml;
     }

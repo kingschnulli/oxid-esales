@@ -82,9 +82,7 @@
 
         <div class="tobasket">
             [{oxhasrights ident="SHOWARTICLEPRICE"}]
-                [{assign var=tprice value=$product->getTPrice()}]
-                [{assign var=price  value=$product->getPrice()}]
-                [{if $tprice && $tprice->getBruttoPrice() > $price->getBruttoPrice()}]
+                [{if $product->getFTPrice() > $product->getFPrice()}]
                     <p class="oldPrice">
                         <strong>[{oxmultilang ident="DETAILS_REDUCEDFROM"}] <del>[{$product->getFTPrice()}] [{$currency->sign}]</del></strong>
                     </p>
@@ -93,13 +91,11 @@
             <div class="tobasketFunction clear">
                 [{oxhasrights ident="SHOWARTICLEPRICE"}]
                     <label id="productPrice_[{$testid}]" class="price">
-                        <strong>[{$product->getFPrice()}] [{$currency->sign}] [{ if $blShowToBasket }]*[{/if}]</strong>
+                        <strong>[{$product->getFPrice()}] [{$currency->sign}]</strong>
                     </label>
                     [{if $product->loadAmountPriceInfo()}]
-                        [{oxscript include="js/widgets/oxamountpriceselect.js" priority=10 }]
-                        [{include file="page/details/inc/priceinfo.tpl" oDetailsProduct=$product}]
+                        <a class="selector corners FXgradBlueDark" href="#priceinfo"><img src="[{$oViewConf->getImageUrl('selectbutton.png')}]" alt="Select"></a>
                     [{/if}]
-
                 [{/oxhasrights}]
                 [{ if $blShowToBasket }]
                     [{oxhasrights ident="TOBASKET"}]
@@ -114,40 +110,6 @@
                     </span>
                 [{/if}]
             </div>
-
-            [{* additional info *}]
-            <div class="additionalInfo clear">
-                    [{if $product->getPricePerUnit()}]
-                        <span id="productPriceUnit">[{$product->getPricePerUnit()}] [{$currency->sign}]/[{$product->getUnitName()}]</span>
-                    [{/if}]
-
-                    [{if $product->getStockStatus() == -1}]
-                        <span class="stockFlag notOnStock">
-                            [{if $product->oxarticles__oxnostocktext->value}]
-                                [{$product->oxarticles__oxnostocktext->value}]
-                            [{elseif $oViewConf->getStockOffDefaultMessage()}]
-                                [{oxmultilang ident="DETAILS_NOTONSTOCK"}]
-                            [{/if}]
-                            [{if $product->getDeliveryDate()}]
-                                [{oxmultilang ident="DETAILS_AVAILABLEON"}] [{$product->getDeliveryDate()}]
-                            [{/if}]
-                        </span>
-                    [{elseif $product->getStockStatus() == 1}]
-                        <span class="stockFlag lowStock">
-                            [{oxmultilang ident="DETAILS_LOWSTOCK"}]
-                        </span>
-                    [{elseif $product->getStockStatus() == 0}]
-                        <span class="stockFlag">
-                            [{if $product->oxarticles__oxstocktext->value}]
-                                [{$product->oxarticles__oxstocktext->value}]
-                            [{elseif $oViewConf->getStockOnDefaultMessage()}]
-                                [{oxmultilang ident="DETAILS_READYFORSHIPPING"}]
-                            [{/if}]
-                        </span>
-                    [{/if}]
-            </div>
-
         </div>
-
     </form>
 </div>

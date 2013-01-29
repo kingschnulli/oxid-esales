@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcountrylistTest.php 41741 2012-01-24 15:59:32Z vilma $
+ * @version   SVN: $Id: oxcountrylistTest.php 32008 2010-12-17 15:10:36Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -84,7 +84,7 @@ class Unit_Core_oxCountryListTest extends OxidTestCase
     {
         $oCountryList = oxNew("oxcountrylist");
         $sVN = $oCountryList->getBaseObject()->getViewName();
-        $sSelect = "SELECT oxid, oxtitle, oxisoalpha2 FROM $sVN WHERE oxtitle like 'oxCountryListTest%' ORDER BY oxorder, oxtitle" ;
+        $sSelect = "SELECT oxid, oxtitle FROM $sVN WHERE oxtitle like 'oxCountryListTest%' ORDER BY oxorder, oxtitle$sSufix" ;
         $oCountryList->selectString( $sSelect );
 
         $aList = array( '_testCountryId5', '_testCountryId1', '_testCountryId2', '_testCountryId0', '_testCountryId4', '_testCountryId3' );
@@ -103,7 +103,7 @@ class Unit_Core_oxCountryListTest extends OxidTestCase
         $oCountry->oxcountry__oxorder = new oxField('999', oxField::T_RAW);
         $oCountry->save();
         $oCountryList = oxNew("oxcountrylist");
-        $sSelect = "SELECT oxid, oxtitle as oxtitle FROM oxcountry WHERE oxtitle like 'oxCountryListTest%' ORDER BY oxorder, oxtitle";
+        $sSelect = "SELECT oxid, oxtitle$sSufix as oxtitle FROM oxcountry WHERE oxtitle like 'oxCountryListTest%' ORDER BY oxorder, oxtitle$sSufix";
         $oCountryList->selectString( $sSelect );
 
         $aList = array( '_testCountryId5', '_testCountryId1', '_testCountryId2', '_testCountryId0', '_testCountryId3', '_testCountryId4' );

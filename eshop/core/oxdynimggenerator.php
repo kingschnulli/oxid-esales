@@ -17,7 +17,7 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   core
- * @copyright (C) OXID eSales AG 2003-2012
+ * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
  * @version   SVN: $Id: oxutilspic.php 32881 2011-02-03 11:45:36Z sarunas $
  */
@@ -447,7 +447,7 @@ class oxDynImgGenerator
         if ( $iWidth && $iHeight && $sQuality ) {
 
             $oConfig = getConfig();
-            $oDb = oxDb::getDb( oxDb::FETCH_MODE_ASSOC );
+            $oDb = oxDb::getDb(true);
 
             // parameter names
             $sNames = '';

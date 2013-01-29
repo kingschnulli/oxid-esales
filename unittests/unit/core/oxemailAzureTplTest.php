@@ -258,13 +258,11 @@ class Unit_Core_oxemailAzureTplTest extends OxidTestCase
     {
         modConfig::getInstance()->setConfigParam( 'blSkipEuroReplace', true );
 
-        $oBasketItem = $this->getMock( 'oxbasketitem', array( 'getFUnitPrice', 'getFTotalPrice', 'getVatPercent', 'getAmount', 'getTitle', 'getProductId') );
+        $oBasketItem = $this->getMock( 'oxbasketitem', array( 'getFUnitPrice', 'getFTotalPrice', 'getVatPercent', 'getAmount') );
         $oBasketItem->expects( $this->any() )->method( 'getFUnitPrice' )->will($this->returnValue( '256,00' ) );
         $oBasketItem->expects( $this->any() )->method( 'getFTotalPrice' )->will($this->returnValue( 256 ) );
         $oBasketItem->expects( $this->any() )->method( 'getVatPercent' )->will($this->returnValue( 19 ) );
         $oBasketItem->expects( $this->any() )->method( 'getAmount' )->will($this->returnValue( 1 ) );
-        $oBasketItem->expects( $this->any() )->method( 'getTitle' )->will($this->returnValue( "testarticle" ) );
-        $oBasketItem->expects( $this->any() )->method( 'getProductId' )->will($this->returnValue( "_testarticleid" ) );
 
         $oBasketItem->oxarticles__oxtitle     = new oxField();
         $oBasketItem->oxarticles__oxvarselect = new oxField();
@@ -303,11 +301,10 @@ class Unit_Core_oxemailAzureTplTest extends OxidTestCase
         $oOrder->oxorder__oxtsprotectcosts = new oxField( '12' );
         $oOrder->oxorder__oxdeltype = new oxField( "oxidstandard" );
 
-        $oEmail = $this->getMock( 'oxEmail', array( "_sendMail", "_getShop", "_getUseInlineImages", 'getOrderFileList' ) );
+        $oEmail = $this->getMock( 'oxEmail', array( "_sendMail", "_getShop", "_getUseInlineImages" ) );
         $oEmail->expects( $this->once() )->method( '_sendMail')->will( $this->returnValue( true ));
         $oEmail->expects( $this->any() )->method( '_getShop')->will( $this->returnValue( $this->_oShop ));
         $oEmail->expects( $this->any() )->method( '_getUseInlineImages')->will( $this->returnValue( true ));
-        $oEmail->expects( $this->any() )->method( 'getOrderFileList')->will( $this->returnValue( false ));
 
         $blRet = $oEmail->sendOrderEmailToUser( $oOrder );
         $this->assertTrue( $blRet, 'Order email was not sent to customer');
@@ -339,12 +336,11 @@ class Unit_Core_oxemailAzureTplTest extends OxidTestCase
     {
         oxConfig::getInstance()->setConfigParam( 'blSkipEuroReplace', true );
 
-        $oBasketItem = $this->getMock( 'oxbasketitem', array( 'getFUnitPrice', 'getFTotalPrice', 'getVatPercent', 'getAmount', 'getTitle') );
+        $oBasketItem = $this->getMock( 'oxbasketitem', array( 'getFUnitPrice', 'getFTotalPrice', 'getVatPercent', 'getAmount') );
         $oBasketItem->expects( $this->any() )->method( 'getFUnitPrice' )->will($this->returnValue( '256,00' ) );
         $oBasketItem->expects( $this->any() )->method( 'getFTotalPrice' )->will($this->returnValue( 256 ) );
         $oBasketItem->expects( $this->any() )->method( 'getVatPercent' )->will($this->returnValue( 19 ) );
         $oBasketItem->expects( $this->any() )->method( 'getAmount' )->will($this->returnValue( 1 ) );
-        $oBasketItem->expects( $this->any() )->method( 'getTitle' )->will($this->returnValue( "testarticle" ) );
 
         $oBasketItem->oxarticles__oxtitle     = new oxField();
         $oBasketItem->oxarticles__oxvarselect = new oxField();
@@ -568,7 +564,6 @@ class Unit_Core_oxemailAzureTplTest extends OxidTestCase
         $sSubject   = 'testSubject';
         $sBody      = 'testBodyMessage';
         $sUserMail  = 'username@useremail.nl';
-        $sShopOwnerMail  = 'shopOwner@shopOwnerEmail.nl';
 
         $oEmail = $this->getMock( 'oxEmail', array( "_sendMail", "_getShop" ) );
         $oEmail->expects( $this->once() )->method( '_sendMail')->will( $this->returnValue( true ));
@@ -582,7 +577,7 @@ class Unit_Core_oxemailAzureTplTest extends OxidTestCase
         $aFields['sRecipientName'] = '';
         $aFields['sSubject']       = $sSubject;
         $aFields['sBody']          = $sBody;
-        $aFields['sFrom']          = $sShopOwnerMail;
+        $aFields['sFrom']          = $sUserMail;
         $aFields['sFromName']      = '';
         $aFields['sReplyTo']       = $sUserMail;
         $aFields['sReplyToName']   = '';
@@ -739,11 +734,10 @@ class Unit_Core_oxemailAzureTplTest extends OxidTestCase
         $oOrder->oxorder__oxbilllname = new oxField('testOrderBillLName', oxField::T_RAW);
         $oOrder->oxorder__oxuserid = new oxField($this->_oUser->getId(), oxField::T_RAW);
 
-        $oEmail = $this->getMock( 'oxEmail', array( "_sendMail", "_getShop", "_getUseInlineImages", 'getOrderFileList' ) );
+        $oEmail = $this->getMock( 'oxEmail', array( "_sendMail", "_getShop", "_getUseInlineImages" ) );
         $oEmail->expects( $this->once() )->method( '_sendMail')->will( $this->returnValue( true ));
         $oEmail->expects( $this->any() )->method( '_getShop')->will( $this->returnValue( $this->_oShop ));
         $oEmail->expects( $this->any() )->method( '_getUseInlineImages')->will( $this->returnValue( true ));
-        $oEmail->expects( $this->any() )->method( 'getOrderFileList')->will( $this->returnValue( false ));
 
         $blRet = $oEmail->sendSendedNowMail( $oOrder );
         $this->assertTrue( $blRet, 'Suggest mail was not sent to user' );
@@ -764,59 +758,6 @@ class Unit_Core_oxemailAzureTplTest extends OxidTestCase
         //file_put_contents ('unit/email_templates/'.__FUNCTION__.'.html', $oEmail->getBody() );
 
         if ( !$this->checkMailBody('testSendSendedNowMail', $oEmail->getBody() ) ) {
-            $this->fail('Incorect mail body');
-        }
-    }
-
-    /*
-     * Test sending download links
-     */
-    public function testSendDownloadLinksMail()
-    {
-        $myConfig = oxConfig::getInstance();
-        $myConfig->setConfigParam( 'blAdmin', true );
-        $myConfig->setAdminMode( true );
-
-        $oOrder = $this->getMock( 'oxOrder', array( "getId" ) );
-        $oOrder->expects( $this->any() )->method( 'getId')->will( $this->returnValue( '_testOrder' ));
-
-        $oOrder->oxorder__oxordernr = new oxField('123456789', oxField::T_RAW);
-        $oOrder->oxorder__oxpaid = new oxField( true );
-        $oOrder->oxorder__oxbillemail = new oxField('testOrderEmail@testuser.eu', oxField::T_RAW);
-        $oOrder->oxorder__oxbillfname = new oxField('testOrderBillFName', oxField::T_RAW);
-        $oOrder->oxorder__oxbilllname = new oxField('testOrderBillLName', oxField::T_RAW);
-        $oOrder->oxorder__oxuserid = new oxField($this->_oUser->getId(), oxField::T_RAW);
-
-        $oOrderFile = $this->getMock( 'oxOrderFile', array( "getId", "getFileSize" ) );
-        $oOrderFile->expects( $this->any() )->method( 'getId')->will( $this->returnValue( '_testOrder' ));
-        $oOrderFile->expects( $this->any() )->method( 'getFileSize')->will( $this->returnValue( '5000' ));
-        $oOrderFile->oxorderfiles__oxfilename = new oxField('testFileName', oxField::T_RAW);
-
-        $oEmail = $this->getMock( 'oxEmail', array( "_sendMail", "_getShop", "_getUseInlineImages", 'getOrderFileList' ) );
-        $oEmail->expects( $this->once() )->method( '_sendMail')->will( $this->returnValue( true ));
-        $oEmail->expects( $this->any() )->method( '_getShop')->will( $this->returnValue( $this->_oShop ));
-        $oEmail->expects( $this->any() )->method( '_getUseInlineImages')->will( $this->returnValue( true ));
-        $oEmail->expects( $this->any() )->method( 'getOrderFileList')->will( $this->returnValue( array($oOrderFile) ));
-
-        $blRet = $oEmail->sendDownloadLinksMail( $oOrder, 'testDownloadLinksSubject' );
-        $this->assertTrue( $blRet, 'SendDownloadLinks mail was not sent to user' );
-
-        // check mail fields
-        $aFields['sRecipient']     = 'testOrderEmail@testuser.eu';
-        $aFields['sRecipientName'] = 'testOrderBillFName testOrderBillLName';
-        $aFields['sSubject']       = 'testDownloadLinksSubject';
-        $aFields['sFrom']          = 'orderemail@orderemail.nl';
-        $aFields['sFromName']      = 'testShopName';
-        $aFields['sReplyTo']       = 'orderemail@orderemail.nl';
-        $aFields['sReplyToName']   = 'testShopName';
-
-        if ( !$this->checkMailFields($aFields, $oEmail) )
-            $this->fail('Incorect mail fields');
-
-        //uncoment line to generate template for checking mail body
-        //file_put_contents ('unit/email_templates/'.__FUNCTION__.'.html', $oEmail->getBody() );
-
-        if ( !$this->checkMailBody('testSendDownloadLinksMail', $oEmail->getBody() ) ) {
             $this->fail('Incorect mail body');
         }
     }

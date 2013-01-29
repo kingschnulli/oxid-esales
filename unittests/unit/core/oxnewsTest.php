@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxnewsTest.php 43511 2012-04-04 07:25:34Z linas.kukulskis $
+ * @version   SVN: $Id: oxnewsTest.php 43471 2012-04-03 14:41:22Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -60,7 +60,7 @@ class Unit_Core_oxnewsTest extends OxidTestCase
      */
     protected function tearDown()
     {
-        $oDB = oxDb::getDb( oxDB::FETCH_MODE_ASSOC );
+        $oDB = oxDb::getDb(true);
         $sDelete = "delete from oxnews where oxid='".$this->_oNews->oxnews__oxid->value."' or oxshortdesc='Test' ";
         $oDB->Execute( $sDelete );
 
@@ -104,7 +104,7 @@ class Unit_Core_oxnewsTest extends OxidTestCase
      */
     public function testAssign()
     {
-        $oDB = oxDb::getDb( oxDB::FETCH_MODE_ASSOC );
+        $oDB = oxDb::getDb(true);
         $oTestNews = oxNew( 'oxnews' );
         $oTestNews->loadInLang(1, $this->_oNews->getId() );
         $this->assertEquals( $oTestNews->oxnews__oxshortdesc->value, 'Test_news_1' );
@@ -278,7 +278,7 @@ class Unit_Core_oxnewsTest extends OxidTestCase
         $oTestNews = oxNew( 'oxnews' );
         $this->assertTrue( $oTestNews->delete( $this->_oNews->getId() ));
 
-        $oDB = oxDb::getDb( oxDB::FETCH_MODE_ASSOC );
+        $oDB = oxDb::getDb(true);
 
         $sSelect = "select * from oxobject2group where oxobjectid='".$this->_oNews->getId()."' ";
         $this->assertFalse( $oDB->GetOne( $sSelect ) );
@@ -320,7 +320,7 @@ class Unit_Core_oxnewsTest extends OxidTestCase
     public function testAssignLongDescription()
     {
         $sSql = "update oxnews set oxlongdesc = '<p>test text</p>' where oxid='".$this->_oNews->getId()."' ";
-        $oDB = oxDb::getDb( oxDB::FETCH_MODE_ASSOC );
+        $oDB = oxDb::getDb(true);
         $oDB->execute( $sSql );
 
         oxTestModules::addFunction( "oxutilsview", "parseThroughSmarty", "{return '<p>test text</p>';}" );

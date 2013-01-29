@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxseoencodertagTest.php 53210 2012-12-21 11:51:53Z aurimas.gladutis $
+ * @version   SVN: $Id: oxseoencodertagTest.php 31189 2010-11-25 12:09:33Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -127,6 +127,22 @@ class Unit_Core_oxSeoEncoderTagTest extends OxidTestCase
         $oEncoder->expects( $this->once() )->method( '_saveToDb' )->with( $this->equalTo( "dynamic" ), $this->equalTo( $sOxid ), $this->equalTo( "testStdUrl" ), $this->equalTo( 'testSeoUrl' ), $this->equalTo( 0 ), $this->equalTo( oxConfig::getInstance()->getShopId() ) );
 
         $this->assertEquals( "testSeoUrl", $oEncoder->UNITgetDynamicTagUri( $sTag, "testStdUrl", "testSeoUrl", 0, $sOxid ) );
+    }
+
+    public function testGetDynamicTagUriNoSuchTag()
+    {
+        $sOxid = "1126";
+
+        $oEncoder = $this->getMock( "oxSeoEncoderTag", array( "_trimUrl", "getDynamicObjectId", "_prepareUri", "_loadFromDb", "_copyToHistory", "_processSeoUrl", "_saveToDb" ) );
+        $oEncoder->expects( $this->once() )->method( '_trimUrl' )->with( $this->equalTo( "testStdUrl" ) )->will( $this->returnValue( "testStdUrl" ) );
+        $oEncoder->expects( $this->once() )->method( 'getDynamicObjectId' )->with( $this->equalTo( oxConfig::getInstance()->getShopId() ), $this->equalTo( "testStdUrl" ) )->will( $this->returnValue( "testId" ) );
+        $oEncoder->expects( $this->once() )->method( '_prepareUri' )->with( $this->equalTo( "testSeoUrl" ) )->will( $this->returnValue( "testSeoUrl" ) );
+        $oEncoder->expects( $this->once() )->method( '_loadFromDb' )->with( $this->equalTo( 'dynamic' ), $this->equalTo( "testId" ), $this->equalTo( 0 ) )->will( $this->returnValue( "testSeoUrl1" ) );
+        $oEncoder->expects( $this->once() )->method( '_copyToHistory' )->with( $this->equalTo( "testId" ), $this->equalTo( oxConfig::getInstance()->getShopId() ), $this->equalTo( 0 ), $this->equalTo( 'dynamic' ) );
+        $oEncoder->expects( $this->never() )->method( '_processSeoUrl' );
+        $oEncoder->expects( $this->never() )->method( '_saveToDb' );
+
+        $this->assertFalse( $oEncoder->UNITgetDynamicTagUri( "testTag", "testStdUrl", "testSeoUrl", 0, $sOxid ) );
     }
 
 }

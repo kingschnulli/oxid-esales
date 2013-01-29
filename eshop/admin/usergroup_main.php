@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   admin
- * @copyright (C) OXID eSales AG 2003-2012
+ * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: usergroup_main.php 45813 2012-06-04 07:45:24Z vaidas.matulevicius $
+ * @version   SVN: $Id: usergroup_main.php 39933 2011-11-14 08:57:50Z arvydas.vapsva $
  */
 
 /**
@@ -69,8 +69,10 @@ class UserGroup_Main extends oxAdminDetails
             }
         }
         if ( oxConfig::getParameter("aoc") ) {
-            $oUsergroupMainAjax = oxNew( 'usergroup_main_ajax' );
-            $this->_aViewData['oxajax'] = $oUsergroupMainAjax->getColumns();
+
+            $aColumns = array();
+            include_once 'inc/'.strtolower(__CLASS__).'.inc.php';
+            $this->_aViewData['oxajax'] = $aColumns;
 
             return "popups/usergroup_main.tpl";
         }

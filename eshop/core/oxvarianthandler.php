@@ -17,7 +17,7 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   core
- * @copyright (C) OXID eSales AG 2003-2012
+ * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
  * @version   SVN: $Id: oxvarianthandler.php 22524 2009-09-22 11:47:27Z tomas $
  */
@@ -185,7 +185,6 @@ class oxVariantHandler extends oxSuperCfg
                         $aParams['oxarticles__oxsort'] = $oSimpleVariant->oxarticles__oxsort->value*10 + 10*$iCounter;
                         $aParams['oxarticles__oxstock'] = 0;
                         $aParams['oxarticles__oxstockflag'] = $oSimpleVariant->oxarticles__oxstockflag->value;
-                        $aParams['oxarticles__oxisconfigurable'] = $oSimpleVariant->oxarticles__oxisconfigurable->value;
                         $sVarId = $this->_createNewVariant( $aParams, $oArticle->oxarticles__oxid->value );
                         if ( $myConfig->getConfigParam( 'blUseMultidimensionVariants' ) ) {
                             $oAttrList = oxNew('oxattribute');
@@ -211,7 +210,6 @@ class oxVariantHandler extends oxSuperCfg
                 $aParams['oxarticles__oxsort'] = 5000 + $iCounter * 1000;
                 $aParams['oxarticles__oxstock'] = 0;
                 $aParams['oxarticles__oxstockflag'] = $oArticle->oxarticles__oxstockflag->value;
-                $aParams['oxarticles__oxisconfigurable'] = $oArticle->oxarticles__oxisconfigurable->value;
                 $sVarId = $this->_createNewVariant( $aParams, $oArticle->oxarticles__oxid->value );
                 if ( $myConfig->getConfigParam( 'blUseMultidimensionVariants' ) ) {
                     $aMDVariants[$sVarId] = $aValues[$i];
@@ -385,14 +383,19 @@ class oxVariantHandler extends oxSuperCfg
         $blPerfectFit = false;
         // applying filters, disabling/activating items
         if ( ( $aFilter = $this->_cleanFilter( $aFilter ) ) ) {
-            $aFilterKeys = array_keys( $aFilter );
-            $iFilterKeysCount = count( $aFilter );
             foreach ( $aSelections as $sVariantId => &$aLineSelections ) {
                 $iActive = 0;
                 foreach ( $aFilter as $iKey => $sVal ) {
+
                     if ( strcmp( $aLineSelections[$iKey]['hash'], $sVal ) === 0 ) {
                         $aLineSelections[$iKey]['active'] = true;
                         $iActive++;
+                        foreach ($aLineSelections as $iOtherKey => &$aLineOtherVariant) {
+                            if ( $iKey != $iOtherKey ) {
+                                $aLineOtherVariant['disabled'] = false;
+                            }
+                        }
+                        unset($aLineOtherVariant);
                     } else {
                         foreach ($aLineSelections as $iOtherKey => &$aLineOtherVariant) {
                             if ( $iKey != $iOtherKey ) {
@@ -401,13 +404,8 @@ class oxVariantHandler extends oxSuperCfg
                         }
                     }
                 }
-                foreach ($aLineSelections as $iOtherKey => &$aLineOtherVariant) {
-                    if ( !in_array( $iOtherKey, $aFilterKeys ) ) {
-                        $aLineOtherVariant['disabled'] = !($iFilterKeysCount == $iActive);
-                    }
-                }
 
-                $blFitsAll = $iActive && (count($aLineSelections) == $iActive) && ($iFilterKeysCount == $iActive);
+                $blFitsAll = $iActive && (count($aLineSelections) == $iActive) && (count($aFilter) == $iActive);
                 if (($iActive > $iMaxActiveCount) || (!$blPerfectFit && $blFitsAll)) {
                     $blPerfectFit = $blFitsAll;
                     $sMostSuitableVariantId = $sVariantId;
@@ -455,7 +453,6 @@ class oxVariantHandler extends oxSuperCfg
      */
     protected function _getSelections( $sTitle )
     {
-
         if ( $this->getConfig()->getConfigParam( 'blUseMultidimensionVariants' ) ) {
             $aSelections = explode( $this->_sMdSeparator, $sTitle );
         } else {
@@ -480,10 +477,8 @@ class oxVariantHandler extends oxSuperCfg
     {
         $aReturn = false;
 
-
         // assigning variants
         $aVarSelects = $this->_getSelections( $sVarName );
-
         if ($iLimit) {
             $aVarSelects = array_slice($aVarSelects, 0, $iLimit);
         }
@@ -502,8 +497,6 @@ class oxVariantHandler extends oxSuperCfg
             if ($sActVariantId) {
                 $oCurrentVariant = $oVariantList[$sActVariantId];
             }
-
-
 
             return array(
                 'selections' => $aVariantSelections,

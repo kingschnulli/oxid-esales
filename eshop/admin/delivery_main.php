@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   admin
- * @copyright (C) OXID eSales AG 2003-2012
+ * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: delivery_main.php 45813 2012-06-04 07:45:24Z vaidas.matulevicius $
+ * @version   SVN: $Id: delivery_main.php 39913 2011-11-14 08:39:17Z arvydas.vapsva $
  */
 
 /**
@@ -104,8 +104,10 @@ class Delivery_Main extends oxAdminDetails
         $this->_aViewData["deltypes"] = $aDelTypes;
 
         if ( oxConfig::getParameter("aoc") ) {
-            $oDeliveryMainAjax = oxNew( 'delivery_main_ajax' );
-            $this->_aViewData['oxajax'] = $oDeliveryMainAjax->getColumns();
+
+            $aColumns = array();
+            include_once 'inc/'.strtolower(__CLASS__).'.inc.php';
+            $this->_aViewData['oxajax'] = $aColumns;
 
             return "popups/delivery_main.tpl";
         }

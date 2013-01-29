@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   admin
- * @copyright (C) OXID eSales AG 2003-2012
+ * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: newsletter_selection.php 45813 2012-06-04 07:45:24Z vaidas.matulevicius $
+ * @version   SVN: $Id: newsletter_selection.php 38561 2011-09-05 11:18:42Z arvydas.vapsva $
  */
 
 /**
@@ -55,8 +55,9 @@ class Newsletter_Selection extends oxAdminDetails
                 $this->_aViewData["edit"] = $oNewsletter;
 
                 if ( oxConfig::getParameter("aoc") ) {
-                    $oNewsletterSelectionAjax = oxNew( 'newsletter_selection_ajax' );
-                    $this->_aViewData['oxajax'] = $oNewsletterSelectionAjax->getColumns();
+                    $aColumns = array();
+                    include_once 'inc/'.strtolower(__CLASS__).'.inc.php';
+                    $this->_aViewData['oxajax'] = $aColumns;
                     return "popups/newsletter_selection.tpl";
                 }
             }
@@ -107,7 +108,7 @@ class Newsletter_Selection extends oxAdminDetails
                        oxnewssubscribed.oxdboptin = 1 and ( not ( oxnewssubscribed.oxemailfailed = '1') )
                        and (not(oxnewssubscribed.oxemailfailed = '1')) group by oxnewssubscribed.oxemail ) as _tmp";
 
-                $this->_iUserCount = $oDB->getOne( $sQ, false, false );
+                $this->_iUserCount = $oDB->getOne( $sQ );
             }
         }
         return $this->_iUserCount;

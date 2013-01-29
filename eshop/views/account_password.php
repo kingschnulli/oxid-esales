@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: account_password.php 53142 2012-12-19 13:28:11Z aurimas.gladutis $
+ * @version   SVN: $Id: account_password.php 44474 2012-04-27 12:26:32Z mindaugas.rimgaila $
  */
 
 
@@ -89,22 +89,20 @@ class Account_Password extends Account
             switch ( $oExcp->getMessage() ) {
                 case 'EXCEPTION_INPUT_EMPTYPASS':
                 case 'EXCEPTION_INPUT_PASSTOOSHORT':
-                    return oxUtilsView::getInstance()->addErrorToDisplay('ERROR_MESSAGE_PASSWORD_TOO_SHORT', false, true);
+                    return oxUtilsView::getInstance()->addErrorToDisplay('ACCOUNT_PASSWORD_ERRPASSWORDTOSHORT', false, true);
                 default:
-                    return oxUtilsView::getInstance()->addErrorToDisplay('ERROR_MESSAGE_PASSWORD_DO_NOT_MATCH', false, true);
+                    return oxUtilsView::getInstance()->addErrorToDisplay('ACCOUNT_PASSWORD_ERRPASSWDONOTMATCH', false, true);
             }
         }
-        
+
         if ( !$sOldPass || !$oUser->isSamePassword( $sOldPass ) ) {
-            return oxUtilsView::getInstance()->addErrorToDisplay('ERROR_MESSAGE_CURRENT_PASSWORD_INVALID', false, true);
+            return oxUtilsView::getInstance()->addErrorToDisplay('ACCOUNT_PASSWORD_ERRINCORRECTCURRENTPASSW', false, true, 'user');
         }
 
         // testing passed - changing password
         $oUser->setPassword( $sNewPass );
         if ( $oUser->save() ) {
             $this->_blPasswordChanged = true;
-            // deleting user autologin cookies.
-            oxUtilsServer::getInstance()->deleteUserCookie( $this->getConfig()->getShopId() );
         }
     }
 

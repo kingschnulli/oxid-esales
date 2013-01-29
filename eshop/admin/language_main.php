@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: language_main.php 46710 2012-06-27 08:38:41Z arturas.sevcenko $
+ * @version   SVN: $Id: language_main.php 42088 2012-02-08 14:24:08Z arvydas.vapsva $
  */
 
 /**
@@ -371,29 +371,17 @@ class Language_Main extends oxAdminDetails
     protected function _checkLangTranslations( $sOxId )
     {
         $myConfig = $this->getConfig();
-        $aLangParams = $this->_aLangData['params'][$sOxId];
-        $iBaseId = $aLangParams['baseId'];
-        $iIsActive = $aLangParams['active'];
+        $iBaseId = $this->_aLangData['params'][$sOxId]['baseId'];
 
-        $sDir = dirname( $myConfig->getDir( 'lang.php', oxLang::getInstance()->getLanguageAbbr( $iBaseId ), 0, $iBaseId ) );
-        
-        $sDirAdmin = dirname( $myConfig->getDir( 'lang.php', oxLang::getInstance()->getLanguageAbbr( $iBaseId ), 1, $iBaseId ) );
-        
+        $sDir = dirname( $myConfig->getLanguagePath( 'lang.php', 0, $iBaseId ) );
             if ( !$sDir ) {
                 //additional check for former templates
                 $sDir = dirname( $myConfig->getLanguagePath( 'lang.txt', 0, $iBaseId ) );
             }
 
-        // language not active @ frontend, lang file in /admin/ not found
-        if ( $iIsActive == 0 && empty($sDirAdmin) ) {
+        if ( empty($sDir) ) {
             $oEx = oxNew( "oxExceptionToDisplay" );
-            $oEx->setMessage( 'LANGUAGE_BACKEND_NOTRANSLATIONS_WARNING' );
-            oxUtilsView::getInstance()->addErrorToDisplay( $oEx );
-        } 
-        // language is active @ frontend, lang files in /out/ or /theme/ not found
-        elseif ( $iIsActive == 1 && empty($sDir) ) {
-            $oEx = oxNew( "oxExceptionToDisplay" );
-            $oEx->setMessage( 'LANGUAGE_FRONTEND_NOTRANSLATIONS_WARNING' );
+            $oEx->setMessage( 'LANGUAGE_NOTRANSLATIONS_WARNING' );
             oxUtilsView::getInstance()->addErrorToDisplay( $oEx );
         }
     }

@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcmp_user.php 53116 2012-12-19 08:50:55Z aurimas.gladutis $
+ * @version   SVN: $Id: oxcmp_user.php 44474 2012-04-27 12:26:32Z mindaugas.rimgaila $
  */
 
 // defining login/logout states
@@ -415,7 +415,6 @@ class oxcmp_user extends oxView
 
     /**
      * Executes oxcmp_user::_changeuser_noredirect().
-     * returns "account_user" (this redirects to billing and shipping settings page)
      *
      * @return null
      */
@@ -425,7 +424,6 @@ class oxcmp_user extends oxView
         // on selecting delivery address
 
         $this->_changeUser_noRedirect();
-        return 'account_user';
     }
 
     /**
@@ -491,9 +489,6 @@ class oxcmp_user extends oxView
             $oUser->setPassword( $sPassword );
             $oUser->oxuser__oxactive   = new oxField( $iActState, oxField::T_RAW);
 
-            // used for checking if user email currently subscribed
-            $iSubscriptionStatus = $oUser->getNewsSubscription()->getOptInStatus();
-
             $oUser->createUser();
             $oUser->load( $oUser->getId() );
             $oUser->changeUserData( $oUser->oxuser__oxusername->value, $sPassword, $sPassword, $aInvAdress, $aDelAdress );
@@ -512,14 +507,7 @@ class oxcmp_user extends oxView
 
             // assigning to newsletter
             $blOptin = oxConfig::getParameter( 'blnewssubscribed' );
-            if ( $blOptin && $iSubscriptionStatus == 1 ) {
-                // if user was assigned to newsletter and is creating account with newsletter checked, don't require confirm
-                $oUser->getNewsSubscription()->setOptInStatus(1);
-                $oUser->addToGroup( 'oxidnewsletter' );
-                $this->_blNewsSubscriptionStatus = 1;
-            } else {
-                $this->_blNewsSubscriptionStatus = $oUser->setNewsSubscription( $blOptin, $this->getConfig()->getConfigParam( 'blOrderOptInEmail' ) );
-            }
+            $this->_blNewsSubscriptionStatus = $oUser->setNewsSubscription( $blOptin, $this->getConfig()->getConfigParam( 'blOrderOptInEmail' ) );
 
             $oUser->addToGroup( 'oxidnotyetordered' );
             $oUser->addDynGroup( oxSession::getVar( 'dgr' ), $myConfig->getConfigParam( 'aDeniedDynGroups' ) );
@@ -634,8 +622,7 @@ class oxcmp_user extends oxView
             if (($blOptin = oxConfig::getParameter( 'blnewssubscribed' )) === null) {
                 $blOptin = $oUser->getNewsSubscription()->getOptInStatus();
             }
-            $blForceCheckOptIn = ( $aInvAdress['oxuser__oxusername'] !== $sUserName );
-            $this->_blNewsSubscriptionStatus = $oUser->setNewsSubscription( $blOptin, $this->getConfig()->getConfigParam( 'blOrderOptInEmail' ), $blForceCheckOptIn );
+            $this->_blNewsSubscriptionStatus = $oUser->setNewsSubscription( $blOptin, $this->getConfig()->getConfigParam( 'blOrderOptInEmail' ) );
 
         } catch ( oxUserException $oEx ) { // errors in input
             // marking error code
@@ -699,9 +686,9 @@ class oxcmp_user extends oxView
     protected function _getLogoutLink()
     {
         $myConfig = $this->getConfig();
-        $sLogoutLink = $myConfig->getShopHomeUrl();
+        $sLogoutLink = $myConfig->getShopSecureHomeUrl();
         if ( $myConfig->isSsl() ) {
-            $sLogoutLink = $myConfig->getShopSecureHomeUrl();
+            $sLogoutLink = $myConfig->getShopHomeUrl();
         }
         $sLogoutLink .= 'cl='.oxConfig::getParameter('cl').$this->getParent()->getDynUrlParams();
         if ( $sParam = oxConfig::getParameter('anid') ) {
@@ -715,9 +702,6 @@ class oxcmp_user extends oxView
         }
         if ( $sParam = oxConfig::getParameter('tpl') ) {
             $sLogoutLink .= '&amp;tpl='.$sParam;
-        }
-        if ( $sParam = oxConfig::getParameter('recommid') ) {
-            $sLogoutLink .= '&amp;recommid='.$sParam;
         }
         return $sLogoutLink.'&amp;fnc=logout';
     }

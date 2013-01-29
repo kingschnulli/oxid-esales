@@ -1,5 +1,0 @@
-# disabling file access
-<FilesMatch ".*">
- order allow,deny
- deny from all
-</FilesMatch>

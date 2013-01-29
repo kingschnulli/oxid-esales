@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   admin
- * @copyright (C) OXID eSales AG 2003-2012
+ * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: article_attribute.php 45813 2012-06-04 07:45:24Z vaidas.matulevicius $
+ * @version   SVN: $Id: article_attribute.php 33186 2011-02-10 15:53:43Z arvydas.vapsva $
  */
 
 /**
@@ -53,15 +53,18 @@ class Article_Attribute extends oxAdminDetails
             }
         }
 
+        $aColumns = array();
         $iAoc = oxConfig::getParameter("aoc");
         if ( $iAoc == 1 ) {
-            $oArticleAttributeAjax = oxNew( 'article_attribute_ajax' );
-            $this->_aViewData['oxajax'] = $oArticleAttributeAjax->getColumns();
+
+            include_once 'inc/article_attribute.inc.php';
+            $this->_aViewData['oxajax'] = $aColumns;
 
             return "popups/article_attribute.tpl";
-        } elseif ( $iAoc == 2 ) {            
-            $oArticleSelectionAjax = oxNew( 'article_selection_ajax' );
-            $this->_aViewData['oxajax'] = $oArticleSelectionAjax->getColumns();
+        } elseif ( $iAoc == 2 ) {
+
+            include_once 'inc/article_selection.inc.php';
+            $this->_aViewData['oxajax'] = $aColumns;
 
             return "popups/article_selection.tpl";
         }

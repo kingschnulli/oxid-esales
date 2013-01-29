@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxorderarticleTest.php 52665 2012-12-04 07:38:54Z aurimas.gladutis $
+ * @version   SVN: $Id: oxorderarticleTest.php 43560 2012-04-05 13:06:40Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -85,12 +85,10 @@ class Unit_Core_oxorderarticleTest extends OxidTestCase
         modConfig::getInstance()->setConfigParam( "blAllowNegativeStock", 'xxx' );
         modConfig::getInstance()->setConfigParam( "blPsBasketReservationEnabled", 0 );
 
-        $oOrderArticle = $this->getMock( "oxorderarticle", array( "updateArticleStock", "isNewOrderItem", "setIsNewOrderItem", '_setOrderFiles' ) );
+        $oOrderArticle = $this->getMock( "oxorderarticle", array( "updateArticleStock", "isNewOrderItem", "setIsNewOrderItem" ) );
         $oOrderArticle->expects( $this->once() )->method( 'updateArticleStock')->with( $this->equalTo( -999 ), 'xxx' );
         $oOrderArticle->expects( $this->once() )->method( 'isNewOrderItem')->will( $this->returnValue( true ) );
-        $oOrderArticle->expects( $this->once() )->method( '_setOrderFiles');
         $oOrderArticle->expects( $this->once() )->method( 'setIsNewOrderItem')->with( $this->equalTo( false ) );
-
         $oOrderArticle->oxorderarticles__oxstorno = new oxField( 0 );
         $oOrderArticle->oxorderarticles__oxamount = new oxField( 999 );
         $oOrderArticle->save();
@@ -485,7 +483,7 @@ class Unit_Core_oxorderarticleTest extends OxidTestCase
 
         foreach ( $oArticle as $name => $value) {
             $sFieldName = preg_replace('/oxarticles__/', 'oxorderarticles__', $name);
-            if ( isset( $oArticle->$name->value ) && !in_array( $name, array("oxarticles__oxtimestamp"))) {
+            if ( isset( $oArticle->$name->value ) ) {
                   $this->assertEquals($oArticle->$name->value, $oOrderArticle->$sFieldName->value, 'oxArticle object was not coppied correctly');
             }
         }
@@ -513,23 +511,7 @@ class Unit_Core_oxorderarticleTest extends OxidTestCase
         $oArticle->load( "_testArticleId" );
 
         $this->assertEquals( 7, $oArticle->oxarticles__oxstock->value );
-        $this->assertEquals( 3, $oArticle->oxarticles__oxsoldamount->value );
         $this->assertNotEquals( '2005-03-24 14:33:53', $oDB->getOne("select oxtimestamp from oxarticles where oxid = '_testArticleId'") );
-    }
-
-    /*
-     * Test updating article stock value when blUseStock is false
-     */
-    public function testUpdateArticleStockWithStockDisabled()
-    {
-        modConfig::getInstance()->setConfigParam( "blUseStock", 0 );
-        $this->_oOrderArticle->updateArticleStock( -3, false );
-
-        $oArticle = oxNew( "oxarticle" );
-        $oArticle->load( "_testArticleId" );
-
-        $this->assertEquals( 10, $oArticle->oxarticles__oxstock->value );
-        $this->assertEquals( 3, $oArticle->oxarticles__oxsoldamount->value );
     }
 
     /*
@@ -656,7 +638,7 @@ class Unit_Core_oxorderarticleTest extends OxidTestCase
         $this->_oOrderArticle->save();
 
         $sSQL = "select * from oxorderarticles where oxid = '_testOrderArticleId' ";
-        $rs = oxDb::getDb( oxDB::FETCH_MODE_ASSOC )->execute( $sSQL);
+        $rs = oxDb::getDb(true)->execute( $sSQL);
 
         $oOrderArticle = new oxorderarticle();
         $oOrderArticle->assign( $rs->fields ); // field names are in upercase
@@ -701,62 +683,32 @@ class Unit_Core_oxorderarticleTest extends OxidTestCase
         $oOrderArticle->oxorderarticles__oxisbundle = new oxField( true );
         $this->assertTrue( $oOrderArticle->isBundle() );
     }
-
+    
     /**
      * Testing article order getter, when order is not yet cached
      */
     public function testGetOrder()
-    {
+    {   
         // oxOrderArticle instance
-
+        
         $oOrderArticle = $this->getProxyClass( 'oxOrderArticle' );
         // overriding the oxOrder::load() method to only return true when 'test' is passed as ID
         oxTestModules::addFunction( "oxorder", 'load($sOXID)', '{ return in_array( $sOXID, array("test")); }' );
-
-        // checking if function returns NULL
-        // when it's impossible to get the order object
-        $oOrderArticle->oxorderarticles__oxorderid = new oxField( 'test1' );
+        
+        // checking if function returns NULL 
+        // when it's impossible to get the order object        
+        $oOrderArticle->oxorderarticles__oxorderid = new oxField( 'test1' );        
         $this->assertNull( $oOrderArticle->getOrder());
-
-        // checking if the function returns an oxOrder instance
+        
+        // checking if the function returns an oxOrder instance 
         // if oxorderarticles has an ID of the order
         $oOrderArticle->oxorderarticles__oxorderid->setValue( 'test' );
         $this->assertTrue( $oOrderArticle->getOrder() instanceof oxOrder );
-
+                        
         // checking if method returns the result from cache
         $oOrderArticle->setNonPublicVar( '_aOrderCache', array( 'test' => 'result' ));
-        $this->assertEquals( 'result', $oOrderArticle->getOrder());
-    }
-
-    /**
-     * Test article insert.
-     *
-     * @return null
-     */
-    public function testInsert()
-    {
-        $now = date( 'Y-m-d H:i:s', time());
-        $oOrderArticle = $this->getProxyClass( 'oxOrderArticle' );
-        $oOrderArticle->setId( '_testOrderArticleId2');
-        $oOrderArticle->UNITinsert();
-        $sOxid = oxDb::getDb()->getOne( "Select oxid from oxorderarticles where oxid = '_testOrderArticleId2'");
-        $this->assertEquals( '_testOrderArticleId2', $sOxid);
-        $this->assertTrue( $oOrderArticle->oxorderarticles__oxtimestamp->value >= $now );
-    }
-
-    /**
-     * Testing article setter getter
-     */
-    public function testSetGetArticle()
-    {
-        $oArticle = new oxArticle();
-
-        $oOrderArticle = new oxOrderArticle();
-
-        $oOrderArticle->setArticle( $oArticle );
-
-        $this->assertEquals( $oArticle, $oOrderArticle->getArticle() );
-
+        $this->assertEquals( 'result', $oOrderArticle->getOrder());        
+                
     }
 
 }

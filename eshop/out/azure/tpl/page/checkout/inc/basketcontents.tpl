@@ -3,10 +3,12 @@
 [{oxscript add="$('#checkAll, #basketRemoveAll').oxBasketChecks();"}]
 [{assign var="currency" value=$oView->getActCurrency()}]
 <form name="basket[{ $basketindex }]" action="[{ $oViewConf->getSelfActionLink() }]" method="post">
-    [{ $oViewConf->getHiddenSid() }]
-    <input type="hidden" name="cl" value="basket">
-    <input type="hidden" name="fnc" value="changebasket">
-    <input type="hidden" name="CustomError" value='basket'>
+    <div>
+        [{ $oViewConf->getHiddenSid() }]
+        <input type="hidden" name="cl" value="basket">
+        <input type="hidden" name="fnc" value="changebasket">
+        <input type="hidden" name="CustomError" value='basket'>
+    </div>
     <table id="basket" class="basketitems[{if $oViewConf->getActiveClassName() == 'order' }] orderBasketItems[{/if}]">
         <colgroup>
             [{if $editable }]<col class="editCol">[{/if}]
@@ -53,8 +55,8 @@
                     [{block name="checkout_basketcontents_basketitem_image"}]
                         [{* product image *}]
                         <td class="basketImage">
-                            <a href="[{$basketitem->getLink()}]" rel="nofollow">
-                                <img src="[{$basketitem->getIconUrl()}]" alt="[{$basketitem->getTitle()|strip_tags}]">
+                            <a href="[{ $basketproduct->getLink() }]" rel="nofollow">
+                                <img src="[{ $basketproduct->getIconUrl() }]" alt="[{ $basketproduct->oxarticles__oxtitle->value|strip_tags }]">
                             </a>
                         </td>
                     [{/block}]
@@ -63,7 +65,7 @@
                         [{* product title & number *}]
                         <td>
                             <div>
-                                <a rel="nofollow" href="[{$basketitem->getLink()}]">[{$basketitem->getTitle()}]</a>[{if $basketitem->isSkipDiscount() }] <sup><a rel="nofollow" href="#SkipDiscounts_link" >**</a></sup>[{/if}]
+                                <a rel="nofollow" href="[{ $basketproduct->getLink() }]">[{ $basketproduct->oxarticles__oxtitle->value }][{if $basketproduct->oxarticles__oxvarselect->value }], [{ $basketproduct->oxarticles__oxvarselect->value }][{/if }]</a>[{if $basketitem->isSkipDiscount() }] <sup><a rel="nofollow" href="#SkipDiscounts_link" >**</a></sup>[{/if}]
                             </div>
                             <div>
                                 [{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_ARTNOMBER" }] [{ $basketproduct->oxarticles__oxartnum->value }]
@@ -83,9 +85,9 @@
                             [{/if }]
 
                             [{if !$editable }]
-                                [{foreach key=sVar from=$basketitem->getPersParams() item=aParam }]
-                                    <p class="persparamBox"><strong>[{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_PERSPARAM" }]</strong> [{ $aParam }]</p>
-                                [{/foreach}]
+                            [{foreach key=sVar from=$basketitem->getPersParams() item=aParam }]
+                                <p class="persparamBox"><strong>[{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_PERSPARAM" }]</strong> [{ $aParam }]</p>
+                            [{/foreach}]
                             [{/if}]
                         </td>
                     [{/block}]
@@ -96,14 +98,14 @@
                         <td>
                                 [{ if !$basketitem->getWrappingId() }]
                                     [{if $editable }]
-                                        <a class="wrappingTrigger" rel="nofollow" href="#" title="[{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_ADDWRAPPING" }]">[{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_ADDWRAPPING" }]</a>
+                                        <a class="wrappingTrigger" rel="nofollow" href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=wrapping" params="aid="|cat:$basketitem->getProductId() }]" title="[{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_ADDWRAPPING" }]">[{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_ADDWRAPPING" }]</a>
                                     [{else}]
                                         [{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_NONE" }]
                                     [{/if}]
                                 [{else}]
                                     [{assign var="oWrap" value=$basketitem->getWrapping() }]
                                     [{if $editable }]
-                                        <a class="wrappingTrigger" rel="nofollow" href="#" title="[{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_ADDWRAPPING" }]">[{$oWrap->oxwrapping__oxname->value}]</a>
+                                        <a class="wrappingTrigger" rel="nofollow" href="[{ oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=wrapping" params="aid="|cat:$basketitem->getProductId() }]" title="[{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_ADDWRAPPING" }]">[{$oWrap->oxwrapping__oxname->value}]</a>
                                     [{else}]
                                         [{$oWrap->oxwrapping__oxname->value}]
                                     [{/if}]
@@ -124,16 +126,9 @@
                                 [{/if}]
 
                                 [{if !$basketitem->isBundle() || !$basketitem->isDiscountArticle()}]
-
-                                    [{if $basketproduct->oxarticles__oxisconfigurable->value}]
-                                        [{if $basketitem->getPersParams()}]
-                                            [{foreach key=sVar from=$basketitem->getPersParams() item=aParam }]
-                                                <p><strong>[{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_PERSPARAM" }]</strong> <input class="textbox persParam" type="text" name="aproducts[[{ $basketindex }]][persparam][[{ $sVar }]]" value="[{ $aParam }]"></p>
-                                            [{/foreach }]
-                                        [{ else }]
-                                            <p><strong>[{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_PERSPARAM" }]</strong> <input class="textbox persParam" type="text" name="aproducts[[{ $basketindex }]][persparam][details]" value=""></p>
-                                        [{/if}]
-                                    [{/if}]
+                                    [{foreach key=sVar from=$basketitem->getPersParams() item=aParam }]
+                                        <p><strong>[{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_PERSPARAM" }]</strong> <input class="textbox persParam" type="text" name="aproducts[[{ $basketindex }]][persparam][[{ $sVar }]]" value="[{ $aParam }]"></p>
+                                    [{/foreach }]
                                     <p>
                                         <input id="am_[{$smarty.foreach.basketContents.iteration}]" type="text" class="textbox" name="aproducts[[{ $basketindex }]][am]" value="[{ $basketitem->getAmount() }]" size="2">
                                     </p>
@@ -150,21 +145,27 @@
                     [{block name="checkout_basketcontents_basketitem_unitprice"}]
                         [{* product price *}]
                         <td>
-                            [{if $basketitem->getFUnitPrice() }][{ $basketitem->getFUnitPrice() }]&nbsp;[{ $currency->sign}][{/if}]
+                            [{if !$basketitem->isBundle() || !$basketitem->isDiscountArticle()}]
+                                [{if $basketitem->getFUnitPrice() }][{ $basketitem->getFUnitPrice() }]&nbsp;[{ $currency->sign}][{/if}]
+                            [{/if}]
                         </td>
                     [{/block}]
 
                     [{block name="checkout_basketcontents_basketitem_vat"}]
                         [{* product VAT percent *}]
                         <td>
-                            [{ $basketitem->getVatPercent() }]%
+                            [{if !$basketitem->isBundle() || !$basketitem->isDiscountArticle()}]
+                                [{ $basketitem->getVatPercent() }]%
+                            [{/if}]
                         </td>
                     [{/block}]
 
                     [{block name="checkout_basketcontents_basketitem_totalprice"}]
                         [{* product quantity * price *}]
                         <td>
-                            [{ $basketitem->getFTotalPrice() }]&nbsp;[{ $currency->sign }]
+                            [{if !$basketitem->isBundle() || !$basketitem->isDiscountArticle()}]
+                                [{ $basketitem->getFTotalPrice() }]&nbsp;[{ $currency->sign }]
+                            [{/if}]
                         </td>
                     [{/block}]
                 </tr>
@@ -176,7 +177,7 @@
                 [{foreach from=$Errors.basket item=oEr key=key }]
                     [{if $oEr->getErrorClassType() == 'oxOutOfStockException'}]
                         [{* display only the exceptions for the current article *}]
-                        [{if $basketindex == $oEr->getValue('basketIndex') }]
+                        [{if $basketproduct->oxarticles__oxid->value == $oEr->getValue('productId') }]
                             <tr class="basketError">
                                 [{if $editable }]<td></td>[{/if}]
                                     <td colspan="5">
@@ -188,11 +189,11 @@
                         [{/if}]
                     [{/if}]
                     [{if $oEr->getErrorClassType() == 'oxArticleInputException'}]
-                        [{if $basketitem->getProductId() == $oEr->getValue('productId') }]
-                            <tr class="basketError">
+                        [{if $basketproduct->oxarticles__oxid->value == $oEr->getValue('productId') }]
+                            <tr>
                                 [{if $editable }]<td></td>[{/if}]
                                 <td colspan="5">
-                                    <span class="inlineError">[{ $oEr->getOxMessage() }]</span>
+                                    [{ $oEr->getOxMessage() }]
                                 </td>
                                 [{if $oView->isWrapping() }]<td></td>[{/if}]
                                 <td></td>
@@ -325,7 +326,7 @@
                     [{block name="checkout_basketcontents_delcosts"}]
                         [{if $oxcmp_basket->getDelCostNet() }]
                             <tr>
-                                <th>[{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_SHIPPINGNET" }]</th>
+                                <th>[{if $oxcmp_basket->getDelCostVat() }][{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_SHIPPINGNET" }][{else}][{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_SHIPPING" }][{/if }]</th>
                                 <td>[{ $oxcmp_basket->getDelCostNet() }]&nbsp;[{ $currency->sign }]</td>
                             </tr>
                             [{if $oxcmp_basket->getDelCostVat() }]
@@ -334,16 +335,11 @@
                                     <td>[{ $oxcmp_basket->getDelCostVat() }]&nbsp;[{ $currency->sign }]</td>
                                 </tr>
                             [{/if }]
-                        [{elseif $oxcmp_basket->getFDeliveryCosts() }]
-                            <tr>
-                                <th>[{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_SHIPPING" }]</th>
-                                <td>[{ $oxcmp_basket->getFDeliveryCosts() }]&nbsp;[{ $currency->sign }]</td>
-                            </tr>
                         [{/if }]
                     [{/block}]
 
                     [{block name="checkout_basketcontents_paymentcosts"}]
-                        [{if $oxcmp_basket->getPayCostNet() }]
+                        [{if $oxcmp_basket->getPaymentCosts() }]
                             <tr>
                                 <th>[{if $oxcmp_basket->getPaymentCosts() >= 0}][{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_PAYMENT" }][{else}][{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_CHARGE2" }][{/if}] [{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_DISCOUNT3" }]</th>
                                 <td>[{ $oxcmp_basket->getPayCostNet() }]&nbsp;[{ $currency->sign }]</td>
@@ -354,49 +350,30 @@
                                     <td>[{ $oxcmp_basket->getPayCostVat() }]&nbsp;[{ $currency->sign }]</td>
                                 </tr>
                             [{/if }]
-                        [{elseif $oxcmp_basket->getFPaymentCosts() }]
-                            <tr>
-                                <th>[{if $oxcmp_basket->getPaymentCosts() >= 0}][{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_PAYMENT" }][{else}][{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_CHARGE2" }][{/if}] [{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_DISCOUNT3" }]</th>
-                                <td>[{ $oxcmp_basket->getFPaymentCosts() }]&nbsp;[{ $currency->sign }]</td>
-                            </tr>
                         [{/if }]
                     [{/block}]
 
                     [{block name="checkout_basketcontents_ts"}]
-                        [{if $oxcmp_basket->getTsProtectionCosts()}]
-                            [{ if $oxcmp_basket->getTsProtectionNet() }]
+                        [{ if $oxcmp_basket->getTsProtectionCosts() }]
+                            <tr>
+                                <th>[{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_TSPROTECTION" }]</th>
+                                <td>[{ $oxcmp_basket->getTsProtectionNet() }]&nbsp;[{ $currency->sign}]</td>
+                            </tr>
+                            [{ if $oxcmp_basket->getTsProtectionVat() }]
                                 <tr>
-                                    <th>[{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_TSPROTECTION" }]</th>
-                                    <td>[{ $oxcmp_basket->getTsProtectionNet() }]&nbsp;[{ $currency->sign}]</td>
-                                </tr>
-                                [{ if $oxcmp_basket->getTsProtectionVat() }]
-                                    <tr>
-                                        <th>[{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_TSPROTECTIONCHARGETAX1" }] [{ $oxcmp_basket->getTsProtectionVatPercent()}][{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_TSPROTECTIONCHARGETAX2" }]</th>
-                                        <td>[{ $oxcmp_basket->getTsProtectionVat() }]&nbsp;[{ $currency->sign}]</td>
-                                    </tr>
-                                [{/if}]
-                            [{ elseif $oxcmp_basket->getFTsProtectionCosts() }]
-                                <tr>
-                                    <th>[{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_TSPROTECTION" }]</th>
-                                    <td>[{ $oxcmp_basket->getFTsProtectionCosts() }]&nbsp;[{ $currency->sign}]</td>
+                                    <th>[{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_TSPROTECTIONCHARGETAX1" }] [{ $oxcmp_basket->getTsProtectionVatPercent()}][{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_TSPROTECTIONCHARGETAX2" }]</th>
+                                    <td>[{ $oxcmp_basket->getTsProtectionVat() }]&nbsp;[{ $currency->sign}]</td>
                                 </tr>
                             [{/if}]
                         [{/if}]
                     [{/block}]
 
                     [{block name="checkout_basketcontents_wrappingcosts"}]
-                        [{ if $oViewConf->getShowGiftWrapping() }]
-                            [{if $oxcmp_basket->getWrappCostNet() }]
-                                <tr>
-                                    <th>[{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_WRAPPINGNET" }]</th>
-                                    <td>[{ $oxcmp_basket->getWrappCostNet() }] [{ $currency->sign}]</td>
-                                </tr>
-                            [{elseif $oxcmp_basket->getFWrappingCosts() }]
-                                <tr>
-                                    <th>[{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_WRAPPINGGROSS1" }]</th>
-                                    <td>[{ $oxcmp_basket->getFWrappingCosts() }] [{ $currency->sign}]</td>
-                                </tr>
-                            [{/if}]
+                        [{ if $oViewConf->getShowGiftWrapping() && $oxcmp_basket->getWrappCostNet() }]
+                            <tr>
+                                <th>[{if $oxcmp_basket->getWrappCostVat() }][{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_WRAPPINGNET" }][{else}][{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_WRAPPINGGROSS1" }][{/if}]</th>
+                                <td>[{ $oxcmp_basket->getWrappCostNet() }] [{ $currency->sign}]</td>
+                            </tr>
                             [{if $oxcmp_basket->getWrappCostVat() }]
                                 <tr>
                                     <th>[{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_WRAPPINGTAX1" }] [{ $oxcmp_basket->getWrappCostVatPercent() }][{ oxmultilang ident="PAGE_CHECKOUT_BASKETCONTENTS_WRAPPINGTAX2" }]</th>

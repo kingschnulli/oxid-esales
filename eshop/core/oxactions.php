@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   core
- * @copyright (C) OXID eSales AG 2003-2012
+ * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxactions.php 45583 2012-05-23 10:11:42Z edvardas.gineika $
+ * @version   SVN: $Id: oxactions.php 39184 2011-10-12 13:22:30Z arvydas.vapsva $
  */
 
 /**
@@ -76,7 +76,7 @@ class oxActions extends oxI18n
     public function removeArticle( $sOxId )
     {
         // remove actions from articles also
-        $oDb = oxDb::getDb();
+        $oDb = oxDb::getDb(true);
         $sDelete = "delete from oxactions2article where oxactionid = ".$oDb->quote( $this->getId() )." and oxartid = ".$oDb->quote($sOxId)." and oxshopid = '" . $this->getShopId() . "'";
         $oDb->execute( $sDelete );
 
@@ -103,7 +103,7 @@ class oxActions extends oxI18n
 
 
         // remove actionss from articles also
-        $oDb = oxDb::getDb();
+        $oDb = oxDb::getDb(true);
         $sDelete = "delete from oxactions2article where oxactionid = ".$oDb->quote($sOxId)." and oxshopid = '" . $this->getShopId() . "'";
         $oDb->execute( $sDelete );
 
@@ -253,11 +253,7 @@ class oxActions extends oxI18n
     public function getBannerLink()
     {
         if ( isset( $this->oxactions__oxlink ) && $this->oxactions__oxlink->value ) {
-           $sUrl = $this->oxactions__oxlink->value ;
-            if ( !preg_match( "#^https?://#i", $sUrl) ) {
-                 $sUrl =  $this->getConfig()->getShopUrl() . $sUrl ;
-            }
-            return  oxUtilsUrl::getInstance()->processUrl( $sUrl );
+            return  oxUtilsUrl::getInstance()->processUrl( $this->oxactions__oxlink->value );
         } else {
             // if article is assinged to banner, getting article link
             if ( $oArticle = $this->getBannerArticle() ) {

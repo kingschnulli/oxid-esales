@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   core
- * @copyright (C) OXID eSales AG 2003-2012
+ * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxerpcsv.php 53106 2012-12-18 15:34:56Z aurimas.gladutis $
+ * @version   SVN: $Id: oxerpcsv.php 35103 2011-05-04 11:19:14Z rimvydas.paskevicius $
  */
 
 /**
@@ -289,57 +289,57 @@ class oxErpCsv extends oxERPBase
     private function getOldOrderFielsList()
     {
          $aFieldList = array(
-            'OXID'             => 'OXID',
-            'OXSHOPID'         => 'OXSHOPID',
-            'OXUSERID'         => 'OXUSERID',
-            'OXORDERDATE'     => 'OXORDERDATE',
-            'OXORDERNR'         => 'OXORDERNR',
-            'OXBILLCOMPANY'     => 'OXBILLCOMPANY',
-            'OXBILLEMAIL'     => 'OXBILLEMAIL',
-            'OXBILLFNAME'     => 'OXBILLFNAME',
-            'OXBILLLNAME'     => 'OXBILLLNAME',
-            'OXBILLSTREET'     => 'OXBILLSTREET',
+            'OXID'		     => 'OXID',
+            'OXSHOPID'		 => 'OXSHOPID',
+            'OXUSERID'		 => 'OXUSERID',
+            'OXORDERDATE'	 => 'OXORDERDATE',
+            'OXORDERNR'		 => 'OXORDERNR',
+            'OXBILLCOMPANY'	 => 'OXBILLCOMPANY',
+            'OXBILLEMAIL'	 => 'OXBILLEMAIL',
+            'OXBILLFNAME'	 => 'OXBILLFNAME',
+            'OXBILLLNAME'	 => 'OXBILLLNAME',
+            'OXBILLSTREET'	 => 'OXBILLSTREET',
             'OXBILLSTREETNR' => 'OXBILLSTREETNR',
-            'OXBILLADDINFO'     => 'OXBILLADDINFO',
-            'OXBILLUSTID'     => 'OXBILLUSTID',
-            'OXBILLCITY'     => 'OXBILLCITY',
-            'OXBILLCOUNTRY'     => 'OXBILLCOUNTRY',
-            'OXBILLZIP'         => 'OXBILLZIP',
-            'OXBILLFON'         => 'OXBILLFON',
-            'OXBILLFAX'         => 'OXBILLFAX',
-            'OXBILLSAL'         => 'OXBILLSAL',
-            'OXDELCOMPANY'     => 'OXDELCOMPANY',
-            'OXDELFNAME'     => 'OXDELFNAME',
-            'OXDELLNAME'     => 'OXDELLNAME',
-            'OXDELSTREET'     => 'OXDELSTREET',
-            'OXDELSTREETNR'     => 'OXDELSTREETNR',
-            'OXDELADDINFO'     => 'OXDELADDINFO',
-            'OXDELCITY'         => 'OXDELCITY',
-            'OXDELCOUNTRY'     => 'OXDELCOUNTRY',
-            'OXDELZIP'         => 'OXDELZIP',
-            'OXDELFON'         => 'OXDELFON',
-            'OXDELFAX'         => 'OXDELFAX',
-            'OXDELSAL'         => 'OXDELSAL',
-            'OXDELCOST'         => 'OXDELCOST',
-            'OXDELVAT'         => 'OXDELVAT',
-            'OXPAYCOST'         => 'OXPAYCOST',
-            'OXPAYVAT'         => 'OXPAYVAT',
-            'OXWRAPCOST'     => 'OXWRAPCOST',
-            'OXWRAPVAT'         => 'OXWRAPVAT',
-            'OXCARDID'         => 'OXCARDID',
-            'OXCARDTEXT'     => 'OXCARDTEXT',
-            'OXDISCOUNT'     => 'OXDISCOUNT',
-            'OXBILLNR'         => 'OXBILLNR',
-            'OXREMARK'         => 'OXREMARK',
-            'OXVOUCHERDISCOUNT'         => 'OXVOUCHERDISCOUNT',
-            'OXCURRENCY'     => 'OXCURRENCY',
-            'OXCURRATE'         => 'OXCURRATE',
-            'OXTRANSID'         => 'OXTRANSID',
-            'OXPAID'         => 'OXPAID',
-            'OXIP'             => 'OXIP',
-            'OXTRANSSTATUS'     => 'OXTRANSSTATUS',
-            'OXLANG'         => 'OXLANG',
-            'OXDELTYPE'         => 'OXDELTYPE'
+            'OXBILLADDINFO'	 => 'OXBILLADDINFO',
+            'OXBILLUSTID'	 => 'OXBILLUSTID',
+            'OXBILLCITY'	 => 'OXBILLCITY',
+            'OXBILLCOUNTRY'	 => 'OXBILLCOUNTRY',
+            'OXBILLZIP'		 => 'OXBILLZIP',
+            'OXBILLFON'		 => 'OXBILLFON',
+            'OXBILLFAX'		 => 'OXBILLFAX',
+            'OXBILLSAL'		 => 'OXBILLSAL',
+            'OXDELCOMPANY'	 => 'OXDELCOMPANY',
+            'OXDELFNAME'	 => 'OXDELFNAME',
+            'OXDELLNAME'	 => 'OXDELLNAME',
+            'OXDELSTREET'	 => 'OXDELSTREET',
+            'OXDELSTREETNR'	 => 'OXDELSTREETNR',
+            'OXDELADDINFO'	 => 'OXDELADDINFO',
+            'OXDELCITY'		 => 'OXDELCITY',
+            'OXDELCOUNTRY'	 => 'OXDELCOUNTRY',
+            'OXDELZIP'		 => 'OXDELZIP',
+            'OXDELFON'		 => 'OXDELFON',
+            'OXDELFAX'		 => 'OXDELFAX',
+            'OXDELSAL'		 => 'OXDELSAL',
+            'OXDELCOST'		 => 'OXDELCOST',
+            'OXDELVAT'		 => 'OXDELVAT',
+            'OXPAYCOST'		 => 'OXPAYCOST',
+            'OXPAYVAT'		 => 'OXPAYVAT',
+            'OXWRAPCOST'	 => 'OXWRAPCOST',
+            'OXWRAPVAT'		 => 'OXWRAPVAT',
+            'OXCARDID'		 => 'OXCARDID',
+            'OXCARDTEXT'	 => 'OXCARDTEXT',
+            'OXDISCOUNT'	 => 'OXDISCOUNT',
+            'OXBILLNR'		 => 'OXBILLNR',
+            'OXREMARK'		 => 'OXREMARK',
+            'OXVOUCHERDISCOUNT'		 => 'OXVOUCHERDISCOUNT',
+            'OXCURRENCY'	 => 'OXCURRENCY',
+            'OXCURRATE'		 => 'OXCURRATE',
+            'OXTRANSID'		 => 'OXTRANSID',
+            'OXPAID'		 => 'OXPAID',
+            'OXIP'		     => 'OXIP',
+            'OXTRANSSTATUS'	 => 'OXTRANSSTATUS',
+            'OXLANG'		 => 'OXLANG',
+            'OXDELTYPE'		 => 'OXDELTYPE'
             );
 
             return $aFieldList;
@@ -418,12 +418,10 @@ class oxErpCsv extends oxERPBase
 
         if ( isset($aRow['OXID'] ) ) {
             $this->_checkIDField($aRow['OXID']);
-        }
-        // #0004426
-        /*else {
+        } else {
             $this->_checkIDField($aRow['OXARTNUM']);
             $aRow['OXID'] = $aRow['OXARTNUM'];
-        }*/
+        }
 
         $sResult = $this->_save( $oType, $aRow, $this->_sCurrVersion == "0.1"); // V0.1 allowes the shopid to be set no matter which login
         return (boolean) $sResult;
@@ -512,7 +510,7 @@ class oxErpCsv extends oxERPBase
         $oDb = oxDb::getDb();
 
         $sSql = "select OXID from oxobject2category where oxobjectid = ".$oDb->quote( $aRow['OXOBJECTID'] )." and OXCATNID = ".$oDb->quote( $aRow['OXCATNID'] );
-        $aRow['OXID'] = $oDb->getOne( $sSql, false, false );
+        $aRow['OXID'] = $oDb->GetOne($sSql);
 
         $sResult = $this->_save( $oType, $aRow);
         if ((boolean) $sResult) {

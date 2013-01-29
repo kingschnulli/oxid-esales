@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   views
- * @copyright (C) OXID eSales AG 2003-2012
+ * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: payment.php 45770 2012-05-31 11:55:04Z edvardas.gineika $
+ * @version   SVN: $Id: payment.php 40613 2011-12-14 13:59:39Z mindaugas.rimgaila $
  */
 
 /**
@@ -113,12 +113,6 @@ class Payment extends oxUBase
      */
     protected $_aTsProducts = null;
 
-    /**
-     * Filtered dyndata marker
-     * @var bool 
-     */
-    protected $_blDynDataFiltered = false;
-    
     /**
      * Executes parent method parent::init().
      *
@@ -258,7 +252,7 @@ class Payment extends oxUBase
 
     /**
      * Validates oxidcreditcard and oxiddebitnote user payment data.
-     * Returns null if problems on validating occured. If everything
+     * Returns false if problems on validating occured. If everything
      * is OK - returns "order" and redirects to payment confirmation
      * page.
      *
@@ -300,11 +294,6 @@ class Payment extends oxUBase
             oxSession::setVar( 'payerror', 1 );
             return;
         }
-        
-        if ( $this->getDynDataFiltered() && $sPaymentId == 'oxidcreditcard' ) {
-            oxSession::setVar( 'payerror', 7 );
-            return;
-        }
 
         $oBasket = $mySession->getBasket();
         $oBasket->setPayment(null);
@@ -315,7 +304,7 @@ class Payment extends oxUBase
         $dBasketPrice = $oBasket->getPriceForPayment();
 
         $blOK = $oPayment->isValidPayment( $aDynvalue, $myConfig->getShopId(), $oUser, $dBasketPrice, $sShipSetId );
-  
+
         if ( $blOK ) {
             oxSession::setVar( 'paymentid', $sPaymentId );
             oxSession::setVar( 'dynvalue', $aDynvalue );
@@ -449,16 +438,6 @@ class Payment extends oxUBase
     public function getPaymentError()
     {
         return $this->_sPaymentError;
-    }
-
-    /**
-     * Dyndata filter marker getter. Returns if dyndata is filtered
-     * 
-     * @return boolean 
-     */
-    public function getDynDataFiltered()
-    {
-        return $this->_blDynDataFiltered;
     }
 
     /**
@@ -598,30 +577,6 @@ class Payment extends oxUBase
     }
 
     /**
-     * Function to check if array values are empty againts given array keys 
-     * 
-     * @param array $aData array of data to check
-     * @param array $aKeys array of array indexes
-     * 
-     * @return bool 
-     */
-    protected function _checkArrValuesEmpty( $aData, $aKeys ) 
-    {
-        if ( !is_array( $aKeys ) || count( $aKeys ) < 1 ) {
-            return false;
-        }
-        
-        foreach ( $aKeys as $sKey ) {
-            if ( isset( $aData[$sKey] ) && !empty( $aData[$sKey] ) ) {
-                return false;
-            }
-        }
-        
-        return true;
-    }
-
-
-    /**
      * Due to legal reasons probably you are not allowed to store or even handle credit card data.
      * In this case we just delete and forget all submited credit card data from this point.
      * Override this method if you actually want to process credit card data.
@@ -634,20 +589,13 @@ class Payment extends oxUBase
     protected function _filterDynData()
     {
         //in case we actually ARE allowed to store the data
-        if (oxConfig::getInstance()->getConfigParam("blStoreCreditCardInfo")) {
-            //then do nothing and reset _blDynDataFiltered
-            $this->_blDynDataFiltered = false;
+        if (oxConfig::getInstance()->getConfigParam("blStoreCreditCardInfo"))
+            //then do nothing
             return;
-        }
-            
+
         $aDynData = $this->getSession()->getVar("dynvalue");
-        
-        $aFields = array("kktype", "kknumber", "kkname", "kkmonth", "kkyear", "kkpruef");
-  
-        if ( $aDynData ) {
-            if ( !$this->_checkArrValuesEmpty( $aDynData, $aFields ) ) {
-                $this->_blDynDataFiltered = true;
-            }
+
+        if ($aDynData) {
             $aDynData["kktype"] = null;
             $aDynData["kknumber"] = null;
             $aDynData["kkname"] = null;
@@ -657,11 +605,6 @@ class Payment extends oxUBase
             oxSession::setVar("dynvalue", $aDynData);
         }
 
-        if (  !$this->_checkArrValuesEmpty( $_REQUEST["dynvalue"], $aFields ) ||
-              !$this->_checkArrValuesEmpty( $_POST["dynvalue"], $aFields ) ||
-              !$this->_checkArrValuesEmpty( $_GET["dynvalue"], $aFields ) ) {
-            $this->_blDynDataFiltered = true;
-        }
 
         unset($_REQUEST["dynvalue"]["kktype"]);
         unset($_REQUEST["dynvalue"]["kknumber"]);

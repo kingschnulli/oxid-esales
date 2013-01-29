@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxviewTest.php 44704 2012-05-09 11:24:03Z linas.kukulskis $
+ * @version   SVN: $Id: oxviewTest.php 44471 2012-04-27 12:06:58Z vaidas.matulevicius $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -657,12 +657,6 @@ class Unit_Views_oxviewTest extends OxidTestCase
     {
         $oView = new oxView();
         $this->assertNull( $oView->getViewId() );        
-    }
-
-    public function testShowRdfa()
-    {
-        $oView = new oxview();
-        $this->assertFalse( $oView->showRdfa() );
     }
 
 }

@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutils.php 51662 2012-11-12 09:33:47Z aurimas.gladutis $
+ * @version   SVN: $Id: oxutils.php 49879 2012-09-28 12:36:38Z tomas $
  */
 
 /**
@@ -55,20 +55,6 @@ class oxUtils extends oxSuperCfg
      * @var string
      */
     protected $_sPermanentCachePattern = "/c_fieldnames_/";
-
-    /**
-     * Pattern used to filter needed to remove language cache files.
-     *
-     * @var string
-     */
-    protected $_sLanguageCachePattern = "/c_langcache_/i";
-
-    /**
-     * Pattern used to filter needed to remove admin menu cache files.
-     *
-     * @var string
-     */
-    protected $_sMenuCachePattern = "/c_menu_/i";
 
     /**
      * File cache contents.
@@ -266,33 +252,6 @@ class oxUtils extends oxSuperCfg
     }
 
     /**
-     * Returns formatted float, according to formatting standards.
-     *
-     * @param string $sValue Formatted price
-     *
-     * @return float
-     */
-    public function string2Float( $sValue)
-    {
-        $fRet = str_replace( " ", "", $sValue);
-        $iCommaPos = strpos( $fRet, ",");
-        $iDotPos = strpos( $fRet, ".");
-        if (!$iDotPos xor !$iCommaPos) {
-            if (substr_count( $fRet, ",") > 1 || substr_count( $fRet, ".") > 1) {
-                $fRet = str_replace( array(",","."), "", $fRet);
-            } else {
-                $fRet = str_replace( ",", ".", $fRet);
-            }
-        } else if ( $iDotPos < $iCommaPos ) {
-            $fRet = str_replace( ".", "", $fRet);
-            $fRet = str_replace( ",", ".", $fRet);
-        }
-        // remove thousands
-        $fRet = str_replace( array(" ",","), "", $fRet);
-        return (float) $fRet;
-    }
-
-    /**
      * Checks if current web client is Search Engine. Returns true on success.
      *
      * @param string $sClient user browser agent
@@ -418,7 +377,7 @@ class oxUtils extends oxSuperCfg
     }
 
     /**
-     * Rounds the value to currency cents. This method does NOT format the number.
+     * Rounds the value to currency cents
      *
      * @param string $sVal the value that should be rounded
      * @param object $oCur Currenncy Object
@@ -792,76 +751,12 @@ class oxUtils extends oxSuperCfg
      */
     public function oxResetFileCache()
     {
-        $aFiles = glob( $this->getCacheFilePath( null, true ) . '*' );
-        if ( is_array( $aFiles ) ) {
+        $aPathes = glob( $this->getCacheFilePath( null, true ) . '*' );
+        if ( is_array( $aPathes ) ) {
             // delete all the files, except cached tables fieldnames
-            $aFiles = preg_grep( $this->_sPermanentCachePattern, $aFiles, PREG_GREP_INVERT );
-            foreach ( $aFiles as $sFile ) {
-                @unlink( $sFile );
-            }
-        }
-    }
-
-    /**
-     * Removes smarty template cache for given templates
-     *
-     * @param array $aTemplates Template name array
-     *
-     * @return null
-     */
-    public function resetTemplateCache($aTemplates)
-    {
-        $aFiles = glob( $this->getCacheFilePath( null, true ) . '*' );
-        if ( is_array( $aFiles ) && is_array( $aTemplates ) && count($aTemplates) ) {
-            // delete all template cache files
-            foreach ($aTemplates as &$sTemplate) {
-                $sTemplate = preg_quote(basename(strtolower($sTemplate), '.tpl'));
-            }
-
-            $sPattern = sprintf("/%%(%s)\.tpl\.php$/i", implode('|', $aTemplates));
-            $aFiles = preg_grep( $sPattern, $aFiles );
-            
-            if (is_array( $aFiles ) ) {
-                foreach ( $aFiles as $sFile ) {
-                    @unlink( $sFile );
-                }
-            }
-        }
-
-    }
-
-    /**
-     * Removes language constant cache
-     *
-     * @return null
-     */
-    public function resetLanguageCache()
-    {
-        $aFiles = glob( $this->getCacheFilePath( null, true ) . '*' );
-        if ( is_array( $aFiles ) ) {
-            // delete all language cache files
-            $sPattern = $this->_sLanguageCachePattern;
-            $aFiles = preg_grep( $sPattern, $aFiles );
-            foreach ( $aFiles as $sFile ) {
-                @unlink( $sFile );
-            }
-        }
-    }
-
-    /**
-     * Removes admin menu cache
-     *
-     * @return null
-     */
-    public function resetMenuCache()
-    {
-        $aFiles = glob( $this->getCacheFilePath( null, true ) . '*' );
-        if ( is_array( $aFiles ) ) {
-            // delete all menu cache files
-            $sPattern = $this->_sMenuCachePattern;
-            $aFiles = preg_grep( $sPattern, $aFiles );
-            foreach ( $aFiles as $sFile ) {
-                @unlink( $sFile );
+            $aPathes = preg_grep( $this->_sPermanentCachePattern, $aPathes, PREG_GREP_INVERT );
+            foreach ( $aPathes as $sFilename ) {
+                @unlink( $sFilename );
             }
         }
     }
@@ -933,9 +828,8 @@ class oxUtils extends oxSuperCfg
              ( $sAdminSid = oxUtilsServer::getInstance()->getOxCookie( 'admin_sid' ) ) ) {
 
             $sTable = getViewName( 'oxuser' );
-            $oDb = oxDb::getDb();
-            $sQ = "select 1 from $sTable where MD5( CONCAT( ".$oDb->quote($sAdminSid).", {$sTable}.oxid, {$sTable}.oxpassword, {$sTable}.oxrights ) ) = ".oxDb::getDb()->quote($sPrevId);
-            $blCan = (bool) $oDb->getOne( $sQ );
+            $sQ = "select 1 from $sTable where MD5( CONCAT( ?, {$sTable}.oxid, {$sTable}.oxpassword, {$sTable}.oxrights ) ) = ?";
+            $blCan = (bool) oxDb::getDb()->getOne( $sQ, array( $sAdminSid, $sPrevId ) );
         }
 
         return $blCan;
@@ -1071,23 +965,24 @@ class oxUtils extends oxSuperCfg
      *
      * @param int $iShopId current shop id
      *
-     * @deprecated use oxShopMetaData::getInstance()->getShopBit since 4.6
-     *
      * @return int
      */
     public function getShopBit( $iShopId )
     {
-        return oxShopMetaData::getInstance()->getShopBit( $iShopId );
+        $iShopId = (int) $iShopId;
+        //this works for large numbers when $sShopNr is up to (inclusive) 64
+        $iRes = oxDb::getDb()->getOne( "select 1 << ( $iShopId - 1 ) as shopbit" );
+
+        //as php ints supports only 32 bits, we return string.
+        return $iRes;
     }
 
-   /**
+    /**
      * Binary AND implementation.
      * We use mySQL to calculate that, as currently php int size is only 32 bit.
      *
      * @param int $iVal1 value nr 1
      * @param int $iVal2 value nr 2
-     *
-     * @deprecated use oxShopMetaData::getInstance()->isIncludedInShop or oxShopMetaData::getInstance()->isExcludedFromShop since 4.6
      *
      * @return int
      */
@@ -1106,8 +1001,6 @@ class oxUtils extends oxSuperCfg
      *
      * @param int $iVal1 value nr 1
      * @param int $iVal2 value nr 2
-     *
-     * @deprecated since 4.6
      *
      * @return int
      */

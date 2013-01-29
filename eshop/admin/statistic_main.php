@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   admin
- * @copyright (C) OXID eSales AG 2003-2012
+ * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: statistic_main.php 45813 2012-06-04 07:45:24Z vaidas.matulevicius $
+ * @version   SVN: $Id: statistic_main.php 38161 2011-08-12 12:44:20Z vilma $
  */
 
 /**
@@ -88,8 +88,9 @@ class Statistic_Main extends oxAdminDetails
         $this->_aViewData['ireports'] = count($aReports);
 
         if ( oxConfig::getParameter("aoc") ) {
-            $oStatisticMainAjax = oxNew( 'statistic_main_ajax' );
-            $this->_aViewData['oxajax'] = $oStatisticMainAjax->getColumns();
+            $aColumns = array();
+            include_once 'inc/'.strtolower(__CLASS__).'.inc.php';
+            $this->_aViewData['oxajax'] = $aColumns;
 
             return "popups/statistic_main.tpl";
         }

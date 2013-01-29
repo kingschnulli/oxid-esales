@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxconfig.php 51662 2012-11-12 09:33:47Z aurimas.gladutis $
+ * @version   SVN: $Id: oxconfig.php 49757 2012-09-25 13:24:14Z tomas $
  */
 
 define( 'MAX_64BIT_INTEGER', '18446744073709551615' );
@@ -272,13 +272,6 @@ class oxConfig extends oxSuperCfg
     protected $_sResourceDir = 'src';
 
     /**
-     * Modules dir name
-     *
-     * @var string
-     */
-    protected $_sModulesDir = 'modules';
-
-    /**
      * Whether shop is in SSL mode
      *
      * @var bool
@@ -305,20 +298,6 @@ class oxConfig extends oxSuperCfg
      * @var string
      */
     const OXMODULE_THEME_PREFIX = 'theme:';
-
-    /**
-     * prefix for oxmodule field for modules in oxconfig and oxconfigdisplay tables
-     *
-     * @var string
-     */
-    const OXMODULE_MODULE_PREFIX = 'module:';
-
-    /**
-     * The biggest amount of possible subshops
-     *
-     * @var integer
-     */
-    const OXMAX_SHOP_COUNT = 256;
 
     /**
      * Returns config parameter value if such parameter exists
@@ -378,15 +357,20 @@ class oxConfig extends oxSuperCfg
     /**
      * Starts session manager
      *
-     * @throws oxConnectionException
-     *
      * @return null
      */
     public function init()
     {
-        $this->_loadVarsFromFile();
-
+        include getShopBasePath().'config.inc.php';
         include getShopBasePath().'core/oxconfk.php';
+
+        //adding trailing slashes
+        $oFileUtils = oxUtilsFile::getInstance();
+        $this->sShopDir     = $oFileUtils->normalizeDir($this->sShopDir);
+        $this->sCompileDir  = $oFileUtils->normalizeDir($this->sCompileDir);
+        $this->sShopURL     = $oFileUtils->normalizeDir($this->sShopURL);
+        $this->sSSLShopURL  = $oFileUtils->normalizeDir($this->sSSLShopURL);
+        $this->sAdminSSLURL = $oFileUtils->normalizeDir($this->sAdminSSLURL);
 
 
         // some important defaults
@@ -415,20 +399,17 @@ class oxConfig extends oxSuperCfg
 
         // #1173M  for EE - not all pic are deleted
         $iPicCount = $this->getConfigParam( 'iPicCount' );
-        if ( !isset( $iPicCount ) )
+        if( !isset( $iPicCount ) )
             $this->setConfigParam( 'iPicCount', 7 );
 
         $iZoomPicCount = $this->getConfigParam( 'iZoomPicCount' );
-        if ( !isset( $iZoomPicCount ) )
+        if( !isset( $iZoomPicCount ) )
             $this->setConfigParam( 'iZoomPicCount', 4 );
 
         //max shop id default value
         $iMaxShopId = $this->getConfigParam( 'iMaxShopId' );
-        if ( !isset( $iMaxShopId ) ) {
-            $this->setConfigParam( 'iMaxShopId', 128 );
-        } elseif ( $iMaxShopId > self::OXMAX_SHOP_COUNT ) {
-            $this->setConfigParam( 'iMaxShopId', self::OXMAX_SHOP_COUNT );
-        }
+        if( !isset( $iMaxShopId ) )
+            $this->setConfigParam( 'iMaxShopId', 64 );
 
         // disabling caching according to DODGER #655 : disable Caching as it doesnt work good enought
         $this->setConfigParam( 'blTemplateCaching', false );
@@ -439,7 +420,7 @@ class oxConfig extends oxSuperCfg
 
         // ADODB cachelifetime
         $iDBCacheLifeTime = $this->getConfigParam( 'iDBCacheLifeTime' );
-        if ( !isset( $iDBCacheLifeTime ) )
+        if( !isset( $iDBCacheLifeTime ) )
             $this->setConfigParam( 'iDBCacheLifeTime', 3600 ); // 1 hour
 
         $sCoreDir = $this->getConfigParam( 'sShopDir' );
@@ -449,7 +430,7 @@ class oxConfig extends oxSuperCfg
             $sShopID = $this->getShopId();
             $blConfigLoaded = $this->_loadVarsFromDb( $sShopID );
 
-            // loading shop config
+            // load now
             if ( empty($sShopID) || !$blConfigLoaded ) {
                 // if no config values where loaded (some problmems with DB), throwing an exception
                 $oEx = oxNew( "oxConnectionException" );
@@ -464,9 +445,6 @@ class oxConfig extends oxSuperCfg
             if ( $this->getConfigParam('sCustomTheme') ) {
                 $this->_loadVarsFromDb( $sShopID, null, oxConfig::OXMODULE_THEME_PREFIX . $this->getConfigParam('sCustomTheme') );
             }
-
-            // loading modules config
-            $this->_loadVarsFromDb( $sShopID, null, oxConfig::OXMODULE_MODULE_PREFIX );
 
 
             $this->_processSeoCall();
@@ -499,8 +477,6 @@ class oxConfig extends oxSuperCfg
         }
 
 
-        $this->_loadVarsFromFile();
-
         //application initialization
         $this->_oStart = new oxStart();
         $this->_oStart->appInit();
@@ -530,40 +506,6 @@ class oxConfig extends oxSuperCfg
     }
 
     /**
-     * Loads vars from default config file
-     *
-     * @return null;
-     */
-    protected function _loadVarsFromFile()
-    {
-        //config variables from config.inc.php takes priority over the ones loaded from db
-        include getShopBasePath().'/config.inc.php';
-
-        //adding trailing slashes
-        $oFileUtils = oxUtilsFile::getInstance();
-        $this->sShopDir     = $oFileUtils->normalizeDir($this->sShopDir);
-        $this->sCompileDir  = $oFileUtils->normalizeDir($this->sCompileDir);
-        $this->sShopURL     = $oFileUtils->normalizeDir($this->sShopURL);
-        $this->sSSLShopURL  = $oFileUtils->normalizeDir($this->sSSLShopURL);
-        $this->sAdminSSLURL = $oFileUtils->normalizeDir($this->sAdminSSLURL);
-        
-        $this->_loadCustomConfig();
-    }
-
-    /**
-     * Loads vars from custom config file
-     *
-     * @return null;
-     */
-    protected function _loadCustomConfig()
-    {
-        $sCustConfig = getShopBasePath().'/cust_config.inc.php';
-        if ( is_readable( $sCustConfig ) ) {
-            include $sCustConfig;
-        }
-    }
-    
-    /**
      * Load config values from DB
      *
      * @param string $sShopID   shop ID to load parameters
@@ -576,13 +518,7 @@ class oxConfig extends oxSuperCfg
     {
         $oDb = oxDb::getDb();
 
-        if ( !empty($sModule) ) {
-            $sModuleSql = " oxmodule LIKE " . $oDb->quote($sModule."%");
-        } else {
-            $sModuleSql = " oxmodule='' ";
-        }
-
-        $sQ = "select oxvarname, oxvartype, ".$this->getDecodeValueQuery()." as oxvarvalue from oxconfig where oxshopid = '$sShopID' and " . $sModuleSql;
+        $sQ = "select oxvarname, oxvartype, ".$this->getDecodeValueQuery()." as oxvarvalue from oxconfig where oxshopid = '$sShopID' and oxmodule=".$oDb->quote($sModule);
         // dodger, allow loading from some vars only from baseshop
         if ( $aOnlyVars !== null ) {
             $blSep = false;
@@ -596,7 +532,8 @@ class oxConfig extends oxSuperCfg
             }
             $sQ .= ' and oxvarname in ( '.$sIn.' ) ';
         }
-        $oRs = $oDb->select( $sQ );
+
+        $oRs = $oDb->execute( $sQ );
 
         if ( $oRs != false && $oRs->recordCount() > 0 ) {
             while ( !$oRs->EOF ) {
@@ -681,7 +618,7 @@ class oxConfig extends oxSuperCfg
                     $sValue = modConfig::getParameter(  $sName, $blRaw );
 
                     // TODO: remove this after special chars concept implementation
-                    $blIsAdmin = modConfig::getInstance()->isAdmin() || isAdmin();
+                    $blIsAdmin = modConfig::getInstance()->isAdmin();
                     if ( $sValue !== null && !$blIsAdmin && (!$blRaw || is_array($blRaw))) {
                         self::checkSpecialChars( $sValue, $blRaw );
                     }
@@ -838,8 +775,7 @@ class oxConfig extends oxSuperCfg
                 // "1&1" hoster provides "1"
                 $this->_blIsSsl = ($this->getConfigParam('sSSLShopURL') || $this->getConfigParam('sMallSSLShopURL'));
                 if ($this->isAdmin() && !$this->_blIsSsl) {
-                    //#4026
-                    $this->_blIsSsl = !is_null($this->getConfigParam('sAdminSSLURL')) ? true : false;
+                    $this->_blIsSsl = $this->getConfigParam('sAdminSSLURL');
                 }
             }
 
@@ -1425,28 +1361,7 @@ class oxConfig extends oxSuperCfg
      */
     public function getTemplatePath( $sFile, $blAdmin )
     {
-        $sTemplatePath = $this->getDir( $sFile, $this->_sTemplateDir, $blAdmin );
-
-        if (!$sTemplatePath) {
-            $sBasePath        = getShopBasePath();
-            $aModuleTemplates = $this->getConfigParam('aModuleTemplates');
-
-            $oModulelist = oxNew('oxmodulelist');
-            $aActiveModuleInfo = $oModulelist->getActiveModuleInfo();
-            if (is_array($aModuleTemplates) && is_array($aActiveModuleInfo)) {
-                foreach ($aModuleTemplates as $sModuleId => $aTemplates) {
-                    if (isset($aTemplates[$sFile]) && isset($aActiveModuleInfo[$sModuleId])) {
-                        $sPath = $aTemplates[$sFile];
-                        $sPath = $sBasePath. 'modules/'.  $sPath;
-                        if (is_file($sPath) && is_readable($sPath)) {
-                            $sTemplatePath =  $sPath;
-                        }
-                    }
-                }
-            }
-        }
-
-        return $sTemplatePath;
+        return $this->getDir( $sFile, $this->_sTemplateDir, $blAdmin );
     }
 
     /**
@@ -1500,22 +1415,6 @@ class oxConfig extends oxSuperCfg
     public function getResourcePath($sFile = '', $blAdmin = false )
     {
         return $this->getDir( $sFile, $this->_sResourceDir, $blAdmin );
-    }
-
-    /**
-     * Returns path to modules dir
-     *
-     * @param bool $blAbsolute mode - absolute/relative path
-     *
-     * @return string
-     */
-    public function getModulesDir( $blAbsolute = true )
-    {
-        if ($blAbsolute) {
-            return $this->getConfigParam('sShopDir') . $this->_sModulesDir . '/';
-        } else {
-            return $this->_sModulesDir . '/';
-        }
     }
 
     /**
@@ -1687,8 +1586,6 @@ class oxConfig extends oxSuperCfg
         return $this->getConfigParam('blDemoShop');
     }
 
-
-
     /**
      * Returns OXID eShop edition
      *
@@ -1803,11 +1700,6 @@ class oxConfig extends oxSuperCfg
                     $sVarVal = unserialize( $sVarVal );
                 }
                 break;
-            case 'num':
-                //config param
-                $sVarVal = $sVarVal != ''? oxUtils::getInstance()->string2Float( $sVarVal ) : '';
-                $sValue = $sVarVal;
-                break;
             case 'bool':
                 //config param
                 $sVarVal = (( $sVarVal == 'true' || $sVarVal) && $sVarVal && strcasecmp($sVarVal, "false"));
@@ -1828,7 +1720,7 @@ class oxConfig extends oxSuperCfg
             $this->setConfigParam( $sVarName, $sVarVal );
         }
 
-        $oDb = oxDb::getDb();
+        $oDb = oxDb::getDb(true);
 
         $sShopIdQuoted     = $oDb->quote($sShopId);
         $sModuleQuoted     = $oDb->quote($sModule);
@@ -1843,6 +1735,7 @@ class oxConfig extends oxSuperCfg
 
         $sQ = "insert into oxconfig (oxid, oxshopid, oxmodule, oxvarname, oxvartype, oxvarvalue)
                values($sNewOXIDdQuoted, $sShopIdQuoted, $sModuleQuoted, $sVarNameQuoted, $sVarTypeQuoted, ENCODE( $sVarValueQuoted, $sConfigKeyQuoted) )";
+
         $oDb->execute( $sQ );
     }
 
@@ -1868,10 +1761,9 @@ class oxConfig extends oxSuperCfg
             }
         }
 
-        $oDb = oxDb::getDb( oxDb::FETCH_MODE_ASSOC );
-
+        $oDb = oxDb::getDb(true);
         $sQ  = "select oxvartype, ".$this->getDecodeValueQuery()." as oxvarvalue from oxconfig where oxshopid = '{$sShopId}' and oxmodule = '{$sModule}' and oxvarname = ".$oDb->quote($sVarName);
-        $oRs = $oDb->select( $sQ );
+        $oRs = $oDb->execute( $sQ );
 
         $sValue = null;
         if ( $oRs != false && $oRs->recordCount() > 0 ) {
@@ -2033,40 +1925,4 @@ class oxConfig extends oxSuperCfg
     {
         return $this->isSsl() ? $this->getConfigParam( 'sSSLShopURL' ) : $this->getConfigParam( 'sShopURL' );
     }
-
-    /**
-     * Get parsed modules
-     *
-     * @return array
-     */
-    public function getAllModules()
-    {
-        return $this->parseModuleChains($this->getConfigParam('aModules'));
-    }
-
-    /**
-     * Parse array of module chains to nested array
-     *
-     * @param array $aModules Module array (config format)
-     *
-     * @return array
-     */
-    public function parseModuleChains($aModules)
-    {
-        $aModuleArray = array();
-
-        if (is_array($aModules)) {
-            foreach ($aModules as $sClass => $sModuleChain) {
-                if (strstr($sModuleChain, '&')) {
-                    $aModuleChain = explode('&', $sModuleChain);
-                } else {
-                    $aModuleChain = array($sModuleChain);
-                }
-                $aModuleArray[$sClass] = $aModuleChain;
-            }
-        }
-
-        return $aModuleArray;
-    }
-
 }

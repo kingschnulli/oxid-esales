@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: myorderTest.php 43679 2012-04-10 13:26:02Z linas.kukulskis $
+ * @version   SVN: $Id: myorderTest.php 44655 2012-05-08 10:33:14Z mindaugas.rimgaila $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -839,19 +839,12 @@ class Unit_Maintenance_myorderTest extends OxidTestCase
      */
     public function testMyOrder_exportStandartWhenOrderIsCanceled()
     {
-        // marking order article as variant ..
-        $oSelVariantField = $this->getMock( 'oxfield', array( '__get' ) );
-        $oSelVariantField->expects( $this->once() )->method( '__get');
-
         $this->_insertTestOrder();
-        $oArticle = $this->_insertTestOrderArticle();
-        $oArticle->oxorderarticles__oxtitle = new oxField("testtitle");
-        $oArticle->oxorderarticles__oxselvariant = $oSelVariantField;
+        $this->_insertTestOrderArticle();
 
         $oPdf = new oxPdf;
 
-        $oMyOrder = $this->getMock( "myOrder", array( "getOrderArticles" ) );
-        $oMyOrder->expects( $this->any() )->method( 'getOrderArticles')->will( $this->returnValue( array( $oArticle->getId() => $oArticle ) ) );
+        $oMyOrder = new myOrder();
         $oMyOrder->load('_testOrderId');
 
         //
@@ -866,6 +859,13 @@ class Unit_Maintenance_myorderTest extends OxidTestCase
 
         // marking as canceled
         $oMyOrder->oxorder__oxstorno = new oxField( 1 );
+
+        // marking order article as variant ..
+        $oSelVariantField = $this->getMock( 'oxfield', array( '__get' ) );
+        $oSelVariantField->expects( $this->once() )->method( '__get');
+
+        $aOrderArticles = $oMyOrder->getOrderArticles();
+        $aOrderArticles->current()->oxorderarticles__oxselvariant = $oSelVariantField;
 
         $oMyOrder->exportStandart( $oPdf );
     }

@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: details.php 53086 2012-12-18 12:22:28Z aurimas.gladutis $
+ * @version   SVN: $Id: details.php 51526 2012-11-08 11:00:31Z aurimas.gladutis $
  */
 
 /**
@@ -381,7 +381,7 @@ class Details extends oxUBase
         }
 
         if ( ( $sTplName = oxConfig::getParameter( 'tpl' ) ) ) {
-            $this->_sThisTemplate = 'custom/'.basename ( $sTplName );
+            $this->_sThisTemplate = basename ( $sTplName );
         }
 
         parent::render();
@@ -426,14 +426,7 @@ class Details extends oxUBase
         if ( !$sMeta ) {
             $oProduct = $this->getProduct();
 
-            if ( oxConfig::getInstance()->getConfigParam( 'bl_perfParseLongDescinSmarty' ) ) {
-                $sMeta = $oProduct->getLongDesc();
-            } else {
-                $sMeta = $oProduct->getLongDescription()->value;
-            }
-            if ( $sMeta == '' ) {
-                $sMeta = $oProduct->oxarticles__oxshortdesc->value;
-            }
+            $sMeta = $oProduct->getArticleLongDesc()->value;
             $sMeta = $oProduct->oxarticles__oxtitle->value.' - '.$sMeta;
         }
         return parent::_prepareMetaDescription( $sMeta, $iLength, $blDescTag );
@@ -473,19 +466,7 @@ class Details extends oxUBase
     }
 
     /**
-     * Checks if rating functionality is active
-     *
-     * @return bool
-     */
-    public function ratingIsActive()
-    {
-        $myConfig = $this->getConfig();
-
-        return $myConfig->getConfigParam( 'bl_perfLoadReviews' );
-    }
-
-    /**
-     * Checks if rating functionality is on and allowed to user
+     * Checks if rating runctionality is on and allwed to user
      *
      * @return bool
      */
@@ -496,13 +477,13 @@ class Details extends oxUBase
             $this->_blCanRate = false;
             $myConfig = $this->getConfig();
 
-            if ( $this->ratingIsActive() && $oUser = $this->getUser() ) {
+            if ( $myConfig->getConfigParam( 'bl_perfLoadReviews' ) &&
+                 $oUser = $this->getUser() ) {
 
                 $oRating = oxNew( 'oxrating' );
                 $this->_blCanRate = $oRating->allowRating( $oUser->getId(), 'oxarticle', $this->getProduct()->getId() );
             }
         }
-
         return $this->_blCanRate;
     }
 
@@ -536,7 +517,7 @@ class Details extends oxUBase
             }
 
             //save rating
-            if ( $dRating !== null && $dRating >= 1 && $dRating <= 5 ) {
+            if ( $dRating !== null && $dRating >= 0 && $dRating <= 5 ) {
                 $oRating = oxNew( 'oxrating' );
                 if ( $oRating->allowRating( $oUser->getId(), 'oxarticle', $oProduct->getId() ) ) {
                     $oRating->oxratings__oxuserid   = new oxField( $oUser->getId() );
@@ -555,7 +536,7 @@ class Details extends oxUBase
                 $oReview->oxreviews__oxtext     = new oxField( $sReviewText, oxField::T_RAW );
                 $oReview->oxreviews__oxlang     = new oxField( oxLang::getInstance()->getBaseLanguage() );
                 $oReview->oxreviews__oxuserid   = new oxField( $oUser->getId() );
-                $oReview->oxreviews__oxrating   = new oxField( ( $dRating !== null ) ? $dRating : 0);
+                $oReview->oxreviews__oxrating   = new oxField( ( $dRating !== null ) ? $dRating : null );
                 $oReview->save();
             }
         }
@@ -1407,7 +1388,7 @@ class Details extends oxUBase
         if ( $this->_dRatingValue === null ) {
             $this->_dRatingValue = (double) 0;
             if ( $this->isReviewActive() && ( $oDetailsProduct = $this->getProduct() ) ) {
-                $this->_dRatingValue = round( $oDetailsProduct->getArticleRatingAverage( $this->getConfig()->getConfigParam( 'blShowVariantReviews' ) ), 1);
+                $this->_dRatingValue = round( $oDetailsProduct->getArticleRatingAverage(), 1);
             }
         }
 
@@ -1415,7 +1396,7 @@ class Details extends oxUBase
     }
 
     /**
-     * Template variable getter. Returns if review module is on
+     * Template variable getter. Returns if review modul is on
      *
      * @return bool
      */
@@ -1434,7 +1415,7 @@ class Details extends oxUBase
         if ( $this->_iRatingCnt === null ) {
             $this->_iRatingCnt = false;
             if ( $this->isReviewActive() && ( $oDetailsProduct = $this->getProduct() ) ) {
-                $this->_iRatingCnt = $oDetailsProduct->getArticleRatingCount( $this->getConfig()->getConfigParam( 'blShowVariantReviews' ) );
+                $this->_iRatingCnt = $oDetailsProduct->oxarticles__oxratingcnt->value;
             }
         }
         return $this->_iRatingCnt;
@@ -1626,196 +1607,6 @@ class Details extends oxUBase
             $this->_sSearchParamForHtml = oxConfig::getParameter( 'searchparam' );
         }
         return $this->_sSearchParamForHtml;
-    }
-
-    /**
-     * Returns if page has rdfa
-     *
-     * @return bool
-     */
-    public function showRdfa()
-    {
-        return $this->getConfig()->getConfigParam( 'blRDFaEmbedding' );
-    }
-
-    /**
-     * Sets normalized rating
-     *
-     * @return array
-     */
-    public function getRDFaNormalizedRating()
-    {
-        $myConfig = $this->getConfig();
-        $iMin = $myConfig->getConfigParam("iRDFaMinRating");
-        $iMax = $myConfig->getConfigParam("iRDFaMaxRating");
-
-        $oProduct = $this->getProduct();
-        $iCount = $oProduct->oxarticles__oxratingcnt->value;
-        if ( isset($iMin) && isset($iMax) && $iMax != '' && $iMin != '' && $iCount > 0 ) {
-            $aNomalizedRating = array();
-            $iValue = ((4*($oProduct->oxarticles__oxrating->value - $iMin)/($iMax - $iMin)))+1;
-            $aNomalizedRating["count"] = $iCount;
-            $aNomalizedRating["value"] = round($iValue, 2);
-            return $aNomalizedRating;
-        }
-        return false;
-    }
-
-    /**
-     * Sets and returns validity period of given object
-     *
-     * @param string $sShopConfVar object name
-     *
-     * @return array
-     */
-    public function getRDFaValidityPeriod($sShopConfVar)
-    {
-        if ( $sShopConfVar ) {
-            $aValidity = array();
-            $iDays = $this->getConfig()->getConfigParam($sShopConfVar);
-            $iFrom = oxUtilsDate::getInstance()->getTime();
-
-            $iThrough = $iFrom + ($iDays * 24 * 60 * 60);
-            $aValidity["from"] = date('Y-m-d\TH:i:s', $iFrom)."Z";
-            $aValidity["through"] = date('Y-m-d\TH:i:s', $iThrough)."Z";
-
-            return $aValidity;
-        }
-        return false;
-    }
-
-    /**
-     * Gets business function of the gr:Offering
-     *
-     * @return string
-     */
-    public function getRDFaBusinessFnc()
-    {
-        return $this->getConfig()->getConfigParam("sRDFaBusinessFnc");
-    }
-
-    /**
-     * Gets the types of customers for which the given gr:Offering is valid
-     *
-     * @return array
-     */
-    public function getRDFaCustomers()
-    {
-        return $this->getConfig()->getConfigParam("aRDFaCustomers");
-    }
-
-    /**
-     * Gets information whether prices include vat
-     *
-     * @return int
-     */
-    public function getRDFaVAT()
-    {
-        return $this->getConfig()->getConfigParam("iRDFaVAT");
-    }
-
-    /**
-     * Gets a generic description of product condition
-     *
-     * @return string
-     */
-    public function getRDFaGenericCondition()
-    {
-        return $this->getConfig()->getConfigParam("iRDFaCondition");
-    }
-
-    /**
-     * Returns bundle product
-     *
-     * @return object
-     */
-    public function getBundleArticle()
-    {
-        $oProduct = $this->getProduct();
-        if ( $oProduct && $oProduct->oxarticles__oxbundleid->value ) {
-            $oArticle = oxNew("oxarticle");
-            $oArticle->load($oProduct->oxarticles__oxbundleid->value);
-            return $oArticle;
-        }
-        return false;
-    }
-
-    /**
-     * Gets accepted payment methods
-     *
-     * @return array
-     */
-    public function getRDFaPaymentMethods()
-    {
-        $iPrice = $this->getProduct()->getPrice()->getBruttoPrice();
-        $oPayments = oxNew("oxpaymentlist");
-        $oPayments->loadRDFaPaymentList($iPrice);
-        return $oPayments;
-    }
-
-    /**
-     * Returns delivery methods with assigned deliverysets.
-     *
-     * @return object
-     */
-    public function getRDFaDeliverySetMethods()
-    {
-        $oDelSets = oxNew("oxdeliverysetlist");
-        $oDelSets->loadRDFaDeliverySetList();
-        return $oDelSets;
-    }
-
-    /**
-     * Template variable getter. Returns delivery list for current product
-     *
-     * @return object
-     */
-    public function getProductsDeliveryList()
-    {
-        $oProduct = $this->getProduct();
-        $oDelList = oxNew( "oxDeliveryList" );
-        $oDelList->loadDeliveryListForProduct( $oProduct );
-        return $oDelList;
-    }
-
-    /**
-     * Gets content id of delivery information page
-     *
-     * @return string
-     */
-    public function getRDFaDeliveryChargeSpecLoc()
-    {
-        return $this->getConfig()->getConfigParam("sRDFaDeliveryChargeSpecLoc");
-    }
-
-    /**
-     * Gets content id of payments
-     *
-     * @return string
-     */
-    public function getRDFaPaymentChargeSpecLoc()
-    {
-        return $this->getConfig()->getConfigParam("sRDFaPaymentChargeSpecLoc");
-    }
-
-    /**
-     * Gets content id of company info page (About Us)
-     *
-     * @return string
-     */
-    public function getRDFaBusinessEntityLoc()
-    {
-        return $this->getConfig()->getConfigParam("sRDFaBusinessEntityLoc");
-    }
-
-    /**
-     * Returns if to show products left stock
-     *
-     * @return string
-     */
-    public function showRDFaProductStock()
-    {
-        return $this->getConfig()->getConfigParam("blShowRDFaProductStock");
     }
 
 }

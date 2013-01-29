@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: article_variant.php 52897 2012-12-13 12:40:39Z aurimas.gladutis $
+ * @version   SVN: $Id: article_variant.php 42603 2012-03-02 15:22:00Z vilma $
  */
 
 /**
@@ -160,19 +160,6 @@ class Article_Variant extends oxAdminDetails
         $oArticle->assign( $aParams );
         $oArticle->setLanguage( $this->_iEditLang );
 
-        // #0004473
-        $oArticle->resetRemindStatus();
-
-        if ( $sOXID == "-1" ) {
-            if ( $oParent = $this->_getProductParent( $oArticle->oxarticles__oxparentid->value ) ) {
-
-                // assign field from parent for new variant
-                // #4406, #0003942
-                $oArticle->oxarticles__oxisconfigurable = new oxField( $oParent->oxarticles__oxisconfigurable->value );
-                $oArticle->oxarticles__oxremindactive = new oxField( $oParent->oxarticles__oxremindactive->value );
-
-            }
-        }
 
         $oArticle->save();
     }
@@ -236,6 +223,7 @@ class Article_Variant extends oxAdminDetails
     public function changename()
     {
         $soxId = $this->getEditObjectId();
+
         $aParams = oxConfig::getParameter( "editval");
 
 

@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: accountRecommlistTest.php 52180 2012-11-23 11:58:42Z aurimas.gladutis $
+ * @version   SVN: $Id: accountRecommlistTest.php 33442 2011-02-22 16:14:37Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -47,7 +47,7 @@ class Unit_Views_accountRecommlistTest extends OxidTestCase
         $sQ = 'insert into oxrecommlists ( oxid, oxuserid, oxtitle, oxdesc, oxshopid ) values ( "testlist2", "oxdefaultadmin", "oxtest2", "oxtest2", "'.$sShopId.'" ) ';
         $myDB->Execute( $sQ );
         $this->_sArticleID = '1651';
-        $sQ = 'insert into oxobject2list ( oxid, oxobjectid, oxlistid, oxdesc ) values ( "testlist", "'.$this->_sArticleID.'", "testlist", "test" ) ';
+        $sQ = 'insert into oxobject2list ( oxid, oxobjectid, oxlistid, oxdesc ) values ( "testlist", "'.$this->sArticleID.'", "testlist", "test" ) ';
         $myDB->Execute( $sQ );
     }
 

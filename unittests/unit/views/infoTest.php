@@ -19,23 +19,11 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: infoTest.php 43785 2012-04-11 14:43:50Z rimvydas.paskevicius $
+ * @version   SVN: $Id: infoTest.php 32923 2011-02-04 14:35:22Z vilma $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
 require_once realpath( "." ).'/unit/test_config.inc.php';
-
-/*
- * Dummy class for getParsedContent function test.
- * 
- */
-class infoTest_oxUtilsView extends oxUtilsView
-{
-    public function parseThroughSmarty( $sDesc, $sOxid = null, $oActView = null, $blRecompile = false )
-    {
-        return $sDesc;
-    }
-}
 
 /**
  * Testing info class
@@ -64,7 +52,7 @@ class Unit_Views_infoTest extends OxidTestCase
         modConfig::setParameter( 'tpl', "test.tpl");
         $oInfo = $this->getProxyClass( 'info' );
         $oInfo->info();
-        $this->assertSame( 'custom/test.tpl', $oInfo->getTemplateName() );
+        $this->assertEquals( 'test.tpl', $oInfo->getTemplateName() );
     }
 
     /**
@@ -101,7 +89,7 @@ class Unit_Views_infoTest extends OxidTestCase
         modConfig::setParameter( 'tpl', "test.tpl");
         $oInfo = $this->getProxyClass( 'info' );
         $oInfo->info();
-        $this->assertEquals( 'custom/test.tpl', $oInfo->render() );
+        $this->assertEquals( 'test.tpl', $oInfo->render() );
     }
 
     /**
@@ -127,48 +115,10 @@ class Unit_Views_infoTest extends OxidTestCase
         $oInfo->info();
         $oContent = $oInfo->getContent();
 
-        $sContentId = oxDb::getDb( oxDB::FETCH_MODE_ASSOC )->getOne( "SELECT oxid FROM oxcontents WHERE oxloadid = 'oximpressum' " );
+        $sContentId = oxDb::getDb( true )->getOne( "SELECT oxid FROM oxcontents WHERE oxloadid = 'oximpressum' " );
         $oContent = oxNew( 'oxcontent' );
         $oContent->load( $sContentId );
 
         $this->assertEquals( 'oximpressum', $oContent->oxcontents__oxloadid->value );
-    }
-    
-    /**
-     * Content::getParsedContent() Test case
-     *
-     * @return null
-     */
-    public function testGetParsedContent()
-    {   
-        oxAddClassModule('infoTest_oxUtilsView', 'oxUtilsView');
-
-        
-        $this->_oObj = new oxbase();
-        $this->_oObj->init( 'oxcontents' );
-        
-        $this->_oObj->oxcontents__oxcontent = new oxField('[{ $oxcmp_shop->oxshops__oxowneremail->value }]', oxField::T_RAW);
-        $this->_oObj->save();
-        modConfig::setParameter( 'oxcid', $this->_oObj->getId() );
-        $oContent = new content();
-
-        $this->assertEquals( $oContent->getContent()->oxcontents__oxcontent->value, $oContent->getParsedContent() );
-    }
-
-    /**
-     * Test get content title.
-     *
-     * @return null
-     */
-    public function testGetTitle()
-    {
-        $oObj = new oxbase();
-        $oObj->init( 'oxcontents' );
-        $oObj->oxcontents__oxtitle = new oxField('testTitle');
-
-        $oView = $this->getMock( "info", array( "getContent" ) );
-        $oView->expects( $this->once() )->method( 'getContent')->will( $this->returnValue($oObj) );
-
-        $this->assertEquals( 'testTitle', $oView->getTitle() );
     }
 }

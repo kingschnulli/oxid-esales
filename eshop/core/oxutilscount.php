@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutilscount.php 43756 2012-04-11 09:00:15Z linas.kukulskis $
+ * @version   SVN: $Id: oxutilscount.php 42580 2012-03-01 16:02:59Z tomas $
  */
 
 /**
@@ -318,7 +318,7 @@ class oxUtilsCount extends oxSuperCfg
             $sTable  = getViewName( 'oxcategories' );
             $sSelect = "select $sTable.oxid from $sTable where " . (double)$iPrice . " >= $sTable.oxpricefrom and " . (double)$iPrice . " <= $sTable.oxpriceto ";
 
-            $rs = oxDb::getDb()->select( $sSelect, false, false );
+            $rs = oxDb::getDb()->execute( $sSelect );
             if ( $rs != false && $rs->recordCount() > 0 ) {
                 while ( !$rs->EOF ) {
                     if ( isset( $aCatData[$rs->fields[0]] ) ) {

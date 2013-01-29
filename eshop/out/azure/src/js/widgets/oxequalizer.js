@@ -16,7 +16,7 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   out
- * @copyright (C) OXID eSales AG 2003-2012
+ * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
  * @version   SVN: $Id: oxequalizer.js 35529 2011-05-23 07:31:20Z vilma $
  */
@@ -34,30 +34,20 @@
          */
         equalHeight: function(group, target)
         {
-            var self    = this,
-                newh    = 0,
-                tallest = 0;
+            var self    = this;
 
-            if ( target ) {
+            if (target) {
                 if (group.height() < target.height()){
-                    tallest = target.height() - (group.innerHeight() - group.height());
+                    group.css("height", target.height());
                 }
             } else {
-                tallest = self.getTallest( group );
-            }
-
-            if( tallest ) {
+                tallest = self.getTallest(group);
                 group.each(function(){
-                    if($(this).hasClass('oxEqualized')) {
-                        $(this).css('height','');
-                        $(this).removeClass('oxEqualized');
-                    }
-                    newh = tallest;
-                    if ($(this).height() < newh && $(this).hasClass('catPicOnly')) {
-                        newh += 20;
-                    }
-                    if ($(this).height() < newh) {
-                        $(this).height(newh).addClass('oxEqualized');
+                    if( $(this).hasClass('catPicOnly') && $(this).height() < tallest  ){
+                        $(this).height(tallest+20);
+                    }else{
+                        $(this).height(tallest);
+
                     }
                 });
             }
@@ -73,7 +63,7 @@
             var tallest = 0;
             el.each(function(){
                 var thisHeight = $(this).height();
-                if (!$(this).hasClass('oxEqualized') && thisHeight > tallest) {
+                if (thisHeight > tallest) {
                     tallest = thisHeight;
                 }
             });
@@ -86,4 +76,4 @@
      */
     $.widget("ui.oxEqualizer", oxEqualizer );
 
-})( jQuery );
+})( jQuery )

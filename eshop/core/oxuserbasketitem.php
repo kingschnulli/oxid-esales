@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   core
- * @copyright (C) OXID eSales AG 2003-2012
+ * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxuserbasketitem.php 50684 2012-10-18 10:12:24Z aurimas.gladutis $
+ * @version   SVN: $Id: oxuserbasketitem.php 29921 2010-09-21 12:18:02Z sarunas $
  */
 
 /**
@@ -111,8 +111,7 @@ class oxUserBasketItem extends oxBase
             // performance
             if ( $this->_blParentBuyable ) {
                 $this->_oArticle->setSkipAbPrice( true );
-                // removed due to #4178
-                // $this->_oArticle->setNoVariantLoading( true );
+                $this->_oArticle->setNoVariantLoading( true );
             }
 
             if ( !$this->_oArticle->load( $this->oxuserbasketitems__oxartid->value ) ) {
@@ -130,6 +129,15 @@ class oxUserBasketItem extends oxBase
                     }
                 }
                 $this->_oArticle->setSelectlist( $aSelectlist );
+            }
+            // formatting title if variant
+            if ( $this->_oArticle->oxarticles__oxparentid->value ) {
+                $oParent = oxNew( 'oxarticle' );
+                if ( $oParent->load( $this->_oArticle->oxarticles__oxparentid->value ) ) {
+                    if ( $this->_oArticle->oxarticles__oxvarselect->value ) {
+                        $this->_oArticle->oxarticles__oxtitle->value .= ', '.$this->_oArticle->oxarticles__oxvarselect->value;
+                    }
+                }
             }
 
             // generating item key

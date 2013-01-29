@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: alistTest.php 52265 2012-11-23 15:08:26Z aurimas.gladutis $
+ * @version   SVN: $Id: alistTest.php 51387 2012-11-06 09:11:01Z andrius.silgalis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -99,7 +99,7 @@ class Unit_Views_alistTest extends OxidTestCase
     public function testGetMetaDescription()
     {
         $sCatId  = '8a142c3e60a535f16.78077188';
-        $sPrefix = "Wohnen - Uhren. OXID eShop 4";
+        $sPrefix = "Sie sind hier: Wohnen - Uhren. Der Onlineshop";
 
         $oCategory = new oxCategory();
         $oCategory->load( $sCatId );
@@ -413,39 +413,21 @@ class Unit_Views_alistTest extends OxidTestCase
     }
 
     /**
-     * Test get list sorting descending
+     * Test get list sorting info.
      *
      * @return null
      */
-    public function testGetSortingDesc()
+    public function testGetSorting()
     {
         $oCat = new oxcategory();
         $oCat->oxcategories__oxdefsort = $this->getMock( 'oxfield', array( '__get' ) );
         $oCat->oxcategories__oxdefsort->expects( $this->exactly( 2 ) )->method( '__get')->will( $this->returnValue( 'testsort' ) );
         $oCat->oxcategories__oxdefsortmode = $this->getMock( 'oxfield', array( '__get' ) );
-        $oCat->oxcategories__oxdefsortmode->expects( $this->once() )->method( '__get')->will( $this->returnValue( 1 ) );
+        $oCat->oxcategories__oxdefsortmode->expects( $this->once() )->method( '__get')->will( $this->returnValue( true ) );
 
         $oListView = $this->getMock( 'alist', array( 'getActCategory' ) );
         $oListView->expects( $this->once() )->method( 'getActCategory')->will( $this->returnValue( $oCat ) );
         $this->assertEquals( array( 'sortby' => 'testsort', 'sortdir' => "desc" ), $oListView->getSorting( '999' ) );
-    }
-
-    /**
-     * Test get list sorting ascending
-     *
-     * @return null
-     */
-    public function testGetSortingAsc()
-    {
-        $oCat = new oxcategory();
-        $oCat->oxcategories__oxdefsort = $this->getMock( 'oxfield', array( '__get' ) );
-        $oCat->oxcategories__oxdefsort->expects( $this->exactly( 2 ) )->method( '__get')->will( $this->returnValue( 'testsort' ) );
-        $oCat->oxcategories__oxdefsortmode = $this->getMock( 'oxfield', array( '__get' ) );
-        $oCat->oxcategories__oxdefsortmode->expects( $this->once() )->method( '__get')->will( $this->returnValue( 0 ) );
-
-        $oListView = $this->getMock( 'alist', array( 'getActCategory' ) );
-        $oListView->expects( $this->once() )->method( 'getActCategory')->will( $this->returnValue( $oCat ) );
-        $this->assertEquals( array( 'sortby' => 'testsort', 'sortdir' => "asc" ), $oListView->getSorting( '999' ) );
     }
 
     /**
@@ -562,8 +544,8 @@ class Unit_Views_alistTest extends OxidTestCase
     public function testCollectMetaKeyword()
     {
         $oLongDesc = new oxField('testtitle');
-        $oArticle = $this->getMock( 'oxarticle', array( 'getLongDescription' ) );
-        $oArticle->expects( $this->exactly( 2 ) )->method( 'getLongDescription')->will( $this->returnValue( $oLongDesc ) );
+        $oArticle = $this->getMock( 'oxarticle', array( 'getArticleLongDesc' ) );
+        $oArticle->expects( $this->exactly( 2 ) )->method( 'getArticleLongDesc')->will( $this->returnValue( $oLongDesc ) );
 
         $oArtList = new oxlist();
         $oArtList->offsetSet( 0, $oArticle );
@@ -587,8 +569,8 @@ class Unit_Views_alistTest extends OxidTestCase
     public function testCollectMetaKeywordLongerThen60()
     {
         $oLongDesc = new oxField('testtitle Originelle, witzige Geschenkideen - Lifestyle, Trends, Accessoires');
-        $oArticle = $this->getMock( 'oxarticle', array( 'getLongDescription' ) );
-        $oArticle->expects( $this->exactly( 1 ) )->method( 'getLongDescription')->will( $this->returnValue( $oLongDesc ) );
+        $oArticle = $this->getMock( 'oxarticle', array( 'getArticleLongDesc' ) );
+        $oArticle->expects( $this->exactly( 1 ) )->method( 'getArticleLongDesc')->will( $this->returnValue( $oLongDesc ) );
 
         $oArtList = new oxlist();
         $oArtList->offsetSet( 0, $oArticle );
@@ -626,7 +608,7 @@ class Unit_Views_alistTest extends OxidTestCase
         modConfig::setParameter( 'tpl', 'http://www.shop.com/somepath/test2.tpl' );
 
         // template name passed by request param
-        $this->assertSame( 'custom/test2.tpl', $oListView->getTemplateName() );
+        $this->assertEquals( 'test2.tpl', $oListView->getTemplateName() );
     }
 
     /**
@@ -737,9 +719,8 @@ class Unit_Views_alistTest extends OxidTestCase
         $oListView = $this->getMock( "alist", array( 'getActCategory' ) );
         $oListView->expects( $this->any() )->method( 'getActCategory')->will($this->returnValue( $oCategory ) );
 
-        //expected string changed due to #2776
         $this->assertEquals(
-            'parent category - category. OXID eShop 4',
+            'Sie sind hier: parent category - category. Der Onlineshop',
             $oListView->UNITprepareMetaDescription( $aCatPath, 1024, false )
         );
     }

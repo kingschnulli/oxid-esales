@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   views
- * @copyright (C) OXID eSales AG 2003-2012
+ * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: tpl.php 43015 2012-03-19 13:30:33Z mindaugas.rimgaila $
+ * @version   SVN: $Id: tpl.php 25466 2010-02-01 14:12:07Z alfonsas $
  */
 
 /**
@@ -39,11 +39,6 @@ class Tpl extends oxUBase
         parent::render();
 
         // security fix so that you cant access files from outside template dir
-        $sTplName = basename( (string) oxConfig::getParameter( "tpl" ) );
-        if ($sTplName) {
-            $sTplName = 'custom/'.$sTplName;
-        }
-
-        return $sTplName;
+        return basename( (string) oxConfig::getParameter( "tpl" ) );
     }
 }

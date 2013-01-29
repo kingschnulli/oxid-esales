@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxuserbasketitemTest.php 50684 2012-10-18 10:12:24Z aurimas.gladutis $#
+ * @version   SVN: $Id: oxuserbasketitemTest.php 29921 2010-09-21 12:18:02Z sarunas $#
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -218,11 +218,18 @@ class Unit_Core_oxuserbasketitemTest extends OxidTestCase
 
         // if thi line one day will faile, probebly becaus these parameters are not public any more :)
         $this->assertTrue( $oArticle->getClassVar('_blSkipAbPrice') );
-        // removed due to #4178
-        //$this->assertFalse( $oArticle->getClassVar('_blLoadVariants') );
+        $this->assertFalse( $oArticle->getClassVar('_blLoadVariants') );
 
         //$this->assertTrue( $oArticle->getNonPublicVar('_blForceSkipAbPrice') );
         //$this->assertTrue( $oArticle->getNonPublicVar('_blDoNotLoadVariants') );
+    }
+    // testing article title formatting - article has parent
+    public function testGetArticleTitleFormatterArticleHasParent()
+    {
+        $oBasketItem = new oxuserbasketitem();
+        $oBasketItem->oxuserbasketitems__oxartid = new oxField('xxx', oxField::T_RAW);
+        $oArticle = $oBasketItem->getArticle( 'xxx' );
+        $this->assertEquals( 'xxx, yyy', $oArticle->oxarticles__oxtitle->value );
     }
     // testing article title formatting - article has NO parent
     public function testGetArticleTitleFormatterArticleHasNoParent()

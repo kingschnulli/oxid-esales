@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxdeliveryset.php 43722 2012-04-11 07:20:39Z linas.kukulskis $
+ * @version   SVN: $Id: oxdeliveryset.php 41196 2012-01-11 15:29:50Z linas.kukulskis $
  */
 
 /**
@@ -29,6 +29,13 @@
  */
 class oxDeliverySet extends oxI18n
 {
+    /**
+     * Core database table name. $sCoreTbl could be only original data table name and not view name.
+     *
+     * @var string
+     */
+    protected $_sCoreTbl = 'oxdeliveryset';
+
     /**
      * Current object class name
      *
@@ -81,9 +88,8 @@ class oxDeliverySet extends oxI18n
      */
     public function getIdByName( $sTitle )
     {
-        $oDb = oxDb::getDb();
-        $sQ = "SELECT `oxid` FROM `" . getViewName( 'oxdeliveryset' ) . "` WHERE  `oxtitle` = " . $oDb->quote( $sTitle );
-        $sId = $oDb->getOne( $sQ );
+        $sQ = "SELECT `oxid` FROM `" . getViewName( 'oxdeliveryset' ) . "` WHERE  `oxtitle` = " . oxDb::getDb()->quote( $sTitle );
+        $sId = oxDb::getDb()->getOne( $sQ );
 
         return $sId;
     }

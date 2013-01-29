@@ -3,20 +3,14 @@
 
 [{block name="details_tabs_longdescription"}]
     [{oxhasrights ident="SHOWLONGDESCRIPTION"}]
-        [{assign var="oLongdesc" value=$oDetailsProduct->getLongDescription()}]
+        [{assign var="oLongdesc" value=$oDetailsProduct->getArticleLongDesc()}]
         [{if $oLongdesc->value}]
             [{capture append="tabs"}]<a href="#description">[{oxmultilang ident="PAGE_DETAILS_TABS_DESCRIPTION"}]</a>[{/capture}]
             [{capture append="tabsContent"}]
-            <div id="description" class="cmsContent">
+            <div id="description">
                 [{oxeval var=$oLongdesc}]
                 [{if $oDetailsProduct->oxarticles__oxexturl->value}]
-                    <a id="productExturl" class="js-external" href="http://[{$oDetailsProduct->oxarticles__oxexturl->value}]">
-                    [{if $oDetailsProduct->oxarticles__oxurldesc->value }]
-                        [{$oDetailsProduct->oxarticles__oxurldesc->value }]
-                    [{else}]
-                        [{$oDetailsProduct->oxarticles__oxexturl->value }]
-                    [{/if}]
-                    </a>
+                    <a id="productExturl" class="js-external" href="[{$oDetailsProduct->oxarticles__oxexturl->value}]">[{$oDetailsProduct->oxarticles__oxurldesc->value}]</a>
                 [{/if}]
             </div>
             [{/capture}]
@@ -73,9 +67,16 @@
     [{/if}]
 [{/block}]
 
+[{block name="details_tabs_fblivestream"}]
+    [{if $oView->isActive('FbLiveStream') && $oViewConf->getFbAppId()}]
+        [{capture append="FBtabs"}]<a href="#productFbLiveStream">[{oxmultilang ident="FACEBOOK_CHAT"}]</a>[{/capture}]
+        [{capture append="FBtabsContent"}]<div id="productFbLiveStream">[{include file="widget/facebook/enable.tpl" source="widget/facebook/livestream.tpl" ident="#productFbLiveStream" type="text"}]</div>[{/capture}]
+    [{/if}]
+[{/block}]
+
 [{block name="details_tabs_main"}]
     [{if $tabs}]
-        <div class="tabbedWidgetBox clear">
+        <div class="tabbedWidgetBox clear" style="min-height:50px;">
             <ul id="itemTabs" class="tabs clear">
                 [{foreach from=$tabs item="tab"}]
                     <li>[{$tab}]</li>
@@ -92,7 +93,7 @@
 
 [{block name="details_tabs_facebook"}]
     [{if $FBtabs}]
-        <div class="tabbedWidgetBox clear">
+        <div class="tabbedWidgetBox clear" style="min-height:50px;">
             <ul id="itemFbTabs" class="tabs clear">
                 [{foreach from=$FBtabs item="FBtab"}]
                     <li class="fbTab">[{$FBtab}]</li>

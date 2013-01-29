@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxtagcloudTest.php 53210 2012-12-21 11:51:53Z aurimas.gladutis $
+ * @version   SVN: $Id: oxtagcloudTest.php 43562 2012-04-05 13:42:03Z mindaugas.rimgaila $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -123,7 +123,7 @@ class Unit_Core_oxTagCloudTest extends OxidTestCase
 
 
             $this->assertEquals( oxConfig::getInstance()->getConfigParam("sShopURL")."tag/zauber/", $oTagCloud->getTagLink( "zauber" ) );
-            //$this->assertEquals( oxConfig::getInstance()->getConfigParam("sShopURL")."index.php?cl=tag&amp;searchtag=testTag&amp;lang=0", $oTagCloud->getTagLink( "testTag" ) );
+            $this->assertEquals( oxConfig::getInstance()->getConfigParam("sShopURL")."index.php?cl=tag&amp;searchtag=testTag&amp;lang=0", $oTagCloud->getTagLink( "testTag" ) );
     }
 
     /**
@@ -321,27 +321,7 @@ class Unit_Core_oxTagCloudTest extends OxidTestCase
         $this->assertEquals('a b', $oTagCloud->stripMetaChars('a*b'));
         $this->assertEquals('a b', $oTagCloud->stripMetaChars('a"b'));
         $this->assertEquals('a b', $oTagCloud->stripMetaChars('a\'b'));
-        $this->assertEquals('a b', $oTagCloud->stripMetaChars('a\\b'));	
-        $this->assertEquals('a b', $oTagCloud->stripMetaChars('a[]{};:./|!@#$%^&?=`b'));
-        $this->assertEquals('a b', $oTagCloud->stripMetaChars('a[b'));
-        $this->assertEquals('a b', $oTagCloud->stripMetaChars('a]b'));
-        $this->assertEquals('a b', $oTagCloud->stripMetaChars('a{b'));
-        $this->assertEquals('a b', $oTagCloud->stripMetaChars('a}b'));
-        $this->assertEquals('a b', $oTagCloud->stripMetaChars('a;b'));
-        $this->assertEquals('a b', $oTagCloud->stripMetaChars('a:b'));
-        $this->assertEquals('a b', $oTagCloud->stripMetaChars('a.b'));
-        $this->assertEquals('a b', $oTagCloud->stripMetaChars('a/b'));
-        $this->assertEquals('a b', $oTagCloud->stripMetaChars('a|b'));
-        $this->assertEquals('a b', $oTagCloud->stripMetaChars('a!b'));
-        $this->assertEquals('a b', $oTagCloud->stripMetaChars('a@b'));
-        $this->assertEquals('a b', $oTagCloud->stripMetaChars('a#b'));
-        $this->assertEquals('a b', $oTagCloud->stripMetaChars('a$b'));
-        $this->assertEquals('a b', $oTagCloud->stripMetaChars('a%b'));
-        $this->assertEquals('a b', $oTagCloud->stripMetaChars('a^b'));
-        $this->assertEquals('a b', $oTagCloud->stripMetaChars('a&b'));
-        $this->assertEquals('a b', $oTagCloud->stripMetaChars('a?b'));
-        $this->assertEquals('a b', $oTagCloud->stripMetaChars('a=b'));
-        $this->assertEquals('a b', $oTagCloud->stripMetaChars('a`b'));
+        $this->assertEquals('a b', $oTagCloud->stripMetaChars('a\\b'));
     }
 
     public function testPrepareTags()
@@ -364,8 +344,6 @@ class Unit_Core_oxTagCloudTest extends OxidTestCase
         $this->assertEquals('barr sett', $oTagCloud->prepareTags('barr-sett'));
         $this->assertEquals('foo_ bar_', $oTagCloud->prepareTags('"foo-bar"'));
         $this->assertEquals('foo_', $oTagCloud->prepareTags('\\foo\\'));
-        $this->assertEquals('long testing string long testing string long testing string', $oTagCloud->prepareTags('Long testing string long testing string long testing string long testing string'));
-		$this->assertEquals('a___ long testing string long testing string long testing strin', $oTagCloud->prepareTags('A long testing string long testing string long testing string long testing string'));
     }
 
     public function testTrimTags()
@@ -414,14 +392,14 @@ class Unit_Core_oxTagCloudTest extends OxidTestCase
     {
         $oTagCloud = $this->getProxyClass( 'oxTagCloud' );
             $this->assertEquals( 'tagcloud__oxbaseshop_1_1', $oTagCloud->UNITgetCacheKey( true, 1 ) );
-            $this->assertEquals( 'tagcloud__oxbaseshop_1_0', $oTagCloud->UNITgetCacheKey( false, 1 ) );
+            $this->assertEquals( 'tagcloud__oxbaseshop_1_', $oTagCloud->UNITgetCacheKey( false, 1 ) );
     }
 
     public function testGetCacheName()
     {
         $oTagCloud = $this->getProxyClass('oxTagCloud');
             $this->assertEquals('tagcloud__oxbaseshop_0_1', $oTagCloud->UNITgetCacheKey(true));
-            $this->assertEquals('tagcloud__oxbaseshop_0_0', $oTagCloud->UNITgetCacheKey(false));
+            $this->assertEquals('tagcloud__oxbaseshop_0_', $oTagCloud->UNITgetCacheKey(false));
     }
 
 }

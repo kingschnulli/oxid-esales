@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxubaseTest.php 54128 2013-01-22 11:06:15Z aurimas.gladutis $
+ * @version   SVN: $Id: oxubaseTest.php 44499 2012-04-30 06:59:07Z saulius.stasiukaitis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -383,23 +383,6 @@ class Unit_Views_oxubaseTest extends OxidTestCase
 
 
             $this->assertEquals( "ox|1|1|0|0", $sId );
-    }
-
-    /*
-     * Test getting view ID with SSL enabled
-     */
-    public function testGetViewIdWithSSL()
-    {
-        $myConfig = $this->getMock( 'oxconfig', array( 'isSsl' ) );
-        $myConfig->expects( $this->once() )->method( 'isSsl')->will( $this->returnValue( true ) );
-
-        $sShopURL = $myConfig->getShopUrl();
-        $sShopID  = $myConfig->getShopId();
-
-
-            $oView = $this->getMock( 'oxubase', array( 'getConfig' ) );
-            $oView->expects( $this->once() )->method( 'getConfig')->will( $this->returnValue( $myConfig ) );
-            $this->assertEquals( "ox|0|0|0|0|ssl", $oView->getViewId() );
     }
 
     public function testGetMetaDescriptionForStartView()
@@ -1028,7 +1011,7 @@ class Unit_Views_oxubaseTest extends OxidTestCase
     public function testGetContentId()
     {
         $oView = $this->getProxyClass( 'oxubase' );
-        $sContentId = oxDb::getDb( oxDB::FETCH_MODE_ASSOC )->getOne( "SELECT oxid FROM oxcontents WHERE oxloadid = 'oximpressum' " );
+        $sContentId = oxDb::getDb( true )->getOne( "SELECT oxid FROM oxcontents WHERE oxloadid = 'oximpressum' " );
         $this->assertEquals( $sContentId, $oView->getContentId() );
     }
 
@@ -1067,18 +1050,14 @@ class Unit_Views_oxubaseTest extends OxidTestCase
     public function testAddRssFeed()
     {
         $oView = new oxubase();
-        $oView->addRssFeed('test', 'http://example.com/?force_sid=abc123');
+        $oView->addRssFeed('test', 'tt');
         $a = $oView->getRssLinks();
+        $this->assertEquals(array(0=>array('title'=>'test', 'link'=>'tt')), $a);
 
-        $this->assertEquals(array(
-            0 => array('title'=>'test', 'link'=>'http://example.com/') ), $a);
-
-        $oView->addRssFeed('testd', 'http://example.com/?test=1', 'iknowthiskey');
-
+        $oView->addRssFeed('testd', 'tta', 'iknowthiskey');
         $a = $oView->getRssLinks();
-        $this->assertEquals(array(
-            0 => array('title'=>'test', 'link'=>'http://example.com/'),
-            'iknowthiskey' => array('title'=>'testd', 'link'=>'http://example.com/?test=1')), $a);
+        $this->assertEquals(array(0=>array('title'=>'test', 'link'=>'tt'),
+                        'iknowthiskey'=>array('title'=>'testd', 'link'=>'tta')), $a);
     }
 
     public function testGetDynUrlParams()
@@ -1343,13 +1322,8 @@ class Unit_Views_oxubaseTest extends OxidTestCase
      */
     public function testGetTitle()
     {
-        $oActiveView = $this->getMock( 'oxubase', array( 'getClassName' ) );
-        $oActiveView->expects( $this->once() )->method( 'getClassName' )->will( $this->returnValue( 'links' ) );
-        $oConfig = $this->getMock( 'oxconfig', array( 'getActiveView' ) );
-        $oConfig->expects( $this->once() )->method( 'getActiveView' )->will( $this->returnValue( $oActiveView ) );
-        $oView = $this->getMock( 'oxubase', array( 'getConfig' ) );
-        $oView->expects( $this->once() )->method( 'getConfig' )->will( $this->returnValue( $oConfig ) );
-        $this->assertEquals( 'Links', $oView->getTitle() );
+        $oView = new oxubase();
+        $this->assertNull( $oView->getTitle() );
     }
 
     /*
@@ -2189,28 +2163,17 @@ class Unit_Views_oxubaseTest extends OxidTestCase
      *
      * @return null
      */
-    public function testisFbWidgetVisible()
+    public function testisFbWidgetWisible()
     {
         // cookie OFF
         oxTestModules::addFunction("oxUtilsServer", "getOxCookie", "{return 0;}");
         $oView = new oxUbase();
-        $this->assertFalse( $oView->isFbWidgetVisible() );
+        $this->assertFalse( $oView->isFbWidgetWisible() );
 
         // cookie ON
         oxTestModules::addFunction("oxUtilsServer", "getOxCookie", "{return 1;}");
         $oView = new oxUbase();
-        $this->assertTrue( $oView->isFbWidgetVisible() );
-    }
-
-     /**
-     * oxUbase::isEnabledDownloadabaleFiles() test case
-     *
-     * @return null
-     */
-    public function testIsEnabledDownloadableFiles()
-    {
-        $oView = new oxUbase();
-        $this->assertEquals( (bool) oxConfig::getInstance()->getConfigParam( "blEnableDownloads" ), $oView->isEnabledDownloadableFiles() );
+        $this->assertTrue( $oView->isFbWidgetWisible() );
     }
 
     /**
@@ -2220,19 +2183,10 @@ class Unit_Views_oxubaseTest extends OxidTestCase
      */
     public function testShowRememberMe()
     {
-        $oView = new oxUbase();
-        $this->assertEquals((bool) oxConfig::getInstance()->getConfigParam( "blShowRememberMe" ),  $oView->showRememberMe() );
-    }
+        modConfig::getInstance()->setConfigParam('blShowRememberMe', true );
 
-    /**
-     * oxUbase::isPriceCalculated() test case
-     *
-     * @return null
-     */
-    public function testIsPriceCalculated()
-    {
         $oView = new oxUbase();
-        $this->assertEquals( (bool) oxConfig::getInstance()->getConfigParam( "bl_perfLoadPrice" ), $oView->isPriceCalculated() );
+        $this->assertTrue( $oView->showRememberMe() );
     }
     /* oxubase::getCatMoreUrl() test case
      * 

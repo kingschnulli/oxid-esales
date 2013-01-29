@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: detailsTest.php 53161 2012-12-20 09:27:52Z aurimas.gladutis $
+ * @version   SVN: $Id: detailsTest.php 44354 2012-04-25 11:30:15Z mindaugas.rimgaila $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -1057,42 +1057,19 @@ class Unit_Views_detailsTest extends OxidTestCase
     }
 
     /**
-     * Test meta meta desctionio generation when short desc is empty (should use long desc).
+     * Test meta meta desctionio generation..
      *
      * @return null
      */
-    public function testMetaDescriptionWithLongDesc()
+    public function testMetaDescription()
     {
         $oProduct = oxNew("oxarticle");
         $oProduct->load("1849");
 
         $oDetails = $this->getMock( 'details', array( 'getProduct' ) );
         $oDetails->expects( $this->once() )->method( 'getProduct')->will( $this->returnValue( $oProduct ) );
+
         $sMeta = $oProduct->oxarticles__oxtitle->value.' - '.$oProduct->oxarticles__oxlongdesc->value;
-
-        $oView = new oxubase();
-        $this->assertEquals( $oView->UNITprepareMetaDescription( $sMeta, 200, false ), $oDetails->UNITprepareMetaDescription( null ) );
-    }
-
-    /**
-     * Test meta meta desctionio generation when short desc is empty (should use long desc).
-     *
-     * @return null
-     */
-    public function testMetaDescriptionWithLongDescWithSmartyParsing()
-    {
-        modConfig::getInstance()->setConfigParam( 'bl_perfParseLongDescinSmarty', true );
-
-        $oProduct = $this->getMock('oxarticle', array('getLongDesc', 'getLongDescription'));
-        $oProduct->expects( $this->once() )->method( 'getLongDesc')->will( $this->returnValue( 'parsed description' ) );
-        $oProduct->expects( $this->never() )->method( 'getLongDescription')->will( $this->returnValue( 'not parsed description' ) );
-        $oProduct->oxarticles__oxshortdesc =  new oxField( 'Short description', oxField::T_RAW);
-        $oProduct->oxarticles__oxtitle =  new oxField( 'Title', oxField::T_RAW);
-
-        $oDetails = $this->getMock( 'details', array( 'getProduct' ) );
-        $oDetails->expects( $this->once() )->method( 'getProduct')->will( $this->returnValue( $oProduct ) );
-
-        $sMeta = 'Title - parsed description';
 
         $oView = new oxubase();
         $this->assertEquals( $oView->UNITprepareMetaDescription( $sMeta, 200, false ), $oDetails->UNITprepareMetaDescription( null ) );
@@ -1750,14 +1727,16 @@ class Unit_Views_detailsTest extends OxidTestCase
 
     public function testGetRatingValue_active()
     {
+        /**
         $oConfig = $this->getMock( 'oxStdClass', array( 'getConfigParam' ) );
         $oConfig->expects( $this->once() )->method( 'getConfigParam' )->with( $this->equalTo( 'blShowVariantReviews' ) )->will( $this->returnValue( true ) );
+        **/
 
         $oProduct = $this->getMock( 'oxStdClass', array( 'getArticleRatingAverage' ) );
         $oProduct->expects( $this->once() )->method( 'getArticleRatingAverage' )->will( $this->returnValue( 123.855 ) );
 
         $oView = $this->getMock( $this->getProxyClassName( 'Details' ), array( 'getConfig', 'isReviewActive', 'getProduct' ) );
-        $oView->expects( $this->once() )->method( 'getConfig' )->will( $this->returnValue( $oConfig ) );
+        //$oView->expects( $this->once() )->method( 'getConfig' )->will( $this->returnValue( $oConfig ) );
         $oView->expects( $this->once() )->method( 'isReviewActive' )->will( $this->returnValue( true ) );
         $oView->expects( $this->once() )->method( 'getProduct' )->will( $this->returnValue( $oProduct ) );
 
@@ -1768,7 +1747,7 @@ class Unit_Views_detailsTest extends OxidTestCase
     public function testGetRatingValue_inactive()
     {
         $oView = $this->getMock( $this->getProxyClassName( 'Details' ), array( 'getConfig', 'isReviewActive', 'getProduct' ) );
-        $oView->expects( $this->never() )->method( 'getConfig' );
+        //$oView->expects( $this->never() )->method( 'getConfig' );
         $oView->expects( $this->once() )->method( 'isReviewActive' )->will( $this->returnValue( false ) );
         $oView->expects( $this->never() )->method( 'getProduct' );
 
@@ -1789,14 +1768,18 @@ class Unit_Views_detailsTest extends OxidTestCase
 
      public function testGetRatingCount_active()
     {
+        /**
         $oConfig = $this->getMock( 'oxStdClass', array( 'getConfigParam' ) );
         $oConfig->expects( $this->once() )->method( 'getConfigParam' )->with( $this->equalTo( 'blShowVariantReviews' ) )->will( $this->returnValue( true ) );
+        **/
 
         $oProduct = $this->getMock( 'oxStdClass', array( 'getArticleRatingCount' ) );
-        $oProduct->expects( $this->once() )->method( 'getArticleRatingCount' )->will( $this->returnValue( 123 ) );
+        //$oProduct->expects( $this->once() )->method( 'getArticleRatingCount' )->will( $this->returnValue( 123 ) );
+        $oProduct->oxarticles__oxratingcnt = new oxStdClass();
+        $oProduct->oxarticles__oxratingcnt->value = 123;
 
         $oView = $this->getMock( $this->getProxyClassName( 'Details' ), array( 'getConfig', 'isReviewActive', 'getProduct' ) );
-        $oView->expects( $this->once() )->method( 'getConfig' )->will( $this->returnValue( $oConfig ) );
+        //$oView->expects( $this->once() )->method( 'getConfig' )->will( $this->returnValue( $oConfig ) );
         $oView->expects( $this->once() )->method( 'isReviewActive' )->will( $this->returnValue( true ) );
         $oView->expects( $this->once() )->method( 'getProduct' )->will( $this->returnValue( $oProduct ) );
 
@@ -1938,7 +1921,8 @@ class Unit_Views_detailsTest extends OxidTestCase
         $oView = $this->getMock( $this->getProxyClassName( 'Details' ), array( 'getProduct' ) );
         $oView->expects( $this->once() )->method( 'getProduct' )->will( $this->returnValue( $oProduct ) );
 
-        $sExpected = 'custom/test_paramtpl.tpl';
+        //$sExpected = 'custom/test_paramtpl.tpl';
+        $sExpected = 'test_paramtpl.tpl';
         $this->assertSame( $sExpected, $oView->render() );
         $this->assertSame( $sExpected, $oView->getNonPublicVar( '_sThisTemplate' ) );
     }

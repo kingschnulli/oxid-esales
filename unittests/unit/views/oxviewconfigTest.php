@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxviewconfigTest.php 53116 2012-12-19 08:50:55Z aurimas.gladutis $
+ * @version   SVN: $Id: oxviewconfigTest.php 44479 2012-04-27 13:03:21Z vaidas.matulevicius $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -386,18 +386,14 @@ class Unit_Views_oxviewConfigTest extends OxidTestCase
 
     public function testGetLogoutLink()
     {
-        $oCfg = $this->getMock('oxconfig', array('getShopHomeURL', 'isSsl'));
+        $oCfg = $this->getMock('oxconfig', array('getShopHomeURL'));
         $oCfg->expects($this->once())
              ->method('getShopHomeURL')
              ->will($this->returnValue('shopHomeUrl/'));
-        $oCfg->expects($this->once())
-             ->method('isSsl')
-             ->will($this->returnValue(false));
 
         $oVC = $this->getMock('oxviewconfig'
             , array('getConfig', 'getActionClassName', 'getActCatId', 'getActTplName'
-            , 'getActArticleId', 'getActSearchParam', 'getActSearchTag', 'getActListType'
-            , 'getActRecommendationId' ));
+            , 'getActArticleId', 'getActSearchParam', 'getActSearchTag', 'getActListType'));
 
         $oVC->expects($this->once())
              ->method('getConfig')
@@ -423,62 +419,9 @@ class Unit_Views_oxviewConfigTest extends OxidTestCase
         $oVC->expects($this->once())
              ->method('getActListType')
              ->will($this->returnValue('listtype'));
-        $oVC->expects($this->once())
-        ->method('getActRecommendationId')
-        ->will($this->returnValue('recommid'));
 
-        $this->assertEquals('shopHomeUrl/cl=actionclass&amp;cnid=catid&amp;anid=anid&amp;searchparam=searchparam&amp;searchtag=searchtag&amp;recommid=recommid&amp;listtype=listtype&amp;fnc=logout&amp;tpl=tpl&amp;redirect=1', $oVC->getLogoutLink());
-    }
+        $this->assertEquals('shopHomeUrl/cl=actionclass&amp;cnid=catid&amp;anid=anid&amp;searchparam=searchparam&amp;searchtag=searchtag&amp;listtype=listtype&amp;fnc=logout&amp;tpl=tpl&amp;redirect=1', $oVC->getLogoutLink());
 
-    /**
-     * Tests forming of logout link when in ssl page
-     *
-     * @return null
-     */
-    public function testGetLogoutLinkSsl()
-    {
-        $oCfg = $this->getMock('oxconfig', array('getShopSecureHomeUrl', 'isSsl'));
-        $oCfg->expects($this->once())
-             ->method('getShopSecureHomeUrl')
-             ->will($this->returnValue('sslShopHomeUrl/'));
-        $oCfg->expects($this->once())
-             ->method('isSsl')
-             ->will($this->returnValue(true));
-
-        $oVC = $this->getMock('oxviewconfig'
-            , array('getConfig', 'getActionClassName', 'getActCatId', 'getActTplName'
-            , 'getActArticleId', 'getActSearchParam', 'getActSearchTag', 'getActListType'
-            , 'getActRecommendationId' ));
-
-        $oVC->expects($this->once())
-             ->method('getConfig')
-             ->will($this->returnValue($oCfg));
-        $oVC->expects($this->once())
-             ->method('getActionClassName')
-             ->will($this->returnValue('actionclass'));
-        $oVC->expects($this->once())
-             ->method('getActCatId')
-             ->will($this->returnValue('catid'));
-        $oVC->expects($this->once())
-             ->method('getActTplName')
-             ->will($this->returnValue('tpl'));
-        $oVC->expects($this->once())
-             ->method('getActArticleId')
-             ->will($this->returnValue('anid'));
-        $oVC->expects($this->once())
-             ->method('getActSearchParam')
-             ->will($this->returnValue('searchparam'));
-        $oVC->expects($this->once())
-             ->method('getActSearchTag')
-             ->will($this->returnValue('searchtag'));
-        $oVC->expects($this->once())
-             ->method('getActListType')
-             ->will($this->returnValue('listtype'));
-        $oVC->expects($this->once())
-        ->method('getActRecommendationId')
-        ->will($this->returnValue('recommid'));
-
-        $this->assertEquals('sslShopHomeUrl/cl=actionclass&amp;cnid=catid&amp;anid=anid&amp;searchparam=searchparam&amp;searchtag=searchtag&amp;recommid=recommid&amp;listtype=listtype&amp;fnc=logout&amp;tpl=tpl&amp;redirect=1', $oVC->getLogoutLink());
     }
 
     /**
@@ -619,24 +562,21 @@ class Unit_Views_oxviewConfigTest extends OxidTestCase
     {
         $sMdir = realpath((dirname(__FILE__).'/../moduleTestBlock'));
 
-        $myConfig = modConfig::getInstance();
-        $myConfig->setConfigParam( "sShopDir", $sMdir."/" );
+        $oVC = new oxViewConfig();
+        overrideGetShopBasePath($sMdir);
 
-        $oVC = $this->getMock( 'oxViewConfig', array( 'getConfig' ) );
-        $oVC->expects( $this->any() )->method( 'getConfig')->will( $this->returnValue( $myConfig ) );
+        $this->assertEquals("$sMdir/modules/test1/out", $oVC->getModulePath('test1', 'out'));
+        $this->assertEquals("$sMdir/modules/test1/out/", $oVC->getModulePath('test1', '/out/'));
 
-        $this->assertEquals($sMdir."/modules/test1/out", $oVC->getModulePath('test1', 'out'));
-        $this->assertEquals($sMdir."/modules/test1/out/", $oVC->getModulePath('test1', '/out/'));
-
-        $this->assertEquals($sMdir."/modules/test1/out/blocks/test2.tpl", $oVC->getModulePath('test1', 'out/blocks/test2.tpl'));
-        $this->assertEquals($sMdir."/modules/test1/out/blocks/test2.tpl", $oVC->getModulePath('test1', '/out/blocks/test2.tpl'));
+        $this->assertEquals("$sMdir/modules/test1/out/blocks/test2.tpl", $oVC->getModulePath('test1', 'out/blocks/test2.tpl'));
+        $this->assertEquals("$sMdir/modules/test1/out/blocks/test2.tpl", $oVC->getModulePath('test1', '/out/blocks/test2.tpl'));
 
         // check exception throwing
         try {
             $oVC->getModulePath('test1', '/out/blocks/test1.tpl');
             $this->fail("should have thrown");
         } catch (oxFileException $e) {
-            $this->assertEquals("Requested file not found for module test1 (".$sMdir."/modules/test1/out/blocks/test1.tpl)", $e->getMessage());
+            $this->assertEquals("Requested file not found for module test1 ($sMdir/modules/test1/out/blocks/test1.tpl)", $e->getMessage());
         }
     }
 
@@ -645,11 +585,8 @@ class Unit_Views_oxviewConfigTest extends OxidTestCase
         $sBaseUrl  = oxConfig::getInstance()->getCurrentShopUrl();
         $sMdir = realpath((dirname(__FILE__).'/../moduleTestBlock'));
 
-        $myConfig = modConfig::getInstance();
-        $myConfig->setConfigParam( "sShopDir", $sMdir."/" );
-
-        $oVC = $this->getMock( 'oxViewConfig', array( 'getConfig' ) );
-        $oVC->expects( $this->any() )->method( 'getConfig')->will( $this->returnValue( $myConfig ) );
+        $oVC = new oxViewConfig();
+        overrideGetShopBasePath($sMdir);
 
         $this->assertEquals("{$sBaseUrl}modules/test1/out", $oVC->getModuleUrl('test1', 'out'));
         $this->assertEquals("{$sBaseUrl}modules/test1/out/", $oVC->getModuleUrl('test1', '/out/'));
@@ -662,8 +599,7 @@ class Unit_Views_oxviewConfigTest extends OxidTestCase
             $oVC->getModuleUrl('test1', '/out/blocks/test1.tpl');
             $this->fail("should have thrown");
         } catch (oxFileException $e) {
-            $sBaseUrl  = oxConfig::getInstance()->getConfigParam('sShopDir');
-            $this->assertEquals("Requested file not found for module test1 (".$sMdir."/modules/test1/out/blocks/test1.tpl)", $e->getMessage());
+            $this->assertEquals("Requested file not found for module test1 ($sMdir/modules/test1/out/blocks/test1.tpl)", $e->getMessage());
         }
     }
 
@@ -754,140 +690,616 @@ class Unit_Views_oxviewConfigTest extends OxidTestCase
         $oViewConf->expects( $this->once() )->method( "getImageUrl" )->will( $this->returnValue( "shopUrl/out/theme/img/" ) );
         $this->assertEquals( "shopUrl/out/theme/img/", $oViewConf->getImageUrl() );
     }
-
-    /**
-     * Checks if shop licenze is in staging mode
-     */
-    public function testHasDemoKey()
-    {
-            return;
-
-        $oConfig = $this->getMock( "oxConfig", array( "hasDemoKey" ) );
-        $oConfig->expects( $this->once() )->method( "hasDemoKey" )->will( $this->returnValue( true ) );
-
-        $oViewConfig = $this->getMock( 'oxViewConfig', array('getConfig') );
-        $oViewConfig->expects($this->any())->method('getConfig')->will( $this->returnValue( $oConfig ) );
-
-        $this->assertTrue( $oViewConfig->hasDemoKey() );
-    }
-
-
     /**
      * Testing getSelfLink()
      */
     public function testGetSelfLink()
     {
-        $oConfig = $this->getMock( "oxConfig", array( "getShopHomeURL" ) );
-        $oConfig->expects( $this->once() )->method( "getShopHomeURL" )->will( $this->returnValue( "testShopUrl" ) );
+        $oViewConfig = $this->getProxyClass( 'oxviewconfig' );
+
+        $this->assertContains( "index.php?", $oViewConfig->getSelfLink() );
+    }
+    
+    /**
+     * check config params getter oxviewconfig::getActCatId()
+     */
+    public function testGetActCatId()
+    {
+        $oOxViewConfig = new oxviewconfig();
+
+        modConfig::setParameter( 'cnid', null );
+        $this->assertNull( $oOxViewConfig->getActCatId() );
+
+        modConfig::setParameter( 'cnid', 123 );
+        $this->assertEquals( 123, $oOxViewConfig->getActCatId() );
+    }
+    
+    /**
+     * check config params getter oxviewconfig::getActArticleId()
+     */
+    public function testGetActArticleId()
+    {
+        $oOxViewConfig = new oxviewconfig();
+
+        modConfig::setParameter( 'anid', null );
+        $this->assertNull( $oOxViewConfig->getActArticleId() );
+
+        modConfig::setParameter( 'anid', 123 );
+        $this->assertEquals( 123, $oOxViewConfig->getActArticleId() );
+    }
+    
+    /**
+     * check config params getter oxviewconfig::getActSearchParam()
+     */
+    public function testGetActSearchParam()
+    {
+        $oOxViewConfig = new oxviewconfig();
+
+        modConfig::setParameter( 'searchparam', null );
+        $this->assertNull( $oOxViewConfig->getActSearchParam() );
+
+        modConfig::setParameter( 'searchparam', '123' );
+        $this->assertEquals( '123', $oOxViewConfig->getActSearchParam() );
+    }
+    
+    /**
+     * check config params getter oxviewconfig::getActSearchTag()
+     */
+    public function testGetActSearchTag()
+    {
+        $oOxViewConfig = new oxviewconfig();
+
+        modConfig::setParameter( 'searchtag', null );
+        $this->assertNull( $oOxViewConfig->getActSearchTag() );
+
+        modConfig::setParameter( 'searchtag', '123' );
+        $this->assertEquals( '123', $oOxViewConfig->getActSearchTag() );
+    }
+    
+    /**
+     * check config params getter oxviewconfig::getActListType()
+     */
+    public function testGetActListType()
+    {
+        $oOxViewConfig = new oxviewconfig();
+
+        modConfig::setParameter( 'listtype', null );
+        $this->assertNull( $oOxViewConfig->getActListType() );
+
+        modConfig::setParameter( 'listtype', '123' );
+        $this->assertEquals( '123', $oOxViewConfig->getActListType() );
+    }
+    
+    /**
+     * check config params getter oxviewconfig::getActManufacturerId()
+     */
+    public function testGetActManufacturerId()
+    {
+        $oOxViewConfig = new oxviewconfig();
+
+        modConfig::setParameter( 'mnid', null );
+        $this->assertNull( $oOxViewConfig->getActManufacturerId() );
+
+        modConfig::setParameter( 'mnid', '123' );
+        $this->assertEquals( '123', $oOxViewConfig->getActManufacturerId() );
+    }
+    
+    /**
+     * check config params getter oxviewconfig::isBuyableParent()
+     */
+    public function testIsBuyableParent()
+    {        
+        modConfig::getInstance()->setConfigParam( "blVariantParentBuyable", true );
+        
+        $oVC = new oxviewconfig();
+        $this->assertEquals(true, $oVC->isBuyableParent());
+    }
+    
+    /**
+     * check config params getter oxviewconfig::getStockOnDefaultMessage()
+     */
+    public function testGetStockOnDefaultMessage()
+    {        
+        modConfig::getInstance()->setConfigParam( "blStockOnDefaultMessage", true );
+        
+        $oVC = new oxviewconfig();
+        $this->assertEquals(true, $oVC->getStockOnDefaultMessage());
+    }
+    
+    /**
+     * check config params getter oxviewconfig::getStockOffDefaultMessage()
+     */
+    public function testGetStockOffDefaultMessage()
+    {        
+        modConfig::getInstance()->setConfigParam( "blStockOffDefaultMessage", true );
+        
+        $oVC = new oxviewconfig();
+        $this->assertEquals(true, $oVC->getStockOffDefaultMessage());
+    }
+    
+    /**
+     * check config params getter oxviewconfig::getArtPerPageCount()
+     */
+    public function testGetArtPerPageCount()
+    {        
+        $oVC = new oxviewconfig();
+        
+        $this->assertNull( $oVC->getArtPerPageCount() );
+        
+        $oVC->setViewConfigParam('iartPerPage', 123);
+        $this->assertEquals(123, $oVC->getArtPerPageCount());
+    }
+    
+    /**
+     * check config params getter oxviewconfig::getShopVersion()
+     */
+    public function testGetShopVersion()
+    {        
+        $sShopVersion = "x.x.x";
+        $oVC = new oxviewconfig();
+        $oVC->setViewConfigParam('sShopVersion', $sShopVersion);
+        $this->assertEquals($sShopVersion, $oVC->getShopVersion());
+    }
+    
+    /**
+     * check config params getter oxviewconfig::showBirthdayFields()
+     */
+    public function testShowBirthdayFields()
+    {        
+        modConfig::getInstance()->setConfigParam( "blShowBirthdayFields", true );
+        
+        $oVC = new oxviewconfig();
+        $this->assertEquals(true, $oVC->showBirthdayFields());
+    }
+    
+    /**
+     * check config params getter oxviewconfig::showFinalStep()
+     */
+    public function testShowFinalStep()
+    {        
+        modConfig::getInstance()->setConfigParam( "blShowFinalStep", true );
+        
+        $oVC = new oxviewconfig();
+        $this->assertEquals(true, $oVC->showFinalStep());
+    }
+    
+    /**
+     * check config params getter oxviewconfig::isAutoSearchOnCat()
+     */
+    public function testIsAutoSearchOnCat()
+    {        
+        modConfig::getInstance()->setConfigParam( "blAutoSearchOnCat", true );
+        
+        $oVC = new oxviewconfig();
+        $this->assertEquals(true, $oVC->isAutoSearchOnCat());
+    }
+    
+    /**
+     * Testing oxviewconfig::getCoreUtilsDir()
+     */
+    public function testGetCoreUtilsDir()
+    {
+        $oConfig = $this->getMock( "oxConfig", array( "getCoreUtilsURL" ) );
+        $oConfig->expects( $this->once() )->method( "getCoreUtilsURL" )->will( $this->returnValue( "testDir" ) );
 
         $oViewConfig = $this->getMock( 'oxViewConfig', array('getConfig') );
         $oViewConfig->expects($this->any())->method('getConfig')->will( $this->returnValue( $oConfig ) );
 
-        $this->assertEquals( "testShopUrl", $oViewConfig->getSelfLink() );
+        $this->assertEquals( "testDir", $oViewConfig->getCoreUtilsDir() );
     }
-
+    
     /**
-     * Testing getSslSelfLink()
+     * Testing oxviewconfig::getCoreUtilsDir()
      */
-    public function testGetSslSelfLink()
+    public function testGetCoreUtilsDirThroughProxy()
     {
-        $oConfig = $this->getMock( "oxConfig", array( "getShopSecureHomeURL" ) );
-        $oConfig->expects( $this->once() )->method( "getShopSecureHomeURL" )->will( $this->returnValue( "testSecureShopUrl" ) );
+        $oVC = $this->getProxyClass('oxviewconfig');
+        $this->assertContains( "core/utils/", $oVC->getCoreUtilsDir() );
+    }   
+    
+    /**
+     * Testing oxViewConfig::getCurrentHomeDir()
+     */
+    public function testGetCurrentHomeDir()
+    {
+        $oConfig = $this->getMock( "oxConfig", array( "getCurrentShopUrl" ) );
+        $oConfig->expects( $this->once() )->method( "getCurrentShopUrl" )->will( $this->returnValue( "testShopUrl" ) );
 
         $oViewConfig = $this->getMock( 'oxViewConfig', array('getConfig') );
         $oViewConfig->expects($this->any())->method('getConfig')->will( $this->returnValue( $oConfig ) );
 
-        $this->assertEquals( "testSecureShopUrl", $oViewConfig->getSslSelfLink() );
+        $this->assertEquals( "testShopUrl", $oViewConfig->getCurrentHomeDir() );
     }
-
+    
     /**
-     * Testing getSslSelfLink() - admin mode
+     * Testing oxViewConfig::getOrderLink()
      */
-    public function testGetSslSelfLink_adminMode()
+    public function testGetOrderLink()
     {
-        $oConfig = $this->getMock( "oxConfig", array( "getShopSecureHomeURL" ) );
-        $oConfig->expects( $this->never() )->method( "getShopSecureHomeURL" );
+        $oConfig = $this->getMock( "oxConfig", array( "getShopSecureHomeUrl" ) );
+        $oConfig->expects( $this->once() )->method( "getShopSecureHomeUrl" )->will( $this->returnValue( "testShopSecureHomeUrl" ) );
 
-        $oViewConfig = $this->getMock( 'oxViewConfig', array('getConfig', 'isAdmin', 'getSelfLink') );
+        $oViewConfig = $this->getMock( 'oxViewConfig', array('getConfig') );
+        $oViewConfig->expects($this->any())->method('getConfig')->will( $this->returnValue( $oConfig ) );
+
+        $this->assertEquals( "testShopSecureHomeUrl"."cl=user", $oViewConfig->getOrderLink() );
+    }
+    
+    /**
+     * Testing oxViewConfig::getOrderLink()
+     */
+    public function testGetOrderLinkProxy()
+    {
+        $oVC = $this->getProxyClass('oxviewconfig');
+        $this->assertContains( "index.php?"."cl=user", $oVC->getOrderLink() );
+    }
+    
+    /**
+     * Testing oxViewConfig::getPaymentLink()
+     */
+    public function testGetPaymentLink()
+    {
+        $oConfig = $this->getMock( "oxConfig", array( "getShopSecureHomeUrl" ) );
+        $oConfig->expects( $this->once() )->method( "getShopSecureHomeUrl" )->will( $this->returnValue( "testShopSecureHomeUrl" ) );
+
+        $oViewConfig = $this->getMock( 'oxViewConfig', array('getConfig') );
+        $oViewConfig->expects($this->any())->method('getConfig')->will( $this->returnValue( $oConfig ) );
+
+        $this->assertEquals( "testShopSecureHomeUrl"."cl=payment", $oViewConfig->getPaymentLink() );
+    }
+    
+    /**
+     * Testing oxViewConfig::getPaymentLink()
+     */
+    public function testGetPaymentLinkProxy()
+    {
+        $oVC = $this->getProxyClass('oxviewconfig');
+        $this->assertContains( "index.php?"."cl=payment", $oVC->getPaymentLink() );
+    }
+    
+    /**
+     * Testing oxViewConfig::getExeOrderLink()
+     */
+    public function testGetExeOrderLink()
+    {
+        $oConfig = $this->getMock( "oxConfig", array( "getShopSecureHomeUrl" ) );
+        $oConfig->expects( $this->once() )->method( "getShopSecureHomeUrl" )->will( $this->returnValue( "testShopSecureHomeUrl" ) );
+
+        $oViewConfig = $this->getMock( 'oxViewConfig', array('getConfig') );
+        $oViewConfig->expects($this->any())->method('getConfig')->will( $this->returnValue( $oConfig ) );
+
+        $this->assertEquals( "testShopSecureHomeUrl"."cl=order&amp;fnc=execute", $oViewConfig->getExeOrderLink() );
+    }
+    
+    /**
+     * Testing oxViewConfig::getExeOrderLink()
+     */
+    public function testGetExeOrderLinkProxy()
+    {
+        $oVC = $this->getProxyClass('oxviewconfig');
+        $this->assertContains( "index.php?"."cl=order&amp;fnc=execute", $oVC->getExeOrderLink() );
+    }
+    
+    /**
+     * Testing oxViewConfig::getOrderConfirmLink()
+     */
+    public function testGetOrderConfirmLink()
+    {
+        $oConfig = $this->getMock( "oxConfig", array( "getShopSecureHomeUrl" ) );
+        $oConfig->expects( $this->once() )->method( "getShopSecureHomeUrl" )->will( $this->returnValue( "testShopSecureHomeUrl" ) );
+
+        $oViewConfig = $this->getMock( 'oxViewConfig', array('getConfig') );
+        $oViewConfig->expects($this->any())->method('getConfig')->will( $this->returnValue( $oConfig ) );
+
+        $this->assertEquals( "testShopSecureHomeUrl"."cl=order", $oViewConfig->getOrderConfirmLink() );
+    }
+    
+    /**
+     * Testing oxViewConfig::getOrderConfirmLink()
+     */
+    public function testGetOrderConfirmLinkProxy()
+    {
+        $oVC = $this->getProxyClass('oxviewconfig');
+        $this->assertContains( "index.php?"."cl=order", $oVC->getOrderConfirmLink() );
+    }
+    
+    /**
+     * Testing oxViewConfig::getTemplateDir()
+     */
+    public function testGetTemplateDir()
+    {
+        $oConfig = $this->getMock( "oxConfig", array( "getTemplateDir" ) );
+        $oConfig->expects( $this->once() )->method( "getTemplateDir" )->will( $this->returnValue( "testTemplateDir" ) );
+
+        $oViewConfig = $this->getMock( 'oxViewConfig', array('getConfig') );
+        $oViewConfig->expects($this->any())->method('getConfig')->will( $this->returnValue( $oConfig ) );
+
+        $this->assertEquals( "testTemplateDir", $oViewConfig->getTemplateDir() );
+    }
+    
+    /**
+     * Testing oxViewConfig::getTemplateDir()
+     */
+    public function testGetTemplateDirProxy()
+    {
+        $oVC = $this->getProxyClass('oxviewconfig');
+        $this->assertContains( "/out/azure/tpl", $oVC->getTemplateDir() );
+    }
+    
+    /**
+     * Testing oxViewConfig::getUrlTemplateDir()
+     */
+    public function testGetUrlTemplateDir()
+    {
+        $oConfig = $this->getMock( "oxConfig", array( "getTemplateUrl" ) );
+        $oConfig->expects( $this->once() )->method( "getTemplateUrl" )->will( $this->returnValue( "testTemplateUrl" ) );
+
+        $oViewConfig = $this->getMock( 'oxViewConfig', array('getConfig') );
+        $oViewConfig->expects($this->any())->method('getConfig')->will( $this->returnValue( $oConfig ) );
+
+        $this->assertEquals( "testTemplateUrl", $oViewConfig->getUrlTemplateDir() );
+    }
+    
+    /**
+     * Testing oxViewConfig::getUrlTemplateDir()
+     */
+    public function testGetUrlTemplateDirProxy()
+    {
+        $oVC = $this->getProxyClass('oxviewconfig');
+        $this->assertContains( "/out/azure/tpl", $oVC->getUrlTemplateDir() );
+    }
+    
+    /**
+     * Testing oxViewConfig::getNoSslImageDir()
+     */
+    public function testGetNoSslImageDir()
+    {
+        $oConfig = $this->getMock( "oxConfig", array( "getImageUrl" ) );
+        $oConfig->expects( $this->once() )->method( "getImageUrl" )->will( $this->returnValue( "testImageUrl" ) );
+
+        $oViewConfig = $this->getMock( 'oxViewConfig', array('getConfig') );
+        $oViewConfig->expects($this->any())->method('getConfig')->will( $this->returnValue( $oConfig ) );
+
+        $this->assertEquals( "testImageUrl", $oViewConfig->getNoSslImageDir() );
+    }
+    
+    /**
+     * Testing oxViewConfig::getNoSslImageDir()
+     */
+    public function testGetNoSslImageDirProxy()
+    {
+        $oVC = $this->getProxyClass('oxviewconfig');
+        $this->assertContains( "/out/azure/img", $oVC->getNoSslImageDir() );
+    }
+    
+    /**
+     * Testing oxViewConfig::getPictureDir()
+     */
+    public function testGetPictureDir()
+    {
+        $oConfig = $this->getMock( "oxConfig", array( "getPictureUrl" ) );
+        $oConfig->expects( $this->once() )->method( "getPictureUrl" )->will( $this->returnValue( "testPictureUrl" ) );
+
+        $oViewConfig = $this->getMock( 'oxViewConfig', array('getConfig') );
+        $oViewConfig->expects($this->any())->method('getConfig')->will( $this->returnValue( $oConfig ) );
+
+        $this->assertEquals( "testPictureUrl", $oViewConfig->getPictureDir() );
+    }
+    
+    /**
+     * Testing oxViewConfig::getPictureDir()
+     */
+    public function testGetPictureDirProxy()
+    {
+        $oVC = $this->getProxyClass('oxviewconfig');
+        $this->assertContains( "/out/pictures", $oVC->getPictureDir() );
+    }
+    
+    /**
+     * Testing oxViewConfig::getAdminDir()
+     */
+    public function testGetAdminDir()
+    {
+        modConfig::getInstance()->setConfigParam( "sAdminDir", "testAdminDir" );
+        $oViewConfig = new oxViewConfig();
+
+        $this->assertEquals( "testAdminDir", $oViewConfig->getAdminDir() );
+    }
+          
+    /**
+     * Testing oxViewConfig::getActiveShopId()
+     */
+    public function testGetActiveShopId()
+    {
+        $oConfig = $this->getMock( "oxConfig", array( "getShopId" ) );
+        $oConfig->expects( $this->once() )->method( "getShopId" )->will( $this->returnValue( "testShopId" ) );
+
+        $oViewConfig = $this->getMock( 'oxViewConfig', array('getConfig') );
+        $oViewConfig->expects($this->any())->method('getConfig')->will( $this->returnValue( $oConfig ) );
+
+        $this->assertEquals( "testShopId", $oViewConfig->getActiveShopId() );
+    }
+    
+    /**
+     * Testing oxViewConfig::isSsl()
+     */
+    public function testIsSsl()
+    {
+        $oConfig = $this->getMock( "oxConfig", array( "isSsl" ) );
+        $oConfig->expects( $this->once() )->method( "isSsl" )->will( $this->returnValue( "testIsSssl" ) );
+
+        $oViewConfig = $this->getMock( 'oxViewConfig', array('getConfig') );
+        $oViewConfig->expects($this->any())->method('getConfig')->will( $this->returnValue( $oConfig ) );
+
+        $this->assertEquals( "testIsSssl", $oViewConfig->isSsl() );
+    }
+    
+    /**
+     * Testing oxViewConfig::getRemoteAddress()
+     */
+    public function testGetRemoteAddress()
+    {
+        $oViewConfig = new oxviewconfig();
+        $this->assertEquals(oxUtilsServer::getInstance()->getRemoteAddress(), $oViewConfig->getRemoteAddress() );
+    }
+    
+    /**
+     * Testing oxViewConfig::getPopupIdent()
+     */
+    public function testGetPopupIdent()
+    {
+        $oConfig = $this->getMock( "oxConfig", array( "getShopUrl" ) );
+        $oConfig->expects( $this->once() )->method( "getShopUrl" )->will( $this->returnValue( "testShopUrl" ) );
+
+        $oViewConfig = $this->getMock( 'oxViewConfig', array('getConfig') );
+        $oViewConfig->expects($this->any())->method('getConfig')->will( $this->returnValue( $oConfig ) );
+
+        $this->assertEquals( md5( "testShopUrl" ), $oViewConfig->getPopupIdent() );
+    }
+    
+    /**
+     * Testing oxViewConfig::getPopupIdentRand()
+     */
+    public function testGetPopupIdentRand()
+    {
+        $sRand = md5( time() );
+
+        $oViewConfig =  new oxViewConfig;
+        $oViewConfig->setViewConfigParam('popupidentrand', $sRand);
+
+        $this->assertEquals( $sRand, $oViewConfig->getPopupIdentRand() );
+    }
+    
+    /**
+     * Testing oxViewConfig::getArtPerPageForm()
+     */
+    public function testGetArtPerPageForm()
+    {
+        $oConfig = $this->getMock( "oxConfig", array( "getShopCurrentUrl" ) );
+        $oConfig->expects( $this->once() )->method( "getShopCurrentUrl" )->will( $this->returnValue( "testShopUrl" ) );
+
+        $oViewConfig = $this->getMock( 'oxViewConfig', array('getConfig') );
+        $oViewConfig->expects($this->any())->method('getConfig')->will( $this->returnValue( $oConfig ) );
+
+        $this->assertEquals( "testShopUrl", $oViewConfig->getArtPerPageForm() );
+    }
+    
+    /**
+     * Testing oxViewConfig::getArtPerPageForm()
+     */
+    public function testGetArtPerPageFormProxy()
+    {
+        $oViewConfig = $this->getProxyClass('oxviewconfig');
+        $this->assertContains( "index.php?", $oViewConfig->getArtPerPageForm() );
+    }
+    
+    /**
+     * Testing oxViewConfig::isMultiShop()
+     */
+    public function testIsMultiShop()
+    {
+        $oShop = new oxshop();
+        $oShop->oxshops__oxismultishop = new oxField( true );        
+        
+        $oConfig = $this->getMock( "oxConfig", array( "getActiveShop" ) );
+        $oConfig->expects( $this->once() )->method( "getActiveShop" )->will( $this->returnValue( $oShop ) );
+
+        $oViewConfig = $this->getMock( 'oxViewConfig', array('getConfig') );
+        $oViewConfig->expects($this->any())->method('getConfig')->will( $this->returnValue( $oConfig ) );
+
+        $this->assertEquals( true, $oViewConfig->isMultiShop() );        
+    }
+    
+    /**
+     * Testing oxViewConfig::isMultiShop()
+     */
+    public function testIsMultiShopNotMultiShop()
+    {
+        $oShop = new oxshop();        
+        
+        $oConfig = $this->getMock( "oxConfig", array( "getActiveShop" ) );
+        $oConfig->expects( $this->once() )->method( "getActiveShop" )->will( $this->returnValue( $oShop ) );
+
+        $oViewConfig = $this->getMock( 'oxViewConfig', array('getConfig') );
         $oViewConfig->expects( $this->any() )->method( 'getConfig' )->will( $this->returnValue( $oConfig ) );
-        $oViewConfig->expects( $this->any() )->method( 'isAdmin' )->will( $this->returnValue( true ) );
-        $oViewConfig->expects( $this->once() )->method( "getSelfLink" )->will( $this->returnValue("testShopUrl") );
 
-        $this->assertEquals( "testShopUrl", $oViewConfig->getSslSelfLink() );
+        $this->assertEquals( false, $oViewConfig->isMultiShop() );        
     }
-
+    
     /**
-     * Testing isAltImageServerConfigured() - nothing configured
+     * Testing oxViewConfig::getServiceUrl()
      */
-    public function testIsAltImageServerConfigured_none()
+    public function testGetServiceUrl()
     {
-        modConfig::getInstance()->setConfigParam('sAltImageUrl', '');
-        modConfig::getInstance()->setConfigParam('sAltImageDir', '');
-        modConfig::getInstance()->setConfigParam('sSSLAltImageUrl', '');
-        modConfig::getInstance()->setConfigParam('sSSLAltImageDir', '');
+        $oViewConfig =  new oxViewConfig;
+        $oViewConfig->setViewConfigParam( 'sServiceUrl', 'testService' );
 
-        $oViewConfig = oxNew('oxViewConfig');
-
-        $this->assertFalse( $oViewConfig->isAltImageServerConfigured() );
+        $this->assertEquals( 'testService', $oViewConfig->getServiceUrl() );
     }
-
+    
     /**
-     * Testing isAltImageServerConfigured() - http url configured
+     * Testing oxViewConfig::getShowFbConnect()
      */
-    public function testIsAltImageServerConfigured_httpurl()
+    public function testGetShowFbConnect()
     {
-        modConfig::getInstance()->setConfigParam('sAltImageUrl', 'http://img.oxid-esales.com');
-        modConfig::getInstance()->setConfigParam('sAltImageDir', '');
-        modConfig::getInstance()->setConfigParam('sSSLAltImageUrl', '');
-        modConfig::getInstance()->setConfigParam('sSSLAltImageDir', '');
-
-        $oViewConfig = oxNew('oxViewConfig');
-
-        $this->assertTrue( $oViewConfig->isAltImageServerConfigured() );
+        $oCfg = $this->getMock( 'oxconfig', array( 'getConfigParam' ) );
+        $oCfg->expects( $this->at( 0 ) )->method( 'getConfigParam' )->with( $this->equalTo( 'bl_showFbConnect' ) )->will( $this->returnValue( true ) );
+        $oCfg->expects( $this->at( 1 ) )->method( 'getConfigParam' )->with( $this->equalTo( 'sFbAppId' ) )->will( $this->returnValue( 'true' ) );
+        $oCfg->expects( $this->at( 2 ) )->method( 'getConfigParam' )->with( $this->equalTo( 'sFbSecretKey' ) )->will( $this->returnValue( 'true' ) );
+        
+        $oVC = $this->getMock( 'oxviewconfig', array( 'getConfig' ) );
+        $oVC->expects( $this->once() )->method( 'getConfig' )->will( $this->returnValue( $oCfg ) );
+        $this->assertTrue( $oVC->getShowFbConnect() );
+    }   
+    
+    /**
+     * Testing oxViewConfig::getShowFbConnect()
+     */
+    public function testGetShowFbConnectNotShowFbConnect()
+    {
+        modConfig::getInstance()->setConfigParam( "bl_showFbConnect", false );
+        
+        $oVC = new oxviewconfig();
+        $this->assertFalse( $oVC->getShowFbConnect() );
     }
-
+    
     /**
-     * Testing isAltImageServerConfigured() - http dir configured
+     * Testing oxViewConfig::getShowFbConnect()
      */
-    public function testIsAltImageServerConfigured_httpdir()
+    public function testGetShowFbConnectNoFBConfig()
     {
-        modConfig::getInstance()->setConfigParam('sAltImageUrl', '');
-        modConfig::getInstance()->setConfigParam('sAltImageDir', 'http://img.oxid-esales.com');
-        modConfig::getInstance()->setConfigParam('sSSLAltImageUrl', '');
-        modConfig::getInstance()->setConfigParam('sSSLAltImageDir', '');
-
-        $oViewConfig = oxNew('oxViewConfig');
-
-        $this->assertTrue( $oViewConfig->isAltImageServerConfigured() );
+        $oCfg = $this->getMock( 'oxconfig', array( 'getConfigParam' ) );
+        $oCfg->expects( $this->at( 0 ) )->method( 'getConfigParam' )->with( $this->equalTo( 'bl_showFbConnect' ) )->will( $this->returnValue( true ) );
+        
+        $oVC = $this->getMock('oxviewconfig', array('getConfig'));
+        $oVC->expects( $this->once() )->method( 'getConfig' )->will( $this->returnValue( $oCfg ) );
+        $this->assertFalse( $oVC->getShowFbConnect() );
     }
-
+    
     /**
-     * Testing isAltImageServerConfigured() - https url configured
+     * Testing oxViewConfig::getPasswordLength()
      */
-    public function testIsAltImageServerConfigured_httpsurl()
+    public function testGetPasswordLength()
     {
-        modConfig::getInstance()->setConfigParam('sAltImageUrl', '');
-        modConfig::getInstance()->setConfigParam('sAltImageDir', '');
-        modConfig::getInstance()->setConfigParam('sSSLAltImageUrl', 'https://img.oxid-esales.com');
-        modConfig::getInstance()->setConfigParam('sSSLAltImageDir', '');
-
-        $oViewConfig = oxNew('oxViewConfig');
-
-        $this->assertTrue( $oViewConfig->isAltImageServerConfigured() );
+        $oCfg = $this->getMock( 'oxconfig', array( 'getConfigParam' ) );
+        $oCfg->expects( $this->any() )->method( 'getConfigParam' )->with( $this->equalTo( 'iPasswordLength' ) )->will( $this->returnValue( 123 ) );
+        
+        $oVC = $this->getMock('oxviewconfig', array('getConfig'));
+        $oVC->expects( $this->once() )->method( 'getConfig' )->will( $this->returnValue( $oCfg ) );        
+        
+        $this->assertEquals( 123, $oVC->getPasswordLength() );
     }
-
+    
     /**
-     * Testing isAltImageServerConfigured() - https dir configured
+     * Testing oxViewConfig::getPasswordLength()
      */
-    public function testIsAltImageServerConfigured_httpsdir()
+    public function testGetPasswordLengthNotSet()
     {
-        modConfig::getInstance()->setConfigParam('sAltImageUrl', '');
-        modConfig::getInstance()->setConfigParam('sAltImageDir', '');
-        modConfig::getInstance()->setConfigParam('sSSLAltImageUrl', '');
-        modConfig::getInstance()->setConfigParam('sSSLAltImageDir', 'https://img.oxid-esales.com');
-
-        $oViewConfig = oxNew('oxViewConfig');
-
-        $this->assertTrue( $oViewConfig->isAltImageServerConfigured() );
+        $oCfg = $this->getMock( 'oxconfig', array( 'getConfigParam' ) );
+        
+        $oVC = $this->getMock('oxviewconfig', array('getConfig'));
+        $oVC->expects( $this->once() )->method( 'getConfig' )->will( $this->returnValue( $oCfg ) );        
+        
+        $this->assertEquals( 6, $oVC->getPasswordLength() );
     }
 }

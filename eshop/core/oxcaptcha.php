@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   core
- * @copyright (C) OXID eSales AG 2003-2012
+ * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcaptcha.php 52486 2012-11-27 15:37:13Z aurimas.gladutis $
+ * @version   SVN: $Id: oxcaptcha.php 36149 2011-06-10 11:25:50Z arvydas.vapsva $
  */
 
 /**
@@ -90,14 +90,11 @@ class oxCaptcha extends oxSuperCfg
         // if session is started - storing captcha info here
         if ( $this->getSession()->isSessionStarted() ) {
             $sHash = oxUtilsObject::getInstance()->generateUID();
-            $aHash = oxSession::getVar( "aCaptchaHash" );
-            $aHash[$sHash] = array( $sTextHash => $iTime );
-            oxSession::setVar( "aCaptchaHash", $aHash );
+            oxSession::setVar( "aCaptchaHash", array( $sHash => array( $sTextHash => $iTime ) ) );
         } else {
-            $oDb = oxDb::getDb();
             $sQ = "insert into oxcaptcha ( oxhash, oxtime ) values ( '{$sTextHash}', '{$iTime}' )";
-            $oDb->execute( $sQ );
-            $sHash = $oDb->getOne( "select LAST_INSERT_ID()", false, false );
+            oxDb::getDb()->execute( $sQ );
+            $sHash = oxDb::getDb()->getOne( "select LAST_INSERT_ID()" );
         }
         return $sHash;
     }
@@ -156,12 +153,7 @@ class oxCaptcha extends oxSuperCfg
         $blPass = null;
         if ( ( $aHash = oxSession::getVar( "aCaptchaHash" ) ) ) {
             $blPass = ( isset( $aHash[$sMacHash][$sHash] ) && $aHash[$sMacHash][$sHash] >= $iTime ) ? true : false;
-            unset( $aHash[$sMacHash] );
-            if ( !empty( $aHash ) ) {
-                oxSession::setVar( "aCaptchaHash", $aHash );
-            } else {
-                oxSession::deleteVar( "aCaptchaHash" );
-            }
+            oxSession::deleteVar( "aCaptchaHash" );
         }
         return $blPass;
     }
@@ -181,7 +173,7 @@ class oxCaptcha extends oxSuperCfg
 
         $oDb = oxDb::getDb();
         $sQ  = "select 1 from oxcaptcha where oxid = {$iMacHash} and oxhash = '{$sHash}'";
-        if ( ( $blPass = (bool) $oDb->getOne( $sQ, false, false ) ) ) {
+        if ( ( $blPass = (bool) $oDb->getOne( $sQ ) ) ) {
             // cleanup
             $sQ = "delete from oxcaptcha where oxid = {$iMacHash} and oxhash = '{$sHash}'";
             $oDb->execute( $sQ );

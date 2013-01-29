@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   views
- * @copyright (C) OXID eSales AG 2003-2012
+ * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: manufacturerlist.php 44119 2012-04-20 12:23:13Z alfonsas $
+ * @version   SVN: $Id: manufacturerlist.php 38568 2011-09-05 12:25:37Z arvydas.vapsva $
  */
 
 /**
@@ -437,10 +437,10 @@ class ManufacturerList extends aList
     {
         $aPaths = array();
 
-        $oCatTree = $this->getManufacturerTree();
+        $oCatTree = $this->getManufacturerTree()->getPath();
 
         if ( $oCatTree ) {
-            foreach ( $oCatTree->getPath() as $oCat ) {
+            foreach ( $oCatTree as $oCat ) {
                 $aCatPath = array();
                 $aCatPath['link'] = $oCat->getLink();
                 $aCatPath['title'] = $oCat->oxmanufacturers__oxtitle->value;

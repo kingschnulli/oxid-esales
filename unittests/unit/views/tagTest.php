@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: tagTest.php 53259 2013-01-02 10:38:35Z aurimas.gladutis $
+ * @version   SVN: $Id: tagTest.php 38568 2011-09-05 12:25:37Z arvydas.vapsva $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -54,7 +54,6 @@ class Unit_Views_tagTest extends OxidTestCase
     /**
      * Testing if render method calls output of 404 error if articles list is empty
      */
-    /* removing, since when no articles is found, should render empty articles list
     public function testRender_noArticlesForTag()
     {
         modConfig::setParameter( "pgNr", 999 );
@@ -72,7 +71,6 @@ class Unit_Views_tagTest extends OxidTestCase
 
         $this->fail( 'failed redirect on inactive category' );
     }
-    */
 
     public function testGetAddUrlParams()
     {

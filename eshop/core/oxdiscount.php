@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxdiscount.php 50557 2012-10-16 10:09:49Z vilma $
+ * @version   SVN: $Id: oxdiscount.php 49762 2012-09-25 15:12:13Z tomas $
  */
 
 /**
@@ -89,8 +89,8 @@ class oxDiscount extends oxI18n
         }
 
 
-        $oDb = oxDb::getDb();
-        $oDb->execute( 'delete from oxobject2discount where oxobject2discount.oxdiscountid = '.$oDb->quote($sOXID) );
+        $oDB = oxDb::getDb();
+        $oDB->execute( 'delete from oxobject2discount where oxobject2discount.oxdiscountid = '.$oDB->quote($sOXID) );
 
         return parent::delete( $sOXID );
     }
@@ -118,9 +118,9 @@ class oxDiscount extends oxI18n
             return false;
         }
 
-        $oDb = oxDb::getDb();
+        $myDB = oxDb::getDb();
 
-        $sDiscountIdQuoted = $oDb->quote($this->oxdiscount__oxid->value);
+        $sDiscountIdQuoted = $myDB->quote($this->oxdiscount__oxid->value);
 
         //check for global discount (no articles, no categories)
         if ( $this->_blIsForArticleOrForCategory ) {
@@ -129,7 +129,7 @@ class oxDiscount extends oxI18n
 
             $this->_blIsForArticleOrForCategory = false;
             $sQ = "select 1 from oxobject2discount where oxdiscountid = $sDiscountIdQuoted and ( oxtype = 'oxarticles' or oxtype = 'oxcategories')";
-            if ( ! $oDb->getOne( $sQ ) ) {
+            if ( !$myDB->getOne( $sQ ) ) {
                 $this->_blIsForArticleOrForCategory = true;
                 return true;
             }
@@ -145,7 +145,7 @@ class oxDiscount extends oxI18n
             $sQ  = "select 1 from oxobject2discount where oxdiscountid = {$sDiscountIdQuoted} and oxtype = 'oxarticles' ";
             $sQ .= $this->_getProductCheckQuery( $oArticle );
 
-            if ( $oDb->getOne( $sQ ) ) {
+            if ( $myDB->getOne( $sQ ) ) {
                 $this->_aHasArticleDiscounts[ $sArticleId ] = true;
                 return true;
             } else {
@@ -158,7 +158,7 @@ class oxDiscount extends oxI18n
                 $sCatIds = "(".implode(",", oxDb::getInstance()->quoteArray($aCatIds)).")";
                 // getOne appends limit 1, so this one should be fast enough
                 $sQ = "select 1 from oxobject2discount where oxdiscountid = {$sDiscountIdQuoted} and oxobjectid in $sCatIds and oxtype = 'oxcategories'";
-                if ( $oDb->getOne( $sQ ) ) {
+                if ( $myDB->getOne( $sQ ) ) {
                     $this->_aHasArticleDiscounts[ $sArticleId ] = true;
                     return true;
                 }
@@ -186,12 +186,12 @@ class oxDiscount extends oxI18n
             return false;
         }
 
-        $oDb = oxDb::getDb();
+        $myDB = oxDb::getDb();
 
         // check if this article is assigned
-        $sQ  = "select 1 from oxobject2discount where oxdiscountid = ".$oDb->quote( $this->oxdiscount__oxid->value)." and oxtype = 'oxarticles' ";
+        $sQ  = "select 1 from oxobject2discount where oxdiscountid = ".$myDB->quote( $this->oxdiscount__oxid->value)." and oxtype = 'oxarticles' ";
         $sQ .= $this->_getProductCheckQuery( $oArticle );
-        if ( !( $blOk = ( bool ) $oDb->getOne( $sQ ) ) ) {
+        if ( !( $blOk = ( bool ) $myDB->getOne( $sQ ) ) ) {
 
             // checkin article cateogry
             $blOk = $this->_checkForArticleCategories( $oArticle );
@@ -285,10 +285,9 @@ class oxDiscount extends oxI18n
         }
 
         // oxobject2discount configuration check
-        $oDb = oxDb::getDb();
-        $sQ = 'select 1 from oxobject2discount where oxdiscountid = ' . $oDb->quote($this->oxdiscount__oxid->value).' and oxtype in ("oxarticles", "oxcategories" ) ';
+        $sQ = 'select 1 from oxobject2discount where oxdiscountid = '.oxDb::getDb()->quote($this->oxdiscount__oxid->value).' and oxtype in ("oxarticles", "oxcategories" ) ';
 
-        return !( (bool) $oDb->getOne( $sQ ) );
+        return !( (bool) oxDb::getDb()->getOne( $sQ ) );
     }
 
     /**
@@ -365,18 +364,13 @@ class oxDiscount extends oxI18n
             $oDiscountPrice = oxNew( 'oxprice' );
             $oDiscountPrice->setBruttoPriceMode();
             $oDiscountPrice->setPrice( $this->oxdiscount__oxaddsum->value * $oCur->rate, $oPrice->getVat() );
-            //#3587
-            $oDiscountPrice->multiply( $dAmount * -1);
         } else {
             //percent discount
             $oDiscountPrice = oxNew( 'oxprice' );
             $oDiscountPrice->setBruttoPriceMode();
             $oDiscountPrice->setPrice( $oPrice->getBruttoPrice() / 100 * $this->oxdiscount__oxaddsum->value, $oPrice->getVat() );
-            //#3587
-            $oDiscountPrice->multiply(-1);
         }
-           //#3587
-        //$oDiscountPrice->multiply( $dAmount * -1 );
+        $oDiscountPrice->multiply( $dAmount * -1 );
         $oPrice->addPrice( $oDiscountPrice );
 
         if ( $oPrice->getBruttoPrice() < 0 || $oPrice->getNettoPrice() < 0 ) {
