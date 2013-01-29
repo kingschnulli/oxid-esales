@@ -27,9 +27,11 @@ try {
     include_once getShopBasePath() . "core/facebook/facebook.php";
 } catch ( Exception $oEx ) {
     // skipping class includion if curl or json is not active
-    oxRegistry::getConfig()->setConfigParam( "bl_showFbConnect", false );
+    oxConfig::getInstance()->setConfigParam( "bl_showFbConnect", false );
     return;
 }
+
+//error_reporting($iOldErrorReproting);
 
 /**
  * Facebook API
@@ -39,9 +41,16 @@ try {
 class oxFb extends Facebook
 {
     /**
-     * User is connected using Facebook connect.
+     * oxUtils class instance.
      *
-     * @var bool
+     * @var oxutils
+     */
+    private static $_instance = null;
+
+    /**
+     * oxUtils class instance.
+     *
+     * @var oxutils
      */
     protected $_blIsConnected = null;
 
@@ -53,7 +62,7 @@ class oxFb extends Facebook
      */
     public function __construct()
     {
-        $oConfig = oxRegistry::getConfig();
+        $oConfig = oxConfig::getInstance();
 
         $aFbConfig["appId"]  = $oConfig->getConfigParam( "sFbAppId" );
         $aFbConfig["secret"] = $oConfig->getConfigParam( "sFbSecretKey" );
@@ -65,13 +74,23 @@ class oxFb extends Facebook
     /**
      * Returns object instance
      *
-     * @deprecated since v5.0 (2012-08-10); Use oxRegistry::get("oxFb") instead.
-     *
      * @return oxPictureHandler
      */
     public static function getInstance()
     {
-        return oxRegistry::get("oxFb");
+        // disable caching for test modules
+        if ( defined( 'OXID_PHP_UNIT' ) ) {
+            self::$_instance = modInstances::getMod( __CLASS__ );
+        }
+
+        if ( !self::$_instance instanceof oxFb ) {
+
+            self::$_instance = oxNew( 'oxFb' );
+            if ( defined( 'OXID_PHP_UNIT' ) ) {
+                modInstances::addMod( __CLASS__, self::$_instance);
+            }
+        }
+        return self::$_instance;
     }
 
     /**
@@ -81,7 +100,7 @@ class oxFb extends Facebook
      */
     public function isConnected()
     {
-        $oConfig = oxRegistry::getConfig();
+        $oConfig = oxConfig::getInstance();
 
         if ( !$oConfig->getConfigParam( "bl_showFbConnect" ) ) {
             return false;
@@ -128,14 +147,14 @@ class oxFb extends Facebook
         }
 
         $sSessionVarName = $this->constructSessionVariableName($key);
-        oxRegistry::getSession()->setVar($sSessionVarName, $value);
+        oxSession::getInstance()->setVar($sSessionVarName, $value);
     }
 
     /**
      * GET session value
      *
      * @param string $key     Session key
-     * @param bool   $default Default value, if session key not found
+     * @param boot   $default Default value, if session key not found
      *
      * @return string Session value / default
      */
@@ -147,8 +166,8 @@ class oxFb extends Facebook
         }
 
         $sSessionVarName = $this->constructSessionVariableName($key);
-        return (oxRegistry::getSession()->hasVar($sSessionVarName) ?
-            oxRegistry::getSession()->getVar($sSessionVarName) : $default);
+        return (oxSession::getInstance()->hasVar($sSessionVarName) ?
+            oxSession::getInstance()->getVar($sSessionVarName) : $default);
     }
 
     /**
@@ -166,6 +185,6 @@ class oxFb extends Facebook
         }
 
         $sSessionVarName = $this->constructSessionVariableName($key);
-        oxRegistry::getSession()->deleteVar($sSessionVarName);
+        oxSession::getInstance()->deleteVar($sSessionVarName);
     }
 }

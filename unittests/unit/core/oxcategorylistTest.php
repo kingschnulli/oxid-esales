@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcategorylistTest.php 51578 2012-11-09 07:48:35Z alfonsas $
+ * @version   SVN: $Id: oxcategorylistTest.php 43061 2012-03-21 08:24:16Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -134,6 +134,23 @@ class Unit_Core_oxCategoryListTest extends OxidTestCase
     }
 
     /**
+     * Test get Depth Sql Snippet expand level 0.
+     *
+     * @return null
+     */
+    public function test_getDepthSqlSnippet_level0()
+    {
+        $this->_oList->setVar('sActCat', null);
+        $this->_oList->setVar('blHideEmpty', false);
+        $this->_oList->setVar('blForceFull', false);
+        $this->_oList->setVar('iForceLevel', 0);
+
+        $sCurSnippet = $this->_oList->UNITgetDepthSqlSnippet(null);
+        $sExpSnippet = ' ( 0 ) ';
+        $this->assertEquals($sExpSnippet, $sCurSnippet);
+    }
+
+    /**
      * Test get Depth Sql Snippet expand level 1.
      *
      * @return null
@@ -142,13 +159,34 @@ class Unit_Core_oxCategoryListTest extends OxidTestCase
     {
         $this->_oList->setVar('sActCat', null);
         $this->_oList->setVar('blHideEmpty', false);
-
+        $this->_oList->setVar('blForceFull', false);
+        $this->_oList->setVar('iForceLevel', 1);
 
         $sCurSnippet = $this->_oList->UNITgetDepthSqlSnippet(null);
 
         $sViewName = getViewName('oxcategories');
 
         $sExpSnippet = " ( 0 or $sViewName.oxparentid = 'oxrootid' ) ";
+
+        $this->assertEquals($sExpSnippet, $sCurSnippet);
+    }
+
+    /**
+     * Test get Depth Sql Snippet expand level 2.
+     *
+     * @return null
+     */
+    public function test_getDepthSqlSnippet_level2()
+    {
+        $this->_oList->setVar('sActCat', null);
+        $this->_oList->setVar('blHideEmpty', false);
+        $this->_oList->setVar('blForceFull', false);
+        $this->_oList->setVar('iForceLevel', 2);
+
+        $sCurSnippet = $this->_oList->UNITgetDepthSqlSnippet(null);
+
+        $sViewName = getViewName('oxcategories');
+        $sExpSnippet = " ( 0 or $sViewName.oxparentid = 'oxrootid' or $sViewName.oxrootid = $sViewName.oxparentid or $sViewName.oxid = $sViewName.oxrootid ) ";
 
         $this->assertEquals($sExpSnippet, $sCurSnippet);
     }
@@ -162,14 +200,15 @@ class Unit_Core_oxCategoryListTest extends OxidTestCase
     {
         $this->_oList->setVar('sActCat', $this->_sActCat);
         $this->_oList->setVar('blHideEmpty', false);
-
+        $this->_oList->setVar('blForceFull', false);
+        $this->_oList->setVar('iForceLevel', 0);
 
         $oCat = new oxcategory();
         $oCat->load($this->_sActCat);
         $sCurSnippet = $this->_oList->UNITgetDepthSqlSnippet($oCat);
 
         $sViewName = getViewName('oxcategories');
-            $sExpSnippet = " ( 0 or ($sViewName.oxparentid = '8a142c3e44ea4e714.31136811') or oxv_oxcategories_de.oxparentid = 'oxrootid' ) ";
+            $sExpSnippet = " ( 0 or ($sViewName.oxparentid = '8a142c3e44ea4e714.31136811') ) ";
 
         $this->assertEquals($sExpSnippet, $sCurSnippet);
     }
@@ -183,11 +222,11 @@ class Unit_Core_oxCategoryListTest extends OxidTestCase
     {
         $this->_oList->setVar('sActCat', $this->_sNoCat);
         $this->_oList->setVar('blHideEmpty', false);
-
-
+        $this->_oList->setVar('blForceFull', false);
+        $this->_oList->setVar('iForceLevel', 0);
 
         $sCurSnippet = $this->_oList->UNITgetDepthSqlSnippet(null);
-            $sExpSnippet = " ( 0 or oxv_oxcategories_de.oxparentid = 'oxrootid' ) ";
+        $sExpSnippet = " ( 0 ) ";
         $this->assertEquals($sExpSnippet, $sCurSnippet);
     }
 
@@ -201,8 +240,8 @@ class Unit_Core_oxCategoryListTest extends OxidTestCase
         $this->_oList->setVar('sShopID', null);
         $this->_oList->setVar('sActCat', null);
         $this->_oList->setVar('blHideEmpty', false);
-
-
+        $this->_oList->setVar('blForceFull', false);
+        $this->_oList->setVar('iForceLevel', 0);
 
         $sCurSql = $this->_oList->UNITgetSelectString();
 
@@ -220,8 +259,8 @@ class Unit_Core_oxCategoryListTest extends OxidTestCase
     {
         $this->_oList->setVar('sActCat', null);
         $this->_oList->setVar('blHideEmpty', 1);
-
-
+        $this->_oList->setVar('blForceFull', false);
+        $this->_oList->setVar('iForceLevel', 0);
 
         $sCurSql = $this->_oList->UNITgetSelectString();
 
@@ -241,8 +280,8 @@ class Unit_Core_oxCategoryListTest extends OxidTestCase
 
         $this->_oList->setVar('sActCat', null);
         $this->_oList->setVar('blHideEmpty', false);
-
-
+        $this->_oList->setVar('blForceFull', false);
+        $this->_oList->setVar('iForceLevel', 0);
 
         $sCurSql = $this->_oList->UNITgetSelectString();
 
@@ -261,8 +300,8 @@ class Unit_Core_oxCategoryListTest extends OxidTestCase
         $this->_oList->setVar('sShopID', 1);
         $this->_oList->setVar('sActCat', null);
         $this->_oList->setVar('blHideEmpty', false);
-
-
+        $this->_oList->setVar('blForceFull', false);
+        $this->_oList->setVar('iForceLevel', 0);
 
         $sCurSql = $this->_oList->UNITgetSelectString();
 
@@ -282,8 +321,8 @@ class Unit_Core_oxCategoryListTest extends OxidTestCase
         $this->_oList->setVar('sShopID', 1);
         $this->_oList->setVar('sActCat', null);
         $this->_oList->setVar('blHideEmpty', false);
-
-
+        $this->_oList->setVar('blForceFull', false);
+        $this->_oList->setVar('iForceLevel', 0);
 
         $sCurSql = $this->_oList->UNITgetSelectString();
 
@@ -403,7 +442,7 @@ class Unit_Core_oxCategoryListTest extends OxidTestCase
         $this->_oList->setVar('sActCat', null);
         $this->_oList->setVar('blHideEmpty', false);
         $this->_oList->setVar('blForceFull', 1);
-
+        $this->_oList->setVar('iForceLevel', 0);
         oxLang::getInstance()->setBaseLanguage(1);
 
         $sCurSql = $this->_oList->UNITgetSelectString();
@@ -422,8 +461,8 @@ class Unit_Core_oxCategoryListTest extends OxidTestCase
         $this->_oList->setVar('sShopID', null);
         $this->_oList->setVar('sActCat', $this->_sActCat);
         $this->_oList->setVar('blHideEmpty', false);
-
-
+        $this->_oList->setVar('blForceFull', false);
+        $this->_oList->setVar('iForceLevel', 0);
 
         $this->_oList->selectString($this->_oList->UNITgetSelectString());
         $iPreCnt = $this->_oList->count();
@@ -446,8 +485,8 @@ class Unit_Core_oxCategoryListTest extends OxidTestCase
         $this->_oList->setVar('sShopID', null);
         $this->_oList->setVar('sActCat', $this->_sActCat);
         $this->_oList->setVar('blHideEmpty', false);
-
-
+        $this->_oList->setVar('blForceFull', false);
+        $this->_oList->setVar('iForceLevel', 0);
 
         $this->_oList->selectString($this->_oList->UNITgetSelectString());
         $this->_oList[$this->_sActCat] = array();
@@ -467,8 +506,8 @@ class Unit_Core_oxCategoryListTest extends OxidTestCase
         $this->_oList->setVar('sShopID', null);
         $this->_oList->setVar('sActCat', $this->_sActCat);
         $this->_oList->setVar('blHideEmpty', false);
-
-
+        $this->_oList->setVar('blForceFull', false);
+        $this->_oList->setVar('iForceLevel', 0);
 
         $this->_oList->selectString($this->_oList->UNITgetSelectString());
         $this->_oList[$this->_sActRoot]->oxcategories__oxppremove = new oxField(true, oxField::T_RAW);
@@ -491,8 +530,8 @@ class Unit_Core_oxCategoryListTest extends OxidTestCase
         $this->_oList->setVar('sShopID', null);
         $this->_oList->setVar('sActCat', $this->_sActCat);
         $this->_oList->setVar('blHideEmpty', false);
-
-
+        $this->_oList->setVar('blForceFull', false);
+        $this->_oList->setVar('iForceLevel', 0);
 
         $this->_oList->selectString($this->_oList->UNITgetSelectString());
         $this->_oList->UNITppAddPathInfo();
@@ -517,13 +556,69 @@ class Unit_Core_oxCategoryListTest extends OxidTestCase
         $this->_oList->setVar('sShopID', null);
         $this->_oList->setVar('sActCat', null);
         $this->_oList->setVar('blHideEmpty', false);
-
-
+        $this->_oList->setVar('blForceFull', false);
+        $this->_oList->setVar('iForceLevel', 0);
 
         $this->_oList->UNITppAddPathInfo();
         $this->assertEquals(0, count($this->_oList->getPath()));
     }
 
+    /**
+     * Test get rendered path html.
+     *
+     * @return null
+     */
+    public function testGetHtmlPath()
+    {
+        oxTestModules::addFunction("oxutils", "seoIsActive", "{return false;}");
+        $this->_oList->setVar('sShopID', null);
+        $this->_oList->setVar('sActCat', $this->_sActCat);
+        $this->_oList->setVar('blHideEmpty', false);
+        $this->_oList->setVar('blForceFull', false);
+        $this->_oList->setVar('iForceLevel', 0);
+
+        $this->_oList->selectString($this->_oList->UNITgetSelectString());
+        $this->_oList->UNITppAddPathInfo();
+
+        $sHtmlPath = $this->_oList->getHtmlPath();
+
+        $sSid = oxSession::getInstance()->getSession()->getId();
+
+        $sShopUrl = oxConfig::getInstance()->getShopHomeUrl();
+
+
+            $sExpt = " <a href='".$sShopUrl."cl=alist&amp;cnid=8a142c3e4143562a5.46426637'>Geschenke</a> / <a href='".$sShopUrl."cl=alist&amp;cnid=8a142c3e44ea4e714.31136811'>Wohnen</a>";
+            $this->assertEquals( $sExpt, $sHtmlPath);
+    }
+
+    /**
+     * Test get rendered path html with seo url's.
+     *
+     * @return null
+     */
+    public function testGetHtmlPathWithSeo()
+    {
+        oxTestModules::addFunction("oxutilsserver", "getServerVar", "{ \$aArgs = func_get_args(); if ( \$aArgs[0] === 'HTTP_HOST' ) { return '".oxConfig::getInstance()->getShopUrl()."'; } elseif ( \$aArgs[0] === 'SCRIPT_NAME' ) { return ''; } else { return \$_SERVER[\$aArgs[0]]; } }");
+        oxTestModules::addFunction("oxutils", "seoIsActive", "{return true;}");
+        $this->_oList->setVar('sShopID', null);
+        $this->_oList->setVar('sActCat', $this->_sActCat);
+        $this->_oList->setVar('blHideEmpty', false);
+        $this->_oList->setVar('blForceFull', false);
+        $this->_oList->setVar('iForceLevel', 0);
+
+        $this->_oList->selectString($this->_oList->UNITgetSelectString());
+        $this->_oList->UNITppAddPathInfo();
+
+        $sHtmlPath = $this->_oList->getHtmlPath();
+
+        $sSid = oxSession::getInstance()->getSession()->getId();
+
+        $sShopUrl = oxConfig::getInstance()->getShopUrl();
+
+
+            $sExpt = " <a href='".$sShopUrl."Geschenke/'>Geschenke</a> / <a href='".$sShopUrl."Geschenke/Wohnen/'>Wohnen</a>";
+            $this->assertEquals( $sExpt, $sHtmlPath);
+    }
 
     /**
      * Test list post processing, adding content categories to tree with no content categories.
@@ -532,12 +627,13 @@ class Unit_Core_oxCategoryListTest extends OxidTestCase
      */
     public function test_ppAddContentCategories()
     {
-
         $this->_oList->setVar('sShopID', null);
         $this->_oList->setVar('sActCat', $this->_sActCat);
         $this->_oList->setVar('blHideEmpty', false);
+        $this->_oList->setVar('blForceFull', false);
+        $this->_oList->setVar('iForceLevel', 0);
 
-        $this->_oList->load();
+        $this->_oList->selectString($this->_oList->UNITgetSelectString());
         $this->_oList->UNITppAddContentCategories();
 
         $aContent = $this->_oList[$this->_sActCat]->getContentCats();
@@ -555,10 +651,12 @@ class Unit_Core_oxCategoryListTest extends OxidTestCase
         $this->_oList->setVar('sShopID', null);
         $this->_oList->setVar('sActCat', $this->_sActCat);
         $this->_oList->setVar('blHideEmpty', false);
+        $this->_oList->setVar('blForceFull', false);
+        $this->_oList->setVar('iForceLevel', 0);
 
         oxAddClassModule('modContentList_oxcategorylist', 'oxcontentlist');
 
-        $this->_oList->load();
+        $this->_oList->selectString($this->_oList->UNITgetSelectString());
         $this->_oList->UNITppAddContentCategories();
 
         $aContent = $this->_oList[$this->_sActCat]->getContentCats();
@@ -576,6 +674,8 @@ class Unit_Core_oxCategoryListTest extends OxidTestCase
         $this->_oList->setVar('sShopID', null);
         $this->_oList->setVar('sActCat', $this->_sActCat);
         $this->_oList->setVar('blHideEmpty', false);
+        $this->_oList->setVar('blForceFull', false);
+        $this->_oList->setVar('iForceLevel', 0);
 
         $this->_oList->selectString($this->_oList->UNITgetSelectString(true));
         $this->_oList->UNITppBuildTree();
@@ -599,8 +699,8 @@ class Unit_Core_oxCategoryListTest extends OxidTestCase
         $this->_oList->setVar('sShopID', null);
         $this->_oList->setVar('sActCat', $this->_sActCat);
         $this->_oList->setVar('blHideEmpty', false);
-
-
+        $this->_oList->setVar('blForceFull', false);
+        $this->_oList->setVar('iForceLevel', 0);
 
         $this->_oList->selectString($this->_oList->UNITgetSelectString());
         $this->_oList[$this->_sActCat]->oxcategories__oxhidden = new oxField(true, oxField::T_RAW);
@@ -631,6 +731,8 @@ class Unit_Core_oxCategoryListTest extends OxidTestCase
         $this->_oList->setVar('sShopID', null);
         $this->_oList->setVar('sActCat', $this->_sActCat);
         $this->_oList->setVar('blHideEmpty', false);
+        $this->_oList->setVar('blForceFull', false);
+        $this->_oList->setVar('iForceLevel', 2);
 
         $sParentId = $this->_sActRoot;
         $oCat1 = new oxCategory();
@@ -652,7 +754,7 @@ class Unit_Core_oxCategoryListTest extends OxidTestCase
         $oCat3->oxcategories__oxactive = new oxField(1);
         $oCat3->save();
 
-        $this->_oList->buildTree($this->_sActRoot, 1, 1);
+        $this->_oList->buildTree($this->_sActRoot, 1, 1, 1);
 
         //Check root order
         $aCurRootOrder = array();
@@ -683,7 +785,7 @@ class Unit_Core_oxCategoryListTest extends OxidTestCase
         $this->_oList->setVar('sActCat', null);
         $this->_oList->setVar('blHideEmpty', false);
         $this->_oList->setVar('blForceFull', true);
-
+        $this->_oList->setVar('iForceLevel', 0);
 
         $this->_oList->selectString($this->_oList->UNITgetSelectString(false));
         $this->_oList->UNITppBuildTree();
@@ -741,20 +843,21 @@ class Unit_Core_oxCategoryListTest extends OxidTestCase
      */
     public function testBuildTree()
     {
-        $oCatList = $this->getMock( 'testOxCategoryList', array( 'load', '_ppRemoveInactiveCategories', '_ppAddPathInfo', '_ppAddContentCategories', '_ppBuildTree', '_ppLoadFullCategory' ) );
-        $oCatList->expects( $this->at(0) )->method( 'load' );
-        $oCatList->expects( $this->at(1) )->method( '_ppRemoveInactiveCategories' );
-        $oCatList->expects( $this->at(2) )->method( '_ppLoadFullCategory' );
-        $oCatList->expects( $this->at(3) )->method( '_ppAddPathInfo' );
-        $oCatList->expects( $this->at(4) )->method( '_ppAddContentCategories' );
-        $oCatList->expects( $this->at(5) )->method( '_ppBuildTree' );
+        $oCatList = $this->getMock( 'testOxCategoryList', array( '_getSelectString', 'selectString', '_ppRemoveInactiveCategories', '_ppAddPathInfo', '_ppAddContentCategories', '_ppBuildTree', '_ppLoadFullCategory' ) );
+        $oCatList->expects( $this->at(0) )->method( '_getSelectString' );
+        $oCatList->expects( $this->at(1) )->method( 'selectString' );
+        $oCatList->expects( $this->at(2) )->method( '_ppRemoveInactiveCategories' );
+        $oCatList->expects( $this->at(3) )->method( '_ppLoadFullCategory' );
+        $oCatList->expects( $this->at(4) )->method( '_ppAddPathInfo' );
+        $oCatList->expects( $this->at(5) )->method( '_ppAddContentCategories' );
+        $oCatList->expects( $this->at(6) )->method( '_ppBuildTree' );
 
-        $oCatList->buildTree( $this->_sActCat, false, false);
+        $oCatList->buildTree( $this->_sActCat, false, false, false);
 
         $this->assertEquals($this->_sActCat, $oCatList->getVar('sActCat'));
+        $this->assertFalse($oCatList->getVar('blForceFull'));
+        $this->assertEquals(1, $oCatList->getVar('iForceLevel'));
     }
-
-
 
     /**
      * Test build list.
@@ -767,6 +870,8 @@ class Unit_Core_oxCategoryListTest extends OxidTestCase
         $this->_oList->setVar('sActCat', null);
         $this->_oList->setVar('blHideEmpty', false);
         $this->_oList->setVar('blForceFull', true);
+        $this->_oList->setVar('iForceLevel', 0);
+
         $this->_oList->buildList(true);
 
         //Check depth info

@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: orderListTest.php 45625 2012-05-24 07:19:38Z saulius.stasiukaitis $
+ * @version   SVN: $Id: orderListTest.php 26301 2010-03-04 15:38:02Z arvydas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -95,7 +95,7 @@ class Unit_Admin_OrderListTest extends OxidTestCase
     public function testPrepareWhereQuery()
     {
         oxTestModules::addFunction( "oxlang", "isAdmin", "{return 1;}" );
-        $sExpQ = " and ( oxorder.oxfolder = 'ORDERFOLDER_NEW' )";
+        $sExpQ = " and ( oxorder.oxfolder = 'ORDERFOLDER_NEW' or oxorder.oxfolder = 'Neu' )";
         $oOrderList = new order_list();
         $sQ = $oOrderList->UNITprepareWhereQuery(array(), "");
         $this->assertEquals( $sExpQ, $sQ  );
@@ -110,7 +110,7 @@ class Unit_Admin_OrderListTest extends OxidTestCase
     {
         oxTestModules::addFunction( "oxlang", "isAdmin", "{return 1;}" );
         modConfig::setParameter( 'folder', 'ORDERFOLDER_FINISHED' );
-        $sExpQ = " and ( oxorder.oxfolder = 'ORDERFOLDER_FINISHED' )";
+        $sExpQ = " and ( oxorder.oxfolder = 'ORDERFOLDER_FINISHED' or oxorder.oxfolder = 'Bearbeitet' )";
         $oOrderList = new order_list();
         $sQ = $oOrderList->UNITprepareWhereQuery(array(), "");
         $this->assertEquals( $sExpQ, $sQ  );

@@ -58,8 +58,7 @@ class Unit_Admin_NewsletterMainTest extends OxidTestCase
 
         // testing..
         $oView = new Newsletter_Main();
-        $sTpl = $oView->render();
-        $this->assertEquals( 'newsletter_main.tpl', $sTpl );
+        $this->assertEquals( 'newsletter_main.tpl', $oView->render() );
         $aViewData = $oView->getViewData();
         $this->assertTrue( isset( $aViewData['oxid'] ) );
         $this->assertEquals( "-1", $aViewData['oxid'] );

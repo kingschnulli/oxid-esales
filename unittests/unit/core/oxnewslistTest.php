@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxnewslistTest.php 47937 2012-07-30 11:32:27Z linas.kukulskis $
+ * @version   SVN: $Id: oxnewslistTest.php 43565 2012-04-05 14:08:15Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -127,7 +127,7 @@ class Unit_Core_oxnewslistTest extends OxidTestCase
      */
     public function testSetUserAndGetUser()
     {
-        $oUser = new oxUser();
+        $oUser = new Oxstdclass();
         $oUser->xxx = 'yyy';
 
         $oNewsList = new oxnewslist();

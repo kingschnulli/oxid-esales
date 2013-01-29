@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: loginTest.php 47944 2012-07-30 12:41:30Z linas.kukulskis $
+ * @version   SVN: $Id: loginTest.php 44709 2012-05-09 11:25:09Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -33,7 +33,6 @@ class Unit_Admin_loginTest extends OxidTestCase
     public function setUp()
     {
         modConfig::getInstance()->setAdminMode( true );
-        modSession::getInstance()->setVar("blIsAdmin", true);
         return parent::setUp();
     }
 
@@ -60,40 +59,9 @@ class Unit_Admin_loginTest extends OxidTestCase
      */
     public function testLogin()
     {
-        $oUser = oxNew( "oxUser" );
-        $oUser->setId( "_testUserId" );
-        $oUser->oxuser__oxactive = new oxField( "1" );
-        $oUser->oxuser__oxusername = new oxField( "&\"\'\\<>adminname", oxField::T_RAW );
-        $oUser->oxuser__oxshopid = new oxField( modConfig::getInstance()->getShopId() );
-
-        $oUser->setPassword( "&\"\'\\<>adminpsw" );
-        $oUser->save();
-
-        oxTestModules::addFunction( 'oxUtilsView', 'addErrorToDisplay', '{ throw new oxException($aA[0]); }' );
-        oxTestModules::addFunction( 'oxUtilsServer', 'getOxCookie', '{ return array(\'test\'); }' );
-
-        $_SERVER['REQUEST_METHOD'] = "POST";
-        modConfig::setParameter( "user", "&\"\'\\<>adminname" );
-        modConfig::setParameter( "pwd", "&\"\'\\<>adminpsw" );
-
-
-        $oLogin = $this->getProxyClass( 'login' );
-        $this->assertEquals( "admin_start", $oLogin->checklogin() );
-    }
-
-    /**
-     *  Check if login with special characters in login name and
-     *  passworod works fine
-     *
-     *  M#3680
-     *
-     *  @return null
-     */
-    public function testLoginNotAdmin()
-    {
         $this->setExpectedException( 'oxException', 'LOGIN_ERROR' );
 
-        modConfig::getInstance()->setAdminMode( true );
+        $oConfig = oxConfig::getInstance();
 
         $oUser = oxNew( "oxUser" );
         $oUser->setId( "_testUserId" );
@@ -106,8 +74,8 @@ class Unit_Admin_loginTest extends OxidTestCase
         oxTestModules::addFunction( 'oxUtilsServer', 'getOxCookie', '{ return array(\'test\'); }' );
 
         $_SERVER['REQUEST_METHOD'] = "POST";
-        modConfig::setParameter( "user", "&\"\'\\<>adminname" );
-        modConfig::setParameter( "pwd", "&\"\'\\<>adminpsw" );
+        $oConfig->setParameter( "user", "&\"\'\\<>adminname" );
+        $oConfig->setParameter( "pwd", "&\"\'\\<>adminpsw" );
 
         $oLogin = $this->getProxyClass( 'login' );
         $this->assertEquals( "admin_start", $oLogin->checklogin() );
@@ -136,7 +104,7 @@ class Unit_Admin_loginTest extends OxidTestCase
     {
         oxTestModules::addFunction( 'oxUtilsServer', 'getOxCookie', '{ return null; }');
 
-        $oLang = new stdClass();
+        $oLang = new oxStdClass();
         $oLang->id = 0;
         $oLang->oxid = "de";
         $oLang->abbr = "de";
@@ -147,7 +115,7 @@ class Unit_Admin_loginTest extends OxidTestCase
 
         $aLanguages[] = $oLang;
 
-        $oLang = new stdClass();
+        $oLang = new oxStdClass();
         $oLang->id = 1;
         $oLang->oxid = "en";
         $oLang->abbr = "en";
@@ -173,7 +141,7 @@ class Unit_Admin_loginTest extends OxidTestCase
      */
     public function testGetAvailableLanguages_withoutCookies_EN()
     {
-        $oLang = new stdClass();
+        $oLang = new oxStdClass();
         $oLang->id = 0;
         $oLang->oxid = "de";
         $oLang->abbr = "de";
@@ -184,7 +152,7 @@ class Unit_Admin_loginTest extends OxidTestCase
 
         $aLanguages[] = $oLang;
 
-        $oLang = new stdClass();
+        $oLang = new oxStdClass();
         $oLang->id = 1;
         $oLang->oxid = "en";
         $oLang->abbr = "en";
@@ -210,7 +178,7 @@ class Unit_Admin_loginTest extends OxidTestCase
      */
     public function testGetAvailableLanguages_withCookies_DE()
     {
-        $oLang = new stdClass();
+        $oLang = new oxStdClass();
         $oLang->id = 0;
         $oLang->oxid = "de";
         $oLang->abbr = "de";
@@ -221,7 +189,7 @@ class Unit_Admin_loginTest extends OxidTestCase
 
         $aLanguages[] = $oLang;
 
-        $oLang = new stdClass();
+        $oLang = new oxStdClass();
         $oLang->id = 1;
         $oLang->oxid = "en";
         $oLang->abbr = "en";
@@ -294,8 +262,6 @@ class Unit_Admin_loginTest extends OxidTestCase
         modConfig::setParameter('user', '\'"<^%&*aaa>');
         modConfig::setParameter('pwd', '<^%&*aaa>\'"');
         modConfig::setParameter('profile', '<^%&*aaa>\'"');
-        modConfig::getInstance()->setAdminMode( true );
-        modSession::getInstance()->setVar("blIsAdmin", true);
         $oView = $this->getMock( "Login", array( "addTplParam" ) );
         $oView->expects( $this->at( 0 ) )->method( 'addTplParam' )->with( $this->equalTo( "user" ), $this->equalTo( '&#039;&quot;&lt;^%&amp;*aaa&gt;' ) );
         $oView->expects( $this->at( 1 ) )->method( 'addTplParam' )->with( $this->equalTo( "pwd" ), $this->equalTo( '&lt;^%&amp;*aaa&gt;&#039;&quot;' ) );
@@ -315,8 +281,6 @@ class Unit_Admin_loginTest extends OxidTestCase
         modConfig::setParameter('user', '\'"<^%&*aaa>');
         modConfig::setParameter('pwd', '<^%&*aaa>\'"');
         modConfig::setParameter('profile', '<^%&*aaa>\'"');
-        modConfig::getInstance()->setAdminMode( true );
-        modSession::getInstance()->setVar("blIsAdmin", true);
         $oView = $this->getMock( "Login", array( "addTplParam" ) );
         $oView->expects( $this->at( 0 ) )->method( 'addTplParam' )->with( $this->equalTo( "user" ), $this->equalTo( '&#039;&quot;&lt;^%&amp;*aaa&gt;' ) );
         $oView->expects( $this->at( 1 ) )->method( 'addTplParam' )->with( $this->equalTo( "pwd" ), $this->equalTo( '&lt;^%&amp;*aaa&gt;&#039;&quot;' ) );
@@ -331,7 +295,7 @@ class Unit_Admin_loginTest extends OxidTestCase
      */
     public function testRender()
     {
-        $oLang = new stdClass();
+        $oLang = new oxStdClass();
         $oLang->blSelected = true;
 
         $aLanguages = array( $oLang );

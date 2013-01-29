@@ -38,15 +38,12 @@ class Unit_Maintenance_moduleFileInclusionTest extends OxidTestCase
      */
     public function testModuleInclusion()
     {
-        oxUtilsObject::getInstance()->setModuleVar( 'aModules', array('oxarticle'=>'testmod') );
+        modConfig::getInstance()->setConfigParam('aModules', array('oxarticle'=>'testmod'));
 
         include_once dirname(__FILE__).'/modules/testmod.php';
 
         $oTestMod = oxNew('testmod');
         $this->assertEquals("Hi!", $oTestMod->sayHi());
-
-        //the folowing line whoich acts as double declaration is not required after #4301 is fixed
-        oxUtilsObject::getInstance()->setModuleVar( 'aModules', array('oxarticle'=>'testmod') );
 
         $oTestArt = oxNew('oxarticle');
         $this->assertEquals("Hi!", $oTestArt->sayHi());
@@ -57,7 +54,7 @@ class Unit_Maintenance_moduleFileInclusionTest extends OxidTestCase
      */
     public function testMissingModuleInChain()
     {
-        oxUtilsObject::getInstance()->setModuleVar( 'aModules', array('oxarticle'=>'testmod2&testmod') );
+        modConfig::getInstance()->setConfigParam('aModules', array('oxarticle'=>'testmod2&testmod'));
 
         $oTestArt = oxNew('oxarticle');
         $this->assertEquals("Hi!", $oTestArt->sayHi());

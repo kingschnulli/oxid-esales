@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: contentTest.php 50114 2012-10-04 08:52:52Z saulius.stasiukaitis $
+ * @version   SVN: $Id: contentTest.php 43774 2012-04-11 12:06:29Z vaidas.matulevicius $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -27,7 +27,7 @@ require_once realpath( "." ).'/unit/test_config.inc.php';
 
 /*
  * Dummy class for getParsedContent function test.
- *
+ * 
  */
 class contentTest_oxUtilsView extends oxUtilsView
 {
@@ -62,7 +62,7 @@ class Unit_Views_contentTest extends OxidTestCase
         //$this->_oObj->oxcontents__oxcontent = new oxField('[{ $oxcmp_shop->oxshops__oxowneremail->value }]', oxField::T_RAW);
         $this->_oObj->oxcontents__oxcontent_1 = new oxField("testcontentENG&, &, !@#$%^&*%$$&@'.,;p\"ss", oxField::T_RAW);
         $this->_oObj->oxcontents__oxactive = new oxField('1', oxField::T_RAW);
-        $this->_oObj->oxcontents__oxactive_1 = new oxField('1', oxField::T_RAW);
+        $this->_oObj->oxcontents__oxactive_1 = new oxField('1', oxField::T_RAW);       
         $this->_oObj->save();
 
         $sOxid = $this->_oObj->getId();
@@ -120,6 +120,18 @@ class Unit_Views_contentTest extends OxidTestCase
 
         $oView = new content();
         $this->assertEquals( $oView->getContentId(), $sContentId );
+    }
+
+    /**
+     * Test get subject.
+     *
+     * @return null
+     */
+    public function testGetSubject()
+    {
+        $oContentView = $this->getMock( 'content', array( 'getContent' ) );
+        $oContentView->expects( $this->once() )->method( 'getContent')->will( $this->returnValue( 'testsubject' ) );
+        $this->assertEquals( 'testsubject', $oContentView->UNITgetSubject( oxLang::getInstance()->getBaseLanguage() ) );
     }
 
     /**
@@ -307,6 +319,23 @@ class Unit_Views_contentTest extends OxidTestCase
     }
 
     /**
+     * Test active content id getter when content id passed with tpl param.
+     *
+     * @return null
+     */
+    public function testGetContentIdWithTplParam()
+    {
+        modConfig::setParameter( 'tpl', $this->_oObj->getId() );
+        modConfig::getInstance()->setConfigParam( "blPsLoginEnabled", false );
+        oxTestModules::addFunction( 'oxUtils', 'redirect', '{ throw new Exception($aA[0]); }');
+
+        $oObj = new content();
+
+        // testing special chars conversion
+        $this->assertEquals( $oObj->getContentId(), $this->_oObj->getId() );
+    }
+
+    /**
      * Test active content id getter Test active content id getter when content id passed with oxcid param.
      *
      * @return null
@@ -331,16 +360,14 @@ class Unit_Views_contentTest extends OxidTestCase
      */
     public function testGetContentIdIfNotActive()
     {
-        $oContent = new oxContent();
-        $oContent->setId('_testContent');
-        $oContent->oxcontents__oxactive = new oxField('0');
-        $oContent->save();
-        modConfig::setParameter( 'oxcid', $oContent->getId() );
+        $this->_oObj->oxcontents__oxactive = new oxField('0', oxField::T_RAW);
+        $this->_oObj->save();
+        modConfig::setParameter( 'tpl', $this->_oObj->getId() );
 
-        $oContentView = new Content() ;
+        $oObj = oxNew( "content" );
 
         // testing special chars conversion
-        $this->assertFalse( $oContentView->getContentId() );
+        $this->assertFalse( $oObj->getContentId() );
     }
 
     /**
@@ -350,6 +377,7 @@ class Unit_Views_contentTest extends OxidTestCase
      */
     public function testGetContentIdWhenNoIdSpecified()
     {
+        modConfig::setParameter( 'tpl', null );
         modConfig::getInstance()->setConfigParam( "blPsLoginEnabled", false );
 
         oxTestModules::addFunction( 'oxUtils', 'redirect', '{ throw new Exception($aA[0]); }');
@@ -366,7 +394,7 @@ class Unit_Views_contentTest extends OxidTestCase
      */
     public function testGetContent()
     {
-        modConfig::setParameter( 'oxcid', $this->_oObj->getId() );
+        modConfig::setParameter( 'tpl', $this->_oObj->getId() );
         modConfig::getInstance()->setConfigParam( "blPsLoginEnabled", false );
         oxTestModules::addFunction( 'oxUtils', 'redirect', '{ throw new Exception($aA[0]); }');
 
@@ -374,6 +402,21 @@ class Unit_Views_contentTest extends OxidTestCase
 
         // testing special chars conversion
         $this->assertEquals( $oObj->getContent()->getId(), $this->_oObj->getId() );
+    }
+
+    /**
+     * Test active content getter when content doesn't exist.
+     *
+     * @return null
+     */
+    public function testGetContentIfNotExists()
+    {
+       modConfig::setParameter( 'tpl', 'aaaa' );
+
+        $oObj = oxNew( "content" );
+
+        // testing special chars conversion
+        $this->assertFalse( $oObj->getContent() );
     }
 
     /**
@@ -419,8 +462,6 @@ class Unit_Views_contentTest extends OxidTestCase
 
     public function testContentNotFound()
     {
-       modConfig::setParameter( 'oxcid', null );
-       modConfig::setParameter( 'oxloadid', null );
        $oView = $this->getMock( 'content', array( '_getTplName', 'getContentId' ) );
        $oView->expects( $this->once() )->method( '_getTplName')->will( $this->returnValue( '' ) );
        $oView->expects( $this->any() )->method( 'getContentId')->will( $this->returnValue( false ) );
@@ -657,6 +698,8 @@ class Unit_Views_contentTest extends OxidTestCase
 
     /**
      * Content::getRdfaPriceValidity() Test case
+     *
+     * @return null
      */
     public function testGetRdfaPriceValidity()
     {
@@ -673,36 +716,21 @@ class Unit_Views_contentTest extends OxidTestCase
         $this->assertTrue( date('Y-m-d\TH:i:s', $startTime) <= $aResp['validfrom'] );
         $this->assertTrue( date('Y-m-d\TH:i:s', $endTime) <= $aResp['validthrough'] );
     }
-
+    
     /**
-     * Content::testGetParsedContent() Test case
+     * Content::getParsedContent() Test case
      *
-     * Add bugfix to #0004298: If there is smarty tag in content, then it is saved in same name template.
+     * @return null
      */
     public function testGetParsedContent()
-    {
-        $this->_oObj->oxcontents__oxcontent = new oxField("[{ 'A'|cat:'B' }]SSSSSSSS", oxField::T_RAW);
+    {   
+        oxAddClassModule('contentTest_oxUtilsView', 'oxUtilsView');
+
+        $this->_oObj->oxcontents__oxcontent = new oxField('[{ $oxcmp_shop->oxshops__oxowneremail->value }]', oxField::T_RAW);
         $this->_oObj->save();
         modConfig::setParameter( 'oxcid', $this->_oObj->getId() );
         $oContent = new content();
 
-        $this->assertEquals( 'ABSSSSSSSS', $oContent->getParsedContent(), 'Result from smarty not same as in content page.' );
-
-        // Check if second CMS page will be generated with different content.
-        $oSecond = new oxcontent();
-        $oSecond->setId('_test_testGetParsedContent');// = new oxField('_test_testGetParsedContent');
-        $oSecond->oxcontents__oxtitle = new oxField('test', oxField::T_RAW);
-        $sShopId = modConfig::getInstance()->getShopId();
-        $oSecond->oxcontents__oxshopid = new oxField($sShopId, oxField::T_RAW);
-        $oSecond->oxcontents__oxloadid = new oxField('_testLoadId_testGetParsedContent', oxField::T_RAW);
-        $oSecond->oxcontents__oxcontent = new oxField("[{ 'A'|cat:'D' }]SSSSSSSS", oxField::T_RAW);
-        $oSecond->oxcontents__oxcontent_1 = new oxField("testcontentENG&, &, !@#$%^&*%$$&@'.,;p\"ss", oxField::T_RAW);
-        $oSecond->oxcontents__oxactive = new oxField('1', oxField::T_RAW);
-        $oSecond->oxcontents__oxactive_1 = new oxField('1', oxField::T_RAW);
-        $oSecond->save();
-        modConfig::setParameter( 'oxcid', $oSecond->getId() );
-        $oContent = new content();
-
-        $this->assertEquals( 'ADSSSSSSSS', $oContent->getParsedContent(), 'Content not as in second page. If result ABSSSSSSSS than it is ame as in first page, so used wrong smarty cache file.' );
+        $this->assertEquals( $oContent->getContent()->oxcontents__oxcontent->value, $oContent->getParsedContent() );
     }
 }

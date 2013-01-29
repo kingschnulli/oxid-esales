@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   core
- * @copyright (C) OXID eSales AG 2003-2012
+ * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxstr.php 48727 2012-08-16 09:09:02Z tomas $
+ * @version   SVN: $Id: oxstr.php 25467 2010-02-01 14:14:26Z alfonsas $
  */
 
 /**
@@ -72,7 +72,7 @@ class oxStr
      */
     protected function _getStrHandler()
     {
-        if (oxRegistry::getConfig()->isUtf() && function_exists('mb_strlen')) {
+        if (oxConfig::getInstance()->isUtf() && function_exists('mb_strlen')) {
             return oxNew("oxStrMb");
         }
 

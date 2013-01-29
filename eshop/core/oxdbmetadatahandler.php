@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxdbmetadatahandler.php 51491 2012-11-07 11:37:05Z aurimas.gladutis $
+ * @version   SVN: $Id: oxdbmetadatahandler.php 43719 2012-04-11 07:07:20Z linas.kukulskis $
  */
 
 /**
@@ -141,7 +141,7 @@ class oxDbMetaDataHandler extends oxSuperCfg
     public function getAllMultiTables($sTable)
     {
         $aMLTables = array();
-        foreach (array_keys(oxRegistry::getLang()->getLanguageIds()) as $iLangId) {
+        foreach (array_keys(oxLang::getInstance()->getLanguageIds()) as $iLangId) {
             $sLangTableName = getLangTableName($sTable, $iLangId );
             if ($sTable != $sLangTableName && !in_array($sLangTableName, $aMLTables)) {
                 $aMLTables[] = $sLangTableName;
@@ -493,40 +493,14 @@ class oxDbMetaDataHandler extends oxSuperCfg
     }
 
     /**
-     * Updates shop views
+     * Performs full view update
      *
-     * @param array $aTables If you need to update specific tables, just pass its names as array [optional]
-     *
-     * @return bool
+     * @return mixed
      */
-    public function updateViews( $aTables = null )
+    public function updateViews()
     {
-        set_time_limit( 0 );
-
-        $oDb = oxDb::getDb();
-        $oConfig = oxRegistry::getConfig();
-
-        $aShops = $oDb->getAll( "select * from oxshops" );
-
-        $aTables = $aTables ? $aTables : $oConfig->getConfigParam( 'aMultiShopTables' );
-
-        $bSuccess = true;
-        foreach ( $aShops as $aShop ) {
-            $sShopId = $aShop[0];
-            $oShop = oxNew( 'oxshop' );
-            $oShop->load( $sShopId );
-            $oShop->setMultiShopTables( $aTables );
-            $blMultishopInherit = $oConfig->getShopConfVar( 'blMultishopInherit_oxcategories', $sShopId );
-            $aMallInherit = array();
-            foreach ( $aTables as $sTable ) {
-                $aMallInherit[$sTable] = $oConfig->getShopConfVar( 'blMallInherit_' . $sTable, $sShopId );
-            }
-            if ( !$oShop->generateViews( $blMultishopInherit, $aMallInherit ) && $bSuccess ) {
-                $bSuccess = false;
-            }
-        }
-
-        return $bSuccess;
+        oxDb::getInstance()->updateViews();
     }
+
 }
 

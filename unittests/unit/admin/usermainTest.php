@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: usermainTest.php 47906 2012-07-30 07:58:13Z vaidas.matulevicius $
+ * @version   SVN: $Id: usermainTest.php 44707 2012-05-09 11:24:40Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -154,7 +154,7 @@ class Unit_Admin_UserMainTest extends OxidTestCase
         $sPass = '&quot;&#34;"o?p[]XfdKvA=#3K8tQ%';
         modConfig::setParameter( 'newPassword', $sPass );
 
-        $oUser = $this->getMock( 'oxuser', array( 'setPassword', 'checkIfEmailExists', 'load' ) );
+        $oUser = $this->getMock( 'oxStdClass', array( 'setPassword', 'checkIfEmailExists', 'load' ) );
         $oUser->expects( $this->once() )->method( 'setPassword' )->with( $this->equalTo( $sPass ) );
         $oUser->expects( $this->once() )->method( 'checkIfEmailExists' )->will( $this->returnValue( true ) );
         oxTestModules::addModuleObject( 'oxuser', $oUser );

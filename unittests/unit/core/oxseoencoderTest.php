@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxseoencoderTest.php 53394 2013-01-07 10:07:19Z aurimas.gladutis $
+ * @version   SVN: $Id: oxseoencoderTest.php 43624 2012-04-06 15:38:40Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -411,7 +411,7 @@ class Unit_Core_oxSeoEncoderTest extends OxidTestCase
             $sArticleId                 = "1964";
             $sArticleSeoUrl             = $sShopUrl."Geschenke/Original-BUSH-Beach-Radio.html";
             $sArticleVendorSeoUrl       = $sShopUrl."Nach-Lieferant/Bush/Original-BUSH-Beach-Radio.html";
-            $sArticleManufacturerSeoUrl = $sShopUrl."Nach-Hersteller/Bush/Original-BUSH-Beach-Radio.html";
+            $sArticleManufacturerSeoUrl = $sShopUrl."Nach-Marke/Bush/Original-BUSH-Beach-Radio.html";
             $sArticlePriceCatSeoUrl     = $sShopUrl."Test-Price-Category-DE/Original-BUSH-Beach-Radio.html";
             $sArticleTagSeoUrl          = $sShopUrl."tag/seiner/Original-BUSH-Beach-Radio.html";
 
@@ -422,7 +422,7 @@ class Unit_Core_oxSeoEncoderTest extends OxidTestCase
         $sContentSeoUrl = $sShopUrl."Datenschutz/";
 
             $sManufacturerId = "fe07958b49de225bd1dbc7594fb9a6b0";
-            $sManufacturerSeoUrl = $sShopUrl."Nach-Hersteller/Haller-Stahlwaren/";
+            $sManufacturerSeoUrl = $sShopUrl."Nach-Marke/Haller-Stahlwaren/";
 
             $sVendorId = "68342e2955d7401e6.18967838";
             $sVendorSeoUrl = $sShopUrl."Nach-Lieferant/Haller-Stahlwaren/";
@@ -470,7 +470,7 @@ class Unit_Core_oxSeoEncoderTest extends OxidTestCase
             $sTag = "flaschen";
             $sTagUrl = "tag/flaschen/";
 
-        $this->assertEquals( $sShopUrl."tag/bar-equipment/", $oTagEncoder->getTagUrl( "bar equipment", 0 ) );
+        $this->assertFalse( $oTagEncoder->getTagUrl( "bar equipment", 0 ) );
         $this->assertEquals( $sShopUrl.$sTagUrl, $oTagEncoder->getTagUrl( $sTag, 0 ) );
 
         $oVendor = new oxVendor();
@@ -505,7 +505,7 @@ class Unit_Core_oxSeoEncoderTest extends OxidTestCase
             $sArticleId                 = "1964";
             $sArticleSeoUrl             = $sShopUrl."en/Gifts/Original-BUSH-Beach-Radio.html";
             $sArticleVendorSeoUrl       = $sShopUrl."en/By-Distributor/Bush/Original-BUSH-Beach-Radio.html";
-            $sArticleManufacturerSeoUrl = $sShopUrl."en/By-Manufacturer/Bush/Original-BUSH-Beach-Radio.html";
+            $sArticleManufacturerSeoUrl = $sShopUrl."en/By-Brand/Bush/Original-BUSH-Beach-Radio.html";
             $sArticlePriceCatSeoUrl     = $sShopUrl."en/Test-Price-Category-DE/Original-BUSH-Beach-Radio.html";
             $sArticleTagSeoUrl          = $sShopUrl."en/tag/original/Original-BUSH-Beach-Radio.html";
             $sTag = "original";
@@ -517,7 +517,7 @@ class Unit_Core_oxSeoEncoderTest extends OxidTestCase
         $sContentSeoUrl = $sShopUrl."en/Privacy-Policy/";
 
             $sManufacturerId = "fe07958b49de225bd1dbc7594fb9a6b0";
-            $sManufacturerSeoUrl = $sShopUrl."en/By-Manufacturer/Haller-Stahlwaren/";
+            $sManufacturerSeoUrl = $sShopUrl."en/By-Brand/Haller-Stahlwaren/";
 
             $sVendorId = "68342e2955d7401e6.18967838";
             $sVendorSeoUrl = $sShopUrl."en/By-Distributor/Haller-Stahlwaren/";
@@ -1511,13 +1511,20 @@ class Unit_Core_oxSeoEncoderTest extends OxidTestCase
 
     public function testGetMetaData()
     {
-        $iShopId = oxConfig::getInstance()->getBaseShopId();
-        $oDb = oxDb::getDb();
-        $oDb->execute( "insert into oxobject2seodata (`oxobjectid`, `oxkeywords`, `oxshopid`, `oxlang`) values( 'xxx', 'yyy', '$iShopId', 0)" );
-
         $oEncoder = new oxSeoEncoder();
 
-        $this->assertEquals( 'yyy', $oEncoder->getMetaData( 'xxx', 'oxkeywords' ) );
+        $this->aSQL = array();
+        $this->aRET = array();
+
+        $oDb = modDB::getInstance();
+        $oDb->addClassFunction( 'GetOne', array( $this, '__SaveToDbCreatesGoodMd5Callback' ) );
+
+        $oEncoder->getMetaData( 'xxx', 'yyy' );
+
+        $iShopId = oxConfig::getInstance()->getBaseShopId();
+
+        $sQ = "select yyy from oxobject2seodata where oxobjectid = 'xxx' and oxshopid = '{$iShopId}' and oxlang = '0'";
+        $this->assertEquals( $sQ, $this->aSQL[0] );
     }
 
     public function testGetSeoIdent()

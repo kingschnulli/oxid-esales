@@ -34,14 +34,14 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- *  $Id: oxemosadapter.php 52845 2012-12-12 12:25:23Z linas.kukulskis $
+ *  $Id: oxemosadapter.php 49000 2012-08-24 11:52:35Z tomas $
  */
 
 
 /**
  * Includes emos script formatter class
  */
-require_once oxRegistry::getConfig()->getConfigParam( 'sCoreDir' ) . 'smarty/plugins/emos.php';
+require_once oxConfig::getInstance()->getConfigParam( 'sCoreDir' ) . 'smarty/plugins/emos.php';
 
 /**
  * This class is a reference implementation of a PHP Function to include
@@ -74,15 +74,16 @@ class oxEmosAdapter extends oxSuperCfg
     private static $_instance = null;
 
     /**
-     * Return a single instance of this class
-     *
-     * @deprecated since v5.0 (2012-08-10); Use oxRegistry::get("oxEmosAdapter") instead.
+     * resturns a single instance of this class
      *
      * @return oxUtils
      */
     public static function getInstance()
     {
-        return oxRegistry::get("oxEmosAdapter");
+        if ( !self::$_instance instanceof oxEmosAdapter ) {
+            self::$_instance = oxNew('oxEmosAdapter');
+        }
+        return self::$_instance;
     }
 
     /**
@@ -124,7 +125,7 @@ class oxEmosAdapter extends oxSuperCfg
             $this->_oEmos->addPageId( $this->_getEmosPageId( $this->_getTplName() ) );
 
             // language id
-            $this->_oEmos->addLangId( oxRegistry::getLang()->getBaseLanguage() );
+            $this->_oEmos->addLangId( oxLang::getInstance()->getBaseLanguage() );
 
             // set site ID
             $this->_oEmos->addSiteId( $this->getConfig()->getShopId() );
@@ -179,9 +180,7 @@ class oxEmosAdapter extends oxSuperCfg
     protected function _convProd2EmosItem( $oProduct, $sCatPath = "NULL", $iQty = 1 )
     {
         $oItem = $this->_getNewEmosItem();
-
-        $sProductId = ( isset( $oProduct->oxarticles__oxartnum->value ) && $oProduct->oxarticles__oxartnum->value ) ? $oProduct->oxarticles__oxartnum->value : $oProduct->getId();
-        $oItem->productId   = $this->_convertToUtf( $sProductId );
+        $oItem->productId   = ( isset( $oProduct->oxarticles__oxartnum->value ) && $oProduct->oxarticles__oxartnum->value ) ? $oProduct->oxarticles__oxartnum->value : $oProduct->getId();
         $oItem->productName = $this->_prepareProductTitle( $oProduct );
 
         // #810A
@@ -190,8 +189,8 @@ class oxEmosAdapter extends oxSuperCfg
         $oItem->productGroup = "{$sCatPath}/{$this->_convertToUtf( $oProduct->oxarticles__oxtitle->value )}";
         $oItem->quantity     = $iQty;
         // #3452: Add brands to econda tracking
-        $oItem->variant1     = $oProduct->getVendor() ? $this->_convertToUtf( $oProduct->getVendor()->getTitle() ) : "NULL";
-        $oItem->variant2     = $oProduct->getManufacturer() ? $this->_convertToUtf( $oProduct->getManufacturer()->getTitle() ) : "NULL";
+        $oItem->variant1     = $oProduct->getVendor() ? $oProduct->getVendor()->getTitle() : "NULL";
+        $oItem->variant2     = $oProduct->getManufacturer() ? $oProduct->getManufacturer()->getTitle() : "NULL";
         $oItem->variant3     = $oProduct->getId();
 
         return $oItem;
@@ -206,7 +205,7 @@ class oxEmosAdapter extends oxSuperCfg
      */
     protected function _getEmosPageTitle( $aParams )
     {
-        return isset( $aParams['title'] ) ? $this->_convertToUtf( $aParams['title'] ) : null;
+        return isset( $aParams['title'] ) ? $aParams['title'] : null;
     }
 
     /**
@@ -401,12 +400,12 @@ class oxEmosAdapter extends oxSuperCfg
                 //ECONDA FIX use username (email address) instead of customer number
                 $oOrder  = $oCurrView->getOrder();
                 $oBasket = $oCurrView->getBasket();
-                $oEmos->addEmosBillingPageArray( $this->_convertToUtf($oOrder->oxorder__oxordernr->value),
-                                                 $this->_convertToUtf($oUser->oxuser__oxusername->value),
+                $oEmos->addEmosBillingPageArray( $oOrder->oxorder__oxordernr->value,
+                                                 $oUser->oxuser__oxusername->value,
                                                  $oBasket->getPrice()->getBruttoPrice() * ( 1 / $oCur->rate ),
-                                                 $this->_convertToUtf($oOrder->oxorder__oxbillcountry->value),
-                                                 $this->_convertToUtf($oOrder->oxorder__oxbillzip->value),
-                                                 $this->_convertToUtf($oOrder->oxorder__oxbillcity->value) );
+                                                 $oOrder->oxorder__oxbillcountry->value,
+                                                 $oOrder->oxorder__oxbillzip->value,
+                                                 $oOrder->oxorder__oxbillcity->value );
 
                 // get Basket Page Array
                 $aBasket = array();

@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   core
- * @copyright (C) OXID eSales AG 2003-2013
+ * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxstrmb.php 53490 2013-01-08 16:04:12Z aurimas.gladutis $
+ * @version   SVN: $Id: oxstrmb.php 44715 2012-05-09 11:27:44Z linas.kukulskis $
  */
 
 /**
@@ -361,36 +361,5 @@ class oxStrMb
     public function jsonEncode($data)
     {
         return json_encode($data);
-    }
-
-    /**
-     * PHP strip_tags() function wrapper.
-     *
-     * @param string $sString        the input string
-     * @param string $sAllowableTags an optional parameter to specify tags which should not be stripped
-     *
-     * @return string
-     */
-    public function strip_tags( $sString, $sAllowableTags = '' )
-    {
-        if ( stripos( $sAllowableTags, '<style>' ) === false ) {
-            // strip style tags with definitions within
-            $sString = $this->preg_replace( "'<style[^>]*>.*</style>'siU", '', $sString );
-        }
-        return strip_tags( $sString, $sAllowableTags );
-    }
-
-    /**
-     * Compares two strings. Case sensitive.
-     * For use in sorting with reverse order
-     *
-     * @param string $sStr1 String to compare
-     * @param string $sStr2 String to compare
-     *
-     * @return int > 0 if str1 is less than str2; < 0 if str1 is greater than str2, and 0 if they are equal.
-     */
-    public function strrcmp( $sStr1, $sStr2 )
-    {
-        return -strcmp( $sStr1, $sStr2 );
     }
 }

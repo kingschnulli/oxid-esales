@@ -109,7 +109,6 @@ class Unit_Setup_oxSetupUtilsTest extends OxidTestCase
         $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sCompileDir' ) );
         $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBasePicDir/promo' ) );
         $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBasePicDir/media' ) );
-        $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/out/media' ) );
 
         $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBasePicDir/master/product/1' ) );
         $oUtils->expects( $this->at( $iAt++ ) )->method( "checkFileOrDirectory" )->with( $this->equalTo( 'sShopDir/sBasePicDir/master/product/2' ) );

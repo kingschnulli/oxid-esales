@@ -2,7 +2,7 @@
 /*
 CREATE TABLE oxsessions (
     SessionID VARCHAR(64),
-    session_data MEDIUMTEXT DEFAULT '',
+    session_data TEXT DEFAULT '',
     expiry INT(11),
     expireref	VARCHAR(250)	DEFAULT '',
     PRIMARY KEY	(SessionID),

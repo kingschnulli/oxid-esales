@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxvendorTest.php 45648 2012-05-24 08:53:55Z linas.kukulskis $
+ * @version   SVN: $Id: oxvendorTest.php 38243 2011-08-19 11:22:25Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -42,7 +42,7 @@ class Unit_Core_oxvendorTest extends OxidTestCase
     protected function setUp()
     {
         // test require icon for vendors
-        if ( $this->getName() == "testGetIconUrlNewPath"  || $this->getName() == "testGetIconUrl" ) {
+        if ( $this->getName() == "testGetIconUrlNewPath" || $this->getName() == "testMagicGetter" || $this->getName() == "testGetIconUrl" ) {
             $sTarget = oxConfig::getInstance()->getPicturePath( "" ) . "master";
             if ( file_exists( $sTarget . $this->_sManIcon ) ) {
                 copy( $sTarget . $this->_sManIcon, $sTarget . $this->_sVndIcon );
@@ -59,7 +59,7 @@ class Unit_Core_oxvendorTest extends OxidTestCase
     protected function tearDown()
     {
         // removing folder
-        if ( $this->getName() == "testGetIconUrlNewPath"  || $this->getName() == "testGetIconUrl" ) {
+        if ( $this->getName() == "testGetIconUrlNewPath" || $this->getName() == "testMagicGetter" || $this->getName() == "testGetIconUrl" ) {
             $sTarget = oxConfig::getInstance()->getPicturePath( "" ) . "master";
             if ( file_exists( $sTarget . $this->_sVndIcon ) ) {
                 unlink( $sTarget . $this->_sVndIcon );
@@ -107,6 +107,32 @@ class Unit_Core_oxvendorTest extends OxidTestCase
         $this->assertNull( $oVendor->getContentCats() );
     }
 
+    public function testMagicGetter()
+    {
+        $oVendor = $this->getProxyClass( "oxvendor" );
+        $oVendor->oxvendor__oxicon = new oxField( 'big_matsol_1_mico.jpg' );
+
+        $this->assertEquals( 'big_matsol_1_mico.jpg', basename( $oVendor->getIconUrl() ) );
+
+
+        $oVendor = $this->getMock( 'oxvendor', array( 'getLink', 'getNrOfArticles', 'getIsVisible', 'getHasVisibleSubCats', 'getId' ) );
+
+        $oVendor->expects( $this->exactly( 4 ) )->method( 'getLink' )->will( $this->returnValue( 'Link' ) );
+        $oVendor->expects( $this->once() )->method( 'getNrOfArticles' )->will( $this->returnValue( 'NrOfArticles' ) );
+        $oVendor->expects( $this->once() )->method( 'getIsVisible' )->will( $this->returnValue( 'IsVisible' ) );
+        $oVendor->expects( $this->once() )->method( 'getHasVisibleSubCats' )->will( $this->returnValue( 'HasVisibleSubCats' ) );
+        $oVendor->expects( $this->once() )->method( 'getId' )->will( $this->returnValue( 'getId' ) );
+
+        $this->assertEquals( 'getId', $oVendor->sOXID );
+        $this->assertEquals( 'Link', $oVendor->oxurl );
+        $this->assertEquals( 'Link', $oVendor->openlink );
+        $this->assertEquals( 'Link', $oVendor->closelink );
+        $this->assertEquals( 'Link', $oVendor->link );
+        $this->assertEquals( 'NrOfArticles', $oVendor->iArtCnt );
+        $this->assertEquals( 'IsVisible', $oVendor->isVisible );
+        $this->assertEquals( 'HasVisibleSubCats', $oVendor->hasVisibleSubCats );
+    }
+
     // #M366: Upload of manufacturer and categories icon does not work
     public function testGetIconUrl()
     {
@@ -149,8 +175,8 @@ class Unit_Core_oxvendorTest extends OxidTestCase
         $oVendor->load( $sVendorId );
 
 
-        $this->assertEquals( $oVendor->oxvendor__oxnrofarticles->value, $oVendor->getNrOfArticles() );
-        $this->assertEquals( $iCnt, $oVendor->getNrOfArticles() );
+        $this->assertEquals( $oVendor->oxvendor__oxnrofarticles->value, $oVendor->iArtCnt );
+        $this->assertEquals( $iCnt, $oVendor->iArtCnt );
     }
 
     public function testGetStdLink()

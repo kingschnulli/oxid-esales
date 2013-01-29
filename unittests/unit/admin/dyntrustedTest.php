@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: dyntrustedTest.php 47944 2012-07-30 12:41:30Z linas.kukulskis $
+ * @version   SVN: $Id: dyntrustedTest.php 44707 2012-05-09 11:24:40Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -67,7 +67,7 @@ class Unit_Admin_dyntrustedTest extends OxidTestCase
      */
     public function testSave()
     {
-        $oResults = new stdClass();
+        $oResults = new oxStdClass();
         $oResults->stateEnum = 'TEST';
         $oResults->typeEnum = 'EXCELLENCE';
         modConfig::setParameter( "aShopID_TrustedShops", array("test") );
@@ -76,7 +76,7 @@ class Unit_Admin_dyntrustedTest extends OxidTestCase
         modConfig::setParameter( "tsSealActive", true );
         modConfig::setParameter( "tsTestMode", false );
 
-        $oConfig = $this->getMock( "oxConfig", array( "getShopId", "saveShopConfVar" ) );
+        $oConfig = $this->getMock( "oxStdClass", array( "getShopId", "saveShopConfVar" ) );
         $oConfig->expects( $this->at(0) )->method( 'getShopId' )->will( $this->returnValue( "shopid" ) );
         $oConfig->expects( $this->at(1) )->method( 'saveShopConfVar' )->with( $this->equalTo( "aarr" ), $this->equalTo( "iShopID_TrustedShops" ), $this->equalTo( array("test") ), $this->equalTo( "shopid" ) );
         $oConfig->expects( $this->at(2) )->method( 'saveShopConfVar' )->with( $this->equalTo( "aarr" ), $this->equalTo( "aTsUser" ), $this->equalTo( 'testUser' ), $this->equalTo( "shopid" ) );

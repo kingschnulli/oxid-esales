@@ -146,9 +146,11 @@ class Unit_Core_oxfileTest extends OxidTestCase
     {
         $oDb = oxDb::getDb();
 
-        // $aQ[] = "insert into oxfiles (oxid, OXARTID, OXFILENAME, OXSTOREHASH) values ('testId1','_testProd1','testFile','testFileH')";
+       // $aQ[] = "insert into oxfiles (oxid, OXARTID, OXFILENAME, OXSTOREHASH) values ('testId1','_testProd1','testFile','testFileH')";
         $aQ[] = "insert into oxfiles (oxid, OXARTID, OXFILENAME, OXSTOREHASH) values ('testId2','_testProd1','testFile','testFileH')";
         $aQ[] = "insert into oxfiles (oxid, OXARTID, OXFILENAME, OXSTOREHASH) values ('testId3','_testProd2','testFile1','testFileH1')";
+        $aQ[] = "insert into oxfiles (oxid, OXARTID, OXFILENAME, OXSTOREHASH) values ('testId4','_testProd2','testFile2','testFileH2')";
+        $aQ[] = "insert into oxfiles (oxid, OXARTID, OXFILENAME, OXSTOREHASH) values ('testId5','_testProd2','testFile3','testFileH3')";
 
         foreach ( $aQ as $sQ ) {
             $oDb->execute( $sQ );
@@ -158,24 +160,23 @@ class Unit_Core_oxfileTest extends OxidTestCase
             mkdir( oxConfig::getInstance()->getConfigParam('sShopDir').'/out/downloads/te', 0755);
         }
 
+
         $sFilePath1 = oxConfig::getInstance()->getConfigParam('sShopDir').'/out/downloads/te/testFileH';
         file_put_contents( $sFilePath1, 'test jpg file' );
 
-        $oFile = new oxFile();
-
-        $this->assertTrue( $oFile->delete('testId1') );
-        $this->assertTrue( is_file($sFilePath1) );
-        $this->assertEquals( 2, $oDb->getOne("SELECT COUNT(*) FROM `oxfiles`") );
+        $sFilePath2 = oxConfig::getInstance()->getConfigParam('sShopDir').'/out/downloads/te/testFileH1';
+        file_put_contents( $sFilePath2, 'test jpg file 1' );
 
         $oFile = new oxFile();
-        $oFile->load( 'testId2');
-        $this->assertTrue( $oFile->delete() );
-        $this->assertFalse( is_file( $sFilePath1 ) );
-        $this->assertEquals( 1, $oDb->getOne("SELECT COUNT(*) FROM `oxfiles`") );
+        $oFile->delete('testId1');
+        $this->assertTrue( is_file($sFilePath1));
+        $this->assertEquals( 4, $oDb->getOne("SELECT COUNT(*) FROM `oxfiles`") );
 
         $oFile = new oxFile();
-
-        $this->assertFalse( $oFile->delete('testId4') );
+        $oFile->load( 'testId3');
+        $oFile->delete();
+        $this->assertFalse( is_file( $sFilePath2 ) );
+        $this->assertEquals( 3, $oDb->getOne("SELECT COUNT(*) FROM `oxfiles`") );
     }
 
     /**

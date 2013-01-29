@@ -486,7 +486,7 @@ a.viewAllHover,
     border-bottom: 5px solid #ECEFF0;
 }
 
-.basketitems tr td:last-child, .basketitems tr th:last-child, .basketitems .unitPrice, .basketitems .vatPercent {
+.basketitems tr td:last-child, .basketitems tr th:last-child {
     text-align: right;
     padding-right: 5px;
 }
@@ -535,11 +535,6 @@ a.viewAllHover,
 .basketitems .persParam {
     width: 120px;
     text-align: left;
-}
-
-.basketitems .persParamLabel {
-    font-size: 12px;
-    font-weight: bold;
 }
 
 .quantity strong {
@@ -652,27 +647,13 @@ a.viewAllHover,
     color:#515353;
 }
 
-#orderAddress, #orderShipping, #orderPayment, #orderEditCart, #orderAgbTop, #orderBasket {
+#orderAddress, #orderShipping, #orderPayment {
     margin-bottom: 35px;
 }
 
 #orderAddress h3, #orderShipping h3, #orderPayment h3 {
     color:#000;
 }
-
-#orderAddress dl {
-    float: left;
-}
-
-#orderAddress dl.shippingAddress {
-    padding-left: 20px;
-}
-
-#orderAddress dl.orderRemarks {
-    padding-left: 20px;
-    width: 250px;
-}
-
 /* --- CLEAR ------------------------ */
 
 .clear:after, .basketFlyout li a:after, .basketFlyout .totals:after, .basketFlyout .title:after, .lineView li:after, .wrappingData li:after, .form li:after {
@@ -764,7 +745,7 @@ a.viewAllHover,
 }
 
 
-/* --- Article  box & recommendation box --------------------- */
+/* --- Article  box & remomendation box --------------------- */
 .featuredList a {
     padding: 7px 10px 5px 10px;
     display: block;
@@ -1582,21 +1563,8 @@ a.submitButton {
   z-index:9;
 }
 
-#topMenu .flyout strong a  {
-    color: #18778e;
-}
-
-#step2PswdOpener {
-    font-size: 10px;
-    color: #18778e;
-}
-
-#step2PswdOpener:hover {
-    text-decoration: none;
-}
-
-.stepsPasswordbox {
-    width: 138px !important;
+#topMenu .flyout strong a {
+  color: #18778e;
 }
 
 .logoutLink {
@@ -1733,7 +1701,7 @@ a.submitButton {
     color: #515353;
 }
 
-/* --- main navigation menu ------------------- */
+/* --- main navigation meniu ------------------- */
 #navigation {clear:both; width:720px; padding-top: 8px;}
 #navigation {float:left;}
 #navigation a {
@@ -1824,7 +1792,7 @@ div.searchBox input.textbox:focus {
  width: 233px;
  margin:10px 0px;
  color:#465256;
- height: auto;
+ min-height: 280px;
  border-right: 1px solid #3799b1;
  border-left: 1px solid #ffffff;
 }
@@ -1988,9 +1956,6 @@ a.tagText img{
     vertical-align:top;
 }
 
-a.compare.remove {display:none}
-
-
 /* --- Grid View ------------------------------------ */
 .gridView,
 .infogridView {
@@ -2120,7 +2085,7 @@ a.compare.remove {display:none}
  padding-right: 5px;
 }
 
-/* --- InfoGrid -------------------------------- */
+/* --- Infogrid -------------------------------- */
 .infogridView {
     margin: 0;
     padding: 0;
@@ -2707,7 +2672,7 @@ a.compare.remove {display:none}
    margin: 7px 0;
 }
 
-/* --- Checkout - than kyou page --------------------- */
+/* --- Checkout - thankyou page --------------------- */
 #thankyouPage h3.blockHead:first-child {
    color: #ec6105;
 }
@@ -2776,7 +2741,7 @@ a.compare.remove {display:none}
     float: right;
 }
 
-/* --- dropDown ------------- */
+/* --- dropdown ------------- */
 .drop li {
     list-style: none;
     padding: 0;
@@ -2857,10 +2822,6 @@ a.compare.remove {display:none}
 }
 
 .dropDown li.desc span, .dropDown p span.desc {
-    background-position: 100% -39px;
-}
-
-.dropDown li.asc span, .dropDown p span.asc {
     background-position: 100% 3px;
 }
 
@@ -3185,10 +3146,12 @@ a.next {
 
 .couponBox {
     border-top: 5px solid #eceff0;
+    border-bottom: 5px solid #eceff0;
     padding: 15px 0;
     width: 545px;
-    position: absolute;
+    position: relative;
     top: -70px;
+    margin-bottom: 30px;
 }
 
 .couponBox p.oxValidateError {
@@ -3221,7 +3184,7 @@ h3.section button {
 
 #productTitle {
     position: relative;
-    z-index: 17;
+    z-index: 13;
     padding-right: 30px;
     text-shadow: 0px 1px 1px #fff;
 }
@@ -3271,19 +3234,16 @@ h3.section button {
  .actionLinks {
     display: none;
     position: absolute;
-    z-index: 16;
+    z-index: 12;
     background: #D8DEE0;
     text-transform: uppercase;
     font-size: 11px;
     border: 1px solid #979797;
     padding: 7px 0;
-    margin: 0;
 }
 
 .actionLinks li {
     padding: 0 10px;
-    list-style: none outside none;
-    position: relative;
 }
 
 .actionLinks li:hover a {
@@ -3406,7 +3366,7 @@ a.fb_button_simple {
     padding: 0 0 0 10px;
 }
 
-/* --- persistent params ---------------- */
+/* --- persparams ---------------- */
 .persparamBox {
     padding-bottom: 7px;
 }
@@ -3429,7 +3389,7 @@ a.fb_button_simple {
     margin: 2px 5px 0 0;
 }
 
-/* --- articles details attributes ------------ */
+/* --- articles dertails atributes ------------ */
 .attributes {
     width: 100%;
 }
@@ -3497,7 +3457,7 @@ a.fb_button_simple {
     padding: 2px 6px 3px 6px;
     line-height: 16px;
     position: absolute;
-    z-index: 18;
+    z-index: 14;
 }
 
 .selector img {
@@ -3788,7 +3748,7 @@ dl.review .param {
     margin-left: 20px;
     color: #757C83;
 }
-/* --- Account billing / shipping addresses ------ */
+/* --- Account billing / shipping addreses ------ */
 .addressCollumns {
 
 }
@@ -4220,7 +4180,7 @@ label.innerLabel.textArea{
     height: 220px;
 }
 
-/* --- Recommendations ---------------------------- */
+/* --- Recommendatins ---------------------------- */
 .recommendations .title {
     font-size:12px;
     padding:2px 0px 6px;
@@ -4754,12 +4714,12 @@ a.sliderHover {
     padding: 40px 0 0 0px;}
 
 
-/* --- Account Dashboard ----------------- */
+/* --- Account Dashbord ----------------- */
 
 .accountDashboardView .col {
    float: left;
    width: 374px;
- /*  height: 250px;*/
+   height: 250px;
  /* padding-right: 20px; */
 }
 
@@ -4812,15 +4772,6 @@ a.sliderHover {
     width: 190px;
     height: 380px;
     position: relative;
-}
-
-.compareNarrow {
-    width:596px;
-    position:relative;
-}
-
-#compareFirstCol.compareNarrowFirstCol table{
-    width: 152px;
 }
 
 .compareWide {
@@ -5186,100 +5137,3 @@ a.downloadableFile.pending {
 }
 
 
-#cookieNote {
-    position:fixed;
-    top:0px;
-    left:0px;
-    width:100%;
-    z-index:105;
-    text-align:left;
-    font-weight:normal;
-    font-size:16px;
-    color: #fff;
-    background-color:#f77704;
-    opacity: 0.9;
-    filter: alpha(opacity = 90);
-    padding:8px 0 8px 0;
-    text-align: center;
-    border-bottom: 1px solid #d36706;
-    display: none;
-}
-
-#cookieNote span.dismiss {
-    cursor:pointer;
-    position: absolute;
-    right: 10px;
-    top: 8px;
-    width: 18px;
-    height: 18px;
-    display: block;
-    text-indent: -9999px;
-    background: url(../../img/close.png) no-repeat 0 0;
-}
-
-#cookieNote a {
-    color: #fff;
-    text-decoration:underline;
-    font-weight:bold
-}
-
-#cookieNote+#page {
-    padding-top: 35px;
-}
-
-#cookieNote .notify{
-    padding: 0px 35px;
-}
-
-#basketVoucher {
-    position: relative;
-    padding-bottom: 30px;
-}
-
-.smallFont {
-    font-size: 12px;
-    word-wrap: break-word;
-    overflow: hidden;
-    width: 350px;
-}
-
-#betaNote {
-    position:fixed;
-    top:0px;
-    left:0px;
-    width:100%;
-    z-index:105;
-    text-align:left;
-    font-weight:normal;
-    font-size:16px;
-    color: #fff;
-    background-color:#f77704;
-    opacity: 0.9;
-    filter: alpha(opacity = 90);
-    padding:8px 0 8px 0;
-    text-align: center;
-    border-bottom: 1px solid #d36706;
-    display:none;
-}
-
-#betaNote span.dismiss {
-    cursor:pointer;
-    position: absolute;
-    right: 10px;
-    top: 8px;
-    width: 18px;
-    height: 18px;
-    display: block;
-    text-indent: -9999px;
-    background: url(../../img/close.png) no-repeat 0 0;
-}
-
-#betaNote a {
-    color: #fff;
-    text-decoration:underline;
-    font-weight:bold
-}
-
-#betaNote+#page {
-    padding-top: 35px;
-}

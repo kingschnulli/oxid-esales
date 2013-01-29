@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxfunctionsTest.php 51673 2012-11-12 11:06:48Z saulius.stasiukaitis $
+ * @version   SVN: $Id: oxfunctionsTest.php 26841 2010-03-25 13:58:15Z arvydas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -123,10 +123,10 @@ class Unit_Core_oxfunctionsTest extends OxidTestCase
      */
     public function testCmpart()
     {
-        $oA = new stdClass();
+        $oA = new Oxstdclass();
         $oA->cnt = 10;
 
-        $oB = new stdClass();
+        $oB = new Oxstdclass();
         $oB->cnt = 10;
 
         $this->assertTrue( cmpart( $oA, $oB ) == 0);
@@ -199,7 +199,7 @@ class Unit_Core_oxfunctionsTest extends OxidTestCase
 
     public function testError_404_handler()
     {
-        $oUtils = $this->getMock('oxutils', array('handlePageNotFoundError'));
+        $oUtils = $this->getMock('stdclass', array('handlePageNotFoundError'));
         $oUtils->expects($this->at(0))->method('handlePageNotFoundError')->with($this->equalTo(''));
         $oUtils->expects($this->at(1))->method('handlePageNotFoundError')->with($this->equalTo('asd'));
         oxTestModules::addModuleObject('oxutils', $oUtils);
@@ -207,5 +207,4 @@ class Unit_Core_oxfunctionsTest extends OxidTestCase
         error_404_handler();
         error_404_handler('asd');
     }
-
 }

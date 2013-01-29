@@ -258,17 +258,13 @@ class Unit_Core_oxemailAzureTplTest extends OxidTestCase
     {
         modConfig::getInstance()->setConfigParam( 'blSkipEuroReplace', true );
 
-        $oBasketItem = $this->getMock( 'oxbasketitem', array( 'getUnitPrice', 'getRegularUnitPrice',  'getFUnitPrice', 'getFTotalPrice', 'getVatPercent', 'getAmount', 'getTitle', 'getProductId') );
+        $oBasketItem = $this->getMock( 'oxbasketitem', array( 'getFUnitPrice', 'getFTotalPrice', 'getVatPercent', 'getAmount', 'getTitle', 'getProductId') );
         $oBasketItem->expects( $this->any() )->method( 'getFUnitPrice' )->will($this->returnValue( '256,00' ) );
-
-        $oBasketItem->expects( $this->any() )->method( 'getUnitPrice' )->will($this->returnValue( new oxPrice() ) );
-        $oBasketItem->expects( $this->any() )->method( 'getRegularUnitPrice' )->will($this->returnValue( new oxPrice() ) );
-
         $oBasketItem->expects( $this->any() )->method( 'getFTotalPrice' )->will($this->returnValue( 256 ) );
         $oBasketItem->expects( $this->any() )->method( 'getVatPercent' )->will($this->returnValue( 19 ) );
         $oBasketItem->expects( $this->any() )->method( 'getAmount' )->will($this->returnValue( 1 ) );
-        $oBasketItem->expects( $this->any() )->method( 'getTitle' )->will($this->returnValue( "testArticle" ) );
-        $oBasketItem->expects( $this->any() )->method( 'getProductId' )->will($this->returnValue( "_testArticleId" ) );
+        $oBasketItem->expects( $this->any() )->method( 'getTitle' )->will($this->returnValue( "testarticle" ) );
+        $oBasketItem->expects( $this->any() )->method( 'getProductId' )->will($this->returnValue( "_testarticleid" ) );
 
         $oBasketItem->oxarticles__oxtitle     = new oxField();
         $oBasketItem->oxarticles__oxvarselect = new oxField();
@@ -277,7 +273,7 @@ class Unit_Core_oxemailAzureTplTest extends OxidTestCase
         $aBasketContents[] = $oBasketItem;
         $aBasketArticles[] = $this->_oArticle;
 
-        $oBasket = $this->getMock( 'oxBasket', array( "getBasketArticles", "getContents", "getCosts", "getFPrice", "getFProductsPrice", "getProductsNetPrice", "getFDeliveryCosts", "getProductVats", "getFWrappingCosts", "getFGiftCardCosts", "getTsProtectionCosts", "getTsProtectionNet" ) );
+        $oBasket = $this->getMock( 'oxBasket', array( "getBasketArticles", "getContents", "getCosts", "getFPrice", "getFProductsPrice", "getProductsNetPrice", "getFDeliveryCosts", "getProductVats" ) );
         $oBasket->expects( $this->any() )->method( 'getBasketArticles')->will( $this->returnValue( $aBasketArticles ));
         $oBasket->expects( $this->any() )->method( 'getContents')->will( $this->returnValue( $aBasketContents ));
         $oBasket->expects( $this->any() )->method( 'getCosts')->will( $this->returnValue( new oxPrice(0) ));
@@ -286,10 +282,6 @@ class Unit_Core_oxemailAzureTplTest extends OxidTestCase
         $oBasket->expects( $this->any() )->method( 'getProductsNetPrice')->will( $this->returnValue( 777 ));
         $oBasket->expects( $this->any() )->method( 'getFDeliveryCosts')->will( $this->returnValue( 666 ));
         $oBasket->expects( $this->any() )->method( 'getProductVats')->will( $this->returnValue( array('19'=>14.35, '5' => 0.38 ) ));
-        $oBasket->expects( $this->any() )->method( 'getFWrappingCosts')->will( $this->returnValue(5) );
-        $oBasket->expects( $this->any() )->method( 'getFGiftCardCosts')->will( $this->returnValue(6) );
-        $oBasket->expects( $this->any() )->method( 'getTsProtectionCosts')->will( $this->returnValue(true) );
-        $oBasket->expects( $this->any() )->method( 'getTsProtectionNet')->will( $this->returnValue(7) );
 
         $oPayment = new oxPayment();
         $oPayment->oxpayments__oxdesc = new oxField( "testPaymentDesc" );
@@ -347,15 +339,12 @@ class Unit_Core_oxemailAzureTplTest extends OxidTestCase
     {
         oxConfig::getInstance()->setConfigParam( 'blSkipEuroReplace', true );
 
-        $oBasketItem = $this->getMock( 'oxbasketitem', array('getUnitPrice', 'getRegularUnitPrice', 'getFUnitPrice', 'getFTotalPrice', 'getVatPercent', 'getAmount', 'getTitle', 'getProductId') );
+        $oBasketItem = $this->getMock( 'oxbasketitem', array( 'getFUnitPrice', 'getFTotalPrice', 'getVatPercent', 'getAmount', 'getTitle') );
         $oBasketItem->expects( $this->any() )->method( 'getFUnitPrice' )->will($this->returnValue( '256,00' ) );
-        $oBasketItem->expects( $this->any() )->method( 'getUnitPrice' )->will($this->returnValue( new oxPrice() ) );
-        $oBasketItem->expects( $this->any() )->method( 'getRegularUnitPrice' )->will($this->returnValue( new oxPrice() ) );
         $oBasketItem->expects( $this->any() )->method( 'getFTotalPrice' )->will($this->returnValue( 256 ) );
         $oBasketItem->expects( $this->any() )->method( 'getVatPercent' )->will($this->returnValue( 19 ) );
         $oBasketItem->expects( $this->any() )->method( 'getAmount' )->will($this->returnValue( 1 ) );
-        $oBasketItem->expects( $this->any() )->method( 'getTitle' )->will($this->returnValue( "testArticle" ) );
-        $oBasketItem->expects( $this->any() )->method( 'getProductId' )->will($this->returnValue( "_testArticleId" ) );
+        $oBasketItem->expects( $this->any() )->method( 'getTitle' )->will($this->returnValue( "testarticle" ) );
 
         $oBasketItem->oxarticles__oxtitle     = new oxField();
         $oBasketItem->oxarticles__oxvarselect = new oxField();
@@ -364,7 +353,7 @@ class Unit_Core_oxemailAzureTplTest extends OxidTestCase
         $aBasketContents[] = $oBasketItem;
         $aBasketArticles[] = $this->_oArticle;
 
-        $oBasket = $this->getMock( 'oxBasket', array( "getBasketArticles", "getContents", "getCosts", "getFPrice", "getFProductsPrice", "getProductsNetPrice", "getFDeliveryCosts", "getProductVats", "getFWrappingCosts", "getFGiftCardCosts", "getTsProtectionCosts", "getTsProtectionNet" ) );
+        $oBasket = $this->getMock( 'oxBasket', array( "getBasketArticles", "getContents", "getCosts", "getFPrice", "getFProductsPrice", "getProductsNetPrice", "getFDeliveryCosts", "getProductVats" ) );
         $oBasket->expects( $this->any() )->method( 'getBasketArticles')->will( $this->returnValue( $aBasketArticles ));
         $oBasket->expects( $this->any() )->method( 'getContents')->will( $this->returnValue( $aBasketContents ));
         $oBasket->expects( $this->any() )->method( 'getCosts')->will( $this->returnValue( new oxPrice(0) ));
@@ -373,10 +362,6 @@ class Unit_Core_oxemailAzureTplTest extends OxidTestCase
         $oBasket->expects( $this->any() )->method( 'getProductsNetPrice')->will( $this->returnValue( 777 ));
         $oBasket->expects( $this->any() )->method( 'getFDeliveryCosts')->will( $this->returnValue( 666 ));
         $oBasket->expects( $this->any() )->method( 'getProductVats')->will( $this->returnValue( array('19'=>14.35, '5' => 0.38 ) ));
-        $oBasket->expects( $this->any() )->method( 'getFWrappingCosts')->will( $this->returnValue(5) );
-        $oBasket->expects( $this->any() )->method( 'getFGiftCardCosts')->will( $this->returnValue(6) );
-        $oBasket->expects( $this->any() )->method( 'getTsProtectionCosts')->will( $this->returnValue(true) );
-        $oBasket->expects( $this->any() )->method( 'getTsProtectionNet')->will( $this->returnValue(7) );
 
         $oPayment = new oxPayment();
         $oPayment->oxpayments__oxdesc = new oxField( "testPaymentDesc" );
@@ -418,7 +403,7 @@ class Unit_Core_oxemailAzureTplTest extends OxidTestCase
             $this->fail('Incorect mail fields');
 
         //uncoment line to generate template for checking mail body
-        //file_put_contents ('unit/email_templates/azure/'.__FUNCTION__.'_.html', $oEmail->getBody() );
+        //file_put_contents ('unit/email_templates/'.__FUNCTION__.'.html', $oEmail->getBody() );
 
         if ( !$this->checkMailBody('testSendOrderEMailToOwner', $oEmail->getBody()) )
             $this->fail('Incorect mail body');
@@ -515,7 +500,7 @@ class Unit_Core_oxemailAzureTplTest extends OxidTestCase
             $this->fail('Incorect mail fields');
 
         //uncoment line to generate template for checking mail body
-        //file_put_contents ('unit/email_templates/azure/'.__FUNCTION__.'_.html', $oEmail->getBody() );
+        //file_put_contents ('unit/email_templates/'.__FUNCTION__.'_new.html', $oEmail->getBody() );
 
         if ( !$this->checkMailBody('testSendRegisterEMail', $oEmail->getBody()) )
             $this->fail('Incorect mail body');
@@ -551,7 +536,7 @@ class Unit_Core_oxemailAzureTplTest extends OxidTestCase
             $this->fail('Incorect mail fields');
 
         //uncoment line to generate template for checking mail body
-        //file_put_contents ('unit/email_templates/azure/'.__FUNCTION__.'_.html', $oEmail->getBody() );
+        //file_put_contents ('unit/email_templates/'.__FUNCTION__.'.html', $oEmail->getBody() );
 
         if ( !$this->checkMailBody('testSendForgotPwdEmail', $oEmail->getBody()) )
             $this->fail('Incorect mail body');
@@ -583,7 +568,6 @@ class Unit_Core_oxemailAzureTplTest extends OxidTestCase
         $sSubject   = 'testSubject';
         $sBody      = 'testBodyMessage';
         $sUserMail  = 'username@useremail.nl';
-        $sShopOwnerMail  = 'shopOwner@shopOwnerEmail.nl';
 
         $oEmail = $this->getMock( 'oxEmail', array( "_sendMail", "_getShop" ) );
         $oEmail->expects( $this->once() )->method( '_sendMail')->will( $this->returnValue( true ));
@@ -597,7 +581,7 @@ class Unit_Core_oxemailAzureTplTest extends OxidTestCase
         $aFields['sRecipientName'] = '';
         $aFields['sSubject']       = $sSubject;
         $aFields['sBody']          = $sBody;
-        $aFields['sFrom']          = $sShopOwnerMail;
+        $aFields['sFrom']          = $sUserMail;
         $aFields['sFromName']      = '';
         $aFields['sReplyTo']       = $sUserMail;
         $aFields['sReplyToName']   = '';
@@ -636,7 +620,7 @@ class Unit_Core_oxemailAzureTplTest extends OxidTestCase
             $this->fail('Incorect mail fields');
 
         //uncoment line to generate template for checking mail body
-        //file_put_contents ('unit/email_templates/azure/'.__FUNCTION__.'_.html', $oEmail->getBody() );
+        //file_put_contents ('unit/email_templates/'.__FUNCTION__.'.html', $oEmail->getBody() );
 
         if ( !$this->checkMailBody('testSendNewsletterDBOptInMail', $oEmail->getBody()) )
             $this->fail('Incorect mail body');
@@ -679,7 +663,7 @@ class Unit_Core_oxemailAzureTplTest extends OxidTestCase
      */
     public function testSendSuggestMail()
     {
-        $oParams = new stdClass();
+        $oParams = new Oxstdclass();
         $oParams->rec_email    = 'username@useremail.nl';
         $oParams->rec_name     = 'testUserFName testUserLName';
         $oParams->send_subject = 'testSuggestSubject';
@@ -710,7 +694,7 @@ class Unit_Core_oxemailAzureTplTest extends OxidTestCase
             $this->fail('Incorect mail fields');
 
         //uncoment line to generate template for checking mail body
-        //file_put_contents ('unit/email_templates/azure/'.__FUNCTION__.'_.html', $oEmail->getBody() );
+        //file_put_contents ('unit/email_templates/'.__FUNCTION__.'.html', $oEmail->getBody() );
 
         if ( !$this->checkMailBody('testSendSuggestMail', $oEmail->getBody()) )
             $this->fail('Incorect mail body');
@@ -776,7 +760,7 @@ class Unit_Core_oxemailAzureTplTest extends OxidTestCase
             $this->fail('Incorect mail fields');
 
         //uncoment line to generate template for checking mail body
-        //file_put_contents ('unit/email_templates/azure/'.__FUNCTION__.'_.html', $oEmail->getBody() );
+        //file_put_contents ('unit/email_templates/'.__FUNCTION__.'.html', $oEmail->getBody() );
 
         if ( !$this->checkMailBody('testSendSendedNowMail', $oEmail->getBody() ) ) {
             $this->fail('Incorect mail body');
@@ -829,9 +813,9 @@ class Unit_Core_oxemailAzureTplTest extends OxidTestCase
             $this->fail('Incorect mail fields');
 
         //uncoment line to generate template for checking mail body
-        //file_put_contents ('unit/email_templates/azure/'.__FUNCTION__.'_.html', $oEmail->getBody() );
+        //file_put_contents ('unit/email_templates/'.__FUNCTION__.'.html', $oEmail->getBody() );
 
-        if ( !$this->checkMailBody('testSendDownloadLinksMail', $oEmail->getBody()) ) {
+        if ( !$this->checkMailBody('testSendDownloadLinksMail', $oEmail->getBody() ) ) {
             $this->fail('Incorect mail body');
         }
     }
@@ -908,7 +892,7 @@ class Unit_Core_oxemailAzureTplTest extends OxidTestCase
             $this->fail('Incorect mail fields');
 
         //uncoment line to generate template for checking mail body
-        //file_put_contents ('unit/email_templates/azure/'.__FUNCTION__.'_.html', $oEmail->getBody() );
+        //file_put_contents ('unit/email_templates/'.__FUNCTION__.'.html', $oEmail->getBody() );
 
         if ( !$this->checkMailBody('testSendStockReminder', $oEmail->getBody()) )
             $this->fail('Incorect mail body');
@@ -919,7 +903,7 @@ class Unit_Core_oxemailAzureTplTest extends OxidTestCase
      */
     public function testSendWishlistMail()
     {
-        $oParams = new stdClass();
+        $oParams = new oxStdClass();
 
         $oParams->rec_email    = 'username@useremail.nl';
         $oParams->rec_name     = 'testUserFName testUserLName';
@@ -950,7 +934,7 @@ class Unit_Core_oxemailAzureTplTest extends OxidTestCase
             $this->fail('Incorect mail fields');
 
         //uncoment line to generate template for checking mail body
-        //file_put_contents ('unit/email_templates/azure/'.__FUNCTION__.'_.html', $oEmail->getBody() );
+        //file_put_contents ('unit/email_templates/'.__FUNCTION__.'.html', $oEmail->getBody() );
 
         if ( !$this->checkMailBody('testSendWishlistMail', $oEmail->getBody()) )
         $this->fail('Incorect mail body');
@@ -966,7 +950,7 @@ class Unit_Core_oxemailAzureTplTest extends OxidTestCase
         $e = null;
 
         try {
-            $oParams = new stdclass();
+            $oParams = new Oxstdclass();
 
             $aParams['email'] = 'username@useremail.nl';
             $aParams['aid']   = '_testArticleId';
@@ -995,7 +979,7 @@ class Unit_Core_oxemailAzureTplTest extends OxidTestCase
             }
 
             //uncoment line to generate template for checking mail body
-            //file_put_contents ('unit/email_templates/azure/'.__FUNCTION__.'_.html', $oEmail->getBody() );
+            //file_put_contents ('unit/email_templates/'.__FUNCTION__.'.html', $oEmail->getBody() );
 
             if ( !$this->checkMailBody('testSendPriceAlarmNotification', $oEmail->getBody()) ) {
                 $this->fail('Incorect mail body');
@@ -1079,7 +1063,7 @@ class Unit_Core_oxemailAzureTplTest extends OxidTestCase
         $oEmail->expects( $this->once() )->method( 'setReplyTo' )->with( $this->equalto( $aParams['email'] ), $this->equalto( '' ) );
         $oEmail->expects( $this->once() )->method( 'send' )->will( $this->returnValue( 'zzz' ) );
 
-        $oAlarm = new stdClass();
+        $oAlarm = new oxStdClass();
         $oAlarm->oxpricealarm__oxprice = new oxField( '100' );
         $oAlarm->oxpricealarm__oxlang = new oxField( '1' );
 

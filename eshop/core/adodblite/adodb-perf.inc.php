@@ -79,7 +79,7 @@ function& adodb_log_sql(&$conn,$sql,$inputarr)
     $conn->_logsql = true; // reverse setting ::_logsql=false
 
     if (!$_logSqlDbInstance){
-        $myConfig  = oxRegistry::getConfig();
+        $myConfig  = oxConfig::getInstance();
         $conn->_logSqlDbInstance = $_logSqlDbInstance = & NewADOConnection($myConfig->getConfigParam( "dbType" ));
         $_logSqlDbInstance->_connect($conn->host, $conn->username, $conn->password, $conn->database, false, true);
     }

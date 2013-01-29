@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxsysrequirementsTest.php 51578 2012-11-09 07:48:35Z alfonsas $
+ * @version   SVN: $Id: oxsysrequirementsTest.php 46329 2012-06-19 13:55:01Z alfonsas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -79,8 +79,7 @@ class Unit_Core_oxSysRequirementsTest extends OxidTestCase
      */
     public function testCheckServerPermissions()
     {
-        $oSysReq = $this->getMock( 'oxSysRequirements', array( 'isAdmin' ) );
-        $oSysReq->expects( $this->any() )->method( 'isAdmin' )->will( $this->returnValue( false ) );
+        $oSysReq = new oxSysRequirements();
         $this->assertEquals( 2, $oSysReq->checkServerPermissions() );
     }
 
@@ -347,7 +346,7 @@ class Unit_Core_oxSysRequirementsTest extends OxidTestCase
         $oCfg = $this->getMock('oxconfig', array('getShopId'));
         $oCfg->expects($this->exactly(1))->method('getShopId')
                 ->will($this->returnValue(15));
-        oxTestModules::addModuleObject( 'oxconfig', $oCfg );
+        modConfig::getInstance()->modAttach($oCfg);
 
         $oRs = $this->getMock('stdclass', array('moveNext', 'recordCount'));
         $oRs->expects($this->exactly(1))->method('moveNext')
@@ -392,7 +391,7 @@ class Unit_Core_oxSysRequirementsTest extends OxidTestCase
         $oCfg = $this->getMock('oxconfig', array('getShopId'));
         $oCfg->expects($this->exactly(1))->method('getShopId')
                 ->will($this->returnValue(15));
-        oxTestModules::addModuleObject( 'oxconfig', $oCfg );
+        modConfig::getInstance()->modAttach($oCfg);
 
         $oRs = $this->getMock('stdclass', array('moveNext', 'recordCount'));
         $oRs->expects($this->exactly(1))->method('moveNext')
@@ -432,7 +431,7 @@ class Unit_Core_oxSysRequirementsTest extends OxidTestCase
      */
     public function testcheckBug53632_32bits()
     {
-        $iState = 1;
+        $iState = 1; 
         if ( version_compare( PHP_VERSION, "5.3", ">=" ) ) {
             $iState = version_compare( PHP_VERSION, "5.3.5", ">=" ) ? 2 : $iState;
         } elseif ( version_compare( PHP_VERSION, '5.2', ">=" ) ) {
@@ -440,9 +439,9 @@ class Unit_Core_oxSysRequirementsTest extends OxidTestCase
         }
         $oSysReq = $this->getMock('oxSysRequirements', array('_getPhpIntSize'));
         $oSysReq->expects($this->once())->method('_getPhpIntSize')->will($this->returnValue(4));
-        $this->assertEquals( $iState, $oSysReq->checkBug53632() );
+        $this->assertEquals( $iState, $oSysReq->checkBug53632() ); 
     }
-
+    
     /**
      * Test case for oxSysRequirements::checkBug53632() when php 64bit
      *
@@ -450,9 +449,9 @@ class Unit_Core_oxSysRequirementsTest extends OxidTestCase
      */
     public function testcheckBug53632_64bits()
     {
-        $iState = 2;
+        $iState = 2; 
         $oSysReq = $this->getMock('oxSysRequirements', array('_getPhpIntSize'));
         $oSysReq->expects($this->once())->method('_getPhpIntSize')->will($this->returnValue(8));
-        $this->assertEquals( $iState, $oSysReq->checkBug53632() );
+        $this->assertEquals( $iState, $oSysReq->checkBug53632() ); 
     }
 }

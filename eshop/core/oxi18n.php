@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxi18n.php 48767 2012-08-16 17:33:56Z tomas $
+ * @version   SVN: $Id: oxi18n.php 43730 2012-04-11 07:39:14Z linas.kukulskis $
  */
 
 /**
@@ -92,7 +92,7 @@ class oxI18n extends oxBase
     public function getLanguage()
     {
         if ( $this->_iLanguage === null ) {
-            $this->_iLanguage = oxRegistry::getLang()->getBaseLanguage();
+            $this->_iLanguage = oxLang::getInstance()->getBaseLanguage();
         }
         return $this->_iLanguage;
     }
@@ -169,7 +169,7 @@ class oxI18n extends oxBase
         $this->setLanguage($iLanguage);
         // reset
         $this->_sViewTable = false;
-        return $this->load( $sOxid );
+        return $this->load( $sOxid);
     }
 
     /**
@@ -201,7 +201,7 @@ class oxI18n extends oxBase
      */
     public function getAvailableInLangs()
     {
-        $aLanguages = oxRegistry::getLang()->getLanguageNames();
+        $aLanguages = oxLang::getInstance()->getLanguageNames();
 
         $aObjFields = $this->_getTableFields(
             getViewName($this->_sCoreTable, -1, -1),
@@ -456,7 +456,7 @@ class oxI18n extends oxBase
                 $aUpdateTables = $this->_getLanguageSetTables();
             }
             foreach ($aUpdateTables as $sLangTable) {
-                $sUpdate= "insert into $sLangTable set ".$this->_getUpdateFieldsForTable( $sLangTable, $this->getUseSkipSaveFields() ) .
+                $sUpdate= "insert into $sLangTable set ".$this->_getUpdateFieldsForTable( $sLangTable, false ) .
                           " on duplicate key update ".$this->_getUpdateFieldsForTable( $sLangTable );
 
                 $blRet = (bool) oxDb::getDb()->execute( $sUpdate);
@@ -467,7 +467,7 @@ class oxI18n extends oxBase
         // if current object is managed by SEO and SEO is ON
         if ( $blRet && $this->_blIsSeoObject && $this->isAdmin() ) {
             // marks all object db entries as expired
-            oxRegistry::get("oxSeoEncoder")->markAsExpired( $this->getId(), null, 1, $this->getLanguage() );
+            oxSeoEncoder::getInstance()->markAsExpired( $this->getId(), null, 1, $this->getLanguage() );
         }
 
         return $blRet;
@@ -500,7 +500,7 @@ class oxI18n extends oxBase
         if ($blRet) {
             //also insert to multilang tables if it is separate
             foreach ($this->_getLanguageSetTables() as $sTable) {
-                $sSq = "insert into $sTable set ".$this->_getUpdateFieldsForTable( $sTable, $this->getUseSkipSaveFields() );
+                $sSq = "insert into $sTable set ".$this->_getUpdateFieldsForTable( $sTable, false );
                 $blRet = $blRet && (bool) oxDb::getDb()->execute( $sSq );
             }
         }

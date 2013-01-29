@@ -19,14 +19,14 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxprice.php 49551 2012-09-14 08:50:24Z linas.kukulskis $
+ * @version   SVN: $Id: oxprice.php 44094 2012-04-19 15:16:08Z mindaugas.rimgaila $
  */
 
 /**
  * Price calculation class. Responsible for simple price calculations. Basically contains Brutto, Netto prices and VAT values.
  * @package core
  */
-class oxPrice
+class oxPrice extends oxSuperCfg
 {
     /**
      * Brutto price
@@ -49,15 +49,6 @@ class oxPrice
      */
     protected $_dVat = 0.0;
 
-
-    /**
-     * Assigned discount array
-     *
-     * @var array
-     */
-    protected $_aDiscounts = null;
-
-
     /**
      * Price entering mode
      * Reference to myConfig->blEnterNetPrice
@@ -77,7 +68,7 @@ class oxPrice
      */
     public function __construct($dInitPrice = null)
     {
-        $this->_blNetPriceMode = oxRegistry::getConfig()->getConfigParam( 'blEnterNetPrice' );
+        $this->_blNetPriceMode = $this->getConfig()->getConfigParam( 'blEnterNetPrice' );
 
         if ($dInitPrice) {
             $this->setPrice($dInitPrice);
@@ -114,6 +105,7 @@ class oxPrice
     public function setVat($newVat)
     {
         $this->_dVat = (double) $newVat;
+        $this->_recalculate();
     }
 
     /**
@@ -126,7 +118,7 @@ class oxPrice
      *
      * @param double $newVat vat percent
      *
-     * @deprecated since v5.0 (2012-09-14); use setVat();
+     * @see setVat()
      *
      * @return null
      */
@@ -136,6 +128,7 @@ class oxPrice
             $this->_dBrutto = self::Netto2Brutto(self::Brutto2Netto($this->_dBrutto, $this->_dVat), (double) $newVat);
         }
         $this->_dVat = (double) $newVat;
+        $this->_recalculate();
     }
 
     /**
@@ -152,36 +145,23 @@ class oxPrice
      * Sets new price and VAT percent(optional). Recalculates price by
      * price entering mode
      *
-     * @param double $dPrice new price
-     * @param double $dVat   VAT
+     * @param double $newPrice new price
+     * @param double $dVat     (optional)
      *
      * @return null
      */
-    public function setPrice($dPrice, $dVat = null)
+    public function setPrice($newPrice, $dVat = null)
     {
         if (isset($dVat)) {
             $this->_dVat = (double) $dVat;
         }
 
         if ($this->_blNetPriceMode) {
-            $this->_dNetto = $dPrice;
+            $this->_dNetto = $newPrice;
         } else {
-            $this->_dBrutto = $dPrice;
+            $this->_dBrutto = $newPrice;
         }
-    }
-
-    /**
-     * Returns price depending on mode brutto or netto
-     *
-     * @return double
-     */
-    public function getPrice()
-    {
-        if ( $this->_blNetPriceMode ) {
-            return $this->getNettoPrice();
-        } else {
-            return $this->getBruttoPrice();
-        }
+        $this->_recalculate();
     }
 
     /**
@@ -191,11 +171,10 @@ class oxPrice
      */
     public function getBruttoPrice()
     {
-        if ( $this->_blNetPriceMode ) {
-            return $this->getNettoPrice() + $this->getVatValue();
-        } else {
-            return oxRegistry::getUtils()->fRound($this->_dBrutto);
+        if (!$this->_blNetPriceMode) {
+            return oxUtils::getInstance()->fRound($this->_dBrutto);
         }
+        return $this->_dBrutto;
     }
 
     /**
@@ -205,11 +184,10 @@ class oxPrice
      */
     public function getNettoPrice()
     {
-        if ( $this->_blNetPriceMode ) {
-            return oxRegistry::getUtils()->fRound($this->_dNetto);
-        } else {
-            return $this->getBruttoPrice() - $this->getVatValue();
+        if ($this->_blNetPriceMode) {
+            return oxUtils::getInstance()->fRound($this->_dNetto);
         }
+        return $this->_dNetto;
     }
 
     /**
@@ -219,13 +197,7 @@ class oxPrice
      */
     public function getVatValue()
     {
-        if ( $this->_blNetPriceMode ) {
-            $dVatValue = $this->getNettoPrice() * $this->getVat() / 100 ;
-        } else {
-            $dVatValue = $this->getBruttoPrice() * $this->getVat() / ( 100 + $this->getVat());
-        }
-
-        return oxRegistry::getUtils()->fRound( $dVatValue );
+        return (double) $this->getBruttoPrice() - $this->getNettoPrice();
     }
 
     /**
@@ -236,10 +208,15 @@ class oxPrice
      *
      * @return null
      */
-    public function subtractPercent( $dValue )
+    public function subtractPercent($dValue)
     {
-        $dPrice = $this->getPrice();
-        $this->setPrice( $dPrice - self::percent( $dPrice, $dValue) );
+        if ($this->_blNetPriceMode) {
+            $this->_dNetto = $this->_dNetto - self::percent($this->_dNetto, $dValue);
+        } else {
+            $this->_dBrutto = $this->_dBrutto - self::percent($this->_dBrutto, $dValue);
+        }
+        $this->_recalculate();
+
     }
 
     /**
@@ -281,8 +258,12 @@ class oxPrice
      */
     public function add($dValue)
     {
-        $dPrice = $this->getPrice();
-        $this->setPrice( $dPrice + $dValue );
+        if ($this->_blNetPriceMode) {
+            $this->_dNetto += $dValue;
+        } else {
+            $this->_dBrutto += $dValue;
+        }
+        $this->_recalculate();
     }
 
     /**
@@ -308,8 +289,12 @@ class oxPrice
      */
     public function multiply($dValue)
     {
-        $dPrice = $this->getPrice();
-        $this->setPrice( $dPrice * $dValue );
+        if ($this->_blNetPriceMode) {
+            $this->_dNetto = $this->_dNetto * $dValue;
+        } else {
+            $this->_dBrutto = $this->_dBrutto * $dValue;
+        }
+        $this->_recalculate();
     }
 
     /**
@@ -322,8 +307,12 @@ class oxPrice
      */
     public function divide($dValue)
     {
-        $dPrice = $this->getPrice();
-        $this->setPrice( $dPrice / $dValue );
+        if ($this->_blNetPriceMode) {
+            $this->_dNetto = $this->_dNetto / $dValue;
+        } else {
+            $this->_dBrutto = $this->_dBrutto / $dValue;
+        }
+        $this->_recalculate();
     }
 
     /**
@@ -387,6 +376,11 @@ class oxPrice
         }
 
         return (double) ((double) $dBrutto*100.0)/(100.0 + (double) $dVat);
+
+        // Old (alternative) formulas
+        // return $dPrice / ( 1 + ( $dVat/100) );
+        // return $dPrice / ( 1 + ((1/100) * $myConfig->dDefaultVAT));
+
     }
 
     /**
@@ -412,18 +406,16 @@ class oxPrice
      *
      * @access protected
      *
-     * @deprecated since v5.0 (2012-09-14); not needed any more;
-     *
      * @return null
      */
     protected function _recalculate()
     {
         if ( $this->_blNetPriceMode ) {
             $this->_dBrutto = self::netto2Brutto($this->_dNetto, $this->_dVat);
-            $this->_dNetto = oxRegistry::getUtils()->fRound($this->_dNetto);
+            $this->_dBrutto = oxUtils::getInstance()->fRound($this->_dBrutto);
         } else {
+            $this->_dBrutto = oxUtils::getInstance()->fRound($this->_dBrutto);
             $this->_dNetto  = self::brutto2Netto($this->_dBrutto, $this->_dVat);
-            $this->_dBrutto = oxRegistry::getUtils()->fRound($this->_dBrutto);
         }
     }
 
@@ -436,71 +428,7 @@ class oxPrice
      */
     public static function getPriceInActCurrency( $dPrice )
     {
-        $oCur = oxRegistry::getConfig()->getActShopCurrencyObject();
+        $oCur = oxConfig::getInstance()->getActShopCurrencyObject();
         return ( ( double ) $dPrice ) * $oCur->rate;
     }
-
-
-    /**
-     * Sets dicount to price
-     *
-     * @param double $dValue discount value
-     * @param string $sType  discount type: abs or %
-     *
-     * @return null
-     */
-    public function setDiscount( $dValue, $sType )
-    {
-        $this->_aDiscounts[] = array( 'value' => $dValue, 'type' => $sType );
-    }
-
-    /**
-     * Returns assignet discounts
-     *
-     * @return array
-     */
-    public function getDiscounts()
-    {
-        return $this->_aDiscounts;
-    }
-
-    /**
-     * Flush assignet discounts
-     *
-     * @return null
-     */
-    protected function _flushDiscounts()
-    {
-        $this->_aDiscounts = null;
-    }
-
-    /**
-     * Calculates price: affects discounts
-     *
-     * @return null
-     */
-    public function calculateDiscount()
-    {
-        $dPrice = $this->getPrice();
-        $aDiscounts = $this->getDiscounts();
-
-        if ($aDiscounts) {
-            foreach ($aDiscounts as $aDiscount) {
-
-                if ($aDiscount['type'] == 'abs') {
-                    $dPrice = $dPrice - $aDiscount['value'];
-                } else {
-                    $dPrice = $dPrice * (100 - $aDiscount['value']) / 100;
-                }
-            }
-            if ($dPrice < 0 ) {
-                $this->setPrice( 0 );
-            } else {
-                $this->setPrice( $dPrice );
-            }
-
-            $this->_flushDiscounts();
-        }
-    }
-
 }

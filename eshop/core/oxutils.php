@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutils.php 51910 2012-11-15 16:19:01Z linas.kukulskis $
+ * @version   SVN: $Id: oxutils.php 49880 2012-09-28 12:37:10Z tomas $
  */
 
 /**
@@ -54,7 +54,7 @@ class oxUtils extends oxSuperCfg
      *
      * @var string
      */
-    protected $_sPermanentCachePattern = "/c_fieldnames_|c_tbdsc_|_allfields_/";
+    protected $_sPermanentCachePattern = "/c_fieldnames_/";
 
     /**
      * Pattern used to filter needed to remove language cache files.
@@ -94,13 +94,24 @@ class oxUtils extends oxSuperCfg
     /**
      * resturns a single instance of this class
      *
-     * @deprecated since v5.0 (2012-08-10); Use oxRegistry::getUtils() instead.
-     *
      * @return oxUtils
      */
     public static function getInstance()
     {
-        return oxRegistry::getUtils();
+        // disable caching for test modules
+        if ( defined( 'OXID_PHP_UNIT' ) ) {
+            self::$_instance = modInstances::getMod( __CLASS__ );
+        }
+
+        if ( !(self::$_instance instanceof oxUtils) ) {
+
+            self::$_instance = oxNew( 'oxUtils' );
+
+            if ( defined( 'OXID_PHP_UNIT' ) ) {
+                modInstances::addMod( __CLASS__, self::$_instance);
+            }
+        }
+        return self::$_instance;
     }
 
     /**
@@ -254,34 +265,6 @@ class oxUtils extends oxSuperCfg
         return (float) $fRet;
     }
 
-
-    /**
-     * Returns formatted float, according to formatting standards.
-     *
-     * @param string $sValue Formatted price
-     *
-     * @return float
-     */
-    public function string2Float( $sValue)
-    {
-        $fRet = str_replace( " ", "", $sValue);
-        $iCommaPos = strpos( $fRet, ",");
-        $iDotPos = strpos( $fRet, ".");
-        if (!$iDotPos xor !$iCommaPos) {
-            if (substr_count( $fRet, ",") > 1 || substr_count( $fRet, ".") > 1) {
-                $fRet = str_replace( array(",","."), "", $fRet);
-            } else {
-                $fRet = str_replace( ",", ".", $fRet);
-            }
-        } else if ( $iDotPos < $iCommaPos ) {
-            $fRet = str_replace( ".", "", $fRet);
-            $fRet = str_replace( ",", ".", $fRet);
-        }
-        // remove thousands
-        $fRet = str_replace( array(" ",","), "", $fRet);
-        return (float) $fRet;
-    }
-
     /**
      * Checks if current web client is Search Engine. Returns true on success.
      *
@@ -291,52 +274,46 @@ class oxUtils extends oxSuperCfg
      */
     public function isSearchEngine( $sClient = null )
     {
-        if (is_null($this->_blIsSe)) {
-            $this->setSearchEngine( null, $sClient );
-        }
-        return $this->_blIsSe;
-    }
 
-    /**
-     * Sets if current web client is Search Engine.
-     *
-     * @param bool   $blIsSe  sets if Search Engine is on
-     * @param string $sClient user browser agent
-     *
-     * @return null
-     */
-    public function setSearchEngine( $blIsSe = null, $sClient = null )
-    {
-        if (isset($blIsSe)) {
-            $this->_blIsSe = $blIsSe;
-            return;
+        if (!is_null($this->_blIsSe)) {
+            return $this->_blIsSe;
         }
+
         startProfile("isSearchEngine");
 
         $myConfig = $this->getConfig();
         $blIsSe   = false;
 
         if ( !( $myConfig->getConfigParam( 'iDebug' ) && $this->isAdmin() ) ) {
-            $aRobots = $myConfig->getConfigParam( 'aRobots' );
-            $aRobots = is_array( $aRobots )?$aRobots:array();
 
-            $aRobotsExcept = $myConfig->getConfigParam( 'aRobotsExcept' );
-            $aRobotsExcept = is_array( $aRobotsExcept )?$aRobotsExcept:array();
+            // caching
+            $blIsSe = $myConfig->getGlobalParameter( 'blIsSearchEngine' );
+            if ( !isset( $blIsSe ) ) {
 
-            $sClient = $sClient?$sClient:strtolower( getenv( 'HTTP_USER_AGENT' ) );
-            $blIsSe  = false;
-            $aRobots = array_merge( $aRobots, $aRobotsExcept );
-            foreach ( $aRobots as $sRobot ) {
-                if ( strpos( $sClient, $sRobot ) !== false ) {
-                    $blIsSe = true;
-                    break;
+                $aRobots = $myConfig->getConfigParam( 'aRobots' );
+                $aRobots = is_array( $aRobots )?$aRobots:array();
+
+                $aRobotsExcept = $myConfig->getConfigParam( 'aRobotsExcept' );
+                $aRobotsExcept = is_array( $aRobotsExcept )?$aRobotsExcept:array();
+
+                $sClient = $sClient?$sClient:strtolower( getenv( 'HTTP_USER_AGENT' ) );
+                $blIsSe  = false;
+                $aRobots = array_merge( $aRobots, $aRobotsExcept );
+                foreach ( $aRobots as $sRobot ) {
+                    if ( strpos( $sClient, $sRobot ) !== false ) {
+                        $blIsSe = true;
+                        break;
+                    }
                 }
+                $myConfig->setGlobalParameter( 'blIsSearchEngine', $blIsSe );
             }
         }
 
+        stopProfile("isSearchEngine");
+
         $this->_blIsSe = $blIsSe;
 
-        stopProfile("isSearchEngine");
+        return $blIsSe;
     }
 
     /**
@@ -359,6 +336,25 @@ class oxUtils extends oxSuperCfg
     }
 
     /**
+     * Clears Smarty cache data.
+     *
+     * @deprecated since v4.5.9 (2012-03-06); Not needed from 3.0
+     *
+     * @return null
+     */
+    public function rebuildCache()
+    {
+        // not needed from 3.0 on and unused <- MK: not correct, its used for example in shop_config.php, oxbase.php
+
+        //$smarty  = & oxUtils::getInstance()->getSmarty();
+        //$smarty->clear_all_cache();
+
+        if ( function_exists( "UserdefinedRebuildCache")) {
+            UserdefinedRebuildCache();
+        }
+    }
+
+    /**
      * Parses profile configuration, loads stored info in cookie
      *
      * @param array $aInterfaceProfiles ($myConfig->getConfigParam( 'aInterfaceProfiles' ))
@@ -369,9 +365,10 @@ class oxUtils extends oxSuperCfg
     {
         // improved #533
         // checking for available profiles list
+        $aInterfaceProfiles = $aInterfaceProfiles;
         if ( is_array( $aInterfaceProfiles ) ) {
             //checking for previous profiles
-            $sPrevProfile = oxRegistry::get("oxUtilsServer")->getOxCookie('oxidadminprofile');
+            $sPrevProfile = oxUtilsServer::getInstance()->getOxCookie('oxidadminprofile');
             if (isset($sPrevProfile)) {
                 $aPrevProfile = @explode("@", trim($sPrevProfile));
             }
@@ -420,16 +417,17 @@ class oxUtils extends oxSuperCfg
             $this->_iCurPrecision = $iCurPrecision;
         }
 
-        // if < 5.3.x this is a workaround for #36008 bug in php - incorrect round() & number_format() result (R)
+        // this is a workaround for #36008 bug in php - incorrect round() & number_format() result (R)
         static $dprez = null;
         if (!$dprez) {
             $prez = @ini_get("precision");
-            if (!$prez || $prez > 12 ) {
-               $prez = 12;
+            if (!$prez) {
+                $prez = 9;
             }
             $dprez = pow(10, -$prez);
         }
         stopProfile('fround');
+
         return round($sVal + $dprez * ( $sVal >= 0 ? 1 : -1 ), $iCurPrecision);
     }
 
@@ -786,10 +784,7 @@ class oxUtils extends oxSuperCfg
      */
     public function resetTemplateCache($aTemplates)
     {
-        $sSmartyDir = oxRegistry::get("oxUtilsView")->getSmartyDir();
-        //$aFiles = glob( $this->getCacheFilePath( null, true ) . '*' );
-        $aFiles = glob( $sSmartyDir . '*' );
-
+        $aFiles = glob( $this->getCacheFilePath( null, true ) . '*' );
         if ( is_array( $aFiles ) && is_array( $aTemplates ) && count($aTemplates) ) {
             // delete all template cache files
             foreach ($aTemplates as &$sTemplate) {
@@ -798,7 +793,7 @@ class oxUtils extends oxSuperCfg
 
             $sPattern = sprintf("/%%(%s)\.tpl\.php$/i", implode('|', $aTemplates));
             $aFiles = preg_grep( $sPattern, $aFiles );
-
+            
             if (is_array( $aFiles ) ) {
                 foreach ( $aFiles as $sFile ) {
                     @unlink( $sFile );
@@ -908,7 +903,7 @@ class oxUtils extends oxSuperCfg
     {
         $blCan = null;
         if ( ( $sPrevId = oxConfig::getParameter( 'preview' ) ) &&
-             ( $sAdminSid = oxRegistry::get("oxUtilsServer")->getOxCookie( 'admin_sid' ) ) ) {
+             ( $sAdminSid = oxUtilsServer::getInstance()->getOxCookie( 'admin_sid' ) ) ) {
 
             $sTable = getViewName( 'oxuser' );
             $oDb = oxDb::getDb();
@@ -926,7 +921,7 @@ class oxUtils extends oxSuperCfg
      */
     public function getPreviewId()
     {
-        $sAdminSid = oxRegistry::get("oxUtilsServer")->getOxCookie( 'admin_sid' );
+        $sAdminSid = oxUtilsServer::getInstance()->getOxCookie( 'admin_sid' );
         if ( ( $oUser = $this->getUser() ) ) {
             return md5( $sAdminSid . $oUser->getId() . $oUser->oxuser__oxpassword->value . $oUser->oxuser__oxrights->value );
         }
@@ -1031,7 +1026,7 @@ class oxUtils extends oxSuperCfg
 
             $aSeoModes  = $myConfig->getconfigParam( 'aSeoModes' );
             $sActShopId = $sShopId ? $sShopId : $myConfig->getActiveShop()->getId();
-            $iActLang   = $iActLang ? $iActLang : (int) oxRegistry::getLang()->getBaseLanguage();
+            $iActLang   = $iActLang ? $iActLang : (int) oxLang::getInstance()->getBaseLanguage();
 
             // checking special config param for active shop and language
             if ( is_array( $aSeoModes ) && isset( $aSeoModes[$sActShopId] ) && isset( $aSeoModes[$sActShopId][$iActLang] ) ) {
@@ -1040,6 +1035,62 @@ class oxUtils extends oxSuperCfg
         }
 
         return $this->_blSeoIsActive;
+    }
+
+    /**
+     * Returns integer number with bit set according to $iShopId.
+     * The acttion performed could be represented as pow(2, $iShopId - 1)
+     * We use mySQL to calculate that, as currently php int size is only 32 bit.
+     *
+     * @param int $iShopId current shop id
+     *
+     * @deprecated use oxShopMetaData::getInstance()->getShopBit since 4.6
+     *
+     * @return int
+     */
+    public function getShopBit( $iShopId )
+    {
+        return oxShopMetaData::getInstance()->getShopBit( $iShopId );
+    }
+
+   /**
+     * Binary AND implementation.
+     * We use mySQL to calculate that, as currently php int size is only 32 bit.
+     *
+     * @param int $iVal1 value nr 1
+     * @param int $iVal2 value nr 2
+     *
+     * @deprecated use oxShopMetaData::getInstance()->isIncludedInShop or oxShopMetaData::getInstance()->isExcludedFromShop since 4.6
+     *
+     * @return int
+     */
+    public function bitwiseAnd( $iVal1, $iVal2 )
+    {
+        //this works for large numbers when $sShopNr is up to (inclusive) 64
+        $iRes = oxDb::getDb()->getOne( "select ($iVal1 & $iVal2) as bitwiseAnd" );
+
+        //as php ints supports only 32 bits, we return string.
+        return $iRes;
+    }
+
+    /**
+     * Binary OR implementation.
+     * We use mySQL to calculate that, as currently php integer size is only 32 bit.
+     *
+     * @param int $iVal1 value nr 1
+     * @param int $iVal2 value nr 2
+     *
+     * @deprecated since 4.6
+     *
+     * @return int
+     */
+    public function bitwiseOr( $iVal1, $iVal2 )
+    {
+        //this works for large numbers when $sShopNr is up to (inclusive) 64
+        $iRes = oxDb::getDb()->getOne( "select ($iVal1 | $iVal2) as bitwiseOr" );
+
+        //as php ints supports only 32 bits, we return string.
+        return $iRes;
     }
 
     /**
@@ -1125,7 +1176,6 @@ class oxUtils extends oxSuperCfg
 
     /**
      * shows given message and quits
-     * message might be whole content like 404 page.
      *
      * @param string $sMsg message to show
      *
@@ -1139,7 +1189,6 @@ class oxUtils extends oxSuperCfg
         if ( defined( 'OXID_PHP_UNIT' ) ) {
             return;
         }
-
 
         exit( $sMsg );
     }
@@ -1189,7 +1238,7 @@ class oxUtils extends oxSuperCfg
     protected function _fillExplodeArray( $aName, $dVat = null)
     {
         $myConfig = $this->getConfig();
-        $oObject = new stdClass();
+        $oObject = new oxStdClass();
         $aPrice = explode( '!P!', $aName[0]);
 
         if ( ( $myConfig->getConfigParam( 'bl_perfLoadSelectLists' ) && $myConfig->getConfigParam( 'bl_perfUseSelectlistPrice' ) && isset( $aPrice[0] ) && isset( $aPrice[1] ) ) || $this->isAdmin() ) {
@@ -1206,7 +1255,7 @@ class oxUtils extends oxSuperCfg
             } else {
                 $oCur = $myConfig->getActShopCurrencyObject();
                 $oObject->price = str_replace(',', '.', $oObject->price);
-                $oObject->fprice = oxRegistry::getLang()->formatCurrency( $oObject->price  * $oCur->rate, $oCur);
+                $oObject->fprice = oxLang::getInstance()->formatCurrency( $oObject->price  * $oCur->rate, $oCur);
                 $oObject->priceUnit = 'abs';
             }
 
@@ -1220,7 +1269,7 @@ class oxUtils extends oxSuperCfg
                 if ( $dVat != null && $oObject->priceUnit == 'abs' ) {
                     $oPrice = oxNew('oxPrice');
                     $oPrice->setPrice($oObject->price, $dVat);
-                    $aName[0] .= oxRegistry::getLang()->formatCurrency( $oPrice->getBruttoPrice() * $oCur->rate, $oCur);
+                    $aName[0] .= oxLang::getInstance()->formatCurrency( $oPrice->getBruttoPrice() * $oCur->rate, $oCur);
                 } else {
                     $aName[0] .= $oObject->fprice;
                 }
@@ -1330,6 +1379,8 @@ class oxUtils extends oxSuperCfg
      */
     public function getCacheFilePath( $sCacheName, $blPathOnly = false, $sExtension = 'txt' )
     {
+        $sVersionPrefix = "";
+
 
             $sVersionPrefix = 'pe';
 
@@ -1421,7 +1472,7 @@ class oxUtils extends oxSuperCfg
     public function handlePageNotFoundError($sUrl = '')
     {
         $this->setHeader("HTTP/1.0 404 Not Found");
-        if ( oxRegistry::getConfig()->isUtf() ) {
+        if ( oxConfig::getInstance()->isUtf() ) {
             $this->setHeader("Content-Type: text/html; charset=UTF-8");
         }
 
@@ -1430,9 +1481,8 @@ class oxUtils extends oxSuperCfg
             $oView = oxNew('oxubase');
             $oView->init();
             $oView->render();
-            $oView->setClassName( 'oxubase' );
             $oView->addTplParam('sUrl', $sUrl);
-            if ($sRet = oxRegistry::get("oxUtilsView")->getTemplateOutput('message/err_404.tpl', $oView)) {
+            if ($sRet = oxUtilsView::getInstance()->getTemplateOutput('message/err_404.tpl', $oView)) {
                 $sReturn = $sRet;
             }
         } catch (Exception $e) {

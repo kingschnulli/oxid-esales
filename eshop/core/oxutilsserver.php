@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutilsserver.php 53144 2012-12-19 13:36:01Z aurimas.gladutis $
+ * @version   SVN: $Id: oxutilsserver.php 42112 2012-02-09 14:55:11Z mindaugas.rimgaila $
  */
 
 /**
@@ -58,13 +58,22 @@ class oxUtilsServer extends oxSuperCfg
     /**
      * Returns server utils instance
      *
-     * @deprecated since v5.0 (2012-08-10); Use oxRegistry::get("oxUtilsServer") instead.
-     *
      * @return oxUtilsServer
      */
     public static function getInstance()
     {
-        return oxRegistry::get("oxUtilsServer");
+        // disable caching for test modules
+        if ( defined( 'OXID_PHP_UNIT' ) ) {
+            self::$_instance = modInstances::getMod( __CLASS__ );
+        }
+
+        if ( !self::$_instance instanceof oxUtilsServer ) {
+            self::$_instance = oxNew( 'oxUtilsServer');
+            if ( defined( 'OXID_PHP_UNIT' ) ) {
+                modInstances::addMod( __CLASS__, self::$_instance);
+            }
+        }
+        return self::$_instance;
     }
 
     /**
@@ -128,7 +137,7 @@ class oxUtilsServer extends oxSuperCfg
 
                 // testing if domains matches..
                 if ( $sHost != $sSslHost ) {
-                    $oUtils = oxRegistry::getUtils();
+                    $oUtils = oxUtils::getInstance();
                     $this->_blSaveToSession = $oUtils->extractDomain( $sHost ) != $oUtils->extractDomain( $sSslHost );
                 }
             }
@@ -214,7 +223,11 @@ class oxUtilsServer extends oxSuperCfg
      */
     protected function _getCookiePath( $sPath )
     {
-        if ( $aCookiePaths = $this->getConfig()->getConfigParam( 'aCookiePaths' ) ) {
+        // possibility for users to define cookie path
+        // @deprecated use "aCookiePaths" instead
+        if ( $sCookiePath = $this->getConfig()->getConfigParam( 'sCookiePath' ) ) {
+            $sPath = $sCookiePath;
+        } elseif ( $aCookiePaths = $this->getConfig()->getConfigParam( 'aCookiePaths' ) ) {
             // in case user wants to have shop specific setup
             $sShopId = $this->getConfig()->getShopId();
             $sPath = isset( $aCookiePaths[$sShopId] ) ? $aCookiePaths[$sShopId] : $sPath;
@@ -241,7 +254,10 @@ class oxUtilsServer extends oxSuperCfg
         // on special cases, like separate domain for SSL, cookies must be defined on domain specific path
         // please have a look at
         if ( !$sDomain ) {
-            if ( $aCookieDomains = $this->getConfig()->getConfigParam( 'aCookieDomains' ) ) {
+            // @deprecated use "aCookieDomains" instead
+            if ( $sCookieDomain = $this->getConfig()->getConfigParam( 'sCookieDomain' ) ) {
+                $sDomain = $sCookieDomain;
+            } elseif ( $aCookieDomains = $this->getConfig()->getConfigParam( 'aCookieDomains' ) ) {
                 // in case user wants to have shop specific setup
                 $sShopId = $this->getConfig()->getShopId();
                 $sDomain = isset( $aCookieDomains[$sShopId] ) ? $aCookieDomains[$sShopId] : $sDomain;
@@ -262,7 +278,7 @@ class oxUtilsServer extends oxSuperCfg
     {
         $sValue = null;
         if ( $sName && isset( $_COOKIE[$sName] ) ) {
-            $sValue = oxRegistry::getConfig()->checkParamSpecialChars($_COOKIE[$sName]);
+            $sValue = oxConfig::checkSpecialChars($_COOKIE[$sName]);
         } elseif ( $sName && !isset( $_COOKIE[$sName] ) ) {
             $sValue = isset( $this->_sSessionCookies[$sName] ) ? $this->_sSessionCookies[$sName] : null;
         } elseif ( !$sName && isset( $_COOKIE ) ) {
@@ -332,8 +348,8 @@ class oxUtilsServer extends oxSuperCfg
         }
 
         $this->_aUserCookie[$sShopId] = $sUser . '@@@' . crypt( $sPassword, $sSalt );
-        $this->setOxCookie( 'oxid_' . $sShopId, $this->_aUserCookie[$sShopId], oxRegistry::get("oxUtilsDate")->getTime() + $iTimeout, '/', null, true, $blSsl );
-        $this->setOxCookie( 'oxid_' . $sShopId.'_autologin', '1', oxRegistry::get("oxUtilsDate")->getTime() + $iTimeout, '/', null, true, false);
+        $this->setOxCookie( 'oxid_' . $sShopId, $this->_aUserCookie[$sShopId], oxUtilsDate::getInstance()->getTime() + $iTimeout, '/', null, true, $blSsl );
+        $this->setOxCookie( 'oxid_' . $sShopId.'_autologin', '1', oxUtilsDate::getInstance()->getTime() + $iTimeout, '/', null, true, false);
     }
 
     /**
@@ -355,8 +371,8 @@ class oxUtilsServer extends oxSuperCfg
         }
 
         $this->_aUserCookie[$sShopId] = '';
-        $this->setOxCookie( 'oxid_'.$sShopId, '', oxRegistry::get("oxUtilsDate")->getTime() - 3600, '/', null, true, $blSsl );
-        $this->setOxCookie( 'oxid_' . $sShopId.'_autologin', '0', oxRegistry::get("oxUtilsDate")->getTime() - 3600, '/', null, true, false);
+        $this->setOxCookie( 'oxid_'.$sShopId, '', oxUtilsDate::getInstance()->getTime() - 3600, '/', null, true, $blSsl );
+        $this->setOxCookie( 'oxid_' . $sShopId.'_autologin', '0', oxUtilsDate::getInstance()->getTime() - 3600, '/', null, true, false);
     }
 
     /**
@@ -370,11 +386,12 @@ class oxUtilsServer extends oxSuperCfg
     {
         $myConfig = parent::getConfig();
         $sShopId = ( !$sShopId ) ? $myConfig->getShopId() : $sShopId;
+
         // check for SSL connection
         if (!$myConfig->isSsl() && $this->getOxCookie('oxid_'.$sShopId.'_autologin') == '1') {
-            $sSslUrl = rtrim($myConfig->getSslShopUrl(), '/').$_SERVER['REQUEST_URI'];
+            $sSslUrl = $myConfig->getSslShopUrl();
             if (stripos($sSslUrl, 'https') === 0) {
-                oxRegistry::getUtils()->redirect($sSslUrl, true, 302);
+                oxUtils::getInstance()->redirect($sSslUrl, true, 302);
             }
         }
 
@@ -415,44 +432,5 @@ class oxUtilsServer extends oxSuperCfg
             $sAgent = getStr()->preg_replace( "/MSIE(\s)?(\S)*(\s)/", "", (string) $sAgent );
         }
         return $sAgent;
-    }
-
-    /**
-     * Compares current URL to supplied string
-     *
-     * @param string $sURL URL
-     *
-     * @return bool true if $sURL is equal to current page URL
-     */
-    public function isCurrentUrl( $sURL )
-    {
-        // Missing protocol, cannot proceed, assuming true.
-        if ( !$sURL || (strpos( $sURL, "http" ) !== 0)) {
-            return true;
-        }
-
-        // #4010: force_sid added in https to every link
-        preg_match("/^(https?:\/\/)?(www\.)?([^\/]+)/i", $sURL, $matches);
-        $sUrlHost = $matches[3];
-
-        // #4010: force_sid added in https to every link
-        preg_match("/^(https?:\/\/)?(www\.)?([^\/]+)/i", $this->getServerVar( 'HTTP_HOST' ), $matches);
-        $sRealHost = $matches[3];
-
-        $sCurrentHost = preg_replace( '/\/\w*\.php.*/', '', $this->getServerVar( 'HTTP_HOST' ) . $this->getServerVar( 'SCRIPT_NAME' ) );
-
-        //remove double slashes all the way
-        $sCurrentHost = str_replace( '/', '', $sCurrentHost );
-        $sURL = str_replace( '/', '', $sURL );
-
-        //var_dump($sURL,$sCurrentHost, $sRealHost);
-        if ( $sURL && $sCurrentHost && strpos( $sURL, $sCurrentHost ) !== false ) {
-            //bug fix #0002991
-            if ( $sUrlHost == $sRealHost ) {
-                return true;
-            }
-        }
-
-        return false;
     }
 }

@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxuserbasketitemTest.php 50686 2012-10-18 10:19:54Z aurimas.gladutis $#
+ * @version   SVN: $Id: oxuserbasketitemTest.php 50684 2012-10-18 10:12:24Z aurimas.gladutis $#
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -217,8 +217,12 @@ class Unit_Core_oxuserbasketitemTest extends OxidTestCase
         $this->assertEquals( $oArticle->getItemKey(), "123" );
 
         // if thi line one day will faile, probebly becaus these parameters are not public any more :)
+        $this->assertTrue( $oArticle->getClassVar('_blSkipAbPrice') );
         // removed due to #4178
         //$this->assertFalse( $oArticle->getClassVar('_blLoadVariants') );
+
+        //$this->assertTrue( $oArticle->getNonPublicVar('_blForceSkipAbPrice') );
+        //$this->assertTrue( $oArticle->getNonPublicVar('_blDoNotLoadVariants') );
     }
     // testing article title formatting - article has NO parent
     public function testGetArticleTitleFormatterArticleHasNoParent()
@@ -253,29 +257,29 @@ class Unit_Core_oxuserbasketitemTest extends OxidTestCase
 
         $oArticle = $oBasketItem->getArticle( "123" );
 
-        $oR = new stdclass();
+        $oR = new oxstdclass();
         $oR->name     = 'R, 10';
         $oR->value = null;
         $oR->selected = 1;
 
-        $oG = new stdclass();
+        $oG = new oxstdclass();
         $oG->name  = 'G, 20';
         $oG->value = null;
 
-        $oB = new stdclass();
+        $oB = new oxstdclass();
         $oB->name  = 'B, 30';
         $oB->value = null;
 
-        $oS = new stdclass();
+        $oS = new oxstdclass();
         $oS->name     = 'S, 10';
         $oS->value = null;
 
-        $oM = new stdclass();
+        $oM = new oxstdclass();
         $oM->name  = 'M, 20';
         $oM->value = null;
         $oM->selected = 1;
 
-        $oL = new stdclass();
+        $oL = new oxstdclass();
         $oL->name  = 'L, 30';
         $oL->value = null;
 

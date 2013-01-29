@@ -234,10 +234,7 @@ class Unit_Core_oxorderfileTest extends OxidTestCase
         $oOrderFileNew->save();
 
         $sFirstDate = date( 'Y-m-d H:i:s' );
-
-        $sNow = oxRegistry::get("oxUtilsDate")->getTime();
-        $sDate = date( 'Y-m-d H:i:s', $sNow );
-
+        $sDate = date( 'Y-m-d H:i:s', mktime( date("H") + 12, date("i"), 0, date("m"), date("d"), date("Y")) );
         $oOrderFile = new oxOrderFile();
         $oOrderFile->load( '_orderFileId' );
         $sFileId = $oOrderFile->processOrderFile();

@@ -150,7 +150,7 @@ class Unit_Admin_ArticleCrosssellingAjaxTest extends OxidTestCase
         modConfig::setParameter( "oxid", $sOxid );
         
         $oView = oxNew( 'article_crossselling_ajax' );
-        $this->assertEquals( "from ".$this->getObject2CategoryViewTable()." as oxobject2category left join ".$this->getArticleViewTable()." on  ".$this->getArticleViewTable().".oxid=oxobject2category.oxobjectid  where oxobject2category.oxcatnid = '$sOxid'  and ".$this->getArticleViewTable().".oxid not in ( select ".$this->getArticleViewTable().".oxid from oxobject2article left join ".$this->getArticleViewTable()." on oxobject2article.oxobjectid=".$this->getArticleViewTable().".oxid where oxobject2article.oxarticlenid = '$sSynchoxid'  and ".$this->getArticleViewTable().".oxid IS NOT NULL  )  and ".$this->getArticleViewTable().".oxid IS NOT NULL  and ".$this->getArticleViewTable().".oxid != '$sSynchoxid'", trim( $oView->UNITgetQuery() ) );
+        $this->assertEquals( "from ".$this->getObject2CategoryViewTable()." as oxobject2category left join ".$this->getArticleViewTable()." on  ".$this->getArticleViewTable().".oxid=oxobject2category.oxobjectid  where oxobject2category.oxcatnid = '$sOxid'  and ".$this->getArticleViewTable().".oxid not in ( select ".$this->getArticleViewTable().".oxid from oxobject2article left join ".$this->getArticleViewTable()." on oxobject2article.oxobjectid=".$this->getArticleViewTable().".oxid where oxobject2article.oxarticlenid = '$sSynchoxid'  and ".$this->getArticleViewTable().".oxid IS NOT NULL  )  and ".$this->getArticleViewTable().".oxid IS NOT NULL  and ".$this->getArticleViewTable().".oxid != '$sOxid'", trim( $oView->UNITgetQuery() ) );
     }
     
     /**

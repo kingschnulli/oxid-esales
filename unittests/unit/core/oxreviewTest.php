@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxreviewTest.php 47959 2012-07-30 14:44:18Z linas.kukulskis $
+ * @version   SVN: $Id: oxreviewTest.php 26841 2010-03-25 13:58:15Z arvydas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -90,22 +90,23 @@ class Unit_Core_oxreviewTest extends OxidTestCase
 
     public function testLoadDe()
     {
+        oxTestModules::addFunction( "oxUtilsDate", "formatDBDate", "{ return 'testtime:'.\$aA[0]; }");
+
         $oReview = new oxreview();
         $oReview->load( '_testId' );
 
         $this->assertEquals( 'deValue', $oReview->oxreviews__oxtext->value );
-
-         $sCreate = date( 'd.m.Y H:i:s', $this->_iReviewTime );
-        if ( oxLang::getInstance()->getBaseLanguage() == 1 ) {
-            $sCreate = date( 'Y-m-d H:i:s', $this->_iReviewTime );
-        }
-
-        $this->assertEquals( $sCreate, $oReview->oxreviews__oxcreate->value );
+        $this->assertEquals( "testtime:".date( 'Y-m-d H:i:s', $this->_iReviewTime), $oReview->oxreviews__oxcreate->value );
     }
 
     public function testUpdate()
     {
         $iCurrTime = time();
+        //mocking time
+        oxAddClassModule( 'modOxUtilsDate', 'oxUtilsDate' );
+        oxUtilsDate::getInstance()->UNITSetTime( $iCurrTime );
+
+        oxTestModules::addFunction( "oxUtilsDate", "getTime", "{ return $iCurrTime; }");
 
         $this->_oReview->oxreviews__oxtext = new oxField('deValue2', oxField::T_RAW);
         $this->_oReview->Save();
@@ -125,6 +126,12 @@ class Unit_Core_oxreviewTest extends OxidTestCase
     public function testInsertAddsCreateDate()
     {
         $iCurrTime = time();
+
+        //mocking time
+        oxAddClassModule( 'modOxUtilsDate', 'oxUtilsDate' );
+        oxUtilsDate::getInstance()->UNITSetTime( $iCurrTime );
+
+        oxTestModules::addFunction( "oxUtilsDate", "getTime", "{ return $iCurrTime; }");
 
         $oReview = new oxreview();
         $oReview->setId( '_testId2' );

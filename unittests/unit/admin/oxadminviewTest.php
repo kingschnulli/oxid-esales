@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxadminviewTest.php 48764 2012-08-16 16:37:40Z tomas $
+ * @version   SVN: $Id: oxadminviewTest.php 44275 2012-04-24 13:50:08Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -312,8 +312,7 @@ class Unit_Admin_oxAdminViewTest extends OxidTestCase
     {
         $oUU = $this->getMock( 'oxUtilsUrl', array( 'processUrl' ) );
         $oUU->expects( $this->any() )->method( 'processUrl' )->will( $this->returnValue( 'sess:url' ) );
-        //modInstances::addMod('oxUtilsUrl', $oUU);
-        oxTestModules::addModuleObject('oxUtilsUrl', $oUU);
+        modInstances::addMod('oxUtilsUrl', $oUU);
 
         $oAView = new oxAdminView();
         $oAView->addGlobalParams();
@@ -364,11 +363,11 @@ class Unit_Admin_oxAdminViewTest extends OxidTestCase
      */
     public function testGetCountryByCodeNoEng()
     {
-        $oLang = $this->getMock('oxLang', array('getLanguageIds'));
-        $oLang->expects($this->any())->method('getLanguageIds')->will($this->returnValue(array('de')));
-        oxTestModules::addModuleObject( 'oxLang', $oLang );
+        $oLang = $this->getMock('oxlang', array('getLanguageIds'));
+        $oLang->expects($this->once())->method('getLanguageIds')->will($this->returnValue(array('de')));
+        modInstances::addMod('oxLang', $oLang);
 
-        $oSubj = new oxadminView();
+        $oSubj = $this->getProxyClass("oxadminView");
         $sTestCode = "de";
         $this->assertEquals("germany", $oSubj->UNITgetCountryByCode($sTestCode));
     }
@@ -385,7 +384,8 @@ class Unit_Admin_oxAdminViewTest extends OxidTestCase
 
         $oLangMock = $this->getMock("oxLang", array("getLanguageIds"));
         $oLangMock->expects($this->atLeastOnce())->method("getLanguageIds")->will($this->returnValue($aLangArray));
-        oxTestModules::addModuleObject( 'oxLang', $oLangMock );
+
+        modInstances::addMod("oxLang", $oLangMock);
 
         $oSubj = $this->getProxyClass("oxadminView");
         $sTestCode = "de";

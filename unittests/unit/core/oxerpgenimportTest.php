@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxerpgenimportTest.php 45542 2012-05-22 10:09:57Z linas.kukulskis $
+ * @version   SVN: $Id: oxerpgenimportTest.php 35248 2011-05-10 06:47:23Z sarunas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -211,7 +211,7 @@ class Unit_Core_oxErpGenImportTest extends OxidTestCase
         $oUser = $this->getMock( 'oxuser', array( 'isAdmin' ) );
         $oUser->expects( $this->any() )->method( 'isAdmin')->will( $this->returnValue( true ) );
         $oUser->login( oxADMIN_LOGIN, oxADMIN_PASSWD );
-        $oUser->loadAdminUser();
+        $oUser = oxUser::getAdminUser();
 
         $this->assertTrue( $oImport->init( null, null ) );
         $this->assertEquals( oxSession::getInstance()->getId(), $oImport->getNonPublicVar('_sSID') );
@@ -248,7 +248,7 @@ class Unit_Core_oxErpGenImportTest extends OxidTestCase
         $oUser = $this->getMock( 'oxuser', array( 'isAdmin' ) );
         $oUser->expects( $this->any() )->method( 'isAdmin')->will( $this->returnValue( true ) );
         $oUser->login( oxADMIN_LOGIN, oxADMIN_PASSWD );
-        $oUser->loadAdminUser();
+        $oUser = oxUser::getAdminUser();
 
         $oImport->init( null, null );
     }
@@ -379,13 +379,13 @@ class Unit_Core_oxErpGenImportTest extends OxidTestCase
         $oImport = $this->getProxyClass( "oxErpGenImport" );
 
         $this->assertEquals( ",", $oImport->UNITgetCsvFieldsTerminator() );
-
+        
         modConfig::getInstance()->setConfigParam( 'sGiCsvFieldTerminator', ";");
         modConfig::getInstance()->setConfigParam( 'sCSVSign', ",");
         $oImport = $this->getProxyClass( "oxErpGenImport" );
 
         $this->assertEquals( ";", $oImport->UNITgetCsvFieldsTerminator() );
-
+        
     }
 
     /*

@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2012
  * @version OXID eShop CE
- * @version   SVN: $Id: oxoutput.php 48735 2012-08-16 11:31:01Z tomas $
+ * @version   SVN: $Id: oxoutput.php 42683 2012-03-09 15:02:19Z vilma $
  */
 
 /**
@@ -67,7 +67,7 @@ class oxOutput extends oxSuperCfg
      */
     public function __construct()
     {
-        $this->setIsSearchEngine( oxRegistry::getUtils()->isSearchEngine() );
+        $this->setIsSearchEngine( oxUtils::getInstance()->isSearchEngine() );
     }
 
     /**
@@ -229,11 +229,11 @@ class oxOutput extends oxSuperCfg
     {
         switch ($this->_sOutputFormat) {
             case self::OUTPUT_FORMAT_JSON:
-                oxRegistry::getUtils()->setHeader( "Content-Type: application/json; charset=".$this->_sCharset );
+                oxUtils::getInstance()->setHeader( "Content-Type: application/json; charset=".$this->_sCharset );
                 break;
             case self::OUTPUT_FORMAT_HTML:
             default:
-                oxRegistry::getUtils()->setHeader( "Content-Type: text/html; charset=".$this->_sCharset );
+                oxUtils::getInstance()->setHeader( "Content-Type: text/html; charset=".$this->_sCharset );
                 break;
         }
     }
