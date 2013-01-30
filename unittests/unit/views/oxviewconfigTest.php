@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxviewconfigTest.php 52009 2012-11-19 15:12:31Z linas.kukulskis $
+ * @version   SVN: $Id: oxviewconfigTest.php 53118 2012-12-19 09:13:47Z aurimas.gladutis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -383,10 +383,13 @@ class Unit_Views_oxviewConfigTest extends OxidTestCase
 
     public function testGetLogoutLink()
     {
-        $oCfg = $this->getMock('oxconfig', array('getShopHomeURL'));
+        $oCfg = $this->getMock('oxconfig', array('getShopHomeURL', 'isSsl'));
         $oCfg->expects($this->once())
              ->method('getShopHomeURL')
              ->will($this->returnValue('shopHomeUrl/'));
+        $oCfg->expects($this->once())
+            ->method('isSsl')
+            ->will($this->returnValue(false));
 
         $oVC = $this->getMock('oxviewconfig'
             , array('getConfig', 'getTopActionClassName', 'getActCatId', 'getActTplName', 'getActContentLoadId'
@@ -424,7 +427,59 @@ class Unit_Views_oxviewConfigTest extends OxidTestCase
              ->will($this->returnValue('listtype'));
 
         $this->assertEquals('shopHomeUrl/cl=actionclass&amp;cnid=catid&amp;anid=anid&amp;searchparam=searchparam&amp;searchtag=searchtag&amp;recommid=testrecomm&amp;listtype=listtype&amp;fnc=logout&amp;tpl=tpl&amp;oxloadid=oxloadid&amp;redirect=1', $oVC->getLogoutLink());
+    }
 
+    /**
+     * Tests forming of logout link when in ssl page
+     *
+     * @return null
+     */
+    public function testGetLogoutLinkSsl()
+    {
+        $oCfg = $this->getMock('oxconfig', array('getShopSecureHomeUrl', 'isSsl'));
+        $oCfg->expects($this->once())
+            ->method('getShopSecureHomeUrl')
+            ->will($this->returnValue('sslShopHomeUrl/'));
+        $oCfg->expects($this->once())
+            ->method('isSsl')
+            ->will($this->returnValue(true));
+
+        $oVC = $this->getMock('oxviewconfig'
+            , array('getConfig', 'getTopActionClassName', 'getActCatId', 'getActTplName', 'getActContentLoadId'
+            , 'getActArticleId', 'getActSearchParam', 'getActSearchTag', 'getActListType', 'getActRecommendationId'));
+
+        $oVC->expects($this->any())
+            ->method('getConfig')
+            ->will($this->returnValue($oCfg));
+        $oVC->expects($this->once())
+            ->method('getTopActionClassName')
+            ->will($this->returnValue('actionclass'));
+        $oVC->expects($this->once())
+            ->method('getActCatId')
+            ->will($this->returnValue('catid'));
+        $oVC->expects($this->once())
+            ->method('getActTplName')
+            ->will($this->returnValue('tpl'));
+        $oVC->expects($this->once())
+            ->method('getActContentLoadId')
+            ->will($this->returnValue('oxloadid'));
+        $oVC->expects($this->once())
+            ->method('getActArticleId')
+            ->will($this->returnValue('anid'));
+        $oVC->expects($this->once())
+            ->method('getActSearchParam')
+            ->will($this->returnValue('searchparam'));
+        $oVC->expects($this->once())
+            ->method('getActSearchTag')
+            ->will($this->returnValue('searchtag'));
+        $oVC->expects($this->once())
+            ->method('getActRecommendationId')
+            ->will($this->returnValue('testrecomm'));
+        $oVC->expects($this->once())
+            ->method('getActListType')
+            ->will($this->returnValue('listtype'));
+
+        $this->assertEquals('sslShopHomeUrl/cl=actionclass&amp;cnid=catid&amp;anid=anid&amp;searchparam=searchparam&amp;searchtag=searchtag&amp;recommid=testrecomm&amp;listtype=listtype&amp;fnc=logout&amp;tpl=tpl&amp;oxloadid=oxloadid&amp;redirect=1', $oVC->getLogoutLink());
     }
 
     /**

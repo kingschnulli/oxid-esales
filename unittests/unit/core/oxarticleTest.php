@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticleTest.php 52936 2012-12-14 12:27:30Z aurimas.gladutis $
+ * @version   SVN: $Id: oxarticleTest.php 53274 2013-01-02 15:13:51Z aurimas.gladutis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -5302,109 +5302,6 @@ class Unit_Core_oxarticleTest extends OxidTestCase
     }
 
     /**
-     * Test get tags.
-     *
-     * @return null
-     */
-    public function testGetTags()
-    {
-        $oArticle = new oxArticle();
-        $oArticle->load('1651');
-
-        $sGotTags = $oArticle->getTags();
-            $sExpt = "bier,getränkemarkt,zukunftnicht,mehr,mithalten";
-
-        $this->assertEquals($sExpt, $sGotTags);
-    }
-
-    /**
-     * Test save tags.
-     *
-     * @return null
-     */
-    public function testSaveTags()
-    {
-        $oArticle = new oxArticle();
-        $oArticle->load('1651');
-        $sBackup = $oArticle->getTags();
-
-        $sTestTags = "tag1 tag2 ta tag3 t";
-        $oArticle->saveTags($sTestTags);
-        $sGotTags = $oArticle->getTags();
-
-        $this->assertEquals($sTestTags, $sGotTags);
-
-        $oArticle->saveTags($sBackup);
-    }
-
-
-    /**
-     * Test get tags (raw test).
-     *
-     * @return null
-     */
-    public function testSaveTagsRawTest()
-    {
-        $oArticle = new oxArticle();
-        $oArticle->load('1651');
-        $sBackup = $oArticle->getTags();
-
-        $sTestTags = "tag1,tag2,ta,tag3,t";
-        $oArticle->saveTags($sTestTags);
-        $sGotTags = oxDb::getDb()->getOne( "Select oxtags from oxartextends where oxid = '1651'");
-        $sExp = "tag1,tag2,ta__,tag3,t___";;
-
-        $this->assertEquals($sExp, $sGotTags);
-
-        $oArticle->saveTags($sBackup);
-    }
-
-    /**
-     * Test add tag.
-     *
-     * @return null
-     */
-    public function testAddTag()
-    {
-        $oArticle = new oxArticle();
-        $oArticle->load('1651');
-        $sExisting = $oArticle->getTags();
-
-        $sAddTag = "tag3\\\\'";
-        $oArticle->addTag($sAddTag);
-        $sAddTag = "tag3\\\'";
-        $oArticle->addTag($sAddTag);
-        $sAddTag = "tag3\\\"";
-        $oArticle->addTag($sAddTag);
-        $sAddTag = "tag4";
-        $oArticle->addTag($sAddTag);
-        $sGotTags = $oArticle->getTags();
-
-        $sExpt = "$sExisting,tag3,tag3,tag3,tag4";
-
-        $this->assertEquals($sExpt, $sGotTags);
-
-        $oArticle->saveTags($sExisting);
-    }
-
-    /**
-     * Test add tag for new article.
-     *
-     * Tf article has no extended data
-     *
-     * @return null
-     */
-    public function testAddTagForNewArt()
-    {
-        $sAddTag = "tag3";
-        $this->oArticle->addTag($sAddTag);
-        $sGotTags = $this->oArticle->getTags();
-
-        $this->assertEquals($sAddTag, $sGotTags);
-
-    }
-
-    /**
      * Test get select list.
      *
      * @return null
@@ -5980,6 +5877,21 @@ class Unit_Core_oxarticleTest extends OxidTestCase
     public function testGetFPrice()
     {
         $this->assertEquals( '15,50', $this->oArticle->getFPrice() );
+    }
+    /**
+     * Test resetting of remind status when reminder is sent and stock is higher than remindamount
+     *
+     * @return null
+     */
+    public function testResetRemindStatus()
+    {
+        $this->oArticle->oxarticles__oxremindactive = new oxField(2, oxField::T_RAW);
+        $this->oArticle->oxarticles__oxremindamount = new oxField(10, oxField::T_RAW);
+        $this->oArticle->oxarticles__oxstock = new oxField(20, oxField::T_RAW);
+
+        $this->oArticle->resetRemindStatus();
+
+        $this->assertEquals(1, $this->oArticle->oxarticles__oxremindactive->value );
     }
 
     /**

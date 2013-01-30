@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: articleseoTest.php 47944 2012-07-30 12:41:30Z linas.kukulskis $
+ * @version   SVN: $Id: articleseoTest.php 53379 2013-01-07 08:56:57Z aurimas.gladutis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -529,8 +529,10 @@ class Unit_Admin_ArticleSeoTest extends OxidTestCase
         $oProduct = new oxArticle();
         $oProduct->load( $sProdId );
 
-        $oTagCloud = oxNew("oxTagCloud");
-        $aTags = $oTagCloud->getTags( $sProdId, false, 0 );
+        $oArticleTagList = new oxArticleTagList();
+        $oArticleTagList->load($sProdId);
+        $oTagSet = $oArticleTagList->get();
+        $aTags = $oTagSet->get();
 
         $oView = new Article_Seo();
         $aList = $oView->UNITgetTagList( $oProduct, 0 );

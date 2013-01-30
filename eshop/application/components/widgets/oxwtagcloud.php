@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   views
- * @copyright (C) OXID eSales AG 2003-2012
+ * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
- * @version   SVN: $Id: oxwtagcloud.php 51853 2012-11-15 11:28:55Z vilma $
+ * @version   SVN: $Id: oxwtagcloud.php 53343 2013-01-04 16:23:39Z aurimas.gladutis $
  */
 
 /**
@@ -51,7 +51,10 @@ class oxwTagCloud extends oxWidget
      */
     public function getTagCloudManager()
     {
-        return oxNew( "oxTagCloud" );
+        $oTagList = oxNew( "oxtaglist" );
+        $oTagCloud = oxNew( "oxTagCloud" );
+        $oTagCloud->setTagList($oTagList);
+        return $oTagCloud;
     }
 
     /**

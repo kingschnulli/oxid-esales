@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: test_utils.php 49935 2012-10-01 12:50:10Z alfonsas $
+ * @version   SVN: $Id: test_utils.php 53101 2012-12-18 14:54:39Z aurimas.gladutis $
  */
 
 define ('MAX_LOOP_AMOUNT', 4);
@@ -447,6 +447,9 @@ abstract class modOXID
         $oConfig->setUser( null );
         $oConfig->setAdminMode( null );
 
+        if ( defined('OXID_VERSION_EE') && OXID_VERSION_EE ) :
+            $oConfig->setRights( null );
+        endif;
         oxTestModules::cleanAllModules();
     }
 

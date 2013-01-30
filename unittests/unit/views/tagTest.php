@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: tagTest.php 38614 2011-09-05 13:34:37Z linas.kukulskis $
+ * @version   SVN: $Id: tagTest.php 53452 2013-01-07 15:38:28Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -33,14 +33,14 @@ class Unit_Views_tagTest extends OxidTestCase
     public function testSetItemSorting()
     {
         $oView = new tag();
-        $oView->setItemSorting( null, "testSortBy", "testSortOrder" );
+        $oView->setItemSorting( 'alist', "testSortBy", "testSortOrder" );
 
-        $aSorting = modSession::getInstance()->getVar( "aSorting" );
+        $aSorting = $this->getSession()->getVar( "aSorting" );
 
         $this->assertNotNull( $aSorting );
-        $this->assertTrue( isset( $aSorting["oxtags"] ) );
-        $this->assertEquals( "testSortBy", $aSorting["oxtags"]["sortby"] );
-        $this->assertEquals( "testSortOrder", $aSorting["oxtags"]["sortdir"] );
+        $this->assertTrue( isset( $aSorting["alist"] ) );
+        $this->assertEquals( "testSortBy", $aSorting["alist"]["sortby"] );
+        $this->assertEquals( "testSortOrder", $aSorting["alist"]["sortdir"] );
     }
 
     public function testRender()
@@ -52,24 +52,15 @@ class Unit_Views_tagTest extends OxidTestCase
     }
 
     /**
-     * Testing if render method calls output of 404 error if articles list is empty
+     * Testing if render method calls empty category should be outputted
      */
     public function testRender_noArticlesForTag()
     {
         modConfig::setParameter( "pgNr", 999 );
-        oxTestModules::addFunction( "oxUtils", "handlePageNotFoundError", "{ throw new Exception('OK'); }" );
-
         modConfig::setParameter( "searchtag", "notexistingtag" );
 
         $oView = new tag();
-        try {
-            $oView->render();
-        } catch ( Exception $oExcp ) {
-            $this->assertEquals( 'OK', $oExcp->getMessage(), 'failed redirect on inactive category' );
-            return;
-        }
-
-        $this->fail( 'failed redirect on inactive category' );
+        $this->assertEquals( "page/list/list.tpl", $oView->render() );
     }
 
     public function testGetAddUrlParams()
