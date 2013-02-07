@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: detailsTest.php 44354 2012-04-25 11:30:15Z mindaugas.rimgaila $
+ * @version   SVN: $Id: detailsTest.php 53161 2012-12-20 09:27:52Z aurimas.gladutis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -1057,19 +1057,42 @@ class Unit_Views_detailsTest extends OxidTestCase
     }
 
     /**
-     * Test meta meta desctionio generation..
+     * Test meta meta desctionio generation when short desc is empty (should use long desc).
      *
      * @return null
      */
-    public function testMetaDescription()
+    public function testMetaDescriptionWithLongDesc()
     {
         $oProduct = oxNew("oxarticle");
         $oProduct->load("1849");
 
         $oDetails = $this->getMock( 'details', array( 'getProduct' ) );
         $oDetails->expects( $this->once() )->method( 'getProduct')->will( $this->returnValue( $oProduct ) );
-
         $sMeta = $oProduct->oxarticles__oxtitle->value.' - '.$oProduct->oxarticles__oxlongdesc->value;
+
+        $oView = new oxubase();
+        $this->assertEquals( $oView->UNITprepareMetaDescription( $sMeta, 200, false ), $oDetails->UNITprepareMetaDescription( null ) );
+    }
+
+    /**
+     * Test meta meta desctionio generation when short desc is empty (should use long desc).
+     *
+     * @return null
+     */
+    public function testMetaDescriptionWithLongDescWithSmartyParsing()
+    {
+        modConfig::getInstance()->setConfigParam( 'bl_perfParseLongDescinSmarty', true );
+
+        $oProduct = $this->getMock('oxarticle', array('getLongDesc', 'getLongDescription'));
+        $oProduct->expects( $this->once() )->method( 'getLongDesc')->will( $this->returnValue( 'parsed description' ) );
+        $oProduct->expects( $this->never() )->method( 'getLongDescription')->will( $this->returnValue( 'not parsed description' ) );
+        $oProduct->oxarticles__oxshortdesc =  new oxField( 'Short description', oxField::T_RAW);
+        $oProduct->oxarticles__oxtitle =  new oxField( 'Title', oxField::T_RAW);
+
+        $oDetails = $this->getMock( 'details', array( 'getProduct' ) );
+        $oDetails->expects( $this->once() )->method( 'getProduct')->will( $this->returnValue( $oProduct ) );
+
+        $sMeta = 'Title - parsed description';
 
         $oView = new oxubase();
         $this->assertEquals( $oView->UNITprepareMetaDescription( $sMeta, 200, false ), $oDetails->UNITprepareMetaDescription( null ) );

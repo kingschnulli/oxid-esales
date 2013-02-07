@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   lang
- * @copyright (C) OXID eSales AG 2003-2012
+ * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 50505 2012-10-15 12:30:56Z juergen.busch $
+ * @version   SVN: $Id: lang.php 54388 2013-01-25 10:30:09Z juergen.busch $
  */
 
 $sLangName  = 'Deutsch';
@@ -404,7 +404,7 @@ $aLang = array(
 'ARTICLE_EXTEND_ISCONFIGURABLE'                            => 'Artikel ist individualisierbar',
 'ARTICLE_EXTEND_NONMATERIAL'                               => 'Immaterieller Artikel',
 'ARTICLE_EXTEND_FREESHIPPING'                              => 'Versandkostenfrei',
-'ARTICLE_EXTEND_BLFIXEDPRICE'                              => 'Sonderaktionen nicht erlaubt (Preisalarm)',
+'ARTICLE_EXTEND_BLFIXEDPRICE'                              => 'Preisalarm deaktivieren',
 'ARTICLE_EXTEND_ARTINCATS'                                 => 'Zugeordnete Kategorien',
 'ARTICLE_EXTEND_DEFAULT'                                   => 'Als Hauptkat. setzen.',
 'ARTICLE_EXTEND_UPDATEMEDIA'                               => 'Übernehmen',
@@ -425,6 +425,7 @@ $aLang = array(
 'ARTICLE_LIST_ALLPRODUCTS'                                 => 'alle Artikel',
 'ARTICLE_LIST_MENUSUBITEM'                                 => 'Artikel',
 'ARTICLE_MAIN_ERRORSAVINGARTICLE'                          => 'Warnung: Artikelnummer bereits vorhanden!',
+'ARTICLE_MAIN_PARENTNOTBUYABLE'                            => 'Achtung: Vaterartikel kann nicht gekauft werden.',
 'ARTICLE_MAIN_ALDPRICE'                                    => 'Alt. Preise',
 'ARTICLE_MAIN_NONE'                                        => '-- keine --',
 'ARTICLE_MAIN_GOTO'                                        => 'Gehe zu',
@@ -1110,6 +1111,7 @@ $aLang = array(
 'PAYMENT_MAIN_AVAILIBLEINGROUP'                            => 'Zugeordnete Benutzergruppen',
 'PAYMENT_MAIN_NOTAVAILIBLEINGROUP'                         => 'Alle Benutzergruppen',
 'PAYMENT_MAIN_LONGDESC'                                    => 'Beschreibung der Zahlungsart',
+'PAYMENT_MAIN_NOTICEDEFAULTVALUESSELECTED'                 => 'Standardwerte wurden ausgewählt',
 'PAYMENT_OVERVIEW_HOWMANYPAYMENTS'                         => 'Wieviel Einkäufe wurden mit dieser Zahlungsart gemacht',
 'PRICEALARM_DONE_SENDEMAIL'                                => 'Preisalarm E-Mails versendet.',
 'PRICEALARM_DONE_GOTOPRICEALARM'                           => 'gehen Sie zu Preisalarm ',

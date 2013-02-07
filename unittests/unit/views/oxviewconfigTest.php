@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxviewconfigTest.php 44704 2012-05-09 11:24:03Z linas.kukulskis $
+ * @version   SVN: $Id: oxviewconfigTest.php 53116 2012-12-19 08:50:55Z aurimas.gladutis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -386,14 +386,18 @@ class Unit_Views_oxviewConfigTest extends OxidTestCase
 
     public function testGetLogoutLink()
     {
-        $oCfg = $this->getMock('oxconfig', array('getShopHomeURL'));
+        $oCfg = $this->getMock('oxconfig', array('getShopHomeURL', 'isSsl'));
         $oCfg->expects($this->once())
              ->method('getShopHomeURL')
              ->will($this->returnValue('shopHomeUrl/'));
+        $oCfg->expects($this->once())
+             ->method('isSsl')
+             ->will($this->returnValue(false));
 
         $oVC = $this->getMock('oxviewconfig'
             , array('getConfig', 'getActionClassName', 'getActCatId', 'getActTplName'
-            , 'getActArticleId', 'getActSearchParam', 'getActSearchTag', 'getActListType'));
+            , 'getActArticleId', 'getActSearchParam', 'getActSearchTag', 'getActListType'
+            , 'getActRecommendationId' ));
 
         $oVC->expects($this->once())
              ->method('getConfig')
@@ -419,9 +423,62 @@ class Unit_Views_oxviewConfigTest extends OxidTestCase
         $oVC->expects($this->once())
              ->method('getActListType')
              ->will($this->returnValue('listtype'));
+        $oVC->expects($this->once())
+        ->method('getActRecommendationId')
+        ->will($this->returnValue('recommid'));
 
-        $this->assertEquals('shopHomeUrl/cl=actionclass&amp;cnid=catid&amp;anid=anid&amp;searchparam=searchparam&amp;searchtag=searchtag&amp;listtype=listtype&amp;fnc=logout&amp;tpl=tpl&amp;redirect=1', $oVC->getLogoutLink());
+        $this->assertEquals('shopHomeUrl/cl=actionclass&amp;cnid=catid&amp;anid=anid&amp;searchparam=searchparam&amp;searchtag=searchtag&amp;recommid=recommid&amp;listtype=listtype&amp;fnc=logout&amp;tpl=tpl&amp;redirect=1', $oVC->getLogoutLink());
+    }
 
+    /**
+     * Tests forming of logout link when in ssl page
+     *
+     * @return null
+     */
+    public function testGetLogoutLinkSsl()
+    {
+        $oCfg = $this->getMock('oxconfig', array('getShopSecureHomeUrl', 'isSsl'));
+        $oCfg->expects($this->once())
+             ->method('getShopSecureHomeUrl')
+             ->will($this->returnValue('sslShopHomeUrl/'));
+        $oCfg->expects($this->once())
+             ->method('isSsl')
+             ->will($this->returnValue(true));
+
+        $oVC = $this->getMock('oxviewconfig'
+            , array('getConfig', 'getActionClassName', 'getActCatId', 'getActTplName'
+            , 'getActArticleId', 'getActSearchParam', 'getActSearchTag', 'getActListType'
+            , 'getActRecommendationId' ));
+
+        $oVC->expects($this->once())
+             ->method('getConfig')
+             ->will($this->returnValue($oCfg));
+        $oVC->expects($this->once())
+             ->method('getActionClassName')
+             ->will($this->returnValue('actionclass'));
+        $oVC->expects($this->once())
+             ->method('getActCatId')
+             ->will($this->returnValue('catid'));
+        $oVC->expects($this->once())
+             ->method('getActTplName')
+             ->will($this->returnValue('tpl'));
+        $oVC->expects($this->once())
+             ->method('getActArticleId')
+             ->will($this->returnValue('anid'));
+        $oVC->expects($this->once())
+             ->method('getActSearchParam')
+             ->will($this->returnValue('searchparam'));
+        $oVC->expects($this->once())
+             ->method('getActSearchTag')
+             ->will($this->returnValue('searchtag'));
+        $oVC->expects($this->once())
+             ->method('getActListType')
+             ->will($this->returnValue('listtype'));
+        $oVC->expects($this->once())
+        ->method('getActRecommendationId')
+        ->will($this->returnValue('recommid'));
+
+        $this->assertEquals('sslShopHomeUrl/cl=actionclass&amp;cnid=catid&amp;anid=anid&amp;searchparam=searchparam&amp;searchtag=searchtag&amp;recommid=recommid&amp;listtype=listtype&amp;fnc=logout&amp;tpl=tpl&amp;redirect=1', $oVC->getLogoutLink());
     }
 
     /**

@@ -576,6 +576,7 @@ class Unit_Core_oxemailBasicTplTest extends OxidTestCase
         $sSubject   = 'testSubject';
         $sBody      = 'testBodyMessage';
         $sUserMail  = 'username@useremail.nl';
+        $sShopOwnerMail  = 'shopOwner@shopOwnerEmail.nl';
 
         $oEmail = $this->getMock( 'oxEmail', array( "_sendMail", "_getShop" ) );
         $oEmail->expects( $this->once() )->method( '_sendMail')->will( $this->returnValue( true ));
@@ -589,7 +590,7 @@ class Unit_Core_oxemailBasicTplTest extends OxidTestCase
         $aFields['sRecipientName'] = '';
         $aFields['sSubject']       = $sSubject;
         $aFields['sBody']          = $sBody;
-        $aFields['sFrom']          = $sUserMail;
+        $aFields['sFrom']          = $sShopOwnerMail;
         $aFields['sFromName']      = '';
         $aFields['sReplyTo']       = $sUserMail;
         $aFields['sReplyToName']   = '';

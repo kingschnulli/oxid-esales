@@ -3489,10 +3489,10 @@ class Unit_Core_oxuserTest extends OxidTestCase
     }
 
     /**
-     * oxuser::laodActiveUser() test loading active user if use is connected
-     * via facebook connect
+     * oxuser::laodActiveUser() test loading active user via facebook connect
+     * when user logged in to fb and user exists in db
      */
-    public function testLoadActiveUser_loggedInViaFacebookConnect()
+    public function testLoadActiveUser_FacebookConnectLoggedIn()
     {
         oxTestModules::addFunction( "oxFb", "isConnected", "{return true;}" );
         oxTestModules::addFunction( "oxFb", "getUser", "{return 123456;}" );
@@ -3501,14 +3501,8 @@ class Unit_Core_oxuserTest extends OxidTestCase
         $aUsers  = current( $this->_aUsers );
         $sUserId = current( $aUsers );
 
-        oxDb::getDb()->execute( "update oxuser set oxactive = 1 where oxid='$sUserId' " );
-
-        //user does not has Facebook ID
-        $testUser = new oxuser();
-        $this->assertFalse( $testUser->loadActiveUser() );
-
         // Saving user Facebook ID
-        oxDb::getDb()->execute( "update oxuser set oxfbid='123456' where oxid='$sUserId' " );
+        oxDb::getDb()->execute( "update oxuser set oxactive = 1, oxfbid='123456' where oxid='$sUserId' " );
 
         $testUser = $this->getMock( 'oxuser', array( 'isAdmin' ) );
         $testUser->expects( $this->any() )->method( 'isAdmin')->will( $this->returnValue( false ) );
@@ -3518,8 +3512,52 @@ class Unit_Core_oxuserTest extends OxidTestCase
     }
 
     /**
-     * oxuser::laodActiveUser() test loading active user if facebook connect
-     * is disabled
+     * oxuser::laodActiveUser() test loading active user via facebook connect
+     * when user logged in to fb and no user exists in db
+     */
+    public function testLoadActiveUser_FacebookConnectLoggedInNoUser()
+    {
+        oxTestModules::addFunction( "oxFb", "isConnected", "{return true;}" );
+        oxTestModules::addFunction( "oxFb", "getUser", "{return 123456;}" );
+        modConfig::getInstance()->setConfigParam( "bl_showFbConnect", true );
+
+        $aUsers  = current( $this->_aUsers );
+        $sUserId = current( $aUsers );
+
+        // Saving user Facebook ID
+        oxDb::getDb()->execute( "update oxuser set oxactive = 1, oxfbid='' where oxid='$sUserId' " );
+
+        $testUser = $this->getMock( 'oxuser', array( 'isAdmin' ) );
+        $testUser->expects( $this->any() )->method( 'isAdmin')->will( $this->returnValue( false ) );
+
+        $this->assertFalse( $testUser->loadActiveUser() );
+    }
+
+    /**
+     * oxuser::laodActiveUser() test loading active user via facebook connect
+     * when user is not connected to fb, but exists in db
+     */
+    public function testLoadActiveUser_FacebookConnectNotLoggedIn()
+    {
+        oxTestModules::addFunction( "oxFb", "isConnected", "{return false;}" );
+        oxTestModules::addFunction( "oxFb", "getUser", "{return 123456;}" );
+        modConfig::getInstance()->setConfigParam( "bl_showFbConnect", true );
+
+        $aUsers  = current( $this->_aUsers );
+        $sUserId = current( $aUsers );
+
+        // Saving user Facebook ID
+        oxDb::getDb()->execute( "update oxuser set oxactive = 1, oxfbid='123456' where oxid='$sUserId' " );
+
+        $testUser = $this->getMock( 'oxuser', array( 'isAdmin' ) );
+        $testUser->expects( $this->any() )->method( 'isAdmin')->will( $this->returnValue( false ) );
+
+        $this->assertFalse( $testUser->loadActiveUser() );
+    }
+
+    /**
+     * oxuser::laodActiveUser() test loading active user via facebook connect
+     * when facebook connect is disabled
      */
     public function testLoadActiveUser_FacebookConnectDisabled()
     {
@@ -3540,25 +3578,53 @@ class Unit_Core_oxuserTest extends OxidTestCase
     }
 
     /**
-     * oxuser::laodActiveUser() test loading active user if facebook connect
-     * is disabled
+     * oxuser::laodActiveUser() test loading active user via cookie
+     * when user exists and cookie info is correct
      */
-    public function testLoadActiveUser_FacebookConnectNotLoggedIn()
+    public function testLoadActiveUser_CookieLogin()
     {
-        oxTestModules::addFunction( "oxFb", "isConnected", "{return false;}" );
-        oxTestModules::addFunction( "oxFb", "getUser", "{return 123456;}" );
-        modConfig::getInstance()->setConfigParam( "bl_showFbConnect", true );
+        modConfig::getInstance()->setConfigParam( "blShowRememberMe", true );
 
         $aUsers  = current( $this->_aUsers );
         $sUserId = current( $aUsers );
 
-        // Saving user Facebook ID
-        oxDb::getDb()->execute( "update oxuser set oxactive = 1, oxfbid='123456' where oxid='$sUserId' " );
+        $oUser = new oxUser();
+        $oUser->load($sUserId);
+        $oUser->oxuser__oxactive = new oxField(1, oxField::T_RAW);
+        $oUser->setPassword('testPassword');
+        $oUser->save();
+
+        oxUtilsServer::getInstance()->setUserCookie(
+            $oUser->oxuser__oxusername->value,
+            $oUser->oxuser__oxpassword->value, null, 31536000, $oUser->oxuser__oxpasssalt->value
+        );
+
+        $sCookie = oxUtilsServer::getInstance()->getUserCookie();
+
+        $testUser = $this->getMock( 'oxuser', array( 'isAdmin' ) );
+        $testUser->expects( $this->any() )->method( 'isAdmin')->will( $this->returnValue( false ) );
+
+        $this->assertTrue( $testUser->loadActiveUser() );
+
+        $this->assertEquals( $sCookie, oxUtilsServer::getInstance()->getUserCookie() );
+    }
+
+    /**
+     * oxuser::laodActiveUser() test loading active user via cookie
+     * when user defined in cookie is not found
+     */
+    public function testLoadActiveUser_CookieResetting()
+    {
+        modConfig::getInstance()->setConfigParam( "blShowRememberMe", true );
+
+        oxUtilsServer::getInstance()->setUserCookie( 'RandomUserId', 'RandomPassword');
 
         $testUser = $this->getMock( 'oxuser', array( 'isAdmin' ) );
         $testUser->expects( $this->any() )->method( 'isAdmin')->will( $this->returnValue( false ) );
 
         $this->assertFalse( $testUser->loadActiveUser() );
+
+        $this->assertNull( oxUtilsServer::getInstance()->getUserCookie() );
     }
 
     

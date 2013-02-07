@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: shopconfigTest.php 50563 2012-10-16 10:36:57Z aurimas.gladutis $
+ * @version   SVN: $Id: shopconfigTest.php 50971 2012-10-26 13:59:00Z aurimas.gladutis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -271,9 +271,8 @@ class Unit_Admin_ShopConfigTest extends OxidTestCase
      */
     public function testLoadConfVars()
     {
-        $sCl = oxTestModules::publicize('Shop_Config', '_loadConfVars');
-        $oTest = new $sCl;
-        $aDbConfig = $oTest->p_loadConfVars(oxConfig::getInstance()->getShopId(), '');
+        $oTest = new Shop_Config;
+        $aDbConfig = $oTest->loadConfVars(oxConfig::getInstance()->getShopId(), '');
 
         $this->assertEquals(
             array('vars', 'constraints', 'grouping'),

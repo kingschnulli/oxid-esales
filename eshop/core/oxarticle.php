@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   core
- * @copyright (C) OXID eSales AG 2003-2012
+ * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticle.php 50566 2012-10-16 10:52:21Z vilma $
+ * @version   SVN: $Id: oxarticle.php 54002 2013-01-18 13:12:27Z aurimas.gladutis $
  */
 
 // defining supported link types
@@ -173,6 +173,11 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
      * Variable used to force load parent data in export
      */
     protected $_blLoadParentData = false;
+
+    /**
+     * Variable used to determine if setting parentId to empty value is allowed
+     */
+    protected $_blAllowEmptyParentId = false;
 
     /**
      * Variable used to force load parent data in export
@@ -368,7 +373,7 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
      */
     protected $_aCopyParentField = array('oxarticles__oxnonmaterial',
                                          'oxarticles__oxfreeshipping',
-                                         'oxarticles__oxremindactive',
+                                         //'oxarticles__oxremindactive',
                                          'oxarticles__oxisdownloadable');
 
     /**
@@ -636,6 +641,16 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
     public function disablePriceLoad()
     {
         $this->_blLoadPrice = false;
+    }
+
+    /**
+     * Enable article price loading, if disabled.
+     *
+     * @return null
+     */
+    public function enablePriceLoad()
+    {
+        $this->_blLoadPrice = true;
     }
 
     /**
@@ -1122,9 +1137,8 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
         //optionall function parameter $sKeyPrefix added, used only in basket.php
         $sKey = $this->getId();
         if ( isset( $sKeyPrefix ) ) {
-            $sKey = $sKeyPrefix.'__'.$this->getId();
+            $sKey = $sKeyPrefix.'__'.$sKey;
         }
-
         if ( !isset( self::$_aSelList[$sKey] ) ) {
             $oDb = oxDb::getDb();
             $sSLViewName = getViewName( 'oxselectlist' );
@@ -1204,11 +1218,16 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
 
         $iLimit = (int) $iLimit;
         if ( !isset( $this->_aVariantSelections[$iLimit] ) ) {
-            $this->_aVariantSelections[$iLimit] = false;
-
+            $aVariantSelections = false;
             if ( $this->oxarticles__oxvarcount->value ) {
-                $this->_aVariantSelections[$iLimit] = oxNew( "oxVariantHandler" )->buildVariantSelections( $this->oxarticles__oxvarname->getRawValue(), $this->getVariants( false ), $aFilterIds, $sActVariantId, $iLimit );
+                $oVariants = $this->getVariants( false );
+                $aVariantSelections = oxNew( "oxVariantHandler" )->buildVariantSelections( $this->oxarticles__oxvarname->getRawValue(), $oVariants, $aFilterIds, $sActVariantId, $iLimit );
+
+                if ( !empty($oVariants) && empty( $aVariantSelections['rawselections'] ) ) {
+                    $aVariantSelections = false;
+                }
             }
+            $this->_aVariantSelections[$iLimit] = $aVariantSelections;
         }
 
         return $this->_aVariantSelections[$iLimit];
@@ -2075,6 +2094,24 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
         return $blRet;
     }
 
+    /**
+     * Changes article variant to parent article
+     *
+     * @return null
+     */
+    public function resetParent()
+    {
+        $sParentId = $this->oxarticles__oxparentid;
+        $this->oxarticles__oxparentid = new oxField( '', oxField::T_RAW );
+        $this->_blAllowEmptyParentId = true;
+        $this->save();
+        $this->_blAllowEmptyParentId = false;
+
+        if ( $sParentId !== '' ) {
+            $this->onChange( ACTION_UPDATE, null, $sParentId );
+        }
+    }
+
 
     /**
      * collect article pics, icons, zoompic and puts it all in an array
@@ -2211,11 +2248,11 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
         $sId = ( $sParentID ) ? $sParentID : $sOXID;
         $this->_onChangeUpdateMinVarPrice( $sId );
 
-            // reseting articles count cache if stock has changed and some
-            // articles goes offline (M:1448)
-            if ( $sAction === ACTION_UPDATE_STOCK ) {
-                $this->_onChangeStockResetCount( $sOXID );
-            }
+        // reseting articles count cache if stock has changed and some
+        // articles goes offline (M:1448)
+        if ( $sAction === ACTION_UPDATE_STOCK ) {
+            $this->_onChangeStockResetCount( $sOXID );
+        }
 
     }
 
@@ -2601,7 +2638,7 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
 
 
         $oTagCloud = oxNew( 'oxtagcloud' );
-        $oTagCloud->resetTagCache();
+        $oTagCloud->resetTagCache($this->getLanguage());
         $sTags = oxDb::getInstance()->escapeString( $oTagCloud->prepareTags( $sTags ) );
         $oDb = oxDb::getDb();
 
@@ -2800,6 +2837,20 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
     {
         if ( $oPrice = $this->getPrice() ) {
             return $this->getPriceFromPrefix().oxLang::getInstance()->formatCurrency( $oPrice->getBruttoPrice() );
+        }
+    }
+
+    /**
+     * Resets oxremindactive status.
+     * If remindActive status is 2, reminder is already sent.
+     *
+     * @return null
+     */
+    public function resetRemindStatus()
+    {
+        if ( $this->oxarticles__oxremindactive->value == 2 &&
+            $this->oxarticles__oxremindamount->value <= $this->oxarticles__oxstock->value ) {
+            $this->oxarticles__oxremindactive->value = 1;
         }
     }
 
@@ -3063,7 +3114,7 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
        // $this->_aSkipSaveFields[] = 'oxlongdesc';
         $this->_aSkipSaveFields[] = 'oxinsert';
 
-        if ( !isset( $this->oxarticles__oxparentid->value) || $this->oxarticles__oxparentid->value == '') {
+        if ( !$this->_blAllowEmptyParentId && (!isset( $this->oxarticles__oxparentid->value) || $this->oxarticles__oxparentid->value == '') ) {
             $this->_aSkipSaveFields[] = 'oxparentid';
         }
 
@@ -3644,9 +3695,10 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
             return true;
         }
 
-        $aDoubleCopyFields = array('oxarticles__oxprice', 'oxarticles__oxvat');
+        // certain fields with zero value treat as empty
+        $aZeroValueFields = array('oxarticles__oxprice', 'oxarticles__oxvat', 'oxarticles__oxunitquantity');
 
-        if (!$mValue && in_array( $sFieldName, $aDoubleCopyFields ) ) {
+        if (!$mValue && in_array( $sFieldName, $aZeroValueFields ) ) {
             return true;
         }
 
@@ -3680,7 +3732,6 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
         if (!($oParentArticle = $this->getParentArticle())) {
             return;
         }
-
         $sCopyFieldName = $this->_getFieldLongName($sFieldName);
 
         // assigning only theese which parent article has
@@ -3980,6 +4031,29 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
     }
 
     /**
+     * Updates article variants oxremindactive field, as variants inherit this setting from parent
+     *
+     * @return null
+     */
+    public function updateVariantsRemind()
+    {
+        // check if it is parent article
+        if ( !$this->isVariant() && $this->_hasAnyVariant()) {
+            $oDb = oxDb::getDb();
+            $sOxId = $oDb->quote($this->getId());
+            $sOxShopId = $oDb->quote($this->getShopId());
+            $iRemindActive = $oDb->quote($this->oxarticles__oxremindactive->value);
+            $sUpdate = "
+                update oxarticles
+                    set oxremindactive = $iRemindActive
+                    where oxparentid = $sOxId and
+                          oxshopid = $sOxShopId
+            ";
+            $oDb->execute( $sUpdate );
+        }
+    }
+
+    /**
      * Deletes records in database
      *
      * @param string $sOXID Article ID
@@ -4010,6 +4084,9 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
 
         $sDelete = 'delete from oxreviews where oxtype="oxarticle" and oxobjectid = '.$sOXID.' ';
         $oDb->execute( $sDelete);
+
+        $sDelete = 'delete from oxratings where oxobjectid = '.$sOXID.' ';
+        $rs = $oDb->execute( $sDelete );
 
         $sDelete = 'delete from oxaccessoire2article where oxobjectid = '.$sOXID.' or oxarticlenid = '.$sOXID.' ';
         $oDb->execute( $sDelete);
@@ -4157,19 +4234,19 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
             $sQ = 'update oxarticles set oxvarstock = '.$iStock.' where oxid = '.$sParentIdQuoted;
             $oDb->execute( $sQ );
 
-                //now lets update category counts
-                //first detect stock status change for this article (to or from 0)
-                if ( $iStock < 0 ) {
-                    $iStock = 0;
-                }
-                if ( $iOldStock < 0 ) {
-                    $iOldStock = 0;
-                }
-                if ( $this->oxarticles__oxstockflag->value == 2 && $iOldStock xor $iStock ) {
-                    //means the stock status could be changed (oxstock turns from 0 to 1 or from 1 to 0)
-                    // so far we leave it like this but later we could move all count resets to one or two functions
-                    $this->_onChangeResetCounts( $sParentID, $iVendorID, $iManufacturerID );
-                }
+            //now lets update category counts
+            //first detect stock status change for this article (to or from 0)
+            if ( $iStock < 0 ) {
+                $iStock = 0;
+            }
+            if ( $iOldStock < 0 ) {
+                $iOldStock = 0;
+            }
+            if ( $this->oxarticles__oxstockflag->value == 2 && $iOldStock xor $iStock ) {
+                //means the stock status could be changed (oxstock turns from 0 to 1 or from 1 to 0)
+                // so far we leave it like this but later we could move all count resets to one or two functions
+                $this->_onChangeResetCounts( $sParentID, $iVendorID, $iManufacturerID );
+            }
         }
     }
 

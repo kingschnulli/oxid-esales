@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutilsTest.php 43628 2012-04-06 16:00:49Z linas.kukulskis $
+ * @version   SVN: $Id: oxutilsTest.php 51662 2012-11-12 09:33:47Z aurimas.gladutis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -361,6 +361,28 @@ class Unit_Core_oxutilsTest extends OxidTestCase
         $this->assertEquals($fFloat, (float)"10322.32");
         $fFloat = oxUtils::getInstance()->currency2Float("10 322.32", $oActCur);
         $this->assertEquals($fFloat, (float)"10322.32");
+    }
+
+    /**
+     * Testing if shop var saver writes num value with valid string to config correctly
+     */
+    public function testString2Float()
+    {
+        $oUtils = oxUtils::getInstance();
+        $fFloat = $oUtils->string2Float("10.322,32");
+        $this->assertEquals($fFloat, 10322.32);
+        $fFloat = $oUtils->string2Float("10,322.32");
+        $this->assertEquals($fFloat, 10322.32);
+        $fFloat = $oUtils->string2Float("10322,32");
+        $this->assertEquals($fFloat, 10322.32);
+        $fFloat = $oUtils->string2Float("10322.32");
+        $this->assertEquals($fFloat, 10322.32);
+        $fFloat = $oUtils->string2Float("10.32225");
+        $this->assertEquals($fFloat, 10.32225);
+        $fFloat = $oUtils->string2Float("10 000.32225");
+        $this->assertEquals($fFloat, 10000.32225);
+        $fFloat = $oUtils->string2Float("10 000.00");
+        $this->assertEquals($fFloat, 10000);
     }
 
     /**

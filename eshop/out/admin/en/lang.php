@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   lang
- * @copyright (C) OXID eSales AG 2003-2012
+ * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 50506 2012-10-15 12:31:18Z juergen.busch $
+ * @version   SVN: $Id: lang.php 53759 2013-01-14 08:16:21Z aurimas.gladutis $
  */
 
 /*
@@ -401,7 +401,7 @@ $aLang = array(
 'ARTICLE_EXTEND_ISCONFIGURABLE'                            => 'Product can be customized',
 'ARTICLE_EXTEND_NONMATERIAL'                               => 'Intangible Product',
 'ARTICLE_EXTEND_FREESHIPPING'                              => 'Free Shipping',
-'ARTICLE_EXTEND_BLFIXEDPRICE'                              => 'No Promotions<br>(Price Alert)',
+'ARTICLE_EXTEND_BLFIXEDPRICE'                              => 'Deactivate Price Alert',
 'ARTICLE_EXTEND_ARTINCATS'                                 => 'Product is in these Categories',
 'ARTICLE_EXTEND_DEFAULT'                                   => 'Set as Main Category',
 'ARTICLE_EXTEND_UPDATEMEDIA'                               => 'Update media',
@@ -422,6 +422,7 @@ $aLang = array(
 'ARTICLE_LIST_ALLPRODUCTS'                                 => 'all Products',
 'ARTICLE_LIST_MENUSUBITEM'                                 => 'Product',
 'ARTICLE_MAIN_ERRORSAVINGARTICLE'                          => 'Attention: Product already exists!',
+'ARTICLE_MAIN_PARENTNOTBUYABLE'                            => 'Attention: Parent Product can not be purchased.',
 'ARTICLE_MAIN_ALDPRICE'                                    => 'Alt. Prices',
 'ARTICLE_MAIN_NONE'                                        => '-- none --',
 'ARTICLE_MAIN_GOTO'                                        => 'Go to',
@@ -880,7 +881,7 @@ $aLang = array(
 'THEME_VERSION'                                            => 'Version',
 'THEME_ACTIVATE'                                           => 'Activate',
 'THEME_PARENT_THEME_TITLE'                                 => 'Parent theme',
-'THEME_PARENT_VERSIONS'                                    => 'Comapatible parent theme versions',
+'THEME_PARENT_VERSIONS'                                    => 'Compatible parent theme versions',
 'MODULE_AUTHOR'                                            => 'Author',
 'MODULE_VERSION'                                           => 'Version',
 'MODULE_ACTIVATE'                                          => 'Activate',
@@ -1107,6 +1108,7 @@ $aLang = array(
 'PAYMENT_MAIN_AVAILIBLEINGROUP'                            => 'Available in User Groups',
 'PAYMENT_MAIN_NOTAVAILIBLEINGROUP'                         => 'Not available in User Groups',
 'PAYMENT_MAIN_LONGDESC'                                    => 'Payment Description',
+'PAYMENT_MAIN_NOTICEDEFAULTVALUESSELECTED'                 => 'Default values have been selected',
 'PAYMENT_OVERVIEW_HOWMANYPAYMENTS'                         => 'How many purchases were paid with this payment method',
 'PRICEALARM_DONE_SENDEMAIL'                                => 'Sent Price Alert e-mails.',
 'PRICEALARM_DONE_GOTOPRICEALARM'                           => 'go to Price Alert ',

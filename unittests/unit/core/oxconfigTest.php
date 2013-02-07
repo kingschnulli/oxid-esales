@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxconfigTest.php 50814 2012-10-22 11:29:15Z rimvydas.paskevicius $
+ * @version   SVN: $Id: oxconfigTest.php 51662 2012-11-12 09:33:47Z aurimas.gladutis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -843,6 +843,76 @@ class Unit_Core_oxconfigTest extends OxidTestCase
             $oConfig->saveShopConfVar( 'bool', "testVar", "false" );
             $this->assertFalse( $oConfig->getShopConfVar( "testVar" ) );
             $this->assertFalse( $oConfig->getConfigParam( "testVar" ) );
+        } catch (Exception $oE) {
+            // rethrow later
+        }
+        oxDb::getDb()->execute("delete from oxconfig where oxvarname='testVar'");
+        if ($oE) {
+            throw $oE;
+        }
+    }
+
+
+    /**
+     * Testing if shop var saver writes num value with valid string to config correctly
+     */
+    public function testsaveShopConfVarNumValidString()
+    {
+        $oConfig = new oxConfig();
+        $oConfig->init();
+
+        $oE = null;
+        try {
+            $oConfig->saveShopConfVar( 'num', "testVar", "10.000,5989" );
+            $this->assertEquals( 10000.5989, $oConfig->getShopConfVar( "testVar" ) );
+            $this->assertEquals( 10000.5989, $oConfig->getConfigParam( "testVar" ) );
+            $oConfig->saveShopConfVar( 'num', "testVar", "20,000.5989" );
+            $this->assertEquals( 20000.5989, $oConfig->getShopConfVar( "testVar" ) );
+            $this->assertEquals( 20000.5989, $oConfig->getConfigParam( "testVar" ) );
+        } catch (Exception $oE) {
+            // rethrow later
+        }
+        oxDb::getDb()->execute("delete from oxconfig where oxvarname='testVar'");
+        if ($oE) {
+            throw $oE;
+        }
+    }
+
+    /**
+     * Testing if shop var saver writes num value with invalid string to config correctly
+     */
+    public function testsaveShopConfVarNumInvalidString()
+    {
+        $oConfig = new oxConfig();
+        $oConfig->init();
+
+        $oE = null;
+        try {
+            $oConfig->saveShopConfVar( 'num', "testVar", "abc" );
+            $this->assertEquals( 0, $oConfig->getShopConfVar( "testVar" ) );
+            $this->assertEquals( 0, $oConfig->getConfigParam( "testVar" ) );
+        } catch (Exception $oE) {
+            // rethrow later
+        }
+        oxDb::getDb()->execute("delete from oxconfig where oxvarname='testVar'");
+        if ($oE) {
+            throw $oE;
+        }
+    }
+
+    /**
+     * Testing if shop var saver writes num value with float to config correctly
+     */
+    public function testsaveShopConfVarNumFloat()
+    {
+        $oConfig = new oxConfig();
+        $oConfig->init();
+
+        $oE = null;
+        try {
+            $oConfig->saveShopConfVar( 'num', "testVar", 50.009 );
+            $this->assertEquals( 50.009, $oConfig->getShopConfVar( "testVar" ) );
+            $this->assertEquals( 50.009, $oConfig->getConfigParam( "testVar" ) );
         } catch (Exception $oE) {
             // rethrow later
         }

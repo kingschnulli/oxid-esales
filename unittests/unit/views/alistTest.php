@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: alistTest.php 44775 2012-05-10 07:45:40Z linas.kukulskis $
+ * @version   SVN: $Id: alistTest.php 52265 2012-11-23 15:08:26Z aurimas.gladutis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -413,21 +413,39 @@ class Unit_Views_alistTest extends OxidTestCase
     }
 
     /**
-     * Test get list sorting info.
+     * Test get list sorting descending
      *
      * @return null
      */
-    public function testGetSorting()
+    public function testGetSortingDesc()
     {
         $oCat = new oxcategory();
         $oCat->oxcategories__oxdefsort = $this->getMock( 'oxfield', array( '__get' ) );
         $oCat->oxcategories__oxdefsort->expects( $this->exactly( 2 ) )->method( '__get')->will( $this->returnValue( 'testsort' ) );
         $oCat->oxcategories__oxdefsortmode = $this->getMock( 'oxfield', array( '__get' ) );
-        $oCat->oxcategories__oxdefsortmode->expects( $this->once() )->method( '__get')->will( $this->returnValue( true ) );
+        $oCat->oxcategories__oxdefsortmode->expects( $this->once() )->method( '__get')->will( $this->returnValue( 1 ) );
 
         $oListView = $this->getMock( 'alist', array( 'getActCategory' ) );
         $oListView->expects( $this->once() )->method( 'getActCategory')->will( $this->returnValue( $oCat ) );
         $this->assertEquals( array( 'sortby' => 'testsort', 'sortdir' => "desc" ), $oListView->getSorting( '999' ) );
+    }
+
+    /**
+     * Test get list sorting ascending
+     *
+     * @return null
+     */
+    public function testGetSortingAsc()
+    {
+        $oCat = new oxcategory();
+        $oCat->oxcategories__oxdefsort = $this->getMock( 'oxfield', array( '__get' ) );
+        $oCat->oxcategories__oxdefsort->expects( $this->exactly( 2 ) )->method( '__get')->will( $this->returnValue( 'testsort' ) );
+        $oCat->oxcategories__oxdefsortmode = $this->getMock( 'oxfield', array( '__get' ) );
+        $oCat->oxcategories__oxdefsortmode->expects( $this->once() )->method( '__get')->will( $this->returnValue( 0 ) );
+
+        $oListView = $this->getMock( 'alist', array( 'getActCategory' ) );
+        $oListView->expects( $this->once() )->method( 'getActCategory')->will( $this->returnValue( $oCat ) );
+        $this->assertEquals( array( 'sortby' => 'testsort', 'sortdir' => "asc" ), $oListView->getSorting( '999' ) );
     }
 
     /**
@@ -708,7 +726,7 @@ class Unit_Views_alistTest extends OxidTestCase
     public function testPrepareMetaDescription()
     {
         $oParentCategory = new oxcategory();
-        $oParentCategory->oxcategories__oxtitle = new oxField( 'parent category' );
+        $oParentCategory->oxcategories__oxtitle = new oxField( '<span>parent</span> <style type="text/css">p {color:blue;}</style>category' );
 
         $oCategory = new oxcategory();
         $oCategory->oxcategories__oxtitle = new oxField( 'category' );

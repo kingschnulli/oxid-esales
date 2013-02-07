@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxorderarticleTest.php 43558 2012-04-05 12:50:10Z vilma $
+ * @version   SVN: $Id: oxorderarticleTest.php 52665 2012-12-04 07:38:54Z aurimas.gladutis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -513,7 +513,23 @@ class Unit_Core_oxorderarticleTest extends OxidTestCase
         $oArticle->load( "_testArticleId" );
 
         $this->assertEquals( 7, $oArticle->oxarticles__oxstock->value );
+        $this->assertEquals( 3, $oArticle->oxarticles__oxsoldamount->value );
         $this->assertNotEquals( '2005-03-24 14:33:53', $oDB->getOne("select oxtimestamp from oxarticles where oxid = '_testArticleId'") );
+    }
+
+    /*
+     * Test updating article stock value when blUseStock is false
+     */
+    public function testUpdateArticleStockWithStockDisabled()
+    {
+        modConfig::getInstance()->setConfigParam( "blUseStock", 0 );
+        $this->_oOrderArticle->updateArticleStock( -3, false );
+
+        $oArticle = oxNew( "oxarticle" );
+        $oArticle->load( "_testArticleId" );
+
+        $this->assertEquals( 10, $oArticle->oxarticles__oxstock->value );
+        $this->assertEquals( 3, $oArticle->oxarticles__oxsoldamount->value );
     }
 
     /*

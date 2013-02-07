@@ -19,7 +19,7 @@
  * @package   tests
  * @copyright (C) OXID eSales AG 2003-2011
  * @version OXID eShop CE
- * @version   SVN: $Id: oxemailTest.php 50568 2012-10-16 11:33:06Z aurimas.gladutis $
+ * @version   SVN: $Id: oxemailTest.php 52485 2012-11-27 15:35:24Z aurimas.gladutis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -310,6 +310,21 @@ class Unit_Core_oxemailTest extends OxidTestCase
 
         $blRet = $oEmail->SendForgotPwdEmail( 'nosuchuser@useremail.nl' );
         $this->assertFalse( $blRet, 'Mail was sent to not existing user' );
+    }
+
+    /*
+     * Test sending forgot password when oxemail::send fails
+     */
+    public function testSendForgotPwdEmailSendingFailed()
+    {
+        $myConfig = oxConfig::getInstance();
+
+        $oEmail = $this->getMock( 'oxEmail', array( "send", "_getShop" ) );
+        $oEmail->expects( $this->any() )->method( 'send')->will( $this->returnValue( false ));
+        $oEmail->expects( $this->any() )->method( '_getShop')->will( $this->returnValue( $this->_oShop ));
+
+        $blRet = $oEmail->SendForgotPwdEmail( 'username@useremail.nl' );
+        $this->assertEquals( -1, $blRet );
     }
 
 
@@ -1033,6 +1048,15 @@ class Unit_Core_oxemailTest extends OxidTestCase
         $oActShop = oxConfig::getInstance()->getActiveShop();
         $oActShop->setLanguage(1);
         $this->assertEquals($sUrl, $this->_oEmail->UNITgetNewsSubsLink('XXXX'));
+    }
+
+    public function testGetNewsSubsLinkWithConfirm()
+    {
+        $sUrl = oxConfig::getInstance()->getShopHomeURL().'cl=newsletter&amp;fnc=addme&amp;uid=XXXX&amp;confirm=AAAA';
+        $this->assertEquals($sUrl, $this->_oEmail->UNITgetNewsSubsLink('XXXX', 'AAAA'));
+        $oActShop = oxConfig::getInstance()->getActiveShop();
+        $oActShop->setLanguage(1);
+        $this->assertEquals($sUrl, $this->_oEmail->UNITgetNewsSubsLink('XXXX', 'AAAA'));
     }
 
     public function testSetSmtpProtocol()
