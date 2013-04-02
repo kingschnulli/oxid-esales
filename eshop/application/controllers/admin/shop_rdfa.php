@@ -17,7 +17,7 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   admin
- * @copyright (C) OXID eSales AG 2003-2012
+ * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
  * @version   SVN: $Id: shop_rdfa.php 40261 2011-11-24 13:52:22Z vilma $
  */

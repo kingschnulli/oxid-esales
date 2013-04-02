@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   core
- * @copyright (C) OXID eSales AG 2003-2012
+ * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
- * @version   SVN: $Id: oxdb.php 52113 2012-11-21 15:46:41Z aurimas.gladutis $
+ * @version   SVN: $Id: oxdb.php 56036 2013-02-28 13:10:59Z linas.kukulskis $
  */
 
 
@@ -72,85 +72,85 @@ class oxDb
 
     /**
      * Enter description here ...
-     * @var unknown_type
+     * @var string
      */
     private static $_dbType = '';
 
     /**
      * Enter description here ...
-     * @var unknown_type
+     * @var string
      */
     private static $_dbUser = '';
 
     /**
      * Enter description here ...
-     * @var unknown_type
+     * @var string
      */
     private static $_dbPwd  = '';
 
     /**
      * Enter description here ...
-     * @var unknown_type
+     * @var string
      */
     private static $_dbName = '';
 
     /**
      * Enter description here ...
-     * @var unknown_type
+     * @var string
      */
     private static $_dbHost = '';
 
     /**
      * Enter description here ...
-     * @var unknown_type
+     * @var int
      */
     private static $_iDebug = 0;
 
     /**
      * Enter description here ...
-     * @var unknown_type
+     * @var bool
      */
     private static $_blLogChangesInAdmin = false;
 
     /**
      * Enter description here ...
-     * @var unknown_type
+     * @var int
      */
     private static $_iUtfMode = 0;
 
     /**
      * Enter description here ...
-     * @var unknown_type
+     * @var string
      */
     private static $_sDefaultDatabaseConnection = null;
 
     /**
      * Enter description here ...
-     * @var unknown_type
+     * @var array
      */
     private static $_aSlaveHosts;
 
     /**
      * Enter description here ...
-     * @var unknown_type
+     * @var string
      */
     private static $_sAdminEmail;
 
     /**
      * Enter description here ...
-     * @var unknown_type
+     * @var int
      */
     private static $_iMasterSlaveBalance;
 
     /**
      * Enter description here ...
-     * @var unknown_type
+     * @var string
      */
     private static $_sLocalTimeFormat;
 
     /**
      * Enter description here ...
-     * @var unknown_type
+     * @var string
      */
     private static $_sLocalDateFormat;
 
@@ -196,7 +196,7 @@ class oxDb
     }
 
     /**
-     * Returns Singelton instance
+     * Returns Singleton instance
      *
      * @return oxdb
      */
@@ -210,7 +210,6 @@ class oxDb
         if ( !self::$_instance instanceof oxDb ) {
 
             //do not use simple oxNew here as it goes to eternal cycle
-            //self::$_instance = oxNew( 'oxdb' );
             self::$_instance = new oxDb();
 
             if ( defined( 'OXID_PHP_UNIT' ) ) {
@@ -221,7 +220,7 @@ class oxDb
     }
 
     /**
-     * Cal function is admin from oxfunction. Need to mock in tests.
+     * Cal function is admin from oxFunction. Need to mock in tests.
      *
      * @return bool
      */
@@ -354,7 +353,7 @@ class oxDb
     }
 
     /**
-     * In case of connection is errorous - redirects to setup
+     * In case of connection error - redirects to setup
      * or send notification message for shop owner
      *
      * @param ADOConnection $oDb database connection instance
@@ -382,6 +381,7 @@ class oxDb
         } else {
             // notifying about connection problems
             $this->_notifyConnectionErrors( $oDb );
+
         }
     }
 
@@ -416,7 +416,7 @@ class oxDb
     /**
      * Returns database object
      *
-     * @param boolean $iFetchMode - fetche mode default numeric - 0
+     * @param int $iFetchMode - fetch mode default numeric - 0
      *
      * @throws oxConnectionException error while initiating connection to DB
      *
@@ -598,7 +598,7 @@ class oxDb
     }
 
     /**
-     * defines and checks dafault time values
+     * defines and checks default time values
      *
      * @param bool $blToTimeStamp -
      *
@@ -709,7 +709,7 @@ class oxDb
      * @param string $sLocalTimeFormat local format
      * @param bool   $blOnlyDate       marker to format only date field (no time)
      *
-     * @deprecated from 2012-11-21, not used here anymore. All date formatting moved to oxutilsdate
+     * @deprecated from 2012-11-21, not used here anymore. All date formatting moved to oxUtilsDate
      *
      * @return null
      */
@@ -728,7 +728,7 @@ class oxDb
         } else {
             $oObject->value = trim($sReturn);
         }
-        // increasing(decreasing) field lenght
+        // increasing(decreasing) field length
         $oObject->fldmax_length = strlen( $oObject->value);
     }
 
@@ -756,7 +756,7 @@ class oxDb
         } else {
             $oObject->value = @date( $sDateFormat, $iTimestamp );
         }
-        // we should increase (decrease) field lenght
+        // we should increase (decrease) field length
         $oObject->fldmax_length = strlen( $oObject->value );
     }
 
@@ -791,7 +791,7 @@ class oxDb
             $oObject->value = trim( @date( $sDateFormat." ".$sTimeFormat, $iTimestamp ) );
         }
 
-        // we should increase (decrease) field lenght
+        // we should increase (decrease) field length
         $oObject->fldmax_length = strlen( $oObject->value );
     }
 

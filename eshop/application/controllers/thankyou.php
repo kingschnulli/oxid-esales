@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   views
- * @copyright (C) OXID eSales AG 2003-2012
+ * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
- * @version   SVN: $Id: thankyou.php 49522 2012-09-13 14:13:29Z vilma $
+ * @version   SVN: $Id: thankyou.php 55687 2013-02-21 16:03:40Z linas.kukulskis $
  */
 
 /**
@@ -81,12 +81,6 @@ class Thankyou extends oxUBase
      * @var string
      */
     protected $_sMailError = null;
-
-    /**
-     * Sign if to load and show top5articles action
-     * @var bool
-     */
-    protected $_blTop5Action = true;
 
     /**
      * Sign if to load and show bargain action

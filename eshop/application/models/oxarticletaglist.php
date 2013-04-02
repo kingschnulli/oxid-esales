@@ -39,12 +39,12 @@ class oxArticleTagList extends oxI18n implements oxITagList
     protected $_oTagSet = null;
 
     /**
-     * Instantiates oxtagset object
+     * Instantiates oxTagSet object
      */
     public function __construct()
     {
         parent::__construct();
-        $this->_oTagSet = oxNew( 'oxtagset' );
+        $this->_oTagSet = oxNew( 'oxTagSet' );
     }
 
     /**
@@ -144,11 +144,12 @@ class oxArticleTagList extends oxI18n implements oxITagList
                on duplicate key update oxtags$sLangSuffix = '{$sTags}'";
 
         if ( $oDb->execute( $sQ ) ) {
-            $this->_updateTagDependency();
+            $this->executeDependencyEvent();
             return true;
         }
         return false;
     }
+
 
     /**
      * Saves article tags
@@ -230,14 +231,24 @@ class oxArticleTagList extends oxI18n implements oxITagList
      *
      * @return null
      */
+    public function executeDependencyEvent()
+    {
+        $this->_updateTagDependency();
+
+    }
+
+    /**
+     * Execute cache dependencies
+     *
+     * @return null
+     */
     protected function _updateTagDependency()
     {
         // reset tags cloud cache
-        $oTagList = oxNew( "oxtaglist" );
+        $oTagList = oxNew( "oxTagList" );
         $oTagList->setLanguage( $this->getLanguage() );
         $oTagCloud = oxNew( "oxTagCloud" );
         $oTagCloud->setTagList($oTagList);
         $oTagCloud->resetCache();
-
     }
 }

@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   tests
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
- * @version   SVN: $Id: oxbasketTest.php 54117 2013-01-22 09:11:41Z linas.kukulskis $
+ * @version   SVN: $Id: oxbasketTest.php 55454 2013-02-19 09:06:05Z jurate.baseviciene $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -409,53 +409,6 @@ class Unit_Core_oxbasketTest extends OxidTestCase
         $oO2Sel->oxobject2selectlist__oxobjectid = new oxfield( $sArtId );
         $oO2Sel->oxobject2selectlist__oxselnid   = new oxfield( $oSelList->getId() );
         $oO2Sel->save();
-
-        // creating discount
-        $oDiscount = new oxdiscount();
-        $oDiscount->setId( '_testoxdiscount' );
-        $oDiscount->oxdiscount__oxactive = new oxfield( 1 );
-        $oDiscount->oxdiscount__oxtitle  = new oxfield( 'testdisc' );
-        $oDiscount->oxdiscount__oxamount = new oxfield( 3 );
-        $oDiscount->oxdiscount__oxamountto = new oxfield( 99999 );
-        $oDiscount->oxdiscount__oxaddsumtype = new oxfield( '%' );
-        $oDiscount->oxdiscount__oxaddsum = new oxfield( '50' );
-        $oDiscount->save();
-
-        // creating discount
-        $oDiscount2 = new oxdiscount();
-        $oDiscount2->setId( '_testoxdiscount2' );
-        $oDiscount2->oxdiscount__oxactive = new oxfield( 0 );
-        $oDiscount2->oxdiscount__oxtitle  = new oxfield( 'testdisc' );
-        $oDiscount2->oxdiscount__oxprice = new oxfield( 69 );
-        $oDiscount2->oxdiscount__oxpriceto = new oxfield( 99999 );
-        $oDiscount2->oxdiscount__oxaddsumtype = new oxfield( '%' );
-        $oDiscount2->oxdiscount__oxaddsum = new oxfield( '50' );
-        $oDiscount2->save();
-
-        // assigning to category..
-        $oO2D = new oxbase;
-        $oO2D->init( 'oxobject2discount' );
-        $oO2D->setId( '_testoxobject2discount' );
-        $oO2D->oxobject2discount__oxdiscountid = new oxfield( $oDiscount->getId() );
-        $oO2D->oxobject2discount__oxobjectid   = new oxfield( $sCatId );
-        $oO2D->oxobject2discount__oxtype       = new oxfield( 'oxcategories' );
-        $oO2D->save();
-
-        $oO2D = new oxbase;
-        $oO2D->init( 'oxobject2discount' );
-        $oO2D->setId( '_testoxobject2discount' );
-        $oO2D->oxobject2discount__oxdiscountid = new oxfield( $oDiscount2->getId() );
-        $oO2D->oxobject2discount__oxobjectid   = new oxfield( $sCatId );
-        $oO2D->oxobject2discount__oxtype       = new oxfield( 'oxcategories' );
-        $oO2D->save();
-
-        // assigning article to category
-        $oO2C = new oxbase;
-        $oO2C->init( 'oxobject2category' );
-        $oO2C->setId( '_testoxobject2category' );
-        $oO2C->oxobject2category__oxobjectid = new oxfield( $sArtId );
-        $oO2C->oxobject2category__oxcatnid   = new oxfield( $sCatId );
-        $oO2C->save();
     }
 
     /**
@@ -694,76 +647,6 @@ class Unit_Core_oxbasketTest extends OxidTestCase
         $oBasket->setTotalDiscount( 999 );
 
         $this->assertEquals( $oDiscount, $oBasket->getNonPublicVar( "_oTotalDiscount" ) );
-    }
-
-    /**
-     * Test for use case:
-     *  - shop has select list with 3 options assigned to one article X
-     *  - shop has discount assigned to category Y with amount restrictions ( 3 < discount < 999 )
-     *  - article X is assigned to category Y
-     *  - article X is stored to basket 3 times with different selection lists
-     *
-     * @return null
-     */
-    public function testBasketCalculationWithSpecUseCaseDescribedAbove()
-    {
-        $this->markTestSkipped("move to integration test");
-
-        modConfig::getInstance()->setConfigParam( 'bl_perfLoadSelectLists', true );
-
-        $sArtId = '1126';
-
-        $oBasket = new oxBasket();
-        $oBasket->addToBasket( $sArtId, 1, array( 0 ) );
-        $oBasket->addToBasket( $sArtId, 1, array( 1 ) );
-        $oBasket->calculateBasket();
-
-        // now checking discount..
-        $this->assertEquals( 68, $oBasket->getPrice()->getBruttoPrice() );
-
-        // adding one more article
-        $oBasket->addToBasket( $sArtId, 1, array( 2 ) );
-        $oBasket->calculateBasket();
-
-        $this->assertEquals( 51, $oBasket->getPrice()->getBruttoPrice() );
-    }
-
-    /**
-     * testing the basket calculation after adding articles wit discounts which are applied by price
-     *
-     * @return null
-     */
-    public function testBasketCalculationWithSpecUseCaseDescribedAboveJustDiscountIsAppliedByPrice()
-    {
-        $this->markTestSkipped("move to integration test");
-        $this->setConfigParam( 'bl_perfLoadSelectLists', true );
-
-        // disabling amount, enabling price discounts
-        $oDiscount = new oxdiscount();
-        $oDiscount->load( '_testoxdiscount' );
-        $oDiscount->oxdiscount__oxactive = new oxfield( 0 );
-        $oDiscount->save();
-
-        $oDiscount2 = new oxdiscount();
-        $oDiscount2->load( '_testoxdiscount2' );
-        $oDiscount2->oxdiscount__oxactive = new oxfield( 1 );
-        $oDiscount2->save();
-
-        $sArtId = '1126';
-
-        $oBasket = new oxBasket();
-        $oBasket->addToBasket( $sArtId, 1, array( 0 ) );
-        $oBasket->addToBasket( $sArtId, 1, array( 1 ) );
-        $oBasket->calculateBasket();
-
-        // now checking discount..
-        $this->assertEquals( 68, $oBasket->getPrice()->getBruttoPrice() );
-
-        // adding one more article
-        $oBasket->addToBasket( $sArtId, 1, array( 2 ) );
-        $oBasket->calculateBasket();
-
-        $this->assertEquals( 51, $oBasket->getPrice()->getBruttoPrice() );
     }
 
     /**
@@ -4304,7 +4187,7 @@ class Unit_Core_oxbasketTest extends OxidTestCase
 
         $oCategory = new oxCategory();
         $oCategory->load( oxDb::getDb()->getOne( "select oxcatnid from oxobject2category where oxobjectid = '1126'" ) );
-        oxConfig::getInstance()->getActiveView()->setActCategory( $oCategory );
+        oxConfig::getInstance()->getActiveView()->setActiveCategory( $oCategory );
 
         $oBasket = oxNew('oxbasket');
         $this->assertTrue( $oBasket->canAddProductToBasket( "1126" ) );
@@ -4321,7 +4204,7 @@ class Unit_Core_oxbasketTest extends OxidTestCase
 
         $oCategory = new oxCategory();
         $oCategory->load( oxDb::getDb()->getOne( "select oxcatnid from oxobject2category where oxobjectid != '1126'" ) );
-        oxConfig::getInstance()->getActiveView()->setActCategory( $oCategory );
+        oxConfig::getInstance()->getActiveView()->setActiveCategory( $oCategory );
 
         $oBasket = oxNew('oxbasket');
         $this->assertTrue( $oBasket->canAddProductToBasket( "1126" ) );

@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   tests
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
- * @version   SVN: $Id: oxubaseTest.php 54058 2013-01-21 11:50:53Z aurimas.gladutis $
+ * @version   SVN: $Id: oxubaseTest.php 57012 2013-03-26 13:51:23Z aurimas.gladutis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -336,8 +336,6 @@ class Unit_Views_oxubaseTest extends OxidTestCase
         $myConfig = oxConfig::getInstance();
         $sShopURL = $myConfig->getShopUrl();
         $sShopID  = $myConfig->getShopId();
-
-
 
             $oView = new oxubase();
             $sId = $oView->getViewId();
@@ -1589,6 +1587,14 @@ class Unit_Views_oxubaseTest extends OxidTestCase
         $oUBase->setNonPublicVar( "_blTop5Action", true );
         $aList = $oUBase->getTop5ArticleList();
             $this->assertEquals(4, $aList->count());
+    }
+
+    public function testGetTop5ArticleList_notDefaultCount()
+    {
+        $oUBase = $this->getProxyClass( 'oxubase' );
+        $oUBase->setNonPublicVar( "_blTop5Action", true );
+        $aList = $oUBase->getTop5ArticleList(2);
+        $this->assertEquals(2, $aList->count());
     }
 
     public function testGetBargainArticleList()

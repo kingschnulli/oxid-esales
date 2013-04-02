@@ -18,7 +18,7 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   views
- * @copyright (C) OXID eSales AG 2003-2012
+ * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
  * @version   SVN: $Id: oxwservicelist.php 48347 2012-08-07 14:43:38Z vilma $
  */

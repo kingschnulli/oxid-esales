@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   tests
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutilsfileTest.php 48273 2012-08-06 09:48:35Z linas.kukulskis $
+ * @version   SVN: $Id: oxutilsfileTest.php 56496 2013-03-11 16:00:59Z alfonsas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -191,7 +191,7 @@ class Unit_Core_oxUtilsFileTest extends OxidTestCase
 
     public function testProcessFilesSkipBadFiles()
     {
-        $this->setExpectedException('Exception', 'this is ok');
+        $this->setExpectedException('oxFileException', 'this is ok');
 
         $_FILES['myfile']['name'] = array('testname.php5');
         $_FILES['myfile']['tmp_name'] = 'testname';
@@ -199,7 +199,7 @@ class Unit_Core_oxUtilsFileTest extends OxidTestCase
         $oConfig->expects( $this->once() )->method('isDemoShop')->will( $this->returnValue( false ) );
         $oUF = oxUtilsFile::getInstance();
         $oUF->setConfig($oConfig);
-        oxTestModules::addFunction('oxUtils', 'showMessageAndExit', '{throw new Exception("this is ok");}');
+        oxTestModules::addFunction('oxUtils', 'showMessageAndExit', '{throw new oxFileException("this is ok");}');
         $oUF->processFiles();
     }
 

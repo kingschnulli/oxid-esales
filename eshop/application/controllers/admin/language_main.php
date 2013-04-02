@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   admin
- * @copyright (C) OXID eSales AG 2003-2012
+ * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
- * @version   SVN: $Id: language_main.php 51851 2012-11-15 11:06:55Z aurimas.gladutis $
+ * @version   SVN: $Id: language_main.php 54922 2013-02-07 10:47:34Z aurimas.gladutis $
  */
 
 /**
@@ -125,12 +125,20 @@ class Language_Main extends oxAdminDetails
         $blViewError = false;
 
         // if changed language abbervation, updating it for all arrays related with languages
-        if ( $sOxId != -1 && $sOxId  != $aParams['abbr'] ) {
-            $this->_updateAbbervation( $sOxId, $aParams['abbr'] );
-            $sOxId = $aParams['abbr'];
-            $this->setEditObjectId( $sOxId );
+        if ( $sOxId != -1 && $sOxId != $aParams['abbr'] ) {
+            // #0004850 preventing changing abbr for main language with base id = 0
+            if ( (int) $this->_aLangData['params'][$sOxId]['baseId'] == 0 ) {
+                $oEx = oxNew( "oxExceptionToDisplay" );
+                $oEx->setMessage( 'LANGUAGE_ABBRCHANGEMAINLANG_WARNING' );
+                oxUtilsView::getInstance()->addErrorToDisplay( $oEx );
+                $aParams['abbr'] = $sOxId;
+            } else {
+                $this->_updateAbbervation( $sOxId, $aParams['abbr'] );
+                $sOxId = $aParams['abbr'];
+                $this->setEditObjectId( $sOxId );
 
-            $blViewError = true;
+                $blViewError = true;
+            }
         }
 
         // if adding new language, setting lang id to abbervation
@@ -371,9 +379,8 @@ class Language_Main extends oxAdminDetails
     protected function _checkLangTranslations( $sOxId )
     {
         $myConfig = $this->getConfig();
-        $iBaseId = $this->_aLangData['params'][$sOxId]['baseId'];
 
-        $sDir = dirname( $myConfig->getTranslationsDir( 'lang.php', oxRegistry::getLang()->getLanguageAbbr( $iBaseId ) ) );
+        $sDir = dirname( $myConfig->getTranslationsDir( 'lang.php', $sOxId ) );
 
         if ( empty($sDir) ) {
             $oEx = oxNew( "oxExceptionToDisplay" );

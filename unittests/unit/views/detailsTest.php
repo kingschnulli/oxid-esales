@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   tests
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
- * @version   SVN: $Id: detailsTest.php 53484 2013-01-08 14:28:26Z aurimas.gladutis $
+ * @version   SVN: $Id: detailsTest.php 55027 2013-02-11 11:26:40Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -220,36 +220,36 @@ class Unit_Views_detailsTest extends OxidTestCase
     public function testGetLinkType()
     {
         $this->setRequestParam( 'listtype', 'vendor' );
-        $oDetailsView = $this->getMock( "details", array( 'getActCategory' ) );
-        $oDetailsView->expects( $this->never() )->method( 'getActCategory');
+        $oDetailsView = $this->getMock( "details", array( 'getActiveCategory' ) );
+        $oDetailsView->expects( $this->never() )->method( 'getActiveCategory');
         $this->assertEquals( OXARTICLE_LINKTYPE_VENDOR, $oDetailsView->getLinkType() );
 
         $this->setRequestParam( 'listtype', 'manufacturer' );
-        $oDetailsView = $this->getMock( "details", array( 'getActCategory' ) );
-        $oDetailsView->expects( $this->never() )->method( 'getActCategory');
+        $oDetailsView = $this->getMock( "details", array( 'getActiveCategory' ) );
+        $oDetailsView->expects( $this->never() )->method( 'getActiveCategory');
         $this->assertEquals( OXARTICLE_LINKTYPE_MANUFACTURER, $oDetailsView->getLinkType() );
 
         $this->setRequestParam( 'listtype', 'tag' );
-        $oDetailsView = $this->getMock( "details", array( 'getActCategory' ) );
-        $oDetailsView->expects( $this->never() )->method( 'getActCategory');
+        $oDetailsView = $this->getMock( "details", array( 'getActiveCategory' ) );
+        $oDetailsView->expects( $this->never() )->method( 'getActiveCategory');
         $this->assertEquals( OXARTICLE_LINKTYPE_TAG, $oDetailsView->getLinkType() );
 
         $this->setRequestParam( 'listtype', null );
-        $oDetailsView = $this->getMock( "details", array( 'getActCategory' ) );
-        $oDetailsView->expects( $this->once() )->method( 'getActCategory')->will( $this->returnValue( null ) );
+        $oDetailsView = $this->getMock( "details", array( 'getActiveCategory' ) );
+        $oDetailsView->expects( $this->once() )->method( 'getActiveCategory')->will( $this->returnValue( null ) );
         $this->assertEquals( OXARTICLE_LINKTYPE_CATEGORY, $oDetailsView->getLinkType() );
 
         $oCategory = $this->getMock( "oxcategory", array( 'isPriceCategory' ) );
         $oCategory->expects( $this->once() )->method( 'isPriceCategory')->will( $this->returnValue( true ) );
 
         $this->setRequestParam( 'listtype', "recommlist" );
-        $oDetailsView = $this->getMock( "details", array( 'getActCategory' ) );
-        $oDetailsView->expects( $this->never() )->method( 'getActCategory')->will( $this->returnValue( $oCategory ) );
+        $oDetailsView = $this->getMock( "details", array( 'getActiveCategory' ) );
+        $oDetailsView->expects( $this->never() )->method( 'getActiveCategory')->will( $this->returnValue( $oCategory ) );
         $this->assertEquals( OXARTICLE_LINKTYPE_RECOMM, $oDetailsView->getLinkType() );
 
         $this->setRequestParam( 'listtype', null );
-        $oDetailsView = $this->getMock( "details", array( 'getActCategory' ) );
-        $oDetailsView->expects( $this->once() )->method( 'getActCategory')->will( $this->returnValue( $oCategory ) );
+        $oDetailsView = $this->getMock( "details", array( 'getActiveCategory' ) );
+        $oDetailsView->expects( $this->once() )->method( 'getActiveCategory')->will( $this->returnValue( $oCategory ) );
         $this->assertEquals( OXARTICLE_LINKTYPE_PRICECATEGORY, $oDetailsView->getLinkType() );
     }
 
@@ -790,7 +790,7 @@ class Unit_Views_detailsTest extends OxidTestCase
     }
 
     /**
-     * Test get picture galery.
+     * Test get picture gallery.
      *
      * @return null
      */
@@ -1119,7 +1119,7 @@ class Unit_Views_detailsTest extends OxidTestCase
     }
 
     /**
-     * Test meta meta desctionio generation
+     * Test meta meta description generation
      *
      * @return null
      */
@@ -1137,7 +1137,7 @@ class Unit_Views_detailsTest extends OxidTestCase
     }
 
     /**
-     * Test meta meta desctionio generation when short desc is empty (should use long desc).
+     * Test meta meta description generation when short desc is empty (should use long desc).
      *
      * @return null
      */

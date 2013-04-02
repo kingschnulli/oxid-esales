@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   core
- * @copyright (C) OXID eSales AG 2003-2012
+ * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
- * @version   SVN: $Id: oxshoplist.php 47273 2012-07-12 12:47:43Z linas.kukulskis $
+ * @version   SVN: $Id: oxshoplist.php 54664 2013-01-31 12:38:19Z linas.kukulskis $
  */
 
 /**
@@ -41,4 +41,15 @@ class oxShopList extends oxList
     {
         return parent::__construct( 'oxshop');
     }
+
+    /**
+     * Loads all shops to list
+     *
+     * @return null
+     */
+    public function getAll()
+    {
+        $this->selectString( 'SELECT `oxshops`.* FROM `oxshops`' );
+    }
+
 }

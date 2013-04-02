@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   admin
- * @copyright (C) OXID eSales AG 2003-2012
+ * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
- * @version   SVN: $Id: dynexportbase.php 48769 2012-08-16 18:27:46Z tomas $
+ * @version   SVN: $Id: dynexportbase.php 54531 2013-01-29 12:13:04Z aurimas.gladutis $
  */
 
 /**
@@ -80,11 +80,19 @@ class DynExportBase extends oxAdminDetails
     public $fpFile               = null;
 
     /**
-     * Number of records to export per tick
+     * Default number of records to export per tick
+     * Used if not set in config
      *
      * @var int
      */
     public $iExportPerTick       = 30;
+
+    /**
+     * Number of records to export per tick
+     *
+     * @var int
+     */
+    protected $_iExportPerTick   = null;
 
     /**
      * Full export file path
@@ -254,8 +262,8 @@ class DynExportBase extends oxAdminDetails
             $iStart = oxConfig::getParameter("iStart");
             // load from session
             $this->_aExportResultset = oxConfig::getParameter( "aExportResultset");
-
-            for ( $i = $iStart; $i < $iStart + $this->iExportPerTick; $i++) {
+            $iExportPerTick = $this->getExportPerTick();
+            for ( $i = $iStart; $i < $iStart + $iExportPerTick; $i++) {
                 if ( ( $iExportedItems = $this->nextTick( $i ) ) === false ) {
                     // end reached
                     $this->stop( ERR_SUCCESS);
@@ -271,6 +279,34 @@ class DynExportBase extends oxAdminDetails
             }
             fclose( $this->fpFile);
         }
+    }
+
+    /**
+     * Returns how many articles should be exported per tick
+     *
+     * @return int
+     */
+    public function getExportPerTick()
+    {
+        if ( $this->_iExportPerTick === null ) {
+            $this->_iExportPerTick = (int) oxRegistry::getConfig()->getConfigParam("iExportNrofLines");
+            if ( !$this->_iExportPerTick ) {
+                $this->_iExportPerTick = $this->iExportPerTick;
+            }
+        }
+        return $this->_iExportPerTick;
+    }
+
+    /**
+     * Sets how many articles should be exported per tick
+     *
+     * @param int $iCount articles count per tick
+     *
+     * @return int
+     */
+    public function setExportPerTick( $iCount )
+    {
+        $this->_iExportPerTick = $iCount;
     }
 
     /**

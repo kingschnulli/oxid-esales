@@ -17,8 +17,7 @@
  *
  * @link http://www.oxid-esales.com
  * @package tests
- * @copyright (C) OXID eSales AG 2003-2011
- * @version OXID eShop CE
+ * @copyright (C) OXID eSales AG 2003-2013
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';

@@ -17,7 +17,7 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   tests
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
  * @version   SVN: $Id: $
  * $Id: index.php 18893 2009-05-08 11:25:32Z sarunas $
@@ -1777,8 +1777,8 @@ class Unit_utf8Test extends OxidTestCase
 
         $sCatPathString = 'sCatPathString';
 
-        $oListView = $this->getMock( 'alist', array( 'getActCategory', 'getArticleList', '_getCatPathString' ) );
-        $oListView->expects( $this->any() )->method( 'getActCategory')->will( $this->returnValue( $oActCat ) );
+        $oListView = $this->getMock( 'alist', array( 'getActiveCategory', 'getArticleList', '_getCatPathString' ) );
+        $oListView->expects( $this->any() )->method( 'getActiveCategory')->will( $this->returnValue( $oActCat ) );
         $oListView->expects( $this->any() )->method( 'getArticleList')->will( $this->returnValue( $oArtList ) );
         $oListView->expects( $this->any() )->method( '_getCatPathString')->will( $this->returnValue( $sCatPathString ) );
 
@@ -1796,8 +1796,8 @@ class Unit_utf8Test extends OxidTestCase
         $oActCat->oxcategories__oxtitle = $this->getMock( 'oxField', array( '__get' ) );
         $oActCat->oxcategories__oxtitle->expects( $this->once() )->method( '__get')->will( $this->returnValue( $sValue ) );
 
-        $oListView = $this->getMock( 'alist', array( 'getActCategory' ) );
-        $oListView->expects( $this->any() )->method( 'getActCategory')->will( $this->returnValue( $oActCat ) );
+        $oListView = $this->getMock( 'alist', array( 'getActiveCategory' ) );
+        $oListView->expects( $this->any() )->method( 'getActiveCategory')->will( $this->returnValue( $oActCat ) );
 
         $sDescription = "agentūЛитовfür     . " . oxConfig::getInstance()->getActiveShop()->oxshops__oxtitleprefix->value;
 
@@ -1829,8 +1829,8 @@ class Unit_utf8Test extends OxidTestCase
         $oCategoryTree = $this->getMock( 'oxcategorylist', array( 'getPath' ) );
         $oCategoryTree->expects( $this->any() )->method( 'getPath')->will( $this->returnValue( $aCatTree ) );
 
-        $oListView = $this->getMock( 'alist', array( 'getActCategory', 'getCategoryTree' ) );
-        $oListView->expects( $this->any() )->method( 'getActCategory')->will($this->returnValue( $oCategory ) );
+        $oListView = $this->getMock( 'alist', array( 'getActiveCategory', 'getCategoryTree' ) );
+        $oListView->expects( $this->any() )->method( 'getActiveCategory')->will($this->returnValue( $oCategory ) );
         $oListView->expects( $this->any() )->method( 'getCategoryTree')->will( $this->returnValue( $oCategoryTree ) );
 
         $this->assertEquals( 'agentū, литовfür, parent_category, current_category, sub_category_1, nada, fedia', $oListView->UNITprepareMetaKeyword( null ) );

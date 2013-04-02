@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   core
- * @copyright (C) OXID eSales AG 2003-2012
+ * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcategory.php 49281 2012-09-04 14:20:14Z vilma $
+ * @version   SVN: $Id: oxcategory.php 55132 2013-02-13 09:46:16Z tadas.rimkus $
  */
 
 /**
@@ -147,6 +147,26 @@ class oxCategory extends oxI18n implements oxIUrl
     {
         parent::__construct();
         $this->init( 'oxcategories' );
+    }
+
+    /**
+     * Gets default sorting value
+     *
+     * @return string
+     */
+    public function getDefaultSorting()
+    {
+        return $this->oxcategories__oxdefsort->value;
+    }
+
+    /**
+     * Gets default sorting mode value
+     *
+     * @return string
+     */
+    public function getDefaultSortingMode()
+    {
+        return $this->oxcategories__oxdefsortmode->value;
     }
 
     /**

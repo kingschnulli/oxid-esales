@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   tests
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
- * @version   SVN: $Id: oxoutputTest.php 47937 2012-07-30 11:32:27Z linas.kukulskis $
+ * @version   SVN: $Id: oxoutputTest.php 54529 2013-01-29 11:56:09Z aurimas.gladutis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -130,13 +130,14 @@ class Unit_Core_oxoutputTest extends OxidTestCase
         $sMajorVersion = '9';
 
         $oOutput = new oxOutput();
-        $sTest = "<head>foo</head>bar";
+        // should add tag only to first head item
+        $sTest = "<head>foo</head>bar<head>test2</head>";
         $sRes = $oOutput->addVersionTags( $sTest );
         //reset value
         $myConfig->getActiveShop()->oxshops__oxversion = new oxField($sVersion, oxField::T_RAW);
 
             $this->assertNotEquals($sTest, $sRes);
-            $this->assertEquals( "<head>foo</head>\n  <!-- OXID eShop Community Edition, Version $sMajorVersion, Shopping Cart System (c) OXID eSales AG 2003 - $sCurYear - http://www.oxid-esales.com -->bar", $sRes );
+            $this->assertEquals( "<head>foo</head>\n  <!-- OXID eShop Community Edition, Version $sMajorVersion, Shopping Cart System (c) OXID eSales AG 2003 - $sCurYear - http://www.oxid-esales.com -->bar<head>test2</head>", $sRes );
 
 
     }

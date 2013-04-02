@@ -17,7 +17,7 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   lang
- * @copyright (C) OXID eSales AG 2003-2012
+ * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
  * @version   SVN: $Id: lang.php 28697 2010-06-29 11:09:58Z vilma $
  */
@@ -72,7 +72,7 @@ $aLang = array(
 'EMAIL_ORDER_CUST_HTML_TAX1'                                  => "zzgl. MwSt.",
 'EMAIL_ORDER_CUST_HTML_TSPROTECTIONCHARGETAX1'                => "zzgl. MwSt.",
 'EMAIL_ORDER_OWNER_HTML_MESSAGE'                              => "Mitteilung:",
-'EMAIL_ORDER_OWNER_HTML_PAYMENTINFOOFF'                       => "<b>BEZAHLINFORMATIONEN AUSGESCHALTET</b> - um diese einzuschalten bitte email/html/order_owner.tpl aendern.",
+'EMAIL_ORDER_OWNER_HTML_PAYMENTINFOOFF'                       => "<b>BEZAHLINFORMATIONEN AUSGESCHALTET</b> - um diese einzuschalten bitte application/views/[theme]/email/html/order_owner.tpl aendern.",
 'EMAIL_SUGGEST_HTML_MENYGREETINGS'                            => "Viele Grüsse,",
 
 'FOOTER_CATEGORIES'                                           => "KATEGORIEN",

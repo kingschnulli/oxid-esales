@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutilscount.php 53292 2013-01-03 10:58:54Z aurimas.gladutis $
+ * @version   SVN: $Id: oxutilscount.php 55127 2013-02-13 08:24:45Z linas.kukulskis $
  */
 
 /**
@@ -151,7 +151,7 @@ class oxUtilsCount extends oxSuperCfg
      * Saves and returns category article count into cache
      *
      * @param array  $aCache    Category cache data
-     * @param string $sCatId    Unique category ident
+     * @param string $sCatId    Unique category identifier
      * @param string $sActIdent ID
      *
      * @return int
@@ -164,13 +164,10 @@ class oxUtilsCount extends oxSuperCfg
         $oDb = oxDb::getDb();
 
         // we use distinct if article is assigned to category twice
-        $sQ = "SELECT count(*) FROM (
-                   SELECT count(*) FROM $sO2CView LEFT JOIN $sTable ON $sO2CView.oxobjectid=$sTable.oxid
-                       WHERE $sO2CView.oxcatnid = ".$oDb->quote( $sCatId ) ." AND
-                             $sTable.oxparentid='' AND
-                             ".$oArticle->getSqlActiveSnippet() ."
-                       GROUP BY $sTable.oxid
-                   ) AS ox2cat";
+        $sQ = "SELECT COUNT( DISTINCT $sTable.`oxid` )
+               FROM $sO2CView
+                   INNER JOIN $sTable ON $sO2CView.`oxobjectid` = $sTable.`oxid` AND $sTable.`oxparentid` = ''
+               WHERE $sO2CView.`oxcatnid` = " . $oDb->quote( $sCatId ) . " AND " . $oArticle->getSqlActiveSnippet();
 
         $aCache[$sCatId][$sActIdent] = $oDb->getOne( $sQ );
 
@@ -509,7 +506,7 @@ class oxUtilsCount extends oxSuperCfg
     /**
     * Returns user view id (Shop, language, RR group index...)
     *
-    * @param bool $blReset optiona, default = false
+    * @param bool $blReset optional, default = false
     *
     * @return string
     */

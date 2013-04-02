@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   admin
- * @copyright (C) OXID eSales AG 2003-2012
+ * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
- * @version   SVN: $Id: category_main.php 50696 2012-10-18 12:12:59Z linas.kukulskis $
+ * @version   SVN: $Id: category_main.php 56251 2013-03-06 14:22:49Z linas.kukulskis $
  */
 
 /**
@@ -90,12 +90,12 @@ class Category_Main extends oxAdminDetails
 
             return "popups/category_main.tpl";
         }
-        //print_r($this);
+
         return "category_main.tpl";
     }
 
     /**
-     * Returns an array of article object DB fields, without multilanguage and unsortible fields.
+     * Returns an array of article object DB fields, without multi language and unsortible fields.
      *
      * @return array
      */
@@ -149,7 +149,7 @@ class Category_Main extends oxAdminDetails
         if ($aParams['oxcategories__oxvat'] === '')
             $aParams['oxcategories__oxvat'] = null;
 
-            // shopid
+            // shopId
             $aParams['oxcategories__oxshopid'] = oxSession::getVar( "actshop" );
 
         $oCategory = oxNew( "oxcategory" );
@@ -178,6 +178,13 @@ class Category_Main extends oxAdminDetails
             $aParams["oxcategories__oxlongdesc"] = $this->_processLongDesc( $aParams["oxcategories__oxlongdesc"] );
         }
 
+
+        if ( empty($aParams['oxcategories__oxpricefrom']) ) {
+            $aParams['oxcategories__oxpricefrom'] = 0;
+        }
+        if ( empty($aParams['oxcategories__oxpriceto']) ) {
+            $aParams['oxcategories__oxpriceto'] = 0;
+        }
 
         $oCategory->assign( $aParams );
         $oCategory->setLanguage($this->_iEditLang);

@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
- * @version   SVN: $Id: vendorlist.php 53425 2013-01-07 13:27:29Z linas.kukulskis $
+ * @version   SVN: $Id: vendorlist.php 55036 2013-02-11 11:42:19Z linas.kukulskis $
  */
 
 /**
@@ -476,6 +476,17 @@ class VendorList extends aList
     public function setVendorTree( $oVendorTree )
     {
         $this->_oVendorTree = $oVendorTree;
+    }
+
+    /**
+     * Template variable getter. Returns array of attribute values
+     * we do have here in this category
+     *
+     * @return array
+     */
+    public function getAttributes()
+    {
+        return null;
     }
 
 }

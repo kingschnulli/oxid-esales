@@ -17,13 +17,20 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   tests
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
-  * @version   SVN: $Id: $
+ * @version   SVN: $Id: $
  */
 
 if (getenv('oxPATH')) {
     define ('oxPATH', getenv('oxPATH'));
+
+    define ('oxCCTempDir', '/tmp/oxCCTempDir/');
+
+    if (!is_dir(oxCCTempDir)) {
+        mkdir(oxCCTempDir, 0777, 1);
+    }
+    /** DEPLOY_REMOVE_END **/
 } else {
 }
 

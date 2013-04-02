@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   tests
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
- * @version   SVN: $Id: manufacturerlistTest.php 47914 2012-07-30 08:41:23Z linas.kukulskis $
+ * @version   SVN: $Id: manufacturerlistTest.php 55058 2013-02-11 16:11:27Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -64,7 +64,7 @@ class Unit_Views_ManufacturerlistTest extends OxidTestCase
         $oManufacturer->expects( $this->atLeastOnce() )->method( 'getId' )->will( $this->returnValue( "testId" ) );
 
         $oView = $this->getMock( "manufacturerlist", array( "getManufacturerTree", "getActManufacturer", "getArticleList", "_processListArticles", "_checkRequestedPage" ) );
-        $oView->expects( $this->once() )->method( 'getManufacturerTree' )->will( $this->returnValue( true ) );
+        $oView->expects( $this->any() )->method( 'getManufacturerTree' )->will( $this->returnValue( true ) );
         $oView->expects( $this->atLeastOnce() )->method( 'getActManufacturer' )->will( $this->returnValue( $oManufacturer ) );
         $oView->expects( $this->atLeastOnce() )->method( 'getArticleList' );
         $oView->expects( $this->once() )->method( '_processListArticles' );

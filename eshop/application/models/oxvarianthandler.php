@@ -17,7 +17,7 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   core
- * @copyright (C) OXID eSales AG 2003-2012
+ * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
  * @version   SVN: $Id: oxvarianthandler.php 22524 2009-09-22 11:47:27Z tomas $
  */
@@ -208,7 +208,7 @@ class oxVariantHandler extends oxSuperCfg
                 }
                 $aParams['oxarticles__oxartnum'] = $oArticle->oxarticles__oxartnum->value . "-" . $iCounter ;
                 $aParams['oxarticles__oxprice'] = $oArticle->oxarticles__oxprice->value + $dPriceMod;
-                $aParams['oxarticles__oxsort'] = 5000 + $iCounter * 1000;
+                $aParams['oxarticles__oxsort'] = $iCounter * 100; // reduction
                 $aParams['oxarticles__oxstock'] = 0;
                 $aParams['oxarticles__oxstockflag'] = $oArticle->oxarticles__oxstockflag->value;
                 $aParams['oxarticles__oxisconfigurable'] = $oArticle->oxarticles__oxisconfigurable->value;

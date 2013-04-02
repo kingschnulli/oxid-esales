@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
- * @version   SVN: $Id: manufacturerlist.php 53423 2013-01-07 13:26:50Z linas.kukulskis $
+ * @version   SVN: $Id: manufacturerlist.php 55028 2013-02-11 11:27:26Z linas.kukulskis $
  */
 
 /**
@@ -388,9 +388,9 @@ class ManufacturerList extends aList
     }
 
     /**
-     * Metatags - description and keywords - generator for search
+     * Meta tags - description and keywords - generator for search
      * engines. Uses string passed by parameters, cleans HTML tags,
-     * string dublicates, special chars. Also removes strings defined
+     * string duplicates, special chars. Also removes strings defined
      * in $myConfig->aSkipTags (Admin area).
      *
      * @param mixed $aCatPath  category path
@@ -454,5 +454,16 @@ class ManufacturerList extends aList
         }
 
         return $aPaths;
+    }
+
+    /**
+     * Template variable getter. Returns array of attribute values
+     * we do have here in this category
+     *
+     * @return array
+     */
+    public function getAttributes()
+    {
+        return null;
     }
 }

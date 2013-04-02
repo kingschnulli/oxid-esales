@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   core
- * @copyright (C) OXID eSales AG 2003-2012
+ * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
- * @version   SVN: $Id: oxerpgenimport.php 48727 2012-08-16 09:09:02Z tomas $
+ * @version   SVN: $Id: oxerpgenimport.php 55724 2013-02-22 09:13:33Z tadas.rimkus $
  */
 
 /**
@@ -312,20 +312,13 @@ class oxErpGenImport extends oxErpCsv
     }
 
     /**
-     * Get succesfully imported rows number
+     * Get successfully imported rows number
      *
      * @return int
      */
     public function getTotalImportedRowsNumber()
     {
-        $iTotal = 0;
-        foreach ( $this->getStatistics() as $aValue ) {
-            if ( $aValue ['r'] ) {
-                $iTotal++;
-            }
-        }
-
-        return $iTotal;
+        return $this->getImportedRowCount();
     }
 
     /**

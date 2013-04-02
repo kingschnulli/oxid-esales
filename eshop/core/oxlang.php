@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   core
- * @copyright (C) OXID eSales AG 2003-2012
+ * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
- * @version   SVN: $Id: oxlang.php 52070 2012-11-21 08:09:03Z linas.kukulskis $
+ * @version   SVN: $Id: oxlang.php 55835 2013-02-25 13:08:09Z linas.kukulskis $
  */
 
 /**
@@ -30,7 +30,7 @@ class oxLang extends oxSuperCfg
     /**
      * oxLang instance.
      *
-     * @var oxlang
+     * @var oxLang
      */
     private static $_instance = null;
 
@@ -112,7 +112,7 @@ class oxLang extends oxSuperCfg
     protected $_aDisabledModuleInfo = null;
 
     /**
-     * resturns a single instance of this class
+     * returns a single instance of this class
      *
      * @deprecated since v5.0 (2012-08-10); Use Registry getter instead - oxRegistry::getLang();
      *
@@ -338,38 +338,14 @@ class oxLang extends oxSuperCfg
         if ( $this->_aAdminTplLanguageArray === null ) {
             $myConfig = $this->getConfig();
 
-            // #656 add admin languages
-            $aLangData = array();
-            $aLangIds  = $this->getLanguageIds();
+            $aLangArray  = $this->getLanguageArray();
+            $this->_aAdminTplLanguageArray = array();
 
             $sSourceDir = $myConfig->getAppDir() . 'views/admin/';
-            foreach ( glob( $sSourceDir."*", GLOB_ONLYDIR ) as $sDir ) {
-                $sFilePath = "{$sDir}/lang.php";
+            foreach ( $aLangArray as $iLangKey => $oLang ) {
+                $sFilePath = "{$sSourceDir}{$oLang->abbr}/lang.php";
                 if ( file_exists( $sFilePath ) && is_readable( $sFilePath ) ) {
-                    $sLangName = "";
-                    $sAbbr = strtolower( basename( $sDir ) );
-                    if ( !in_array( $sAbbr, $aLangIds ) ) {
-                        include $sFilePath;
-                        $aLangData[$sAbbr] = new stdClass();
-                        $aLangData[$sAbbr]->name = $sLangName;
-                        $aLangData[$sAbbr]->abbr = $sAbbr;
-                    }
-                }
-            }
-
-            $this->_aAdminTplLanguageArray = $this->getLanguageArray();
-            if ( count( $aLangData ) ) {
-
-                // sorting languages for selection list view
-                ksort( $aLangData );
-                $iSort = max( array_keys( $this->_aAdminTplLanguageArray ) );
-
-                // appending other languages
-                foreach ( $aLangData as $oLang ) {
-                    $oLang->id = $oLang->sort = ++$iSort;
-                    $oLang->selected = 0;
-                    $oLang->active   = 0;
-                    $this->_aAdminTplLanguageArray[$iSort] = $oLang;
+                    $this->_aAdminTplLanguageArray[$iLangKey] = $oLang;
                 }
             }
         }
@@ -380,7 +356,7 @@ class oxLang extends oxSuperCfg
     }
 
     /**
-     * Returns selected language abbervation
+     * Returns selected language abbreviation
      *
      * @param int $iLanguage language id [optional]
      *
@@ -389,14 +365,7 @@ class oxLang extends oxSuperCfg
     public function getLanguageAbbr( $iLanguage = null )
     {
         if ( $this->_aLangAbbr === null ) {
-            $this->_aLangAbbr = array();
-            if ( $this->isAdmin() ) {
-                foreach ( $this->getAdminTplLanguageArray() as $oLang ) {
-                    $this->_aLangAbbr[$oLang->id] = $oLang->abbr;
-                }
-            } else {
-                $this->_aLangAbbr = $this->getLanguageIds();
-            }
+            $this->_aLangAbbr = $this->getLanguageIds();
         }
 
         $iLanguage = isset( $iLanguage ) ? (int) $iLanguage : $this->getBaseLanguage();
@@ -425,7 +394,7 @@ class oxLang extends oxSuperCfg
     }
 
     /**
-     * Returns available language IDs (abbervations)
+     * Returns available language IDs (abbreviations)
      *
      * @return array
      */
@@ -545,7 +514,7 @@ class oxLang extends oxSuperCfg
     /**
      * Returns formatted number, according to active currency formatting standards.
      *
-     * @param double $dValue  Plain price
+     * @param float  $dValue  Plain price
      * @param object $oActCur Object of active currency
      *
      * @return string
@@ -562,7 +531,7 @@ class oxLang extends oxSuperCfg
     /**
      * Returns formatted vat value, according to formatting standards.
      *
-     * @param double $dValue  Plain price
+     * @param float  $dValue  Plain price
      * @param object $oActCur Object of active currency
      *
      * @return string
@@ -785,7 +754,7 @@ class oxLang extends oxSuperCfg
     }
 
     /**
-     * Appends lang or options files if exists, exept custom lang files
+     * Appends lang or options files if exists, except custom lang files
      *
      * @param array  $aLangFiles   existing language files
      * @param string $sFullPath    path to language files to append
@@ -927,7 +896,7 @@ class oxLang extends oxSuperCfg
                     $aSeoReplaceChars = array();
                     include $sLangFile;
 
-                    // including only (!) thoose, which has charset defined
+                    // including only (!) those, which has charset defined
                     if ( isset( $aLang['charset'] ) ) {
 
                         // recoding only in utf
@@ -1089,7 +1058,7 @@ class oxLang extends oxSuperCfg
     /**
      * Returns url language parameter
      *
-     * @param int $iLang lanugage id [optional]
+     * @param int $iLang language id [optional]
      *
      * @return string
      */
@@ -1214,8 +1183,8 @@ class oxLang extends oxSuperCfg
     protected function _getActiveModuleInfo()
     {
         if ($this->_aActiveModuleInfo === null) {
-            $oModulelist = oxNew('oxmodulelist');
-            $this->_aActiveModuleInfo = $oModulelist->getActiveModuleInfo();
+            $oModuleList = oxNew('oxModuleList');
+            $this->_aActiveModuleInfo = $oModuleList->getActiveModuleInfo();
         }
         return $this->_aActiveModuleInfo;
     }
@@ -1228,8 +1197,8 @@ class oxLang extends oxSuperCfg
     protected function _getDisabledModuleInfo()
     {
         if ($this->_aDisabledModuleInfo === null) {
-            $oModulelist = oxNew('oxmodulelist');
-            $this->_aDisabledModuleInfo = $oModulelist->getDisabledModuleInfo();
+            $oModuleList = oxNew('oxModuleList');
+            $this->_aDisabledModuleInfo = $oModuleList->getDisabledModuleInfo();
         }
         return $this->_aDisabledModuleInfo;
     }

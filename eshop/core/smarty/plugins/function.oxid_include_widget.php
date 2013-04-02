@@ -17,7 +17,7 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   smarty_plugins
- * @copyright (C) OXID eSales AG 2003-2012
+ * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
  * @version   SVN: $Id: function.oxid_include_widget.php 50798 2012-10-22 08:59:35Z saulius.stasiukaitis $
  */

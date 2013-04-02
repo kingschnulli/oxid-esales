@@ -17,7 +17,7 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   lang
- * @copyright (C) OXID eSales AG 2003-2012
+ * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
  * @version   SVN: $Id: lang.php 28697 2010-06-29 11:09:58Z vilma $
  */
@@ -61,7 +61,7 @@ $aLang = array(
 'EMAIL_ORDER_CUST_HTML_NONE'                                  => "NONE",
 'EMAIL_ORDER_CUST_HTML_PAYMENTCHARGEVAT1'                     => "Payment Charge VAT",
 'EMAIL_ORDER_OWNER_HTML_PAYMENTINFO'                          => "",
-'EMAIL_ORDER_OWNER_HTML_PAYMENTINFOOFF'                       => "",
+'EMAIL_ORDER_OWNER_HTML_PAYMENTINFOOFF'                       => "<b>PAYMENT INFORMATION SWITCHED OFF</b> - to switch it on please edit application/views/[theme]/email/html/order_owner.tpl.",
 'FOOTER_CATEGORIES'                                           => "CATEGORIES",
 'FOOTER_DISTRIBUTORS'                                         => "DISTRIBUTORS",
 'FOOTER_INFORMATION'                                          => "INFORMATION",

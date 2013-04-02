@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   views
- * @copyright (C) OXID eSales AG 2003-2012
+ * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
- * @version   SVN: $Id: oxshopcontrol.php 52049 2012-11-20 13:37:56Z saulius.stasiukaitis $
+ * @version   SVN: $Id: oxshopcontrol.php 56321 2013-03-07 11:51:40Z linas.kukulskis $
  */
 
 /**
@@ -200,11 +200,11 @@ class oxShopControl extends oxSuperCfg
     }
 
     /**
-     * Logs user performad actions to DB. Skips action loggin if
+     * Logs user performed actions to DB. Skips action logging if
      * it's search engine.
      *
      * @param string $sClass Name of class
-     * @param srring $sFnc   Name of executed class method
+     * @param string $sFnc   Name of executed class method
      *
      * @return null
      */
@@ -315,7 +315,7 @@ class oxShopControl extends oxSuperCfg
     }
 
     /**
-     * Returns the differnece between stored profiler end time and start time. Works only after _stopMonitor() is called, otherwise returns 0.
+     * Returns the difference between stored profiler end time and start time. Works only after _stopMonitor() is called, otherwise returns 0.
      *
      * @return  double
      */
@@ -340,7 +340,7 @@ class oxShopControl extends oxSuperCfg
         }
 
         startProfile('executeMaintenanceTasks');
-        oxNew("oxarticlelist")->updateUpcomingPrices();
+        oxNew("oxArticleList")->updateUpcomingPrices();
         stopProfile('executeMaintenanceTasks');
     }
 

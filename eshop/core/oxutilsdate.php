@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   core
- * @copyright (C) OXID eSales AG 2003-2012
+ * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutilsdate.php 52113 2012-11-21 15:46:41Z aurimas.gladutis $
+ * @version   SVN: $Id: oxutilsdate.php 56076 2013-03-01 14:10:37Z linas.kukulskis $
  */
 
 /**
@@ -47,7 +47,7 @@ class oxUtilsDate extends oxSuperCfg
     }
 
     /**
-     * Reformats date to user defined format.
+     * Format date to user defined format.
      *
      * @param string $sDBDateIn         Date to reformat
      * @param bool   $blForceEnglishRet Force to return primary value(default false)
@@ -91,7 +91,7 @@ class oxUtilsDate extends oxSuperCfg
         $sTime = ( isset( $aData[1] ) && $oStr->strstr( $aData[1], ':' ) )?$aData[1]:'';
         $aTime = $sTime?explode( ':', $sTime ):array( 0, 0, 0 );
 
-        // preparind date array
+        // preparing date array
         $sDate = isset( $aData[0] )?$aData[0]:'';
         $aDate = preg_split( '/[\/.-]/', $sDate );
 
@@ -297,7 +297,7 @@ class oxUtilsDate extends oxSuperCfg
      * sets default formatted value
      *
      * @param object $oObject          date field object
-     * @param string $sDate            prefered date
+     * @param string $sDate            preferred date
      * @param string $sLocalDateFormat input format
      * @param string $sLocalTimeFormat local format
      * @param bool   $blOnlyDate       marker to format only date field (no time)
@@ -321,20 +321,20 @@ class oxUtilsDate extends oxSuperCfg
         // setting and returning default formatted value
         if ( $blOnlyDate) {
             $oObject->setValue(trim( $aDFormats[$sLocalDateFormat][2] ));// . " " . @$aTFormats[$sLocalTimeFormat][2]);
-            // increasing(decreasing) field lenght
+            // increasing(decreasing) field length
             $oObject->fldmax_length = strlen( $oObject->value );
             return ;
         } elseif ( $blDefTimeFound ) {
             // setting value
             $oObject->setValue(trim( $aDFormats[$sLocalDateFormat][2] . " " . $aTFormats[$sLocalTimeFormat][2] ));
-            // increasing(decreasing) field lenght
+            // increasing(decreasing) field length
             $oObject->fldmax_length = strlen( $oObject->value );
             return ;
         }
     }
 
     /**
-     * defines and checks dafault time values
+     * defines and checks default time values
      *
      * @param bool $blToTimeStamp -
      *

@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   tests
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
- * @version   SVN: $Id: oxviewconfigTest.php 53118 2012-12-19 09:13:47Z aurimas.gladutis $
+ * @version   SVN: $Id: oxviewconfigTest.php 56498 2013-03-11 16:20:14Z alfonsas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -941,7 +941,7 @@ class Unit_Views_oxviewConfigTest extends OxidTestCase
         $oVieConfig = $this->getMock( "oxViewConfig", array( "getConfig" ) );
         $oVieConfig->expects( $this->once() )->method( "getConfig" )->will( $this->returnValue( $oConfig ) );
 
-        $this->assertEquals( 'will', $oVieConfig->isFunctionalityEnabled( 'bl_showWishlist' ) );
+        $this->assertTrue( $oVieConfig->isFunctionalityEnabled( 'bl_showWishlist' ) );
     }
 
     /**
@@ -2432,7 +2432,7 @@ class Unit_Views_oxviewConfigTest extends OxidTestCase
         $oViewConf = $this->getMock( "oxViewConfig", array( "getConfig" ) );
         $oViewConf->expects( $this->once() )->method( "getConfig" )->will( $this->returnValue( $oConfig ) );
 
-        $this->assertEquals( $sTest, $oViewConf->isMultiShop() );
+        $this->assertTrue( $oViewConf->isMultiShop() );
     }
 
     /**

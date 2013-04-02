@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   smarty_plugins
- * @copyright (C) OXID eSales AG 2003-2012
+ * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
- * @version   SVN: $Id: modifier.oxmultilangassign.php 48727 2012-08-16 09:09:02Z tomas $
+ * @version   SVN: $Id: modifier.oxmultilangassign.php 56523 2013-03-12 11:01:02Z tadas.rimkus $
  */
 
 /**
@@ -30,10 +30,11 @@
  * -------------------------------------------------------------
  *
  * @param string $sIdent language constant ident
+ * @param mixed  $args   for constants using %s notations
  *
  * @return string
  */
-function smarty_modifier_oxmultilangassign( $sIdent )
+function smarty_modifier_oxmultilangassign( $sIdent, $args = null )
 {
     if ( !isset( $sIdent ) ) {
         $sIdent = 'IDENT MISSING';
@@ -57,6 +58,14 @@ function smarty_modifier_oxmultilangassign( $sIdent )
 
     if ( $sTranslation == $sIdent ) {
         $sTranslation = '<b>ERROR : Translation for '.$sIdent.' not found!</b>';
+    }
+
+    if ( $args ) {
+        if ( is_array( $args ) ) {
+            $sTranslation = vsprintf( $sTranslation, $args );
+        } else {
+            $sTranslation = sprintf( $sTranslation, $args );
+        }
     }
 
     return $sTranslation;

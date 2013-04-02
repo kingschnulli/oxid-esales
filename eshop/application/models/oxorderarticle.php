@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   core
- * @copyright (C) OXID eSales AG 2003-2012
+ * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
- * @version   SVN: $Id: oxorderarticle.php 52666 2012-12-04 07:39:29Z aurimas.gladutis $
+ * @version   SVN: $Id: oxorderarticle.php 55757 2013-02-22 14:45:19Z linas.kukulskis $
  */
 
 /**
@@ -418,7 +418,7 @@ class oxOrderArticle extends oxBase implements oxIArticle
 
                 $aArticleSelList = $oArticle->getSelectLists();
 
-                //formating temporary list array from string
+                //formatting temporary list array from string
                 foreach ( $aList as $sList ) {
                     if ( $sList ) {
 
@@ -427,18 +427,18 @@ class oxOrderArticle extends oxBase implements oxIArticle
                             $sOrderArtListTitle = $oStr->strtolower( trim($aVal[0]) );
                             $sOrderArtSelValue  = $oStr->strtolower( trim($aVal[1]) );
 
-                            //checking article list for matches with article list stored in oxorderitem
+                            //checking article list for matches with article list stored in oxOrderItem
                             $iSelListNum = 0;
                             if ( count($aArticleSelList) > 0 ) {
                                 foreach ( $aArticleSelList as $aSelect ) {
-                                    //chek if selects titles are equal
+                                    //check if selects titles are equal
 
                                     if ( $oStr->strtolower($aSelect['name']) == $sOrderArtListTitle ) {
                                         //try to find matching select items value
                                         $iSelValueNum = 0;
                                         foreach ( $aSelect as $oSel ) {
                                             if ( $oStr->strtolower($oSel->name) == $sOrderArtSelValue ) {
-                                                // found, adding tu return array
+                                                // found, adding to return array
                                                 $aRet[$iSelListNum] = $iSelValueNum;
                                             }
                                             //next article list item

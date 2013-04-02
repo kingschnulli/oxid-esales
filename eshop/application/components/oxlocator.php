@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
- * @version   SVN: $Id: oxlocator.php 53447 2013-01-07 15:11:05Z linas.kukulskis $
+ * @version   SVN: $Id: oxlocator.php 55031 2013-02-11 11:31:42Z linas.kukulskis $
  */
 
 /**
@@ -94,7 +94,7 @@ class oxLocator extends oxSuperCfg
     protected function _setListLocatorData( $oLocatorTarget, $oCurrArticle )
     {
         // if no active category is loaded - lets check for category passed by post/get
-        if ( ( $oCategory = $oLocatorTarget->getActCategory() ) ) {
+        if ( ( $oCategory = $oLocatorTarget->getActiveCategory() ) ) {
             $sCatId = $oCategory->getId();
 
             $sOrderBy = null;

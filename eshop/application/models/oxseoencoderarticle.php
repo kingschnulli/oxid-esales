@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   core
- * @copyright (C) OXID eSales AG 2003-2012
+ * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
- * @version   SVN: $Id: oxseoencoderarticle.php 48869 2012-08-21 08:10:48Z tomas $
+ * @version   SVN: $Id: oxseoencoderarticle.php 55494 2013-02-19 13:30:43Z linas.kukulskis $
  */
 
 /**
@@ -258,7 +258,10 @@ class oxSeoEncoderArticle extends oxSeoEncoder
         startProfile(__FUNCTION__);
 
         $sActCatId = '';
-        if ( $oActCat = $this->_getCategory( $oArticle, $iLang ) ) {
+
+        $oActCat = $this->_getCategory( $oArticle, $iLang );
+
+        if ( $oActCat instanceof oxCategory ) {
             $sActCatId = $oActCat->getId();
         } elseif ( $oActCat = $this->_getMainCategory( $oArticle ) ) {
             $sActCatId = $oActCat->getId();
@@ -296,8 +299,8 @@ class oxSeoEncoderArticle extends oxSeoEncoder
     {
         $oCat = null;
         $oView = $this->getConfig()->getActiveView();
-        if ( $oView instanceof oxview ) {
-            $oCat = $oView->getActCategory();
+        if ( $oView instanceof oxUBase ) {
+            $oCat = $oView->getActiveCategory();
         }
         return $oCat;
     }

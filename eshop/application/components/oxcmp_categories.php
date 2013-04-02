@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   views
- * @copyright (C) OXID eSales AG 2003-2012
+ * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcmp_categories.php 49274 2012-09-04 11:12:20Z vilma $
+ * @version   SVN: $Id: oxcmp_categories.php 56565 2013-03-14 09:06:31Z linas.kukulskis $
  */
 
 /**
@@ -81,7 +81,7 @@ class oxcmp_categories extends oxView
         }
 
         if ( $myConfig->getConfigParam( 'bl_perfLoadCatTree' ) ) {
-            // building categorytree for all purposes (nav, search and simple category trees)
+            // building category tree for all purposes (nav, search and simple category trees)
             $this->_loadCategoryTree( $sActCat );
         }
     }
@@ -164,7 +164,7 @@ class oxcmp_categories extends oxView
             $this->setCategoryTree($oCategoryTree);
 
             // setting active category
-            $oParentView->setActCategory( $oCategoryTree->getClickCat() );
+            $oParentView->setActiveCategory( $oCategoryTree->getClickCat() );
         }
     }
 
@@ -199,7 +199,7 @@ class oxcmp_categories extends oxView
      * Executes parent::render(), loads expanded/clicked category object,
      * adds parameters template engine and returns list of category tree.
      *
-     * @return oxcategorylist
+     * @return oxCategoryList
      */
     public function render()
     {
@@ -228,7 +228,7 @@ class oxcmp_categories extends oxView
     /**
      * Adds additional parameters: active category, list type and category id
      *
-     * @param oxarticle $oProduct         loaded product
+     * @param oxArticle $oProduct         loaded product
      * @param string    $sActCat          active category id
      * @param string    $sActManufacturer active manufacturer id
      * @param string    $sActTag          active tag
@@ -280,7 +280,7 @@ class oxcmp_categories extends oxView
     /**
      * Returns array containing default list type and category (or manufacturer ir vendor) id
      *
-     * @param oxarticle $oProduct current product object
+     * @param oxArticle $oProduct current product object
      *
      * @return array
      */
@@ -306,7 +306,7 @@ class oxcmp_categories extends oxView
     /**
      * Setter of category tree
      *
-     * @param oxcategorylist $oCategoryTree category list
+     * @param oxCategoryList $oCategoryTree category list
      *
      * @return null
      */
@@ -318,7 +318,7 @@ class oxcmp_categories extends oxView
     /**
      * Setter of manufacturer tree
      *
-     * @param oxmanufacturerlist $oManufacturerTree manufacturer list
+     * @param oxManufacturerList $oManufacturerTree manufacturer list
      *
      * @return null
      */

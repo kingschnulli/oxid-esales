@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   tests
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
- * @version   SVN: $Id: oxadminviewTest.php 48764 2012-08-16 16:37:40Z tomas $
+ * @version   SVN: $Id: oxadminviewTest.php 54542 2013-01-29 13:17:53Z aurimas.gladutis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -390,8 +390,8 @@ class Unit_Admin_oxAdminViewTest extends OxidTestCase
         $oSubj = $this->getProxyClass("oxadminView");
         $sTestCode = "de";
 
-        //expecting different result due to faked language array
-        $this->assertEquals("deutschland", $oSubj->UNITgetCountryByCode($sTestCode));
+        //expecting same result due to faked language array
+        $this->assertEquals("germany", $oSubj->UNITgetCountryByCode($sTestCode));
     }
 
     /**

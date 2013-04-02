@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   views
- * @copyright (C) OXID eSales AG 2003-2012
+ * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
- * @version   SVN: $Id: compare.php 49626 2012-09-19 05:54:02Z alfonsas $
+ * @version   SVN: $Id: compare.php 55683 2013-02-21 16:01:04Z linas.kukulskis $
  */
 
 /**
@@ -81,12 +81,6 @@ class Compare extends oxUBase
      * @var object
      */
     protected $_oPageNavigation = null;
-
-    /**
-     * Sign if to load and show top5articles action
-     * @var bool
-     */
-    protected $_blTop5Action = false;
 
     /**
      * Sign if to load and show bargain action

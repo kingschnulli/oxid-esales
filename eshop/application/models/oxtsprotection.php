@@ -17,7 +17,7 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   core
- * @copyright (C) OXID eSales AG 2003-2012
+ * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
  * @version   SVN: $Id: oxactions.php 28344 2010-06-15 11:32:21Z sarunas $
  */
@@ -27,7 +27,7 @@
  *
  * @package model
  */
-class oxtsprotection extends oxSuperCfg
+class oxTsProtection extends oxSuperCfg
 {
     /**
      * TS protection product Ids
@@ -40,7 +40,7 @@ class oxtsprotection extends oxSuperCfg
     /**
      * TS protection Vat
      *
-     * @var decimal
+     * @var float
      */
     protected $_dVat = null;
 
@@ -49,7 +49,8 @@ class oxtsprotection extends oxSuperCfg
      *
      * @var array
      */
-    protected $_sTsCurrencyProducts = array( "TS080501_500_30_EUR"   => array( "GBP" => "TS100629_500_30_GBP", "CHF" => "TS100629_1500_30_GBP", "USD" => "TS080501_500_30_USD" ),
+    protected $_sTsCurrencyProducts = array(
+                                       "TS080501_500_30_EUR"   => array( "GBP" => "TS100629_500_30_GBP", "CHF" => "TS100629_500_30_GBP", "USD" => "TS080501_500_30_USD" ),
                                        "TS080501_1500_30_EUR"  => array( "GBP" => "TS100629_1500_30_GBP", "CHF" => "TS100629_1500_30_CHF", "USD" => "TS100629_1500_30_USD" ),
                                        "TS080501_2500_30_EUR"  => array( "GBP" => "TS100629_2500_30_GBP", "CHF" => "TS100629_2500_30_CHF", "USD" => "TS100629_2500_30_USD" ),
                                        "TS080501_5000_30_EUR"  => array( "GBP" => "TS100629_5000_30_GBP", "CHF" => "TS100629_5000_30_CHF", "USD" => "TS100629_5000_30_USD" ),
@@ -60,7 +61,7 @@ class oxtsprotection extends oxSuperCfg
     /**
      * Return VAT
      *
-     * @return decimal
+     * @return float
      */
     public function getVat()
     {
@@ -70,7 +71,7 @@ class oxtsprotection extends oxSuperCfg
     /**
      * Set VAT
      *
-     * @param decimal $dVat - vat
+     * @param float $dVat - vat
      *
      * @return null
      */
@@ -82,7 +83,7 @@ class oxtsprotection extends oxSuperCfg
     /**
      * Returns array of TS protection products according to order price
      *
-     * @param double $dPrice order price
+     * @param float $dPrice order price
      *
      * @return array
      */
@@ -105,11 +106,11 @@ class oxtsprotection extends oxSuperCfg
      *
      * @param string $sTsId TS protection product id
      *
-     * @return object
+     * @return oxTsProduct
      */
     public function getTsProduct( $sTsId )
     {
-        $oProduct = oxNew("oxtsproduct");
+        $oProduct = oxNew("oxTsProduct");
         $oProduct->setTsId($sTsId);
         return $oProduct;
     }
@@ -202,7 +203,7 @@ class oxtsprotection extends oxSuperCfg
      * Executes SOAP call
      *
      * @param string $sSoapUrl  soap url
-     * @param string $sFunction soap funkction
+     * @param string $sFunction soap function
      * @param string $sValues   values sent per soap
      *
      * @return object
@@ -232,7 +233,9 @@ class oxtsprotection extends oxSuperCfg
      */
     protected function _getTsPaymentId( $sPaymentId )
     {
-        $aPayment = oxNew("oxpayment");
+        $sTsPaymentId = '';
+
+        $aPayment = oxNew("oxPayment");
         if ( $aPayment->load($sPaymentId) ) {
             $sTsPaymentId = $aPayment->oxpayments__oxtspaymentid->value;
         }
@@ -248,10 +251,10 @@ class oxtsprotection extends oxSuperCfg
     {
         if ($this->_aAllProducts == null) {
             $this->_aAllProducts = false;
-            $oTsProduct = oxNew("oxtsproduct");
+            $oTsProduct = oxNew("oxTsProduct");
             if ( $aTsProducts = $oTsProduct->getAllTsProducts()) {
                 foreach ( $aTsProducts as $sId => $aTsProduct ) {
-                    $oProduct = oxNew("oxtsproduct");
+                    $oProduct = oxNew("oxTsProduct");
                     $oProduct->setTsId($sId);
                     $oProduct->setVat( $this->getVat() );
                     $this->_aAllProducts[] = $oProduct;

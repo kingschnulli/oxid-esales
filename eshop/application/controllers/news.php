@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   views
- * @copyright (C) OXID eSales AG 2003-2012
+ * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
- * @version   SVN: $Id: news.php 48727 2012-08-16 09:09:02Z tomas $
+ * @version   SVN: $Id: news.php 55686 2013-02-21 16:03:23Z linas.kukulskis $
  */
 
 /**
@@ -38,12 +38,6 @@ class News extends oxUBase
      * @var string
      */
     protected $_sThisTemplate = 'page/info/news.tpl';
-
-    /**
-     * Sign if to load and show top5articles action
-     * @var bool
-     */
-    protected $_blTop5Action = true;
 
     /**
      * Sign if to load and show bargain action

@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   tests
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
- * @version   SVN: $Id: dynexportbaseTest.php 47944 2012-07-30 12:41:30Z linas.kukulskis $
+ * @version   SVN: $Id: dynexportbaseTest.php 54541 2013-01-29 13:15:49Z aurimas.gladutis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -214,10 +214,55 @@ class Unit_Admin_DynExportBaseTest extends OxidTestCase
         $oView = $this->getMock( "_DynExportBase", array( "nextTick" ) );
         $oView->expects( $this->any() )->method( 'nextTick' )->will( $this->returnValue( 5 ));
         $oView->setVar( 'sFilePath', getTestsBasePath()."/misc/test.txt" );
+        $oView->setExportPerTick( 30 );
         $oView->run();
         $this->assertEquals( 0, $oView->getViewDataElement( "refresh" ) );
         $this->assertEquals( 30, $oView->getViewDataElement( "iStart" ) );
         $this->assertEquals( 5, $oView->getViewDataElement( "iExpItems" ) );
+    }
+
+    /**
+     * DynExportBase::Run() test case with default per tick count
+     *
+     * @return null
+     */
+    public function testRunWithDefaultConfigPerTickCount()
+    {
+        modConfig::setParameter("iStart", 0);
+        modConfig::setParameter("aExportResultset", array("aaaaa"));
+        modConfig::getInstance()->setConfigParam( "iExportNrofLines", 10 );
+
+        // testing..
+        $oView = $this->getMock( "_DynExportBase", array( "nextTick" ) );
+        $oView->expects( $this->any() )->method( 'nextTick' )->will( $this->returnValue( 5 ));
+        $oView->setVar( 'sFilePath', getTestsBasePath()."/misc/test.txt" );
+        $oView->run();
+        $this->assertEquals( 0, $oView->getViewDataElement( "refresh" ) );
+        $this->assertEquals( 10, $oView->getViewDataElement( "iStart" ) );
+        $this->assertEquals( 5, $oView->getViewDataElement( "iExpItems" ) );
+    }
+
+    /**
+     * test setting and getting export per tick count
+     *
+     * @return null
+     */
+    public function testSetGetExportPerTick()
+    {
+        $oView = new DynExportBase();
+
+        // if not set yet, should take value from config
+        modConfig::getInstance()->setConfigParam( "iExportNrofLines", 150 );
+        $this->assertEquals( 150, $oView->getExportPerTick() );
+
+        // if not set in config, should use default value
+        $oView->setExportPerTick( null );
+        modConfig::getInstance()->setConfigParam( "iExportNrofLines", 0 );
+        $this->assertEquals( $oView->iExportPerTick, $oView->getExportPerTick() );
+
+        // Should be able to set this value too
+        $oView->setExportPerTick( 190 );
+        $this->assertEquals( 190, $oView->getExportPerTick() );
     }
 
     /**

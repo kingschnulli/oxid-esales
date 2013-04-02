@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   core
- * @copyright (C) OXID eSales AG 2003-2012
+ * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
- * @version   SVN: $Id: oxutils.php 51910 2012-11-15 16:19:01Z linas.kukulskis $
+ * @version   SVN: $Id: oxutils.php 56327 2013-03-07 12:24:56Z linas.kukulskis $
  */
 
 /**
@@ -28,18 +28,11 @@
 require_once getShopBasePath()."core/smarty/Smarty.class.php";
 
 /**
- * general utils class, used as a singelton
+ * General utils class
  *
  */
 class oxUtils extends oxSuperCfg
 {
-    /**
-     * oxUtils class instance.
-     *
-     * @var oxutils instance
-     */
-    private static $_instance = null;
-
     /**
      * Cached currency precision
      *
@@ -48,7 +41,7 @@ class oxUtils extends oxSuperCfg
     protected $_iCurPrecision = null;
 
     /**
-     * Some files, like object structure should not be deleted, because thay are changed rarely
+     * Some files, like object structure should not be deleted, because they are changed rarely
      * and each regeneration eats additional page load time. This array keeps patterns of file
      * names which should not be deleted on regular cache cleanup
      *
@@ -92,7 +85,7 @@ class oxUtils extends oxSuperCfg
     protected $_blIsSe = null;
 
     /**
-     * resturns a single instance of this class
+     * Return a single instance of this class
      *
      * @deprecated since v5.0 (2012-08-10); Use oxRegistry::getUtils() instead.
      *
@@ -180,11 +173,11 @@ class oxUtils extends oxSuperCfg
     /**
      * Returns string witch "." symbols were replaced with "__".
      *
-     * @param string $sName String to search replaceble char
+     * @param string $sName String to search replaceable char
      *
      * @return string
      */
-    public function getArrFldName( $sName)
+    public function getArrFldName( $sName )
     {
         return str_replace( ".", "__", $sName);
     }
@@ -193,11 +186,11 @@ class oxUtils extends oxSuperCfg
      * Takes a string and assign all values, returns array with values.
      *
      * @param string $sIn  Initial string
-     * @param double $dVat Article VAT (optional)
+     * @param float  $dVat Article VAT (optional)
      *
      * @return array
      */
-    public function assignValuesFromText( $sIn, $dVat = null)
+    public function assignValuesFromText( $sIn, $dVat = null )
     {
         $aRet = array();
         $aPieces = explode( '@@', $sIn );
@@ -397,7 +390,7 @@ class oxUtils extends oxSuperCfg
      * Rounds the value to currency cents. This method does NOT format the number.
      *
      * @param string $sVal the value that should be rounded
-     * @param object $oCur Currenncy Object
+     * @param object $oCur Currency Object
      *
      * @return float
      */
@@ -455,7 +448,7 @@ class oxUtils extends oxSuperCfg
     /**
      * Retrieves something from static cache
      *
-     * @param string $sName name under which the content is stored in the satic cache
+     * @param string $sName name under which the content is stored in the static cache
      *
      * @return mixed
      */
@@ -484,8 +477,8 @@ class oxUtils extends oxSuperCfg
     }
 
     /**
-     * Generates php file, which could later be loaded as include instead of paresed data.
-     * Currenntly this method supports simple arrays only.
+     * Generates php file, which could later be loaded as include instead of parsed data.
+     * Currently this method supports simple arrays only.
      *
      * @param string $sKey      Cache key
      * @param mixed  $mContents Cache contents. At this moment only simple array type is supported.
@@ -614,7 +607,7 @@ class oxUtils extends oxSuperCfg
     /**
      * Includes cache file
      *
-     * @param string $sFilePath cache fiel path
+     * @param string $sFilePath cache file path
      *
      * @return mixed
      */
@@ -650,7 +643,7 @@ class oxUtils extends oxSuperCfg
 
     /**
      * Writes all cache contents to file at once. This method was introduced due to possible
-     * race conditions. Cache is cleand up after commit
+     * race conditions. Cache is cleaned up after commit
      *
      * @return null;
      */
@@ -715,7 +708,7 @@ class oxUtils extends oxSuperCfg
                 }
             }
 
-            // in case system does not support file lockings
+            // in case system does not support file locking
             if ( !$blLocked && $iLockMode === LOCK_EX ) {
 
                 // clearing on first call
@@ -760,8 +753,8 @@ class oxUtils extends oxSuperCfg
 
     /**
      * Removes most files stored in cache (default 'tmp') folder. Some files
-     * e.g. table fiels names description, are left. Excluded cache file name
-     * patterns are defined in oxutils::_sPermanentCachePattern parameter
+     * e.g. table files names description, are left. Excluded cache file name
+     * patterns are defined in oxUtils::_sPermanentCachePattern parameter
      *
      * @return null
      */
@@ -769,7 +762,7 @@ class oxUtils extends oxSuperCfg
     {
         $aFiles = glob( $this->getCacheFilePath( null, true ) . '*' );
         if ( is_array( $aFiles ) ) {
-            // delete all the files, except cached tables fieldnames
+            // delete all the files, except cached tables field names
             $aFiles = preg_grep( $this->_sPermanentCachePattern, $aFiles, PREG_GREP_INVERT );
             foreach ( $aFiles as $sFile ) {
                 @unlink( $sFile );
@@ -845,11 +838,11 @@ class oxUtils extends oxSuperCfg
     }
 
     /**
-     * If $sLocal file is older than 24h or doesn't exist, trys to
+     * If $sLocal file is older than 24h or does not exist, tries to
      * download it from $sRemote and save it as $sLocal
      *
      * @param string $sRemote the file
-     * @param string $sLocal  the adress of the remote source
+     * @param string $sLocal  the address of the remote source
      *
      * @return mixed
      */
@@ -1045,7 +1038,7 @@ class oxUtils extends oxSuperCfg
     /**
      * Checks if string is only alpha numeric  symbols
      *
-     * @param string $sField fieldname to test
+     * @param string $sField field name to test
      *
      * @return bool
      */
@@ -1075,18 +1068,14 @@ class oxUtils extends oxSuperCfg
      *
      * @param string $sUrl               URL to be redirected
      * @param bool   $blAddRedirectParam add "redirect" param
-     * @param int    $iHeaderCode        header code, default 301
-     *
-     * @TODO change $iHeaderCode default value to 302, because
-     * ONLY if page was removed permanently 301 header must be
-     * send. On most redirects we only transfer to different page
+     * @param int    $iHeaderCode        header code, default 302
      *
      * @return null or exit
      */
-    public function redirect( $sUrl, $blAddRedirectParam = true, $iHeaderCode = 301 )
+    public function redirect( $sUrl, $blAddRedirectParam = true, $iHeaderCode = 302 )
     {
         //preventing possible cyclic redirection
-        //#M341 and check only if redirect paramater must be added
+        //#M341 and check only if redirect parameter must be added
         if ( $blAddRedirectParam && oxConfig::getParameter( 'redirected' ) ) {
             return;
         }
@@ -1157,7 +1146,7 @@ class oxUtils extends oxSuperCfg
     }
 
     /**
-     * adds the given paramters at the end of the given url
+     * adds the given parameters at the end of the given url
      *
      * @param string $sUrl    a url
      * @param array  $aParams the params which will be added
@@ -1166,10 +1155,10 @@ class oxUtils extends oxSuperCfg
      */
     protected function _addUrlParameters( $sUrl, $aParams )
     {
-        $sDelim = ( ( getStr()->strpos( $sUrl, '?' ) !== false ) )?'&':'?';
+        $sDelimiter = ( ( getStr()->strpos( $sUrl, '?' ) !== false ) )?'&':'?';
         foreach ( $aParams as $sName => $sVal ) {
-            $sUrl = $sUrl . $sDelim . $sName . '=' . $sVal;
-            $sDelim = '&';
+            $sUrl = $sUrl . $sDelimiter . $sName . '=' . $sVal;
+            $sDelimiter = '&';
         }
 
         return $sUrl;
@@ -1178,8 +1167,8 @@ class oxUtils extends oxSuperCfg
     /**
      * Fill array.
      *
-     * @param array  $aName Initial array of strings
-     * @param double $dVat  Article VAT
+     * @param array $aName Initial array of strings
+     * @param float $dVat  Article VAT
      *
      * @return string
      *
@@ -1360,7 +1349,7 @@ class oxUtils extends oxSuperCfg
     }
 
     /**
-     * Writes languge array to file cache
+     * Writes language array to file cache
      *
      * @param string $sCacheName name of cache file
      * @param array  $aLangCache language array
@@ -1375,7 +1364,7 @@ class oxUtils extends oxSuperCfg
     }
 
     /**
-     * Cheks if url has ending slash / - if not, adds it
+     * Checks if url has ending slash / - if not, adds it
      *
      * @param string $sUrl url string
      *
@@ -1414,7 +1403,7 @@ class oxUtils extends oxSuperCfg
     /**
      * handler for 404 (page not found) error
      *
-     * @param string $sUrl url wich was given, can be not specified in some cases
+     * @param string $sUrl url which was given, can be not specified in some cases
      *
      * @return void
      */
@@ -1427,10 +1416,10 @@ class oxUtils extends oxSuperCfg
 
         $sReturn = "Page not found.";
         try {
-            $oView = oxNew('oxubase');
+            $oView = oxNew('oxUBase');
             $oView->init();
             $oView->render();
-            $oView->setClassName( 'oxubase' );
+            $oView->setClassName( 'oxUBase' );
             $oView->addTplParam('sUrl', $sUrl);
             if ($sRet = oxRegistry::get("oxUtilsView")->getTemplateOutput('message/err_404.tpl', $oView)) {
                 $sReturn = $sRet;

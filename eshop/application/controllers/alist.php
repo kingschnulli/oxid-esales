@@ -19,13 +19,13 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
- * @version   SVN: $Id: alist.php 54111 2013-01-22 08:24:08Z linas.kukulskis $
+ * @version   SVN: $Id: alist.php 55681 2013-02-21 15:59:16Z linas.kukulskis $
  */
 
 /**
  * List of articles for a selected product group.
  * Collects list of articles, according to it generates links for list gallery,
- * metatags (for search engines). Result - "list.tpl" template.
+ * meta tags (for search engines). Result - "list.tpl" template.
  * OXID eShop -> (Any selected shop product category).
  */
 class aList extends oxUBase
@@ -115,11 +115,6 @@ class aList extends oxUBase
     protected $_sCatTitle = null;
 
     /**
-     * Sign if to load and show top5articles action
-     * @var bool
-     */
-    protected $_blTop5Action = true;
-    /**
      * Show tags cloud
      * @var bool
      */
@@ -168,7 +163,7 @@ class aList extends oxUBase
      * articles - regular (oxarticlelist::LoadCategoryArticles()) or price
      * dependent (oxarticlelist::LoadPriceArticles()). Generates page navigation data
      * such as previous/next window URL, number of available pages, generates
-     * metatags info (oxubase::_convertForMetaTags()) and returns name of
+     * meta tags info (oxubase::_convertForMetaTags()) and returns name of
      * template to render. Also checks if actual pages count does not exceed real
      * articles page count. If yes - calls error_404_handler().
      *
@@ -188,11 +183,11 @@ class aList extends oxUBase
             $this->_sThisTemplate = $this->_sThisMoreTemplate;
             $oCategory = oxNew( 'oxcategory' );
             $oCategory->oxcategories__oxactive = new oxField( 1, oxField::T_RAW );
-            $this->setActCategory( $oCategory );
+            $this->setActiveCategory( $oCategory );
 
             $this->_blShowTagCloud = true;
 
-        } elseif ( ( $oCategory = $this->getActCategory() ) ) {
+        } elseif ( ( $oCategory = $this->getActiveCategory() ) ) {
             $blContinue = ( bool ) $oCategory->oxcategories__oxactive->value;
             $this->_blIsCat = true;
             $this->_blBargainAction = true;
@@ -204,7 +199,7 @@ class aList extends oxUBase
             oxRegistry::getUtils()->redirect( $myConfig->getShopURL().'index.php', true, 302 );
         }
 
-        $oCat = $this->getActCategory();
+        $oCat = $this->getActiveCategory();
         if ($oCat && $myConfig->getConfigParam( 'bl_rssCategories' )) {
             $oRss = oxNew('oxrssfeed');
             $this->addRssFeed($oRss->getCategoryArticlesTitle($oCat), $oRss->getCategoryArticlesUrl($oCat), 'activeCategory');
@@ -244,7 +239,7 @@ class aList extends oxUBase
 
     /**
      * Iterates through list articles and performs list view specific tasks:
-     *  - sets type of link whicn needs to be generated (Manufacturer link)
+     *  - sets type of link which needs to be generated (Manufacturer link)
      *
      * @return null
      */
@@ -309,7 +304,7 @@ class aList extends oxUBase
     protected function _getProductLinkType()
     {
         $iCatType = OXARTICLE_LINKTYPE_CATEGORY;
-        if ( ( $oCat = $this->getActCategory() ) && $oCat->isPriceCategory() ) {
+        if ( ( $oCat = $this->getActiveCategory() ) && $oCat->isPriceCategory() ) {
             $iCatType =  OXARTICLE_LINKTYPE_PRICECATEGORY;
         }
         return $iCatType;
@@ -406,7 +401,7 @@ class aList extends oxUBase
      */
     protected function _getSeoObjectId()
     {
-        if ( ( $oCategory = $this->getActCategory() ) ) {
+        if ( ( $oCategory = $this->getActiveCategory() ) ) {
             return $oCategory->getId();
         }
     }
@@ -420,7 +415,7 @@ class aList extends oxUBase
     {
         if ( $this->_sCatPathString === null ) {
 
-            // marking as allready set
+            // marking as already set
             $this->_sCatPathString = false;
 
             //fetching category path
@@ -450,13 +445,14 @@ class aList extends oxUBase
      */
     protected function _prepareMetaDescription( $sMeta, $iLength = 1024, $blDescTag = false )
     {
+        $sDescription = '';
         // appending parent title
-        if ( $oCategory = $this->getActCategory() ) {
+        if ( $oCategory = $this->getActiveCategory() ) {
             if ( ( $oParent = $oCategory->getParentCategory() ) ) {
                 $sDescription .= " {$oParent->oxcategories__oxtitle->value} -";
             }
 
-            // adding cateogry title
+            // adding category title
             $sDescription .= " {$oCategory->oxcategories__oxtitle->value}.";
         }
 
@@ -494,9 +490,9 @@ class aList extends oxUBase
     }
 
     /**
-     * Metatags - description and keywords - generator for search
+     * Meta tags - description and keywords - generator for search
      * engines. Uses string passed by parameters, cleans HTML tags,
-     * string dublicates, special chars. Also removes strings defined
+     * string duplicates, special chars. Also removes strings defined
      * in $myConfig->aSkipTags (Admin area).
      *
      * @param string $sMeta     category path
@@ -508,7 +504,10 @@ class aList extends oxUBase
     protected function _collectMetaDescription( $sMeta, $iLength = 1024, $blDescTag = false )
     {
         //formatting description tag
-        $sAddText = ( $oCategory = $this->getActCategory() ) ? trim( $oCategory->getLongDesc() ):'';
+        $oCategory = $this->getActiveCategory();
+
+        $sAddText = ( ( $oCategory instanceof oxCategory ) ) ? trim( $oCategory->getLongDesc() ) : '';
+
         $aArticleList = $this->getArticleList();
         if ( !$sAddText && count($aArticleList)) {
             foreach ( $aArticleList as $oArticle ) {
@@ -533,17 +532,17 @@ class aList extends oxUBase
     }
 
     /**
-     * Returns current view keywords seperated by comma
+     * Returns current view keywords separated by comma
      *
      * @param string $sKeywords               data to use as keywords
-     * @param bool   $blRemoveDuplicatedWords remove dublicated words
+     * @param bool   $blRemoveDuplicatedWords remove duplicated words
      *
      * @return string
      */
     protected function _prepareMetaKeyword( $sKeywords, $blRemoveDuplicatedWords = true )
     {
         $sKeywords = '';
-        if ( ( $oCategory = $this->getActCategory() ) ) {
+        if ( ( $oCategory = $this->getActiveCategory() ) ) {
             $aKeywords = array();
 
             if ( $oCatTree = $this->getCategoryTree() ) {
@@ -624,7 +623,7 @@ class aList extends oxUBase
         // assign template name
         if ( ( $sTplName = basename( oxConfig::getParameter( 'tpl' ) ) ) ) {
             $this->_sThisTemplate = 'custom/'.$sTplName;
-        } elseif ( ( $oCategory = $this->getActCategory() ) && $oCategory->oxcategories__oxtemplate->value ) {
+        } elseif ( ( $oCategory = $this->getActiveCategory() ) && $oCategory->oxcategories__oxtemplate->value ) {
             $this->_sThisTemplate = $oCategory->oxcategories__oxtemplate->value;
         }
 
@@ -642,7 +641,7 @@ class aList extends oxUBase
      */
     protected function _addPageNrParam( $sUrl, $iPage, $iLang = null)
     {
-        if ( oxRegistry::getUtils()->seoIsActive() && ( $oCategory = $this->getActCategory() ) ) {
+        if ( oxRegistry::getUtils()->seoIsActive() && ( $oCategory = $this->getActiveCategory() ) ) {
             if ( $iPage ) {
                 // only if page number > 0
                 $sUrl = $oCategory->getBaseSeoLink( $iLang, $iPage );
@@ -670,7 +669,7 @@ class aList extends oxUBase
      */
     public function generatePageNavigationUrl( )
     {
-        if ( ( oxRegistry::getUtils()->seoIsActive() && ( $oCategory = $this->getActCategory() ) ) ) {
+        if ( ( oxRegistry::getUtils()->seoIsActive() && ( $oCategory = $this->getActiveCategory() ) ) ) {
             return $oCategory->getLink();
         }
         return parent::generatePageNavigationUrl( );
@@ -681,7 +680,7 @@ class aList extends oxUBase
      *
      * @param string $sCnid sortable item id
      *
-     * @deprecated since v4.7.3/5.0.3 (2013-01-07); dublicated code
+     * @deprecated since v4.7.3/5.0.3 (2013-01-07); duplicated code
      *
      * @return string
      */
@@ -698,15 +697,18 @@ class aList extends oxUBase
      */
     public function getDefaultSorting()
     {
-        $oActCat = $this->getActCategory();
+        $aSorting = parent::getDefaultSorting();
 
-        if ( $oActCat && $oActCat->oxcategories__oxdefsort->value ) {
-            $sSortBy  = $oActCat->oxcategories__oxdefsort->value;
-            $sSortDir = ( $oActCat->oxcategories__oxdefsortmode->value ) ? "desc" : "asc";
-            $aSorting = array ( 'sortby' => $sSortBy, 'sortdir' => $sSortDir );
-        } else {
-            $aSorting = parent::getDefaultSorting();
+        $oCategory = $this->getActiveCategory();
+        if ( $oCategory && $oCategory instanceof oxCategory ) {
+            if ( $sDefaultSorting = $oCategory->getDefaultSorting() ) {
+                $sArticleTable = getViewName( 'oxarticles' );
+                $sSortBy  = $sArticleTable.'.'.$sDefaultSorting;
+                $sSortDir = ( $oCategory->getDefaultSortingMode() ) ? "desc" : "asc";
+                $aSorting = array ( 'sortby' => $sSortBy, 'sortdir' => $sSortDir );
+            }
         }
+
         return $aSorting;
     }
 
@@ -718,7 +720,7 @@ class aList extends oxUBase
      */
     public function getTitleSuffix()
     {
-        if ( $this->getActCategory()->oxcategories__oxshowsuffix->value ) {
+        if ( $this->getActiveCategory()->oxcategories__oxshowsuffix->value ) {
             return $this->getConfig()->getActiveShop()->oxshops__oxtitlesuffix->value;
         }
     }
@@ -736,7 +738,7 @@ class aList extends oxUBase
     }
 
     /**
-     * returns object, assosiated with current view.
+     * returns object, associated with current view.
      * (the object that is shown in frontend)
      *
      * @param int $iLang language id
@@ -745,7 +747,7 @@ class aList extends oxUBase
      */
     protected function _getSubject( $iLang )
     {
-        return $this->getActCategory();
+        return $this->getActiveCategory();
     }
 
     /**
@@ -757,7 +759,8 @@ class aList extends oxUBase
     public function getAttributes()
     {
         $this->_aAttributes = false;
-        if ( ( $oCategory = $this->getActCategory() ) ) {
+
+        if ( ( $oCategory = $this->getActiveCategory() ) ) {
             $aAttributes = $oCategory->getAttributes();
             if ( count( $aAttributes ) ) {
                 $this->_aAttributes = $aAttributes;
@@ -775,7 +778,7 @@ class aList extends oxUBase
     public function getArticleList()
     {
         if ( $this->_aArticleList === null ) {
-            if ( /*$this->_isActCategory() &&*/ ( $oCategory = $this->getActCategory() ) ) {
+            if ( /*$this->_isActCategory() &&*/ ( $oCategory = $this->getActiveCategory() ) ) {
                 $aArticleList = $this->_loadArticles( $oCategory );
                 if ( count( $aArticleList ) ) {
                     $this->_aArticleList = $aArticleList;
@@ -885,7 +888,7 @@ class aList extends oxUBase
     {
         if ( $this->_blHasVisibleSubCats === null ) {
             $this->_blHasVisibleSubCats = false;
-            if ( $oClickCat = $this->getActCategory() ) {
+            if ( $oClickCat = $this->getActiveCategory() ) {
                 $this->_blHasVisibleSubCats = $oClickCat->getHasVisibleSubCats();
             }
         }
@@ -893,7 +896,7 @@ class aList extends oxUBase
     }
 
     /**
-     * Template variable getter. Returns list of subategories.
+     * Template variable getter. Returns list of subcategories.
      *
      * @return array
      */
@@ -901,7 +904,7 @@ class aList extends oxUBase
     {
         if ( $this->_aSubCatList === null ) {
             $this->_aSubCatList = array();
-            if ( $oClickCat = $this->getActCategory() ) {
+            if ( $oClickCat = $this->getActiveCategory() ) {
                 $this->_aSubCatList = $oClickCat->getSubCats();
             }
         }
@@ -931,33 +934,11 @@ class aList extends oxUBase
     {
         if ( $this->_sCatTitle === null ) {
             $this->_sCatTitle = false;
-            if ( ( $oCategory = $this->getActCategory() ) ) {
+            if ( ( $oCategory = $this->getActiveCategory() ) ) {
                 $this->_sCatTitle = $oCategory->oxcategories__oxtitle->value;
             }
         }
         return $this->_sCatTitle;
-    }
-
-    /**
-     * Template variable getter. Returns Top 5 article list
-     *
-     * @return array
-     */
-    public function getTop5ArticleList()
-    {
-        if ( $this->_aTop5ArticleList === null ) {
-            $this->_aTop5ArticleList = false;
-            $myConfig = $this->getConfig();
-            if ( $myConfig->getConfigParam( 'bl_perfLoadAktion' ) && $this->_isActCategory() ) {
-                // top 5 articles
-                $oArtList = oxNew( 'oxarticlelist' );
-                $oArtList->loadTop5Articles();
-                if ( $oArtList->count() ) {
-                    $this->_aTop5ArticleList = $oArtList;
-                }
-            }
-        }
-        return $this->_aTop5ArticleList;
     }
 
     /**
@@ -983,11 +964,18 @@ class aList extends oxUBase
     /**
      * Template variable getter. Returns active search
      *
-     * @return oxcategory
+     * @return oxCategory
      */
     public function getActiveCategory()
     {
-        return $this->getActCategory();
+        if ( $this->_oActCategory === null ) {
+            $this->_oActCategory = false;
+            $oCategory = oxNew( 'oxCategory' );
+            if ( $oCategory->load( $this->getCategoryId() ) ) {
+                $this->_oActCategory = $oCategory;
+            }
+        }
+        return $this->_oActCategory;
     }
 
     /**
@@ -1009,7 +997,7 @@ class aList extends oxUBase
     }
 
     /**
-     * Returns cofig prameters blShowListDisplayType value
+     * Returns config parameters blShowListDisplayType value
      *
      * @return boolean
      */

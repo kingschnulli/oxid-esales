@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   tests
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
- * @version   SVN: $Id: oxlangTest.php 52070 2012-11-21 08:09:03Z linas.kukulskis $
+ * @version   SVN: $Id: oxlangTest.php 54527 2013-01-29 11:49:41Z aurimas.gladutis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -1032,11 +1032,11 @@ class Unit_Core_oxLangTest extends OxidTestCase
         $oLang2->id = 1;
 
         $oLang = $this->getMock( "oxLang", array( "isAdmin", "getAdminTplLanguageArray" ) );
-        $oLang->expects( $this->atLeastOnce() )->method( 'isAdmin' )->will( $this->returnValue( true ) );
-        $oLang->expects( $this->once() )->method( 'getAdminTplLanguageArray' )->will( $this->returnValue( array( $oLang1, $oLang2 ) ) );
+        $oLang->expects( $this->any() )->method( 'isAdmin' )->will( $this->returnValue( true ) );
+        $oLang->expects( $this->any() )->method( 'getAdminTplLanguageArray' )->will( $this->returnValue( array( $oLang1, $oLang2 ) ) );
 
-        $this->assertEquals( 'test1', $oLang->getLanguageAbbr( 0 ) );
-        $this->assertEquals( 'test2', $oLang->getLanguageAbbr( 1 ) );
+        $this->assertEquals( 'de', $oLang->getLanguageAbbr( 0 ) );
+        $this->assertEquals( 'en', $oLang->getLanguageAbbr( 1 ) );
         $this->assertEquals( 2, $oLang->getLanguageAbbr( 2 ) );
     }
 
@@ -1421,10 +1421,9 @@ class Unit_Core_oxLangTest extends OxidTestCase
         $oEn->active   = 0;
 
         $oLang = $this->getMock( 'oxlang', array( 'getLanguageIds', 'getLanguageArray' ) );
-        $oLang->expects( $this->once() )->method( 'getLanguageIds')->will( $this->returnValue( array( "lt", "lv" ) ) );
-        $oLang->expects( $this->once() )->method( 'getLanguageArray')->will( $this->returnValue( array( $oLt, $oLv ) ) );
+        $oLang->expects( $this->once() )->method( 'getLanguageArray')->will( $this->returnValue( array( $oLt, $oDe, $oEn ) ) );
 
-        $this->assertEquals( array( $oLt, $oLv, $oDe, $oEn     ), $oLang->getAdminTplLanguageArray() );
+        $this->assertEquals( array( 1 => $oDe, 2 => $oEn ), $oLang->getAdminTplLanguageArray() );
     }
 
 

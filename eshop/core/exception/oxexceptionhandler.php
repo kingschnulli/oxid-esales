@@ -17,13 +17,13 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   core
- * @copyright (C) OXID eSales AG 2003-2012
+ * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
- * @version   SVN: $Id: oxexceptionhandler.php 48727 2012-08-16 09:09:02Z tomas $
+ * @version   SVN: $Id: oxexceptionhandler.php 56324 2013-03-07 11:58:45Z linas.kukulskis $
  */
 
 /**
- * Exception handler, deals with all high level exceptions (caught in oxshopcontrol)
+ * Exception handler, deals with all high level exceptions (caught in oxShopControl)
  * @package core
  */
 class oxExceptionHandler
@@ -45,7 +45,7 @@ class oxExceptionHandler
     /**
      * Class constructor
      *
-     * @param integer $iDebug denug level
+     * @param integer $iDebug debug level
      */
     public function __construct( $iDebug = 0 )
     {
@@ -116,7 +116,7 @@ class oxExceptionHandler
      */
     protected function _uncaughtException( oxException $oEx )
     {
-        // exception occured in function processing
+        // exception occurred in function processing
         $oEx->setNotCaught();
         // general log entry for all exceptions here
         $oEx->debugOut();
@@ -128,16 +128,16 @@ class oxExceptionHandler
         }
 
         //simple safe redirect in productive mode
-        $sShopUrl = oxRegistry::getConfig()->getShopMainUrl();
+        $sShopUrl = oxRegistry::getConfig()->getSslShopUrl();
         $this->_safeShopRedirectAndExit( $sShopUrl . "offline.html" );
 
         //should not be reached
-        return ;
+        return;
     }
 
     /**
-     * No oxid exception, just write log file.
-     * IMPOARTANT: uses _safeShopRedirectAndExit(), see description
+     * No oxException, just write log file.
+     * IMPORTANT: uses _safeShopRedirectAndExit(), see description
      *
      * @param Exception $oEx exception object
      *
@@ -155,7 +155,7 @@ class oxExceptionHandler
             }
         }
 
-        $sShopUrl = oxRegistry::getConfig()->getShopMainUrl();
+        $sShopUrl = oxRegistry::getConfig()->getSslShopUrl();
         $this->_safeShopRedirectAndExit( $sShopUrl . "offline.html" );
     }
 
@@ -175,7 +175,7 @@ class oxExceptionHandler
             return ;
         }
 
-        //make the redirect directly to be independetn from other objects
+        //make the redirect directly to be independent from other objects
         header("HTTP/1.1 500 Internal Server Error");
         header("Location: ".$sUrl);
         header("Connection: close");
@@ -189,11 +189,11 @@ class oxExceptionHandler
      * @param string $sMethod Methods name
      * @param array  $aArgs   Argument array
      *
-     * @throws oxSystemComponentException Throws an exception if the called method does not exist or is not accessable in current class
+     * @throws oxSystemComponentException Throws an exception if the called method does not exist or is not accessible in current class
      *
      * @return string
      */
-    public function __call( $sMethod, $aArgs)
+    public function __call( $sMethod, $aArgs )
     {
         if ( defined( 'OXID_PHP_UNIT' ) ) {
             if ( substr( $sMethod, 0, 4) == "UNIT") {
@@ -204,6 +204,6 @@ class oxExceptionHandler
             }
         }
 
-        throw new oxSystemComponentException( "Function '$sMethod' does not exist or is not accessable! (".__CLASS__.")".PHP_EOL);
+        throw new oxSystemComponentException( "Function '$sMethod' does not exist or is not accessible! (".__CLASS__.")".PHP_EOL);
     }
 }

@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   tests
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
- * @version   SVN: $Id: pluginsmartyoxcontentTest.php 47971 2012-07-30 16:04:04Z linas.kukulskis $
+ * @version   SVN: $Id: pluginsmartyoxcontentTest.php 56496 2013-03-11 16:00:59Z alfonsas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -84,14 +84,12 @@ class Unit_Maintenance_pluginSmartyOxContentTest extends OxidTestCase
     {
             $sShopId = 'oxbaseshop';
 
-        $sText = "<b>content not found ! check ident() !</b>";
-
         $aParams['oxid'] = 'f41427a099a603773.44301043';
         $aParams['assign'] = true;
 
         $oSmarty = $this->getMock( "smarty", array( "fetch", "assign" ) );
         $oSmarty->expects( $this->once() )->method( 'fetch')->with($this->equalTo('ox:f41427a099a603773.44301043oxcontent0'.$sShopId))->will( $this->returnValue( 'testvalue' ) );
-        $oSmarty->expects( $this->once() )->method( 'assign')->with( $this->equalTo( $sText ) );
+        $oSmarty->expects( $this->once() )->method( 'assign')->with( $this->equalTo( true ) );
 
         smarty_function_oxcontent( $aParams, $oSmarty );
     }

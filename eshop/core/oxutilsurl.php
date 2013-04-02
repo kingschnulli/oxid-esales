@@ -17,7 +17,7 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   core
- * @copyright (C) OXID eSales AG 2003-2012
+ * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
  * @version   SVN: $Id: oxutils.php 23456 2009-10-21 14:49:35Z sarunas $
  */
@@ -346,9 +346,9 @@ class oxUtilsUrl extends oxSuperCfg
     }
 
     /**
-     * Remove dublicate GET parameters and clean &amp; and dublicate &
+     * Remove duplicate GET parameters and clean &amp; and duplicate &
      *
-     * @param string $sUrl 	     url to proccess
+     * @param string $sUrl 	     url to process
      * @param string $sConnector GET elements connector
      *
      * @return string
@@ -358,10 +358,7 @@ class oxUtilsUrl extends oxSuperCfg
         $aUrlParts = explode('?', $sUrl);
 
         // check for params part
-        if (
-            !is_array($aUrlParts)
-            || count($aUrlParts) != 2
-        ) {
+        if ( !is_array($aUrlParts) || count($aUrlParts) != 2) {
             return $sUrl;
         }
 
@@ -375,7 +372,7 @@ class oxUtilsUrl extends oxSuperCfg
             $sUrlParams
         );
 
-        // remove dublicate entries
+        // remove duplicate entries
         parse_str($sUrlParams, $aUrlParams);
         $sUrl .= '?'.http_build_query($aUrlParams, '', $sConnector);
 

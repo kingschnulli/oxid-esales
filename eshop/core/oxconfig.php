@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   core
- * @copyright (C) OXID eSales AG 2003-2012
+ * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
- * @version   SVN: $Id: oxconfig.php 52793 2012-12-10 14:04:16Z saulius.stasiukaitis $
+ * @version   SVN: $Id: oxconfig.php 56323 2013-03-07 11:57:40Z linas.kukulskis $
  */
 
 //max integer
@@ -134,13 +134,6 @@ class oxConfig extends oxSuperCfg
      * @var bool
      */
     protected $blSessionUseCookies = null;
-
-    /**
-     * Default max article count in select lists
-     *
-     * @var int
-     */
-    //protected $iMaxArticles = 6000;
 
     /**
      * Default image loading location.
@@ -322,13 +315,6 @@ class oxConfig extends oxSuperCfg
      * @var string
      */
     const OXMODULE_MODULE_PREFIX = 'module:';
-
-    /**
-     * The biggest amount of possible sub-shops
-     *
-     * @var integer
-     */
-    const OXMAX_SHOP_COUNT = 256;
 
     /**
      * Returns config parameter value if such parameter exists
@@ -558,14 +544,6 @@ class oxConfig extends oxSuperCfg
         $iZoomPicCount = $this->getConfigParam( 'iZoomPicCount' );
         if ( !isset( $iZoomPicCount ) )
             $this->setConfigParam( 'iZoomPicCount', 4 );
-
-        //max shop id default value
-        $iMaxShopId = $this->getConfigParam( 'iMaxShopId' );
-        if ( !isset( $iMaxShopId ) ) {
-            $this->setConfigParam( 'iMaxShopId', 128 );
-        } elseif ( $iMaxShopId > self::OXMAX_SHOP_COUNT ) {
-            $this->setConfigParam( 'iMaxShopId', self::OXMAX_SHOP_COUNT );
-        }
 
         // ADODB cache life time
         $iDBCacheLifeTime = $this->getConfigParam( 'iDBCacheLifeTime' );
@@ -1622,7 +1600,7 @@ class oxConfig extends oxSuperCfg
     }
 
     /**
-     * Finds and returns resouce (css, js, etc..) files or folders path
+     * Finds and returns resource (css, js, etc..) files or folders path
      *
      * @param string $sFile   File name
      * @param bool   $blAdmin Whether to force admin

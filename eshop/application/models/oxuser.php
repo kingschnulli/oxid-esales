@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
- * @version   SVN: $Id: oxuser.php 53476 2013-01-08 11:58:19Z linas.kukulskis $
+ * @version   SVN: $Id: oxuser.php 55325 2013-02-15 09:42:54Z linas.kukulskis $
  */
 
 /**
@@ -656,7 +656,7 @@ class oxUser extends oxBase
                     WHERE ( oxid = '.$oDb->quote( $sOXID ).' ) ';
             $sSelect .= $sShopSelect;
 
-            if ( ( $sOxid = $oDb->getOne( $sSelect ) ) ) {
+            if ( ( $sOxid = $oDb->getOne( $sSelect, false, false ) ) ) {
                 // update - set oxid
                 $this->setId( $sOxid );
                 return true;
@@ -667,7 +667,7 @@ class oxUser extends oxBase
                     WHERE ( oxusername = '.$oDb->quote( $this->oxuser__oxusername->value).' ) ';
         $sSelect .= $sShopSelect;
 
-        if ( ( $sOxid = $oDb->getOne( $sSelect ) ) ) {
+        if ( ( $sOxid = $oDb->getOne( $sSelect, false, false ) ) ) {
              // update - set oxid
             $this->setId( $sOxid );
             return true;
@@ -1180,14 +1180,24 @@ class oxUser extends oxBase
      */
     public function changeUserData( $sUser, $sPassword, $sPassword2, $aInvAddress, $aDelAddress )
     {
+
         // validating values before saving. If validation fails - exception is thrown
         $this->checkValues( $sUser, $sPassword, $sPassword2, $aInvAddress, $aDelAddress );
         // input data is fine - lets save updated user info
+
+
+
         $this->assign( $aInvAddress );
+
+
+
 
 
         // update old or add new delivery address
         $this->_assignAddress( $aDelAddress );
+
+
+
 
         // saving new values
         if ( $this->save() ) {
@@ -1235,10 +1245,13 @@ class oxUser extends oxBase
     protected function _assignAddress( $aDelAddress )
     {
         if ( is_array( $aDelAddress ) && count( $aDelAddress ) ) {
-            $sAddressId = oxConfig::getParameter( 'oxaddressid' );
-            $sMyAddressId = ( $sAddressId === null || $sAddressId == -1 || $sAddressId == -2 ) ?  null : $sAddressId;
-            $aDelAddress['oxaddress__oxid'] = $sMyAddressId;
+
+            $sAddressId = $this->getConfig()->getRequestParameter( 'oxaddressid' );
+            $sAddressId = ( $sAddressId === null || $sAddressId == -1 || $sAddressId == -2 ) ?  null : $sAddressId;
+
             $oAddress = oxNew( 'oxaddress' );
+            $oAddress->setId( $sAddressId );
+            $oAddress->load( $sAddressId );
             $oAddress->assign( $aDelAddress );
             $oAddress->oxaddress__oxuserid  = new oxField( $this->getId(), oxField::T_RAW );
             $oAddress->oxaddress__oxcountry = $this->getUserCountry( $oAddress->oxaddress__oxcountryid->value );
@@ -1751,7 +1764,7 @@ class oxUser extends oxBase
         if ( ( $sOxid = $this->getId() ) ) {
             $sQ .= " and oxid <> ".$oDb->quote( $sOxid );
         }
-        $oRs = $oDb->select( $sQ );
+        $oRs = $oDb->select( $sQ, false, false );
         if ( $oRs != false && $oRs->recordCount() > 0 ) {
 
             if ( $this->_blMallUsers ) {

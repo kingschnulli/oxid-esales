@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
- * @version   SVN: $Id: oxarticle.php 53455 2013-01-07 15:55:52Z aurimas.gladutis $
+ * @version   SVN: $Id: oxarticle.php 56033 2013-02-28 13:07:22Z linas.kukulskis $
  */
 
 // defining supported link types
@@ -276,7 +276,7 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
     protected $_iLinkType = 0;
 
     /**
-     * Stardard/dynamic article urls for languages
+     * Standard/dynamic article urls for languages
      *
      * @var array
      */
@@ -348,7 +348,7 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
     /**
      * Amount price
      *
-     * @var duoble
+     * @var double
      */
     protected $_dAmountPrice = null;
 
@@ -443,7 +443,7 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
 
 
     /**
-     * Class constructor, sets shop ID for article (oxconfig::getShopId()),
+     * Constructor, sets shop ID for article (oxconfig::getShopId()),
      * initiates parent constructor (parent::oxI18n()).
      *
      * @param array $aParams The array of names and values of oxArticle instance properties to be set on object instantiation
@@ -473,7 +473,7 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
     {
         $this->$sName = parent::__get($sName);
         if ( $this->$sName ) {
-            // since the field could have been loaded via lazyloading
+            // since the field could have been loaded via lazy loading
             $this->_assignParentFieldValue($sName);
         }
 
@@ -1007,7 +1007,7 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
     }
 
     /**
-     * Loads and returns array with crosselling information.
+     * Loads and returns array with cross selling information.
      *
      * @return array
      */
@@ -1021,7 +1021,7 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
     }
 
     /**
-     * Loads and returns array with accessoires information.
+     * Loads and returns array with accessories information.
      *
      * @return array
      */
@@ -1130,7 +1130,7 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
     /**
      * Returns all selectlists this article has (used in oxbasket)
      *
-     * @param string $sKeyPrefix Optionall key prefix
+     * @param string $sKeyPrefix Optional key prefix
      *
      * @return array
      */
@@ -1160,10 +1160,11 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
                 $oLists->selectString( sprintf( $sQ, $oDb->quote( $this->oxarticles__oxparentid->value ) ) );
             }
 
-            $dVat = 0;
-            if ( $this->getPrice() != null ) {
+            // We do not need to calculate price here as there are method to get current article vat
+            /*if ( $this->getPrice() != null ) {
                 $dVat = $this->getPrice()->getVat();
-            }
+            }*/
+            $dVat = $this->getArticleVat();
 
             $iCnt = 0;
             self::$_aSelList[$sKey] = array();
@@ -1300,7 +1301,7 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
      *
      * @param bool $blSimple              If parameter $blSimple - list will be filled with oxSimpleVariant objects, else - oxArticle
      * @param bool $blRemoveNotOrderables if true, removes from list not orderable articles, which are out of stock [optional]
-     * @param bool $blForceCoreTable      if true forces core tabel use, default is false [optional]
+     * @param bool $blForceCoreTable      if true forces core table use, default is false [optional]
      *
      * @return array | oxsimplevariantlist | oxarticlelist
      */
@@ -1389,7 +1390,7 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
      * Returns variant list (list contains oxArticle objects)
      *
      * @param bool $blRemoveNotOrderables if true, removes from list not orderable articles, which are out of stock [optional]
-     * @param bool $blForceCoreTable      if true forces core tabel use, default is false [optional]
+     * @param bool $blForceCoreTable      if true forces core table use, default is false [optional]
      *
      * @return oxarticlelist
      */
@@ -1402,7 +1403,7 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
      * Collects and returns article variants.
      *
      * @param bool $blRemoveNotOrderables if true, removes from list not orderable articles, which are out of stock
-     * @param bool $blForceCoreTable      if true forces core tabel use, default is false [optional]
+     * @param bool $blForceCoreTable      if true forces core table use, default is false [optional]
      *
      * @return array
      */
@@ -1412,7 +1413,7 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
     }
 
     /**
-     * Simple way to get variants without quering oxarticle table first. This is basically used for lists.
+     * Simple way to get variants without querying oxArticle table first. This is basically used for lists.
      *
      * @return null
      */
@@ -1780,7 +1781,7 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
      */
     public function skipDiscounts()
     {
-        // allready loaded skip discounts config
+        // already loaded skip discounts config
         if ( $this->_blSkipDiscounts !== null ) {
             return $this->_blSkipDiscounts;
         }
@@ -1827,7 +1828,7 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
     public function getBasePrice( $dAmount = 1 )
     {
         // override this function if you want e.g. different prices
-        // for diff. usergroups.
+        // for diff. user groups.
 
         // Performance
         $myConfig = $this->getConfig();
@@ -1844,7 +1845,7 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
     /**
      * Calculates and returns price of article (adds taxes and discounts).
      *
-     * @param double $dAmount article amount
+     * @param float $dAmount article amount
      *
      * @return oxPrice
      */
@@ -1940,9 +1941,9 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
     }
 
     /**
-     * Creates, calculates and returns oxprice object for basket product.
+     * Creates, calculates and returns oxPrice object for basket product.
      *
-     * @param double $dAmount  Amount
+     * @param float  $dAmount  Amount
      * @param string $aSelList Selection list
      * @param object $oBasket  User shopping basket object
      *
@@ -2010,12 +2011,12 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
     }
 
     /**
-     * reduce article stock. return the affected amount
+     * Reduce article stock. return the affected amount
      *
-     * @param double $dAmount              amount to reduce
-     * @param bool   $blAllowNegativeStock are negative stocks allowed?
+     * @param float $dAmount              amount to reduce
+     * @param bool  $blAllowNegativeStock are negative stocks allowed?
      *
-     * @return double
+     * @return float
      */
     public function reduceStock($dAmount, $blAllowNegativeStock = false)
     {
@@ -2038,7 +2039,7 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
      * Recursive function. Updates quantity of sold articles.
      * Return true on success
      *
-     * @param double $dAmount Number of articles sold
+     * @param float $dAmount Number of articles sold
      *
      * @return bool
      */
@@ -2086,7 +2087,7 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
     public function save()
     {
         if ( ( $blRet = parent::save() ) ) {
-            // saving long descrition
+            // saving long description
             $this->_saveArtLongDesc();
         }
 
@@ -2247,7 +2248,7 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
         $sId = ( $sParentID ) ? $sParentID : $sOXID;
         $this->_setVarMinMaxPrice( $sId );
 
-        // reseting articles count cache if stock has changed and some
+        // resetting articles count cache if stock has changed and some
         // articles goes offline (M:1448)
         if ( $sAction === ACTION_UPDATE_STOCK ) {
             $this->_onChangeStockResetCount( $sOXID );
@@ -2497,7 +2498,7 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
      */
     public function setLinkType( $iType )
     {
-        // resetting detaisl link, to force new
+        // resetting details link, to force new
         $this->_sDetailLink = null;
 
         // setting link type
@@ -2515,7 +2516,7 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
     }
 
     /**
-     * Appends article dynemic url with additional request parameters
+     * Appends article dynamic url with additional request parameters
      *
      * @param string $sAddParams additional parameters which needs to be added to product url
      * @param int    $iLang      language id
@@ -2764,7 +2765,7 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
     }
 
     /**
-     * Returns formated delivery date. If the date is not set ('0000-00-00') returns false.
+     * Returns formatted delivery date. If the date is not set ('0000-00-00') returns false.
      *
      * @return string | bool
      */
@@ -2792,7 +2793,7 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
     }
 
     /**
-     * Returns formated product's price.
+     * Returns formatted product's price.
      *
      * @return double
      */
@@ -2819,7 +2820,7 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
     }
 
     /**
-     * Returns formated product's NETTO price.
+     * Returns formatted product's NETTO price.
      *
      * @return double
      */
@@ -2831,7 +2832,7 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
     }
 
     /**
-     * Returns formated price per unit
+     * Returns formatted price per unit
      *
      * @deprecated since v5.0 (2012-091-4); use getFUnitPrice();
      *
@@ -2935,7 +2936,7 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
     /**
      * Returns article thumbnail picture url
      *
-     * @param bool $bSsl wethere to force SSL
+     * @param bool $bSsl to force SSL
      *
      * @return string
      */
@@ -3147,7 +3148,7 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
     /**
      * Modifies article price according to selected select list value
      *
-     * @param double $dPrice      Modifyable price
+     * @param double $dPrice      Modifiable price
      * @param array  $aChosenList Selection list array
      *
      * @return double
@@ -3178,7 +3179,7 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
      /**
      * Fills amount price list object and sets amount price for article object
      *
-     * @param object $oAmPriceList Amount (staffel) price list
+     * @param object $oAmPriceList Amount price list
      *
      * @return object
      */
@@ -3372,7 +3373,7 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
         // #1137V iAttributesPercent = 100 doesnt work
         $iHitMin = ceil( $iCnt * $iAttrPercent );
 
-        // we do not use lists here as we dont need this overhead right now
+        // we do not use lists here as we don't need this overhead right now
         $aList= array();
         $sSelect =  "select oxobjectid, count(*) as cnt from oxobject2attribute as t1 where
                     ( $sAttribs )
@@ -3444,7 +3445,7 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
         $sCatView = getViewName( 'oxcategories', $this->getLanguage() );
         $sO2CView = getViewName( 'oxobject2category' );
 
-        // we do not use lists here as we dont need this overhead right now
+        // we do not use lists here as we don't need this overhead right now
         if ( !$blSearchPriceCat ) {
             $sSelect  = "select {$sCatView}.* from {$sO2CView} as oxobject2category left join {$sCatView} on
                          {$sCatView}.oxid = oxobject2category.oxcatnid
@@ -4035,7 +4036,7 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
     }
 
     /**
-     * Resets category and vendor counts. This method is supposed to be called on article change triger.
+     * Resets category and vendor counts. This method is supposed to be called on article change trigger.
      *
      * @param string $sOxid           object to reset id ID
      * @param string $sVendorId       Vendor ID
@@ -4069,7 +4070,7 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
     }
 
     /**
-     * Updates article stock. This method is supposed to be called on article change triger.
+     * Updates article stock. This method is supposed to be called on article change trigger.
      *
      * @param string $sParentID product parent id
      *
@@ -4127,7 +4128,7 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
     }
 
     /**
-     * Updates variant count. This method is supposed to be called on article change triger.
+     * Updates variant count. This method is supposed to be called on article change trigger.
      *
      * @param string $sParentID Parent ID
      *
@@ -4228,7 +4229,7 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
 
 
     /**
-     * Returns minimum brut price from all (already loaded) variants and if aplicable parent article
+     * Returns minimum brut price from all (already loaded) variants and if applicable parent article
      *
      * @deprecated since v4.7.0-5.0.0 (2012-10-08); use getFVarMinPrice or getFMinPrice methods
      *
@@ -4243,7 +4244,7 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
 
         $this->_blIsRangePrice = false;
 
-        // if parent is buyable - do not apply range price calcculations
+        // if parent is buyable - do not apply range price calculations
         if ($this->_blSkipFromPrice || !$this->_blNotBuyableParent) {
             return;
         }
@@ -4355,7 +4356,7 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
     /**
      * get Sql for loading price categories which include this article
      *
-     * @param string $sFields fields to load from oxcategories
+     * @param string $sFields fields to load from oxCategories
      *
      * @return string
      */
@@ -4372,7 +4373,7 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
     }
 
     /**
-     * Checks if artickle is assigned to price category $sCatNID.
+     * Checks if article is assigned to price category $sCatNID.
      *
      * @param string $sCatNid Price category ID
      *
@@ -4428,7 +4429,7 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
     }
 
     /**
-     * Checks if article has uplodaded master image for selected picture
+     * Checks if article has uploaded master image for selected picture
      *
      * @param int $iIndex master picture index
      *
@@ -4654,7 +4655,7 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
 
 
     /**
-     * Returns formated price per unit
+     * Returns formatted price per unit
      *
      * @return string
      */
@@ -4673,7 +4674,7 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
 
 
     /**
-     * Returns formated price per unit
+     * Returns formatted price per unit
      *
      * @return string
      */
@@ -4695,7 +4696,7 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
 
 
     /**
-     * Returns formated article min price
+     * Returns formatted article min price
      *
      * @return string
      */
@@ -4711,7 +4712,7 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
     }
 
      /**
-     * Returns formated min article variant price
+     * Returns formatted min article variant price
      *
      * @return string
      */
@@ -4776,7 +4777,6 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
         $oPrice->setPrice( $dPrice );
         $this->_calculatePrice( $oPrice );
 
-
         return $oPrice;
     }
 
@@ -4822,7 +4822,7 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
     }
 
     /**
-     * Return price sufix
+     * Return price suffix
      *
      * @return null
      */
@@ -4901,7 +4901,7 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
     }
 
     /**
-     * Return subshop variant min price
+     * Return sub shop variant min price
      *
      * @return null
      */
@@ -4962,7 +4962,7 @@ class oxArticle extends oxI18n implements oxIArticle, oxIUrl
     }
 
     /**
-     * Return subshop variant max price
+     * Return sub shop variant max price
      *
      * @return null
      */

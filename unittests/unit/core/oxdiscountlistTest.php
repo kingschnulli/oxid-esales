@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   tests
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
- * @version   SVN: $Id: oxdiscountlistTest.php 51653 2012-11-12 08:30:11Z linas.kukulskis $
+ * @version   SVN: $Id: oxdiscountlistTest.php 55152 2013-02-14 08:50:58Z aurimas.gladutis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -469,8 +469,11 @@ class Unit_Core_oxDiscountlistTest extends OxidTestCase
         $aDiscounts[3]->expects( $this->once() )->method( 'isForArticle' )->will( $this->returnValue( false ) );
         $aDiscounts[3]->expects( $this->never() )->method( 'getId' )->will( $this->returnValue( 'www' ) );
 
+        $oDList = $this->getMock( 'oxList', array( 'getArray' ) );
+        $oDList->expects( $this->once() )->method( 'getArray' )->will( $this->returnValue( $aDiscounts ) );
+
         $oList = $this->getMock( 'oxdiscountlist', array( '_getList' ) );
-        $oList->expects( $this->once() )->method( '_getList' )->will( $this->returnValue( $aDiscounts ) );
+        $oList->expects( $this->once() )->method( '_getList' )->will( $this->returnValue( $oDList ) );
 
         // now proceeding to disocunt id check
         $this->assertEquals( array( 'xxx' => $aDiscounts[0], 'yyy' => $aDiscounts[1] ), $oList->getArticleDiscounts( $oArticle ) );
@@ -584,8 +587,11 @@ class Unit_Core_oxDiscountlistTest extends OxidTestCase
         $aDiscounts[3]->expects( $this->never() )->method( 'getId' )->will( $this->returnValue( 'www' ) );
         $aDiscounts[3]->expects( $this->never() )->method( 'isForBasketAmount' );
 
+        $oDList = $this->getMock( 'oxList', array( 'getArray' ) );
+        $oDList->expects( $this->once() )->method( 'getArray' )->will( $this->returnValue( $aDiscounts ) );
+
         $oList = $this->getMock( 'oxdiscountlist', array( '_getList' ) );
-        $oList->expects( $this->once() )->method( '_getList' )->will( $this->returnValue( $aDiscounts ) );
+        $oList->expects( $this->once() )->method( '_getList' )->will( $this->returnValue( $oDList ) );
 
         // now proceeding to disocunt id check
         $this->assertEquals( array( 'yyy' => $aDiscounts[1] ), $oList->getBasketItemBundleDiscounts( $oArticle, $oBasket ) );

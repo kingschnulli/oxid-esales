@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   admin
- * @copyright (C) OXID eSales AG 2003-2012
+ * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
- * @version   SVN: $Id: shop_main.php 50640 2012-10-17 12:35:30Z alfonsas $
+ * @version   SVN: $Id: shop_main.php 54663 2013-01-31 12:37:32Z linas.kukulskis $
  */
 
 
@@ -48,7 +48,6 @@ class Shop_Main extends oxAdminDetails
     public function render()
     {
         $myConfig = $this->getConfig();
-
         parent::render();
 
         $soxId = $this->_aViewData["oxid"] = $this->getEditObjectId();

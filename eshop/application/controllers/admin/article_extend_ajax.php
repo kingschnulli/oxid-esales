@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   admin
- * @copyright (C) OXID eSales AG 2003-2012
+ * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
- * @version   SVN: $Id: article_extend_ajax.php 52632 2012-12-03 09:15:51Z linas.kukulskis $
+ * @version   SVN: $Id: article_extend_ajax.php 56249 2013-03-06 14:20:46Z linas.kukulskis $
  */
 
 /**
@@ -93,7 +93,7 @@ class article_extend_ajax extends ajaxListComponent
             reset( $aDataFields );
             while ( list( $iPos, $aField ) = each( $aDataFields ) ) {
 
-                // allready set ?
+                // already set ?
                 if ( $aField['_3'] == '0' ) {
                     $iMinPos = null;
                     break;
@@ -134,7 +134,6 @@ class article_extend_ajax extends ajaxListComponent
         if ( oxConfig::getParameter( 'all' ) ) {
             $sCategoriesTable = $this->_getViewName( 'oxcategories' );
             $aRemoveCat = $this->_getAll( $this->_addFilter( "select {$sCategoriesTable}.oxid ".$this->_getQuery() ) );
-            //echo "\n".$this->_addFilter( "select {$sCategoriesTable}.oxid ".$this->_getQuery() )."\n____<<<>>>____";
         }
 
         // removing all

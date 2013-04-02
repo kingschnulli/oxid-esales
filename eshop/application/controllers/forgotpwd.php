@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   views
- * @copyright (C) OXID eSales AG 2003-2012
+ * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
- * @version   SVN: $Id: forgotpwd.php 51862 2012-11-15 12:41:21Z aurimas.gladutis $
+ * @version   SVN: $Id: forgotpwd.php 55685 2013-02-21 16:03:06Z linas.kukulskis $
  */
 
 /**
@@ -56,12 +56,6 @@ class ForgotPwd extends oxUBase
      * @var bool
      */
     protected $_blUpdateLinkStatus = null;
-
-    /**
-     * Sign if to load and show top5articles action
-     * @var bool
-     */
-    protected $_blTop5Action = true;
 
     /**
      * Sign if to load and show bargain action

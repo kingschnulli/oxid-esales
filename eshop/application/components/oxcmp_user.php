@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   views
- * @copyright (C) OXID eSales AG 2003-2012
+ * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcmp_user.php 53118 2012-12-19 09:13:47Z aurimas.gladutis $
+ * @version   SVN: $Id: oxcmp_user.php 55116 2013-02-12 12:09:42Z linas.kukulskis $
  */
 
 // defining login/logout states
@@ -405,7 +405,7 @@ class oxcmp_user extends oxView
 
     /**
      * Executes oxcmp_user::_changeuser_noredirect().
-     * returns "account_user" (this redirects to billing and shipping settings page)
+     * returns "account_user" (this redirects to billing and shipping settings page) on success
      *
      * @return null
      */
@@ -413,9 +413,11 @@ class oxcmp_user extends oxView
     {
         // skip updating user info if this is just form reload
         // on selecting delivery address
+        // We do redirect only on success not to loose errors.
 
-        $this->_changeUser_noRedirect();
-        return 'account_user';
+        if ( $this->_changeUser_noRedirect() ) {
+            return 'account_user';
+        }
     }
 
     /**
@@ -480,7 +482,7 @@ class oxcmp_user extends oxView
             $iSubscriptionStatus = $oUser->getNewsSubscription()->getOptInStatus();
 
             $oUser->createUser();
-            $oUser->load( $oUser->getId() );
+            $oUser->load($oUser->getId());
             $oUser->changeUserData( $oUser->oxuser__oxusername->value, $sPassword, $sPassword, $aInvAdress, $aDelAdress );
 
             if ( $blActiveLogin ) {
@@ -522,12 +524,10 @@ class oxcmp_user extends oxView
         }
 
         if ( !$blActiveLogin ) {
-            if ( !$sPassword ) {
+
                 oxSession::setVar( 'usr', $oUser->getId() );
                 $this->_afterLogin( $oUser );
-            } elseif ( $this->login() == 'user' ) {
-                return false;
-            }
+
 
             // order remark
             //V #427: order remark for new users
@@ -615,7 +615,7 @@ class oxcmp_user extends oxView
                 $blOptin = $oUser->getNewsSubscription()->getOptInStatus();
             }
             // check if email address changed, if so, force check news subscription settings.
-            $blForceCheckOptIn = ( $aInvAdress['oxuser__oxusername'] !== $sUserName );
+            $blForceCheckOptIn = ( $aInvAdress['oxuser__oxusername'] !== null && $aInvAdress['oxuser__oxusername'] !== $sUserName );
             $this->_blNewsSubscriptionStatus = $oUser->setNewsSubscription( $blOptin, $this->getConfig()->getConfigParam( 'blOrderOptInEmail' ), $blForceCheckOptIn );
 
         } catch ( oxUserException $oEx ) { // errors in input

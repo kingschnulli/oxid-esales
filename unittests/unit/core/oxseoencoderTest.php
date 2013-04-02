@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   tests
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
- * @version   SVN: $Id: oxseoencoderTest.php 53394 2013-01-07 10:07:19Z aurimas.gladutis $
+ * @version   SVN: $Id: oxseoencoderTest.php 55032 2013-02-11 11:33:19Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -430,10 +430,10 @@ class Unit_Core_oxSeoEncoderTest extends OxidTestCase
         $oCategory = new oxCategory();
         $oCategory->load( $sCategoryId );
 
-        $oView = $this->getMock( "oxUBase", array( "getTag", "getActCategory" ) );
+        $oView = $this->getMock( "oxUBase", array( "getTag", "getActiveCategory" ) );
             $oView->expects( $this->once() )->method('getTag')->will( $this->returnValue( 'seiner' ) );
-        $oView->expects( $this->at( 0 ) )->method('getActCategory')->will( $this->returnValue( $oCategory ) );
-        $oView->expects( $this->at( 1 ) )->method('getActCategory')->will( $this->returnValue( $oPriceCategory ) );
+        $oView->expects( $this->at( 0 ) )->method('getActiveCategory')->will( $this->returnValue( $oCategory ) );
+        $oView->expects( $this->at( 1 ) )->method('getActiveCategory')->will( $this->returnValue( $oPriceCategory ) );
 
         $myConfig->setActiveView( $oView );
 
@@ -525,10 +525,10 @@ class Unit_Core_oxSeoEncoderTest extends OxidTestCase
         $oCategory = new oxCategory();
         $oCategory->load( $sCategoryId );
 
-        $oView = $this->getMock( "oxUBase", array( "getTag", "getActCategory" ) );
+        $oView = $this->getMock( "oxUBase", array( "getTag", "getActiveCategory" ) );
         $oView->expects( $this->once() )->method('getTag')->will( $this->returnValue( $sTag ) );
-        $oView->expects( $this->at( 0 ) )->method('getActCategory')->will( $this->returnValue( $oCategory ) );
-        $oView->expects( $this->at( 1 ) )->method('getActCategory')->will( $this->returnValue( $oPriceCategory ) );
+        $oView->expects( $this->at( 0 ) )->method('getActiveCategory')->will( $this->returnValue( $oCategory ) );
+        $oView->expects( $this->at( 1 ) )->method('getActiveCategory')->will( $this->returnValue( $oPriceCategory ) );
 
         $myConfig->setActiveView( $oView );
 

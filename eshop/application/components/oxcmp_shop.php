@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   views
- * @copyright (C) OXID eSales AG 2003-2012
+ * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcmp_shop.php 52083 2012-11-21 10:58:30Z linas.kukulskis $
+ * @version   SVN: $Id: oxcmp_shop.php 56322 2013-03-07 11:52:20Z linas.kukulskis $
  */
 
 /**
@@ -50,8 +50,8 @@ class oxcmp_shop extends oxView
         $oShop = $myConfig->getActiveShop();
         if ( !$oShop->oxshops__oxactive->value && 'oxstart' != $myConfig->getActiveView()->getClassName() && !$this->isAdmin() ) {
             // redirect to offline if there is no active shop
-            $sShopUrl = oxRegistry::getConfig()->getShopMainUrl();
-            oxRegistry::getUtils()->redirect($sShopUrl . 'offline.html', false);
+            $sShopUrl = oxRegistry::getConfig()->getSslShopUrl();
+            oxRegistry::getUtils()->redirect( $sShopUrl . 'offline.html', false );
         }
 
         return $oShop;

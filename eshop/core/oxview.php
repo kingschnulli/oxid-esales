@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   views
- * @copyright (C) OXID eSales AG 2003-2012
+ * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
- * @version   SVN: $Id: oxview.php 52086 2012-11-21 11:07:44Z linas.kukulskis $
+ * @version   SVN: $Id: oxview.php 56624 2013-03-15 16:01:09Z linas.kukulskis $
  */
 
 /**
@@ -807,7 +807,9 @@ class oxView extends oxSuperCfg
      * not set by component - will create category object and will try to
      * load by id passed by request
      *
-     * @return oxcategory
+     * @deprecated since v5.0.4 (2013-02-11); use oxUBase::getActiveCategory();
+     *
+     * @return oxCategory
      */
     public function getActCategory()
     {
@@ -829,7 +831,9 @@ class oxView extends oxSuperCfg
     /**
      * Active category setter
      *
-     * @param oxcategory $oCategory active category
+     * @param oxCategory $oCategory active category
+     *
+     *  @deprecated since v5.0.4 (2013-02-11); use oxUBase::getActiveCategory();
      *
      * @return null
      */

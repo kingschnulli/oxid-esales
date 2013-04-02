@@ -18,9 +18,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   core
- * @copyright (C) OXID eSales AG 2003-2012
+ * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
- * @version   SVN: $Id: oxinputvalidator.php 48869 2012-08-21 08:10:48Z tomas $
+ * @version   SVN: $Id: oxinputvalidator.php 54840 2013-02-06 08:36:32Z linas.kukulskis $
  */
 
 /**
@@ -352,7 +352,7 @@ class oxInputValidator extends oxSuperCfg
                               'oxuser__oxzip',
                               'oxuser__oxcity' );
 
-        // config shoud override default fields
+        // config should override default fields
         $aMustFillFields = $this->getConfig()->getConfigParam( 'aMustFillFields' );
         if ( is_array( $aMustFillFields ) ) {
             $aMustFields = $aMustFillFields;

@@ -19,7 +19,7 @@
  * @package   admin
  * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
- * @version   SVN: $Id: article_main.php 53484 2013-01-08 14:28:26Z aurimas.gladutis $
+ * @version   SVN: $Id: article_main.php 56258 2013-03-06 15:07:33Z linas.kukulskis $
  */
 
 /**
@@ -164,6 +164,10 @@ class Article_Main extends oxAdminDetails
             $aParams['oxarticles__oxid']        = null;
             $aParams['oxarticles__oxissearch']  = 1;
             $aParams['oxarticles__oxstockflag'] = 1;
+            if ( empty($aParams['oxarticles__oxstock']) ) {
+                $aParams['oxarticles__oxstock'] = 0;
+            }
+
                 // shopid
                 $aParams['oxarticles__oxshopid'] = oxRegistry::getSession()->getVariable( "actshop");
 
@@ -183,6 +187,7 @@ class Article_Main extends oxAdminDetails
             if ($oArticle->assignRecord( $sSelect ))
                 $this->_aViewData["errorsavingatricle"] = 1;
         }
+
 
             // #905A resetting article count in price categories if price has been changed
             if ( isset($aParams["oxarticles__oxprice"]) && $aParams["oxarticles__oxprice"] != $oArticle->oxarticles__oxprice->value) {

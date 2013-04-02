@@ -14,10 +14,10 @@
     <li><a [{if !$firstitem}]class="firstitem"[{assign var="firstitem" value="1"}][{/if}] id="btn.new" href="#" onClick="Javascript:top.oxid.admin.editThis( -1 );return false" target="edit">[{ oxmultilang ident="TOOLTIPS_NEWUSER" }]</a> |</li>
     [{/if}]
     [{if $bottom_buttons->user_newremark && $oxid != "-1" }]
-    <li><a [{if !$firstitem}]class="firstitem"[{assign var="firstitem" value="1"}][{/if}] id="btn.newremark" href="#" onClick="Javascript:parent.list.document.search.actedit.value=3;document.location='[{$oViewConf->getSelfLink()|replace:"&amp;":"&"}]&cl=user_remark&oxid=[{$oxid}]';return false" target="edit">[{ oxmultilang ident="TOOLTIPS_NEWREMARK" }]</a> |</li>
+    <li><a [{if !$firstitem}]class="firstitem"[{assign var="firstitem" value="1"}][{/if}] id="btn.newremark" href="#" onClick="Javascript:top.oxid.admin.changeEditBar('user_remark', 3); return false" target="edit">[{ oxmultilang ident="TOOLTIPS_NEWREMARK" }]</a> |</li>
     [{/if}]
     [{if $bottom_buttons->user_newaddress && $oxid != "-1" }]
-    <li><a [{if !$firstitem}]class="firstitem"[{assign var="firstitem" value="1"}][{/if}] id="btn.newaddress" href="#" onClick="Javascript:parent.list.document.search.actedit.value=4;document.location='[{$oViewConf->getSelfLink()|replace:"&amp;":"&"}]&cl=user_address&oxaddressid=-1&oxid=[{$oxid}]';return false" target="edit">[{ oxmultilang ident="TOOLTIPS_NEWADDRESS" }]</a> |</li>
+    <li><a [{if !$firstitem}]class="firstitem"[{assign var="firstitem" value="1"}][{/if}] id="btn.newaddress" href="#" onClick="Javascript:top.oxid.admin.changeEditBar('user_address', 4); return false" target="edit">[{ oxmultilang ident="TOOLTIPS_NEWADDRESS" }]</a> |</li>
     [{ /if }]
     [{* payment *}]
       [{if $bottom_buttons->payment_new }]
@@ -94,7 +94,7 @@
     [{/if}]
     [{* order *}]
     [{if $bottom_buttons->order_newremark && $oxid!=-1 }]
-    <li><a [{if !$firstitem}]class="firstitem"[{assign var="firstitem" value="1"}][{/if}] id="btn.newremark" href="#" onClick="Javascript:parent.list.document.search.actedit.value=4;document.location='[{$oViewConf->getSelfLink()|replace:"&amp;":"&"}]&cl=order_remark&oxid=[{$oxid}]';return false" target="edit">[{ oxmultilang ident="TOOLTIPS_NEWREMARK" }]</a> |</li>
+    <li><a [{if !$firstitem}]class="firstitem"[{assign var="firstitem" value="1"}][{/if}] id="btn.newremark" href="#" onClick="Javascript:top.oxid.admin.changeEditBar('order_remark', 4);return false" target="edit">[{ oxmultilang ident="TOOLTIPS_NEWREMARK" }]</a> |</li>
     [{/if}]
     [{* imex *}]
     [{* country *}]

@@ -17,20 +17,20 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   views
- * @copyright (C) OXID eSales AG 2003-2012
+ * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
  * @version   SVN: $Id: oxshopcontrol.php 46860 2012-07-02 12:43:33Z rimvydas.paskevicius $
  */
 
 /**
  * Main shop actions controller. Processes user actions, logs
- * them (if needed), controlls output, redirects according to
- * processed methods logic. This class is initalized from index.php
+ * them (if needed), controls output, redirects according to
+ * processed methods logic. This class is initialized from index.php
  */
 class oxWidgetControl extends oxShopControl
 {
     /**
-     * Skip hanler set for widget as it already set in oxShopControl.
+     * Skip handler set for widget as it already set in oxShopControl.
      *
      * @var bool
      */
@@ -58,7 +58,7 @@ class oxWidgetControl extends oxShopControl
      * <b>actshop</b>
      *
      * @param string $sClass      Class name
-     * @param string $sFunction   Funtion name
+     * @param string $sFunction   Function name
      * @param array  $aParams     Parameters array
      * @param array  $aViewsChain Array of views names that should be initialized also
      *
@@ -81,7 +81,7 @@ class oxWidgetControl extends oxShopControl
     /**
      * This function is only executed one time here we perform checks if we
      * only need once per session. There is no need to execute it if there
-     * is views chain as parent view already exectuted it.
+     * is views chain as parent view already executed it.
      *
      * @return null
      */
@@ -92,7 +92,7 @@ class oxWidgetControl extends oxShopControl
     }
 
     /**
-     * Runs actions that should be performed at the controler finish.
+     * Runs actions that should be performed at the controller finish.
      *
      * @return null
      */

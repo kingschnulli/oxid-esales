@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   core
- * @copyright (C) OXID eSales AG 2003-2012
+ * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
- * @version   SVN: $Id: oxbase.php 52113 2012-11-21 15:46:41Z aurimas.gladutis $
+ * @version   SVN: $Id: oxbase.php 55353 2013-02-15 14:36:06Z linas.kukulskis $
  */
 
 /**
@@ -179,6 +179,7 @@ class oxBase extends oxSuperCfg
      * @var bool
      */
     protected $_blEmployMultilanguage = false;
+
 
     /**
      * Getting use skip fields or not
@@ -351,7 +352,7 @@ class oxBase extends oxSuperCfg
     }
 
     /**
-     * Magic fuinction invoked on object cloning. Basically takes care about cloning properly DB fields.
+     * Magic function invoked on object cloning. Basically takes care about cloning properly DB fields.
      *
      * @return null;
      */
@@ -548,7 +549,7 @@ class oxBase extends oxSuperCfg
     /**
      * Lazy loading cache key modifier.
      *
-     * @param string $sCacheKey  kache  key
+     * @param string $sCacheKey  cache  key
      * @param bool   $blOverride marker to force override cache key
      *
      * @return null;
@@ -563,7 +564,7 @@ class oxBase extends oxSuperCfg
     }
 
     /**
-     * Disables lazy loading mechanism and inits object fully
+     * Disables lazy loading mechanism and init object fully
      *
      * @return null;
      */
@@ -598,8 +599,8 @@ class oxBase extends oxSuperCfg
     }
 
     /**
-     * Returns true, if object has multilanguage fields (if object is derived from oxi18n class).
-     * In oxBase it is always returns false, as oxBase treats all fields as non multilanguage.
+     * Returns true, if object has multi language fields (if object is derived from oxi18n class).
+     * In oxBase it is always returns false, as oxBase treats all fields as non multi language.
      *
      * @return bool
      */
@@ -617,16 +618,8 @@ class oxBase extends oxSuperCfg
      *
      * @return bool
      */
-    public function load( $sOXID)
+    public function load( $sOXID )
     {
-        /*
-        if( !isset($oxID)){
-            $oEx = oxNew('oxObjectException','core');
-            $oEx->setMessage('EXCEPTION_OBJECT_OXIDNOTSET');
-            $oEx->setObject($this);
-            throw $oEx;
-        }*/
-
         $blExistingOldForceCoreTable = $this->_blForceCoreTableUsage;
 
         $this->_blForceCoreTableUsage = true;
@@ -860,7 +853,7 @@ class oxBase extends oxSuperCfg
         $oDb = oxDb::getDb( oxDb::FETCH_MODE_ASSOC );
         $sSelect= "select {$this->_sExistKey} from {$sViewName} where {$this->_sExistKey} = ".$oDb->quote( $sOXID );
 
-        return ( bool ) $oDb->getOne( $sSelect );
+        return ( bool ) $oDb->getOne( $sSelect, false, false );
     }
 
     /**
@@ -1014,7 +1007,7 @@ class oxBase extends oxSuperCfg
     }
 
     /**
-     * Initilizes object data structure.
+     * Initializes object data structure.
      * Either by trying to load from cache or by calling $this->_getNonCachedFieldNames
      *
      * @param bool $blForceFullStructure Set to true if you want to load full structure in any case.
@@ -1050,7 +1043,7 @@ class oxBase extends oxSuperCfg
      * Returns the list of fields. This function is slower and its result is normally cached.
      * Basically we have 3 separate cases here:
      *  1. We are in admin so we need extended info for all fields (name, field length and field type)
-     *  2. Object is not lazy loaded so we will return all data fields as simple array, as we nede only names
+     *  2. Object is not lazy loaded so we will return all data fields as simple array, as we need only names
      *  3. Object is lazy loaded so we will return empty array as all fields are loaded on request (in __get()).
      *
      * @param bool $blForceFullStructure Whether to force loading of full data structure
@@ -1098,8 +1091,8 @@ class oxBase extends oxSuperCfg
     }
 
     /**
-     * Returns _aFieldName[] value. 0 means - non multilanguage, 1 - multilanguage field. But this is defined only in derived oxi18n class.
-     * In oxBase it is always 0, as oxBase treats all fields as non multilanguage.
+     * Returns _aFieldName[] value. 0 means - non multi language, 1 - multi language field. But this is defined only in derived oxi18n class.
+     * In oxBase it is always 0, as oxBase treats all fields as non multi language.
      *
      * @param string $sFieldName Field name
      *
@@ -1114,7 +1107,7 @@ class oxBase extends oxSuperCfg
      * Adds additional field to meta structure
      *
      * @param string $sName   Field name
-     * @param int    $iStatus Field name status. In derived classes it indicates multilanguage status.
+     * @param int    $iStatus Field name status. In derived classes it indicates multi language status.
      * @param string $sType   Field type
      * @param string $sLength Field Length
      *
@@ -1128,7 +1121,7 @@ class oxBase extends oxSuperCfg
         //adding field names element
         $this->_aFieldNames[$sName] = $iStatus;
 
-        //allready set?
+        //already set?
         $sLongName = $this->_getFieldLongName($sName);
         if ( isset($this->$sLongName) ) {
             return;
@@ -1189,7 +1182,7 @@ class oxBase extends oxSuperCfg
         //$sLongFieldName = $this->_sCoreTable . "__" . strtolower($sFieldName);
 
         //T2008-03-14
-        //doing this because in lazy loaded lists on first load it is harmful to have initilised fields but not yet set
+        //doing this because in lazy loaded lists on first load it is harmful to have initialised fields but not yet set
         //situation: only first article is loaded fully for "select oxid from oxarticles"
         /*
         if ($this->_blUseLazyLoading && !isset($this->$sLongFieldName))
@@ -1313,7 +1306,7 @@ class oxBase extends oxSuperCfg
 
     /**
      * Update this Object into the database, this function only works on
-     * the main table, it will not save any dependend tables, which might
+     * the main table, it will not save any dependent tables, which might
      * be loaded through oxlist.
      *
      * @throws oxObjectException Throws on failure inserting
@@ -1352,7 +1345,7 @@ class oxBase extends oxSuperCfg
 
     /**
      * Insert this Object into the database, this function only works
-     * on the main table, it will not save any dependend tables, which
+     * on the main table, it will not save any dependent tables, which
      * might be loaded through oxlist.
      *
      * @return bool
@@ -1383,7 +1376,7 @@ class oxBase extends oxSuperCfg
 
         $sInsert .= $this->_getUpdateFields( $this->getUseSkipSaveFields() );
 
-        $blRet = (bool) $oDb->execute( $sInsert);
+        $blRet = (bool) $oDb->execute( $sInsert );
 
         return $blRet;
     }
@@ -1466,7 +1459,7 @@ class oxBase extends oxSuperCfg
 
 
     /**
-     * Returns -1, means object is not multilanguage
+     * Returns -1, means object is not multi language
      *
      * @return int
      */
@@ -1474,4 +1467,5 @@ class oxBase extends oxSuperCfg
     {
         return -1;
     }
+
 }

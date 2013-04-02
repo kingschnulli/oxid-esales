@@ -17,7 +17,7 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   core
- * @copyright (C) OXID eSales AG 2003-2012
+ * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
  * @version   SVN: $Id: oxactions.php 28344 2010-06-15 11:32:21Z sarunas $
  */
@@ -95,7 +95,7 @@ class oxTsProduct extends oxSuperCfg
     /**
      * Return protection vat
      *
-     * @return decimal
+     * @return float
      */
     public function getVat()
     {
@@ -105,7 +105,7 @@ class oxTsProduct extends oxSuperCfg
     /**
      * set protection vat
      *
-     * @param decimal $dVat - vat
+     * @param float $dVat - vat
      *
      * @return null
      */
@@ -155,7 +155,7 @@ class oxTsProduct extends oxSuperCfg
     }
 
     /**
-     * Returns formated brutto price of TS protection product
+     * Returns formatted brutto price of TS protection product
      *
      * @return string
      */
@@ -170,7 +170,7 @@ class oxTsProduct extends oxSuperCfg
     }
 
     /**
-     * Returns formated brutto price of TS protection product
+     * Returns formatted brutto price of TS protection product
      *
      * @return string
      */
@@ -185,7 +185,7 @@ class oxTsProduct extends oxSuperCfg
     }
 
     /**
-     * Returns formated brutto price of TS protection product
+     * Returns formatted brutto price of TS protection product
      *
      * @return string
      */
@@ -202,7 +202,7 @@ class oxTsProduct extends oxSuperCfg
      /**
      * Returns price of TS protection product
      *
-     * @return float
+     * @return oxPrice
      */
     public function getPrice()
     {

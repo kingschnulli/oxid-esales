@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   admin
- * @copyright (C) OXID eSales AG 2003-2012
+ * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
- * @version   SVN: $Id: report_canceled_orders.php 48786 2012-08-17 10:20:42Z tomas $
+ * @version   SVN: $Id: report_canceled_orders.php 54926 2013-02-07 10:54:49Z aurimas.gladutis $
  */
 
 if ( !class_exists( 'report_canceled_orders' ) ) {
@@ -270,7 +270,7 @@ class Report_canceled_orders extends report_base
         $rs = oxDb::getDb()->execute( $sQ );
         if ( $rs != false && $rs->recordCount() > 0 ) {
             while ( !$rs->EOF ) {
-                $sKey = oxRegistry::get("oxUtilsDate")->getWeekNumber( $myConfig->getConfigParam( 'iFirstWeekDay' ), strtotime( $rs->fields[0] ) );
+                $sKey = oxRegistry::get("oxUtilsDate")->getWeekNumber( oxConfig::getConfigParam( 'iFirstWeekDay' ), strtotime( $rs->fields[0] ) );
                 if ( isset( $aDataX5[$sKey] ) ) {
                     $aDataX5[$sKey]++;
                 }

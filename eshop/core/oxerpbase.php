@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   core
- * @copyright (C) OXID eSales AG 2003-2012
+ * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
- * @version   SVN: $Id: oxerpbase.php 48727 2012-08-16 09:09:02Z tomas $
+ * @version   SVN: $Id: oxerpbase.php 55724 2013-02-22 09:13:33Z tadas.rimkus $
  */
 
 /**
@@ -63,9 +63,34 @@ abstract class oxERPBase
         '2.9.0' => '8', // added new fields to oxcategories, oxorderarticle
     );
 
+    /**
+     * Imported id array
+     * @var array
+     */
+    protected $_aImportedIds = array();
+
+    /**
+     * Imported row count
+     * @var array
+     */
+    protected $_iImportedRowCount = 0;
+
     public $_aStatistics = array();
     public $_iIdx        = 0;
 
+    /** gets count of imported rows, total, during import
+     *
+     * @return int $_iImportedRowCount
+     */
+    public abstract function getImportedRowCount();
+
+    /** adds true to $_aImportedIds where key is given
+     *
+     * @param mixed $key - given key
+     *
+     * @return null
+     */
+    public abstract function setImportedIds( $key );
     /**
      * _aStatistics getter
      *
@@ -520,7 +545,13 @@ abstract class oxERPBase
             }
 
             try {
-                $blImport = $this->$sFnc($oType, $aData);
+                $iId = $this->$sFnc($oType, $aData);
+                if ( !$iId )
+                    $blImport = false;
+                else {
+                    $this->setImportedIds( $iId );
+                    $blImport = true;
+                }
                 $sMessage = '';
             } catch (Exception $e) {
                 $sMessage = $e->getMessage();

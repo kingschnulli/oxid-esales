@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
- * @version   SVN: $Id: tag.php 53427 2013-01-07 13:29:36Z linas.kukulskis $
+ * @version   SVN: $Id: tag.php 55035 2013-02-11 11:41:40Z linas.kukulskis $
  */
 
 /**
@@ -293,16 +293,6 @@ class Tag extends aList
             $aPath[1]->oxcategories__oxtitle = new oxField( $oStr->ucfirst( $sTag ) );
             return $aPath;
         }
-    }
-
-    /**
-     * Template variable getter. Returns active search
-     *
-     * @return object
-     */
-    public function getActiveCategory()
-    {
-        return $this->getActTag();
     }
 
     /**

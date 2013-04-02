@@ -17,7 +17,7 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   tests
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
  * @version   SVN: $Id: oxcmpCurTest.php 25505 2010-02-02 02:12:13Z alfonsas $
  */
@@ -38,7 +38,7 @@ class Unit_Views_oxCmpShopTest extends OxidTestCase
     public function testRenderNoActiveShop()
     {
         $sRedirUrl = oxConfig::getInstance()->getShopMainUrl().'offline.html';
-        $this->setExpectedException('Exception', $sRedirUrl);
+        $this->setExpectedException('oxException', $sRedirUrl);
 
         $oView = $this->getMock( "oxView", array( "getClassName" ) );
         $oView->expects( $this->once() )->method('getClassName')->will( $this->returnValue( "test" ) );
@@ -46,7 +46,7 @@ class Unit_Views_oxCmpShopTest extends OxidTestCase
         $oShop = new oxShop();
         $oShop->oxshops__oxactive = new oxField( 0 );
 
-        oxTestModules::addFunction('oxUtils', 'redirect($url, $blAddRedirectParam = true, $iHeaderCode = 301)', '{throw new Exception($url);}');
+        oxTestModules::addFunction('oxUtils', 'redirect($url, $blAddRedirectParam = true, $iHeaderCode = 301)', '{throw new oxException($url);}');
 
         $oConfig = $this->getMock( "oxConfig", array( "getConfigParam", "getActiveView", "getActiveShop" ) );
         $oConfig->expects( $this->once() )->method('getActiveView')->will( $this->returnValue( $oView ) );

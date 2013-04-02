@@ -17,7 +17,7 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   tests
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
  * @version   SVN: $Id: wishlistTest.php 25505 2010-02-02 02:12:13Z alfonsas $
  */
@@ -142,7 +142,7 @@ class Unit_Views_oxShopControlTest extends OxidTestCase
      */
     public function testStartExceptionWithDebug()
     {
-        $this->setExpectedException('Exception', 'log debug');
+        $this->setExpectedException('oxException', 'log debug');
 
         modConfig::getInstance()->setParameter( 'cl', 'testClass' );
         modConfig::setParameter( 'fnc', 'testFnc' );
@@ -151,7 +151,7 @@ class Unit_Views_oxShopControlTest extends OxidTestCase
         $oUtilsView->expects( $this->any() )->method( 'addErrorToDisplay' );
 
         $oMockEx = $this->getMock('oxException', array('debugOut'));
-        $oMockEx->expects( $this->once() )->method( 'debugOut' )->will( $this->throwException( new Exception('log debug') ));
+        $oMockEx->expects( $this->once() )->method( 'debugOut' )->will( $this->throwException( new oxException('log debug') ));
 
         $oControl = $this->getMock( "oxShopControl", array( "getConfig", "_runOnce", "isAdmin", "_process", "_isDebugMode" ), array(), '', false, false, true );
         $oControl->expects( $this->at(1) )->method( 'getConfig' );
@@ -170,13 +170,13 @@ class Unit_Views_oxShopControlTest extends OxidTestCase
      */
     public function testStartExceptionNoDebug()
     {
-        $this->setExpectedException('Exception', 'log debug');
+        $this->setExpectedException('oxException', 'log debug');
 
         modConfig::getInstance()->setParameter( 'cl', 'testClass' );
         modConfig::setParameter( 'fnc', 'testFnc' );
 
         $oMockEx = $this->getMock('oxException', array('debugOut'));
-        $oMockEx->expects( $this->once() )->method( 'debugOut' )->will( $this->throwException( new Exception('log debug') ));
+        $oMockEx->expects( $this->once() )->method( 'debugOut' )->will( $this->throwException( new oxException('log debug') ));
 
         $oControl = $this->getMock( "oxShopControl", array( "getConfig", "_runOnce", "_process", "_isDebugMode" ), array(), '', false, false, true );
         $oControl->expects( $this->at(0) )->method( 'getConfig' );

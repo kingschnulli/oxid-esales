@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   tests
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
- * @version   SVN: $Id: tagTest.php 53452 2013-01-07 15:38:28Z linas.kukulskis $
+ * @version   SVN: $Id: tagTest.php 55057 2013-02-11 15:54:37Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -188,13 +188,6 @@ class Unit_Views_tagTest extends OxidTestCase
     {
         $oTagView = new tag();
         $this->assertEquals( OXARTICLE_LINKTYPE_TAG, $oTagView->UNITgetProductLinkType() );
-    }
-
-    public function testGetActiveCategory()
-    {
-        $oTagView = $this->getMock( 'tag', array( 'getActTag' ) );
-        $oTagView->expects( $this->any() )->method( 'getActTag')->will( $this->returnValue( 'testtag' ) );
-        $this->assertEquals( "testtag", $oTagView->getActiveCategory() );
     }
 
     public function testPrepareMetaKeyword()

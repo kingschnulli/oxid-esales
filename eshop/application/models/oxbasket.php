@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
- * @version   SVN: $Id: oxbasket.php 54334 2013-01-24 09:58:39Z linas.kukulskis $
+ * @version   SVN: $Id: oxbasket.php 55029 2013-02-11 11:28:56Z linas.kukulskis $
  */
 
 /**
@@ -2798,7 +2798,7 @@ class oxBasket extends oxSuperCfg
 
             // request category
             if ( $oView = $this->getConfig()->getActiveView() ) {
-                if ( $oCat = $oView->getActCategory() ) {
+                if ( $oCat = $oView->getActiveCategory() ) {
                     if ( !$this->_isProductInRootCategory( $sProductId, $oCat->oxcategories__oxrootid->value ) ) {
                         $oCat = null;
                     } else {

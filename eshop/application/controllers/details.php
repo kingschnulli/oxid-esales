@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
- * @version   SVN: $Id: details.php 53484 2013-01-08 14:28:26Z aurimas.gladutis $
+ * @version   SVN: $Id: details.php 55684 2013-02-21 16:02:48Z linas.kukulskis $
  */
 
 /**
@@ -84,7 +84,7 @@ class Details extends oxUBase
     protected $_aTags = null;
 
     /**
-     * Returns user recommlist
+     * Returns user recommendation list
      * @var array
      */
     protected $_aUserRecommList = null;
@@ -109,13 +109,13 @@ class Details extends oxUBase
 
     /**
      * Current product's vendor
-     * @var oxvendor
+     * @var oxVendor
      */
     protected $_oVendor = null;
 
     /**
      * Current product's manufacturer
-     * @var oxmanufacturer
+     * @var oxManufacturer
      */
     protected $_oManufacturer = null;
 
@@ -162,25 +162,25 @@ class Details extends oxUBase
     protected $_aReviews = null;
 
     /**
-     * CrossSelling articlelist
+     * CrossSelling article list
      * @var object
      */
     protected $_oCrossSelling = null;
 
     /**
-     * Similar products articlelist
+     * Similar products article list
      * @var object
      */
     protected $_oSimilarProducts = null;
 
     /**
-     * Similar recommlists
+     * Similar recommendation lists
      * @var object
      */
     protected $_oRecommList = null;
 
     /**
-     * Accessoires of current article
+     * Accessories of current article
      * @var object
      */
     protected $_oAccessoires = null;
@@ -212,7 +212,7 @@ class Details extends oxUBase
     protected $_iLinkType = null;
 
     /**
-     * Is multidimension variant view?
+     * Is multi dimension variant view
      *
      * @var bool
      */
@@ -229,12 +229,6 @@ class Details extends oxUBase
      * @var integer
      */
     protected $_iRatingCnt = null;
-
-    /**
-     * Sign if to load and show top5articles action
-     * @var bool
-     */
-    protected $_blTop5Action = false;
 
     /**
      * Bid price.
@@ -469,7 +463,7 @@ class Details extends oxUBase
                 }
             }
 
-            //adding searchkeys info
+            //adding search keys info
             if ( $sSearchKeys = trim( $oProduct->oxarticles__oxsearchkeys->value ) ) {
                 $sKeywords .= ", ". $sSearchKeys;
             }
@@ -512,7 +506,7 @@ class Details extends oxUBase
     }
 
     /**
-     * Checks if rating runctionality is on and allwed to user
+     * Checks if rating functionality is on and allowed to user
      *
      * @return bool
      */
@@ -526,7 +520,7 @@ class Details extends oxUBase
     }
 
     /**
-     * Saves user ratings and review text (oxreview object)
+     * Saves user ratings and review text (oxReview object)
      *
      * @return null
      */
@@ -567,7 +561,7 @@ class Details extends oxUBase
     }
 
     /**
-     * Adds article to selected recommlist
+     * Adds article to selected recommendation list
      *
      * @return null
      */
@@ -851,7 +845,7 @@ class Details extends oxUBase
                 $this->_iLinkType = OXARTICLE_LINKTYPE_CATEGORY;
 
                 // price category has own type..
-                if ( ( $oCat = $this->getActCategory() ) && $oCat->isPriceCategory() ) {
+                if ( ( $oCat = $this->getActiveCategory() ) && $oCat->isPriceCategory() ) {
                     $this->_iLinkType = OXARTICLE_LINKTYPE_PRICECATEGORY;
                 }
             }
@@ -1020,7 +1014,7 @@ class Details extends oxUBase
     }
 
     /**
-     * Template variable getter. Returns picture galery of current article
+     * Template variable getter. Returns picture gallery of current article
      *
      * @return array
      */
@@ -1215,7 +1209,7 @@ class Details extends oxUBase
     }
 
     /**
-     * Template variable getter. Returns accessoires of article
+     * Template variable getter. Returns accessories of article
      *
      * @return object
      */
@@ -1231,7 +1225,7 @@ class Details extends oxUBase
     }
 
     /**
-     * Template variable getter. Returns list of customer also bought thies products
+     * Template variable getter. Returns list of customer also bought these products
      *
      * @return object
      */
@@ -1247,13 +1241,13 @@ class Details extends oxUBase
     }
 
     /**
-     * Template variable getter. Returns if pricealarm is disabled
+     * Template variable getter. Returns if price alarm is disabled
      *
      * @return object
      */
     public function isPriceAlarm()
     {
-        // #419 disabling pricealarm if article has fixed price
+        // #419 disabling price alarm if article has fixed price
         $oProduct = $this->getProduct();
         if ( isset( $oProduct->oxarticles__oxblfixedprice->value ) && $oProduct->oxarticles__oxblfixedprice->value ) {
             return 0;
@@ -1262,7 +1256,7 @@ class Details extends oxUBase
     }
 
     /**
-     * returns object, assosiated with current view.
+     * returns object, associated with current view.
      * (the object that is shown in frontend)
      *
      * @param int $iLang language id
@@ -1275,7 +1269,7 @@ class Details extends oxUBase
     }
 
     /**
-     * Returns search title. It will be setted in oxlocator
+     * Returns search title. It will be setted in oxLocator
      *
      * @return string
      */
@@ -1387,7 +1381,7 @@ class Details extends oxUBase
     }
 
     /**
-     * Checks should persistent parametere input field be displayed
+     * Checks should persistent parameter input field be displayed
      *
      * @return bool
      */
@@ -1511,8 +1505,8 @@ class Details extends oxUBase
     /**
      * Validates email
      * address. If email is wrong - returns false and exits. If email
-     * address is OK - creates prcealarm object and saves it
-     * (oxpricealarm::save()). Sends pricealarm notification mail
+     * address is OK - creates price alarm object and saves it
+     * (oxpricealarm::save()). Sends price alarm notification mail
      * to shop owner.
      *
      * @return  bool    false on error
@@ -1559,7 +1553,7 @@ class Details extends oxUBase
     }
 
     /**
-     * Return pricealarm status (if it was send)
+     * Return price alarm status (if it was send)
      *
      * @return integer
      */
@@ -1605,7 +1599,7 @@ class Details extends oxUBase
     /**
      * Returns pictures product object
      *
-     * @return oxarticle
+     * @return oxArticle
      */
     public function getPicturesProduct()
     {

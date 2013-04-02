@@ -19,7 +19,7 @@
  * @package   lang
  * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
- * @version   SVN: $Id: lang.php 54386 2013-01-25 10:23:10Z juergen.busch $
+ * @version   SVN: $Id: lang.php 56707 2013-03-19 12:08:18Z linas.kukulskis $
  */
 
 $sLangName  = 'Deutsch';
@@ -798,9 +798,10 @@ $aLang = array(
 'LANGUAGE_FRONTEND_NOTRANSLATIONS_WARNING'                 => 'Warnung: Es wurden keine Sprachdateien zum Theme oder im Verzeichnis /out für die ausgewählte Sprache gefunden!',
 'LANGUAGE_BACKEND_NOTRANSLATIONS_WARNING'                  => 'Warnung: Es wurden keine Sprachdateien im Verzeichnis /admin für die ausgewählte Sprache gefunden!',
 'LANGUAGE_NOTRANSLATIONS_WARNING'                          => 'Warnung: Es wurden keine Sprachdateien für die ausgewählte Sprache gefunden!',
-'LANGUAGE_ERROR_ADDING_MULTILANG_FIELDS'                   => 'Warnung: Beim anlegen der neuen Datenbankfelder ist ein Fehler aufgetreten',
+'LANGUAGE_ERROR_ADDING_MULTILANG_FIELDS'                   => 'Warnung: Beim Anlegen der neuen Datenbankfelder ist ein Fehler aufgetreten!',
 'LANGUAGE_ERROR_RESETING_MULTILANG_FIELDS'                 => 'Achtung: Während des Löschens einer Sprache ist beim Zurücksetzens der Multisprachen-Felder ein Fehler aufgetreten!',
-'LANGUAGE_DELETINGMAINLANG_WARNING'                        => 'Warnung: Sie können nicht die Hauptsprache löschen (Sprach-ID 0)',
+'LANGUAGE_DELETINGMAINLANG_WARNING'                        => 'Warnung: Sie können nicht die Hauptsprache löschen (Sprach-ID 0)!',
+'LANGUAGE_ABBRCHANGEMAINLANG_WARNING'                      => 'Warnung: Sie können nicht die Abkürzung der Hauptsprache (Sprach-ID 0) ändern!',
 'LANGUAGE_ALREADYEXISTS_ERROR'                             => 'Fehler: Eine Sprache mit diesem Sprachkürzel existiert bereits',
 'LANGUAGE_EMPTYLANGUAGENAME_ERROR'                         => 'Bitte geben Sie den Namen der Sprache ein!',
 'SETUP_DIRNOTDELETED_WARNING'                              => 'Bitte löschen Sie das Setup-Verzeichnis',
@@ -1300,7 +1301,7 @@ $aLang = array(
 'SHOP_SYSTEM_SMARTYPHPHANDLING_PASSTHRU'                   => 'Code mit PHP-Tags anzeigen',
 'SHOP_SYSTEM_SMARTYPHPHANDLING_QUOTE'                      => 'Code ohne PHP-Tags anzeigen',
 'SHOP_SYSTEM_SMARTYPHPHANDLING_ALLOW'                      => 'Den PHP-Code ausführen',
-'SHOP_SYSTEM_LDAP'                                         => 'LDAP Authentifizierung aktivieren (Bitte Datei core/oxldap.php anpassen)',
+'SHOP_SYSTEM_LDAP'                                         => 'LDAP Authentifizierung aktivieren',
 'SHOP_SYSTEM_PLEASE_CHOOSE'                                => 'Bitte auswählen',
 
 'SHOP_SEO_SEOMODE'                                         => 'Aktiv',

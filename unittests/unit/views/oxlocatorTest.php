@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   tests
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
- * @version   SVN: $Id: oxlocatorTest.php 53446 2013-01-07 15:10:41Z linas.kukulskis $
+ * @version   SVN: $Id: oxlocatorTest.php 55031 2013-02-11 11:31:42Z linas.kukulskis $
  */
 
 
@@ -177,11 +177,11 @@ class Unit_Views_oxlocatorTest extends OxidTestCase
         $oCategory = new oxcategory();
         $oCategory->load( $sActCat );
 
-        $oLocatorTarget = $this->getMock( 'oxubase', array( 'getLinkType', 'getSortingSql', 'setCatTreePath', 'getCatTreePath', 'getActCategory', 'getCategoryTree', 'showSorting' ) );
+        $oLocatorTarget = $this->getMock( 'oxubase', array( 'getLinkType', 'getSortingSql', 'setCatTreePath', 'getCatTreePath', 'getActiveCategory', 'getCategoryTree', 'showSorting' ) );
         $oLocatorTarget->expects( $this->once() )->method( 'getSortingSql')->with( $this->equalTo( 'alist' ) )->will( $this->returnValue( 'oxid' ) );
         $oLocatorTarget->expects( $this->any() )->method( 'setCatTreePath' );
         $oLocatorTarget->expects( $this->any() )->method( 'getCatTreePath' );
-        $oLocatorTarget->expects( $this->once() )->method( 'getActCategory' )->will( $this->returnValue( $oCategory ) );
+        $oLocatorTarget->expects( $this->once() )->method( 'getActiveCategory' )->will( $this->returnValue( $oCategory ) );
         $oLocatorTarget->expects( $this->once() )->method( 'getCategoryTree' )->will( $this->returnValue( new oxcategorylist ) );
         $oLocatorTarget->expects( $this->once() )->method( 'showSorting' )->will( $this->returnValue( true ) );
         $oLocatorTarget->expects( $this->any() )->method( 'getLinkType' )->will( $this->returnValue( OXARTICLE_LINKTYPE_CATEGORY ) );
@@ -221,11 +221,11 @@ class Unit_Views_oxlocatorTest extends OxidTestCase
         $oCategory = new oxcategory();
         $oCategory->load( $sActCat );
 
-        $oLocatorTarget = $this->getMock( 'oxubase', array( 'getLinkType', 'getSortingSql', 'setCatTreePath', 'getCatTreePath', 'getActCategory', 'getCategoryTree', 'showSorting' ) );
+        $oLocatorTarget = $this->getMock( 'oxubase', array( 'getLinkType', 'getSortingSql', 'setCatTreePath', 'getCatTreePath', 'getActiveCategory', 'getCategoryTree', 'showSorting' ) );
         $oLocatorTarget->expects( $this->once() )->method( 'getSortingSql')->with( $this->equalTo( 'alist' ) )->will( $this->returnValue( 'oxid' ) );
         $oLocatorTarget->expects( $this->any() )->method( 'setCatTreePath' );
         $oLocatorTarget->expects( $this->any() )->method( 'getCatTreePath' );
-        $oLocatorTarget->expects( $this->once() )->method( 'getActCategory' )->will( $this->returnValue( $oCategory ) );
+        $oLocatorTarget->expects( $this->once() )->method( 'getActiveCategory' )->will( $this->returnValue( $oCategory ) );
         $oLocatorTarget->expects( $this->once() )->method( 'getCategoryTree' )->will( $this->returnValue( new oxcategorylist ) );
         $oLocatorTarget->expects( $this->once() )->method( 'showSorting' )->will( $this->returnValue( true ) );
         $oLocatorTarget->expects( $this->any() )->method( 'getLinkType' )->will( $this->returnValue( OXARTICLE_LINKTYPE_CATEGORY ) );

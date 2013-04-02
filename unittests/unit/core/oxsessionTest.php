@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   tests
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
- * @version   SVN: $Id: oxsessionTest.php 52010 2012-11-19 15:14:45Z linas.kukulskis $
+ * @version   SVN: $Id: oxsessionTest.php 56496 2013-03-11 16:00:59Z alfonsas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -1018,7 +1018,7 @@ class Unit_Core_oxsessionTest extends OxidTestCase
      */
     function testSetSessionIdAdmin()
     {
-        oxTestModules::addFunction( "oxUtilsServer", "getOxCookie", "{return true;}" );
+        oxTestModules::addFunction( "oxUtilsServer", "getOxCookie", "{return 'testSid';}" );
 
         $oSession = $this->getMock( 'testSession', array( 'isAdmin', '_sessionStart', "_getNewSessionId" ) );
         $oSession->expects( $this->any() )->method( '_getNewSessionId')->will( $this->returnValue( "newSessionId" ) );

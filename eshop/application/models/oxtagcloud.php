@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
- * @version   SVN: $Id: oxtagcloud.php 53779 2013-01-14 12:36:55Z aurimas.gladutis $
+ * @version   SVN: $Id: oxtagcloud.php 54524 2013-01-29 11:36:06Z aurimas.gladutis $
  */
 
 if (!defined('OXTAGCLOUD_MINFONT')) {
@@ -68,7 +68,7 @@ class oxTagCloud extends oxSuperCfg
     /**
      * Tag separator.
      *
-     * @deprecated since 2012-01-02, moved to oxtagset
+     * @deprecated since v5.0.3 (2012-01-02), moved to oxtagset
      *
      * @var string
      */
@@ -78,7 +78,7 @@ class oxTagCloud extends oxSuperCfg
      * Maximum tag's length
      * Maximum size of one tag in admin area and limits tag input field in front end
      *
-     * @deprecated since 2012-01-02, moved to oxtag
+     * @deprecated since  v5.0.3 (2012-01-02), moved to oxtag
      *
      * @var int
      */
@@ -87,7 +87,7 @@ class oxTagCloud extends oxSuperCfg
     /**
      * Product id
      *
-     * @deprecated since 2012-01-02, moved to oxarticlelisttagset
+     * @deprecated since  v5.0.3 (2012-01-02), moved to oxarticlelisttagset
      *
      * @var string
      */
@@ -96,7 +96,7 @@ class oxTagCloud extends oxSuperCfg
     /**
      * Language id
      *
-     * @deprecated since 2012-01-02, moved to oxarticlelisttagset
+     * @deprecated since  v5.0.3 (2012-01-02), moved to oxarticlelisttagset
      *
      * @var int
      */
@@ -106,7 +106,7 @@ class oxTagCloud extends oxSuperCfg
      * Meta characters.
      * Array of meta chars used for FULLTEXT index.
      *
-     * @deprecated since 2012-01-02, moved to oxtag
+     * @deprecated since  v5.0.3 (2012-01-02), moved to oxtag
      *
      * @var array
      */
@@ -124,7 +124,7 @@ class oxTagCloud extends oxSuperCfg
      *
      * @param string $sProductId product id
      *
-     * @deprecated since 2012-01-02, pass oxITagCloudSet object to oxTagCloud::setTagSet method instead
+     * @deprecated since  v5.0.3 (2012-01-02), pass oxITagCloudSet object to oxTagCloud::setTagSet method instead
      *
      * @return null
      */
@@ -140,7 +140,7 @@ class oxTagCloud extends oxSuperCfg
     /**
      * Returns current tag cloud product id (if available)
      *
-     * @deprecated since 2012-01-02, class is now made article independent
+     * @deprecated since  v5.0.3 (2012-01-02), class is now made article independent
      *
      * @return string
      */
@@ -154,7 +154,7 @@ class oxTagCloud extends oxSuperCfg
      *
      * @param int $iLangId language id
      *
-     * @deprecated since 2012-01-02, Class is language independent now
+     * @deprecated since  v5.0.3 (2012-01-02), Class is language independent now
      *
      * @return null
      */
@@ -166,7 +166,7 @@ class oxTagCloud extends oxSuperCfg
     /**
      * Returns current tag cloud language id
      *
-     * @deprecated since 2012-01-02, Class is language independent now
+     * @deprecated since  v5.0.3 (2012-01-02), Class is language independent now
      *
      * @return int
      */
@@ -381,7 +381,7 @@ class oxTagCloud extends oxSuperCfg
      * @param bool   $blExtended if can extend tags
      * @param int    $iLang      preferred language [optional]
      *
-     * @deprecated since 2012-01-02, moved to oxtaglist
+     * @deprecated since  v5.0.3 (2012-01-02), moved to oxtaglist
      *
      * @return array
      */
@@ -420,7 +420,7 @@ class oxTagCloud extends oxSuperCfg
      *
      * @param string $sTags given tag
      *
-     * @deprecated since 2012-01-02, moved to oxtag
+     * @deprecated since v5.0.3 (2012-01-02), moved to oxtag
      *
      * @return string
      */
@@ -455,7 +455,7 @@ class oxTagCloud extends oxSuperCfg
      *
      * @param string $sTags given tag
      *
-     * @deprecated since 2012-01-02, moved to oxArticleTagSet
+     * @deprecated since v5.0.3 (2012-01-02), moved to oxArticleTagSet
      *
      * @return string
      */
@@ -483,7 +483,7 @@ class oxTagCloud extends oxSuperCfg
      *
      * @param string $sText given text
      *
-     * @deprecated since 2012-01-02, use oxTag::stripMetaChars
+     * @deprecated since v5.0.3 (2012-01-02), use oxTag::stripMetaChars
      *
      * @return string
      */
@@ -503,7 +503,7 @@ class oxTagCloud extends oxSuperCfg
     /**
      * Returns current maximum tag length
      *
-     * @deprecated since 2012-01-02, use oxTag::getMaxLength
+     * @deprecated since v5.0.3 (2012-01-02), use oxTag::getMaxLength
      *
      * @return int
      */
@@ -518,7 +518,7 @@ class oxTagCloud extends oxSuperCfg
      *
      * @param string $sTag tag title
      *
-     * @deprecated since 5.1 2012-01-02, moved to oxArticleTagSet
+     * @deprecated since v5.0.3 (2012-01-02), moved to oxArticleTagSet
      *
      * @return string
      */
@@ -533,7 +533,7 @@ class oxTagCloud extends oxSuperCfg
      *
      * @param string $sTag tag title
      *
-     * @deprecated since 5.1 2012-01-02, moved to oxArticleTagSet
+     * @deprecated since v5.0.3 (2012-01-02), moved to oxArticleTagSet
      *
      * @return string
      */
@@ -548,7 +548,7 @@ class oxTagCloud extends oxSuperCfg
      *
      * @param string $sTagTitle given tag
      *
-     * @deprecated since 5.1 2012-01-02, moved to oxArticleTagSet
+     * @deprecated since v5.0.3 (2012-01-02), moved to oxArticleTagSet
      *
      * @return bool
      */
@@ -564,7 +564,7 @@ class oxTagCloud extends oxSuperCfg
      *
      * @param string $sTag given tag
      *
-     * @deprecated since 2012-01-02, moved to oxArticleTagSet
+     * @deprecated since v5.0.3 (2012-01-02), moved to oxArticleTagSet
      *
      * @return string
      */
@@ -587,7 +587,7 @@ class oxTagCloud extends oxSuperCfg
      * @param bool $blExtended Whether to display full list
      * @param int  $iLang      preferred language [optional]
      *
-     * @deprecated since 2012-01-02, use _formCacheKey
+     * @deprecated since v5.0.3 (2012-01-02), use _formCacheKey
      *
      * @return null
      */
@@ -669,7 +669,7 @@ class oxTagCloud extends oxSuperCfg
      * @param array $aTags tags to sort
      * @param int   $iLang preferred language [optional]
      *
-     * @deprecated since 5.1 2012-01-02, Sorting is now done by php.
+     * @deprecated since v5.0.3 (2012-01-02), Sorting is now done by php.
      *
      * @return array
      */

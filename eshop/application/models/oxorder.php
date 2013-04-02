@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   core
- * @copyright (C) OXID eSales AG 2003-2012
+ * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
- * @version   SVN: $Id: oxorder.php 53162 2012-12-20 09:44:43Z aurimas.gladutis $
+ * @version   SVN: $Id: oxorder.php 55730 2013-02-22 10:02:47Z linas.kukulskis $
  */
 
 /**
@@ -50,7 +50,7 @@ class oxOrder extends oxBase
     const ORDER_STATE_PAYMENTERROR = 2;
 
     /**
-     * Order with such id allready exist
+     * Order with such id already exist
      * @var int
      */
     const ORDER_STATE_ORDEREXISTS = 3;
@@ -240,13 +240,13 @@ class oxOrder extends oxBase
         parent::__construct();
         $this->init( 'oxorder' );
 
-        // set usage of seperate orders numbering for different shops
+        // set usage of separate orders numbering for different shops
         $this->setSeparateNumbering( $this->getConfig()->getConfigParam( 'blSeparateNumbering') );
 
     }
 
      /**
-     * Getter made for order deliveryset object access
+     * Getter made for order delivery set object access
      *
      * @param string $sName parameter name
      *
@@ -289,7 +289,7 @@ class oxOrder extends oxBase
     /**
      * Gets country title by country id.
      *
-     * @param string $sCountryId Cuntry ID
+     * @param string $sCountryId country ID
      *
      * @return string
      */
@@ -317,7 +317,7 @@ class oxOrder extends oxBase
         $sSelect = "SELECT `oxorderarticles`.* FROM `oxorderarticles`
                         WHERE `oxorderarticles`.`oxorderid` = '".$this->getId() . "'" .
                         ( $blExcludeCanceled ? " AND `oxorderarticles`.`oxstorno` != 1 ": " " ) ."
-                        ORDER BY `oxorderarticles`.`oxartid`";
+                        ORDER BY `oxorderarticles`.`oxartid`, `oxorderarticles`.`oxselvariant`, `oxorderarticles`.`oxpersparam` ";
 
             // order articles
         $oArticles = oxNew( 'oxlist' );
@@ -474,7 +474,7 @@ class oxOrder extends oxBase
      * removes article from wishlist (oxorder::_updateWishlist()), updates voucher data
      * (oxorder::_markVouchers()). Finally sends order confirmation email to customer
      * (oxemail::SendOrderEMailToUser()) and shop owner (oxemail::SendOrderEMailToOwner()).
-     * If this is order racalculation, skipping payment execution, marking vouchers as used
+     * If this is order recalculation, skipping payment execution, marking vouchers as used
      * and sending order by email to shop owner and user
      * Mailing status (1 if OK, 0 on error) is returned.
      *
@@ -515,7 +515,7 @@ class oxOrder extends oxBase
         $oUserPayment = $this->_setPayment( $oBasket->getPaymentId() );
 
         // set folder information, if order is new
-        // #M575 in recalcualting order case folder must be the same as it was
+        // #M575 in recalculating order case folder must be the same as it was
         if ( !$blRecalculatingOrder ) {
             $this->_setFolder();
         }
@@ -527,7 +527,7 @@ class oxOrder extends oxBase
         $this->save();
 
         // executing payment (on failure deletes order and returns error code)
-        // in case when recalcualting order, payment execution is skipped
+        // in case when recalculating order, payment execution is skipped
         if ( !$blRecalculatingOrder ) {
             $blRet = $this->_executePayment( $oBasket, $oUserPayment );
             if ( $blRet !== true ) {
@@ -646,10 +646,10 @@ class oxOrder extends oxBase
     }
 
     /**
-     * Gathers and assigns to new oxorder object customer data, payment, delivery
-     * and shipping info, customer odere remark, currency, voucher, language data.
+     * Gathers and assigns to new oxOrder object customer data, payment, delivery
+     * and shipping info, customer order remark, currency, voucher, language data.
      * Additionally stores general discount and wrapping. Sets order status to "error"
-     * and creates oxorderarticle objects and assigns to them basket articles.
+     * and creates oxOrderArticle objects and assigns to them basket articles.
      *
      * @param oxBasket $oBasket Shopping basket object
      *
@@ -659,7 +659,7 @@ class oxOrder extends oxBase
     {
         $myConfig = $this->getConfig();
 
-        // store IP Adress - default must be FALSE as it is illegal to store
+        // store IP Address - default must be FALSE as it is illegal to store
         if ( $myConfig->getConfigParam( 'blStoreIPs' ) &&  $this->oxorder__oxip->value === null ) {
             $this->oxorder__oxip = new oxField(oxRegistry::get("oxUtilsServer")->getRemoteAddress(), oxField::T_RAW);
         }
@@ -668,8 +668,8 @@ class oxOrder extends oxBase
         $this->oxorder__oxisnettomode   = new oxField($oBasket->isCalculationModeNetto());
 
         // copying main price info
-        $this->oxorder__oxtotalnetsum   = new oxField($oBasket->getNettoSum()); //new oxField(oxRegistry::getUtils()->fRound($oBasket->getDiscountedNettoPrice()), oxField::T_RAW);
-        $this->oxorder__oxtotalbrutsum  = new oxField($oBasket->getBruttoSum()); //new oxField($oBasket->getProductsPrice()->getBruttoSum(), oxField::T_RAW);
+        $this->oxorder__oxtotalnetsum   = new oxField($oBasket->getNettoSum());
+        $this->oxorder__oxtotalbrutsum  = new oxField($oBasket->getBruttoSum());
         $this->oxorder__oxtotalordersum = new oxField($oBasket->getPrice()->getBruttoPrice(), oxField::T_RAW);
 
         // copying discounted VAT info
@@ -705,7 +705,7 @@ class oxOrder extends oxBase
         $this->oxorder__oxcurrency = new oxField($oCur->name);
         $this->oxorder__oxcurrate  = new oxField($oCur->rate, oxField::T_RAW);
 
-        // store voucherdiscount
+        // store voucher discount
         if ( ( $oVoucherDiscount = $oBasket->getVoucherDiscount() ) ) {
             $this->oxorder__oxvoucherdiscount = new oxField($oVoucherDiscount->getBruttoPrice(), oxField::T_RAW);
         }
@@ -740,7 +740,7 @@ class oxOrder extends oxBase
     }
 
     /**
-     * Returns language id of current order object. If order allready has
+     * Returns language id of current order object. If order already has
      * language defined - checks if this language is defined in shops config
      *
      * @return int
@@ -867,7 +867,7 @@ class oxOrder extends oxBase
                     $oProduct->loadInLang( $iCurrLang, $oProduct->getProductId() );
                 }
 
-                // set chosen selectlist
+                // set chosen select list
                 $sSelList = '';
                 if ( count( $aChosenSelList = $oContent->getChosenSelList() ) ) {
                     foreach ( $aChosenSelList as $oItem ) {
@@ -930,7 +930,7 @@ class oxOrder extends oxBase
 
             $oOrderArticle->setArticle( $oProduct );
 
-            // simulatin order article list
+            // simulation order article list
             $this->_oArticles->offsetSet( $oOrderArticle->getId(), $oOrderArticle );
         }
     }
@@ -985,7 +985,7 @@ class oxOrder extends oxBase
     }
 
     /**
-     * Creats and returns user payment.
+     * Creates and returns user payment.
      *
      * @param string $sPaymentid used payment id
      *
@@ -1031,7 +1031,7 @@ class oxOrder extends oxBase
         }
 
         // Store this payment information, we might allow users later to
-        // reactivate already give payment informations
+        // reactivate already give payment information
 
         $oUserpayment = oxNew( 'oxuserpayment' );
         $oUserpayment->oxuserpayments__oxuserid     = clone $this->oxorder__oxuserid;
@@ -1138,7 +1138,7 @@ class oxOrder extends oxBase
     {
         $oDb = oxDb::getDb();
         $sDate = date( 'Y-m-d H:i:s', oxRegistry::get("oxUtilsDate")->getTime() );
-        $sQ = 'update oxorder set oxorderdate=\''.$sDate.'\' where oxid='.$oDb->quote( $this->getId() );
+        $sQ = 'update oxorder set oxorderdate=' . $oDb->quote( $sDate ) . ' where oxid=' . $oDb->quote( $this->getId() );
         $this->oxorder__oxorderdate = new oxField( $sDate, oxField::T_RAW );
         $oDb->execute( $sQ );
     }
@@ -1189,7 +1189,7 @@ class oxOrder extends oxBase
     }
 
     /**
-     * Loads and returns delivery adress object or null
+     * Loads and returns delivery address object or null
      * if deladrid is not configured, or object was not loaded
      *
      * @return  object
@@ -1215,7 +1215,7 @@ class oxOrder extends oxBase
     }
 
     /**
-     * Function whitch cheks if article stock is valid.
+     * Function which checks if article stock is valid.
      * If not displays error and returns false.
      *
      * @param object $oBasket basket object
@@ -1302,8 +1302,8 @@ class oxOrder extends oxBase
         $oDb = oxDb::getDb();
 
         $iCnt = oxNew( 'oxCounter' )->getNext( $this->_getCounterIdent() );
-        $sQ = "update oxorder set oxordernr = $iCnt where oxid = ?";
-        $blUpdate = ( bool ) $oDb->execute( $sQ, array( $this->getId() ) );
+        $sQ = "update oxorder set oxordernr = ? where oxid = ?";
+        $blUpdate = ( bool ) $oDb->execute( $sQ, array($iCnt, $this->getId() ) );
 
         if ( $blUpdate ) {
             $this->oxorder__oxordernr = new oxField( $iCnt );
@@ -1365,7 +1365,7 @@ class oxOrder extends oxBase
 
     /**
      * Recalculates order. Starts transactions, deletes current order and order articles from DB,
-     * adds current order articles to virtual basket and finaly recalculates order by calling oxorder::finalizeOrder()
+     * adds current order articles to virtual basket and finally recalculates order by calling oxorder::finalizeOrder()
      * If no errors, finishing transaction.
      *
      * @param array $aNewArticles article list of new order
@@ -1825,7 +1825,7 @@ class oxOrder extends oxBase
     }
 
     /**
-     * Set usage of seperate orders numbering for different shops
+     * Set usage of separate orders numbering for different shops
      *
      * @param bool $blSeparateNumbering use or not separate orders numbering
      *
@@ -1907,9 +1907,9 @@ class oxOrder extends oxBase
     }
 
     /**
-     * Returns array of palain of formatted VATs stored in order
+     * Returns array of plain formatted VATs stored in order
      *
-     * @param bool $blFormatCurrency enambles currency formating
+     * @param bool $blFormatCurrency enables currency formatting
      *
      * @return array
      */
@@ -1983,7 +1983,7 @@ class oxOrder extends oxBase
     }
 
     /**
-     * Performs order cancelation process
+     * Performs order cancel process
      *
      * @return null
      */

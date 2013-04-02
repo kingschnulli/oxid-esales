@@ -40,7 +40,7 @@
         [{/if}]
 
         <label for="usr">[{ oxmultilang ident="GENERAL_USER" }]</label>
-        <input type="text" name="user" id="usr" value="[{ $user }]" size="49"><br>
+        <input type="text" name="user" id="usr" value="[{ $user }]" size="49" autofocus><br>
 
         <label for="pwd">[{ oxmultilang ident="GENERAL_PASSWORD" }]</label>
         <input type="password" name="pwd" id="pwd" value="[{ $pwd }]" size="49"><br>

@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   admin
- * @copyright (C) OXID eSales AG 2003-2012
+ * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
- * @version   SVN: $Id: order_overview.php 48786 2012-08-17 10:20:42Z tomas $
+ * @version   SVN: $Id: order_overview.php 56412 2013-03-08 13:09:08Z linas.kukulskis $
  */
 
 /**
@@ -31,7 +31,7 @@
 class Order_Overview extends oxAdminDetails
 {
     /**
-     * executes parent mathod parent::render(), creates oxorder, passes
+     * Executes parent method parent::render(), creates oxOrder, passes
      * it's data to Smarty engine and returns name of template file
      * "order_overview.tpl".
      *
@@ -42,7 +42,7 @@ class Order_Overview extends oxAdminDetails
         $myConfig = $this->getConfig();
         parent::render();
 
-        $oOrder = oxNew( "oxorder" );
+        $oOrder = oxNew( "oxOrder" );
         $oCur  = $myConfig->getActShopCurrencyObject();
         $oLang = oxRegistry::getLang();
 
@@ -72,7 +72,6 @@ class Order_Overview extends oxAdminDetails
         $this->_aViewData["ordertotalsum"] = $oLang->formatCurrency( $dSum, $oCur);
         $this->_aViewData["ordertotalcnt"] = $oOrder->getOrderCnt();
         $this->_aViewData["afolder"] = $myConfig->getConfigParam( 'aOrderfolder' );
-        $this->_aViewData["sfolder"] = $myConfig->getConfigParam( 'aOrderfolder' );
             $this->_aViewData["alangs"] = $oLang->getLanguageNames();
 
         $this->_aViewData["currency"] = $oCur;
@@ -83,19 +82,19 @@ class Order_Overview extends oxAdminDetails
     /**
      * Returns user payment used for current order. In case current order was executed using
      * credit card and user payment info is not stored in db (if oxConfig::blStoreCreditCardInfo = false),
-     * just for preview user payment is set from oxpayment
+     * just for preview user payment is set from oxPayment
      *
      * @param object $oOrder Order object
      *
-     * @return oxuserpayment
+     * @return oxUserPayment
      */
     protected function _getPaymentType( $oOrder )
     {
         if ( !( $oUserPayment = $oOrder->getPaymentType() ) && $oOrder->oxorder__oxpaymenttype->value ) {
-            $oPayment = oxNew( "oxpayment" );
+            $oPayment = oxNew( "oxPayment" );
             if ( $oPayment->load( $oOrder->oxorder__oxpaymenttype->value ) ) {
                 // in case due to security reasons payment info was not kept in db
-                $oUserPayment = oxNew( "oxuserpayment" );
+                $oUserPayment = oxNew( "oxUserPayment" );
                 $oUserPayment->oxpayments__oxdesc = new oxField( $oPayment->oxpayments__oxdesc->value );
             }
         }
@@ -161,8 +160,8 @@ class Order_Overview extends oxAdminDetails
      */
     public function exportDTAUS()
     {
-        $oOrderList = oxNew( "oxlist" );
-        $oOrderList->init( "oxorder" );
+        $oOrderList = oxNew( "oxList" );
+        $oOrderList->init( "oxOrder" );
         $sSelect =  "select * from oxorder where oxpaymenttype = 'oxiddebitnote'";
 
         if ( ( $iFromOrderNr = oxConfig::getParameter( "ordernr") ) ) {
@@ -171,7 +170,7 @@ class Order_Overview extends oxAdminDetails
 
         $oOrderList->selectString( $sSelect );
         if ( count( $oOrderList ) ) {
-            $oUserPayment = oxNew( "oxuserpayment" );
+            $oUserPayment = oxNew( "oxUserPayment" );
             $oUtils = oxRegistry::getUtils();
             $oShop  = $this->getConfig()->getActiveShop();
 

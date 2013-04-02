@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   tests
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
- * @version   SVN: $Id: vendorlistTest.php 53539 2013-01-10 08:32:14Z aurimas.gladutis $
+ * @version   SVN: $Id: vendorlistTest.php 55063 2013-02-11 16:33:30Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -215,9 +215,9 @@ class Unit_Views_vendorlistTest extends OxidTestCase
         $oVendor = new oxVendor();
         $oVendor->load( $sVendorId );
 
-        $oVendorList = $this->getProxyClass( "vendorlist" );
+        $oVendorList = new vendorList();
        // $oVendorList->setVendorTree( $oVendorTree );
-        $oVendorList->setNonPublicVar( "_oActVendor", $oVendor );
+        $oVendorList->setActVendor( $oVendor );
         $oArtList = $oVendorList->getArticleList();
 
         $this->assertEquals(oxUtilsCount::getInstance()->getVendorArticleCount( $sVendorId ), $oArtList->count());
@@ -313,79 +313,6 @@ class Unit_Views_vendorlistTest extends OxidTestCase
         $oVendorList->setNonPublicVar( "_oActVendor", $oVendor );
 
         $this->assertEquals( 'online kaufen', $oVendorList->getTitleSuffix() );
-    }
-
-    public function testGetMetaKeywords()
-    {
-            $sVendorId = '77442e37fdf34ccd3.94620745';
-            $sRez = 'are, here, ein, authentisches, glanzstück, seiner, zeit, -, original, bush, beach, radio';
-
-
-        $oVendor = new oxVendor();
-        $oVendor->load($sVendorId);
-
-        $oCat = new oxcategory();
-        $oCat->oxcategories__oxtitle = new oxField( 'you are here' );
-
-        $oListView = $this->getMock( "vendorlist", array( 'getActVendor', 'getCatTreePath' ) );
-        $oListView->expects( $this->atLeastOnce() )->method( 'getActVendor')->will( $this->returnValue( $oVendor ) );
-        $oListView->expects( $this->atLeastOnce() )->method( 'getCatTreePath' )->will( $this->returnValue( array( $oCat ) ) );
-
-        $this->assertEquals( $sRez, $oListView->getMetaKeywords() );
-    }
-
-    public function testSetMetaKeywordsIfPathNotSet()
-    {
-            $sVendorId = '77442e37fdf34ccd3.94620745';
-            $sRez = 'by, distributor, ein, authentisches, glanzstück, seiner, zeit, -, original, bush, beach, radio';
-
-
-        $oVendor = new oxVendor();
-        $oVendor->load($sVendorId);
-
-        $oCat = new oxcategory();
-        $oCat->oxcategories__oxtitle = new oxField( 'By Distributor' );
-
-        $oListView = $this->getMock( "vendorlist", array( 'getActVendor', 'getCatTreePath' ) );
-        $oListView->expects( $this->atLeastOnce() )->method( 'getActVendor')->will( $this->returnValue( $oVendor ) );
-        $oListView->expects( $this->atLeastOnce() )->method( 'getCatTreePath' )->will( $this->returnValue( array( $oCat ) ) );
-
-        $this->assertEquals( $sRez, $oListView->getMetaKeywords() );
-
-    }
-
-    public function testGetMetaDescription()
-    {
-            $sVendorId = '77442e37fdf34ccd3.94620745';
-            $sRez = 'by distributor - Original BUSH Beach Radio';
-
-        $oVendor = new oxVendor();
-        $oVendor->load($sVendorId);
-
-        $oCat = new oxcategory();
-        $oCat->oxcategories__oxtitle = new oxField( 'By Distributor' );
-
-        $oListView = $this->getMock( "vendorlist", array( 'getActVendor', 'getCatTreePath' ) );
-        $oListView->expects( $this->atLeastOnce() )->method( 'getActVendor')->will( $this->returnValue( $oVendor ) );
-        $oListView->expects( $this->atLeastOnce() )->method( 'getCatTreePath' )->will( $this->returnValue( array( $oCat ) ) );
-
-        $this->assertEquals( $sRez, $oListView->getMetaDescription() );
-    }
-
-    public function testSetMetaDescriptionIfPathNotSet()
-    {
-            $sVendorId = '68342e2955d7401e6.18967838';
-            $sRez = 'By Distributor - Brieföffner mit Drachenwandhalter';
-
-        $oVendor = new oxVendor();
-        $oVendor->load($sVendorId);
-
-        $oVendorList = $this->getProxyClass( "vendorlist" );
-        $oVendorList->setVendorTree( new oxvendorlist() );
-        $oVendorList->setNonPublicVar( "_oActVendor", $oVendor );
-        $oVendorList->setNonPublicVar( "_sCatPathString", 'By Distributor' );
-        $oVendorList->setMetaDescription( null );
-        $this->assertEquals( $sRez, $oVendorList->getMetaDescription() );
     }
 
     public function testAddPageNrParamIfSeo()

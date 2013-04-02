@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   admin
- * @copyright (C) OXID eSales AG 2003-2012
+ * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
- * @version   SVN: $Id: report_conversion_rate.php 48786 2012-08-17 10:20:42Z tomas $
+ * @version   SVN: $Id: report_conversion_rate.php 54926 2013-02-07 10:54:49Z aurimas.gladutis $
  */
 
 if ( !class_exists( "report_conversion_rate")) {
@@ -73,8 +73,11 @@ class Report_conversion_rate extends report_base
         $aDataX = array();
         $aDataY = array();
 
-        $sTimeTo    = $oDb->quote( date( "Y-m-d H:i:s", strtotime( oxConfig::getParameter( "time_to" ) ) ) );
-        $sTimeFrom = $oDb->quote( date( "Y-m-d H:i:s", mktime( 23, 59, 59, date( "m", $dTimeTo)-12, date( "d", $dTimeTo), date( "Y", $dTimeTo)) ) );
+        $dTimeTo = strtotime( oxRegistry::getConfig()->getRequestParameter( "time_to" ) );
+        $dTimeFrom = mktime( 23, 59, 59, date( "m", $dTimeTo)-12, date( "d", $dTimeTo), date( "Y", $dTimeTo));
+
+        $sTimeTo    = $oDb->quote( date( "Y-m-d H:i:s", $dTimeTo ) );
+        $sTimeFrom = $oDb->quote( date( "Y-m-d H:i:s", $dTimeFrom ) );
 
         // orders
         $sSQL = "select oxtime, count(*) as nrof from oxlogs where oxtime >= $sTimeFrom and oxtime <= $sTimeTo group by oxsessid";

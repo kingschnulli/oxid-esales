@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   views
- * @copyright (C) OXID eSales AG 2003-2012
+ * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcmp_utils.php 51871 2012-11-15 12:46:50Z linas.kukulskis $
+ * @version   SVN: $Id: oxcmp_utils.php 55822 2013-02-25 12:11:23Z linas.kukulskis $
  */
 
 /**
@@ -207,8 +207,8 @@ class oxcmp_utils extends oxView
         // only if user is logged in
         if ( $oUser = $this->getUser() ) {
 
-            $sProductId = ($sProductId) ? $sProductId : oxConfig::getParameter( 'aid' );
             $sProductId = ($sProductId) ? $sProductId : oxConfig::getParameter( 'itmid' );
+            $sProductId = ($sProductId) ? $sProductId : oxConfig::getParameter( 'aid' );
             $dAmount = isset( $dAmount ) ? $dAmount : oxConfig::getParameter( 'am' );
             $aSel    = $aSel ? $aSel : oxConfig::getParameter( 'sel' );
 
@@ -227,7 +227,7 @@ class oxcmp_utils extends oxView
     }
 
     /**
-     *  Set viewdata, call parent::render
+     *  Set view data, call parent::render
      *
      * @return null
      */
@@ -238,7 +238,7 @@ class oxcmp_utils extends oxView
         $myConfig = $this->getConfig();
         $oParentView = $this->getParent();
 
-        // add content for mainmenu
+        // add content for main menu
         $oContentList = oxNew( 'oxcontentlist' );
         $oContentList->loadMainMenulist();
         $oParentView->setMenueList( $oContentList );

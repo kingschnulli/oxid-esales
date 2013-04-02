@@ -19,7 +19,7 @@
      * @package   core
  * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
-     * @version   SVN: $Id: oxtags.php 53105 2012-12-18 15:03:40Z aurimas.gladutis $
+ * @version   SVN: $Id: oxtags.php 53105 2012-12-18 15:03:40Z aurimas.gladutis $
      */
 
 

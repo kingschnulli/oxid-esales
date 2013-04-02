@@ -17,8 +17,7 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   main
- * @copyright (C) OXID eSales AG 2003-2012
- * @version OXID eShop CE
+ * @copyright (C) OXID eSales AG 2003-2013
  */
 
     /** @name database information */

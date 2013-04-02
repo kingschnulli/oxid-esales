@@ -8,9 +8,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   out
- * @copyright (C) OXID eSales AG 2003-2011
- * @version OXID eShop PE
- * @version   SVN: $Id: $
+ * @copyright (C) OXID eSales AG 2003-2013
+ * @version OXID eShop CE
+ * @version   SVN: $Id: oxcomparelinks.js 35529 2012-05-23 07:31:20Z tomas $
  */
 ( function ( $ ) {
 

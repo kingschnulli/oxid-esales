@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   core
- * @copyright (C) OXID eSales AG 2003-2012
+ * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
- * @version   SVN: $Id: oxbasketitem.php 50307 2012-10-09 14:25:19Z linas.kukulskis $
+ * @version   SVN: $Id: oxbasketitem.php 55356 2013-02-15 14:38:05Z linas.kukulskis $
  */
 
 /**
@@ -643,7 +643,7 @@ class oxBasketItem extends oxSuperCfg
     }
 
      /**
-     * Special getter function for backwards compatability.
+     * Special getter function for backwards compatibility.
      * Executes methods by rule "get".$sVariableName and returns
      * result processed by executed function.
      *
@@ -708,7 +708,7 @@ class oxBasketItem extends oxSuperCfg
         $this->_sIconUrl = $oArticle->getIconUrl();
         $this->_blSsl    = $oConfig->isSsl();
 
-        // removing force_sid from the link (incase it'll change)
+        // removing force_sid from the link (in case it'll change)
         $this->_sLink    = oxRegistry::get("oxUtilsUrl")->cleanUrl( $oArticle->getLink(), array( 'force_sid' ) );
 
         // shop Ids

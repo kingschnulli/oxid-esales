@@ -19,7 +19,7 @@
  * @package   core
  * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
- * @version   SVN: SVN: $Id: oxarticlelist.php 53484 2013-01-08 14:28:26Z aurimas.gladutis $
+ * @version   SVN: SVN: $Id: oxarticlelist.php 56564 2013-03-14 09:05:01Z linas.kukulskis $
  */
 
 /**
@@ -160,9 +160,9 @@ class oxArticleList extends oxList
      *
      * @return null
      */
-    protected function sortByIds($aIds)
+    public function sortByIds( $aIds )
     {
-        $this->_aOrderMap = array_flip($aIds);
+        $this->_aOrderMap = array_flip( $aIds );
         uksort($this->_aArray, array($this, '_sortByOrderMapCallback'));
     }
 
@@ -343,7 +343,7 @@ class oxArticleList extends oxList
     }
 
     /**
-     * Loads article crosssellings
+     * Loads article cross selling
      *
      * @param string $sArticleId Article id
      *
@@ -363,21 +363,31 @@ class oxArticleList extends oxList
 
         $sArticleId = oxDb::getDb()->quote($sArticleId);
 
-        $sSelect  = "select $sArticleTable.* from oxobject2article left join $sArticleTable on oxobject2article.oxobjectid=$sArticleTable.oxid ";
-        $sSelect .= "where oxobject2article.oxarticlenid = $sArticleId ";
-        $sSelect .= " and $sArticleTable.oxid is not null and " .$oBaseObject->getSqlActiveSnippet(). " order by rand()";
+        $sSelect  = "SELECT $sArticleTable.*
+                        FROM $sArticleTable INNER JOIN oxobject2article ON oxobject2article.oxobjectid=$sArticleTable.oxid ";
+        $sSelect .= "WHERE oxobject2article.oxarticlenid = $sArticleId ";
+        $sSelect .= " AND " .$oBaseObject->getSqlActiveSnippet();
 
-        // #525 bidirectional crossselling
+        // #525 bidirectional cross selling
         if ( $myConfig->getConfigParam( 'blBidirectCross' ) ) {
-            $sSelect = "SELECT $sArticleTable.* FROM $sArticleTable
-                LEFT JOIN oxobject2article AS O2A1 on
-                    ( O2A1.oxobjectid = $sArticleTable.oxid AND O2A1.oxarticlenid = $sArticleId )
-                LEFT JOIN oxobject2article AS O2A2 ON
-                    ( O2A2.oxarticlenid = $sArticleTable.oxid AND O2A2.oxobjectid = $sArticleId )
-                WHERE 1
-                    AND ( O2A2.oxarticlenid IS NOT NULL OR O2A1.oxobjectid IS NOT NULL )
+            $sSelect = "
+                (
+                    SELECT $sArticleTable.* FROM $sArticleTable
+                        INNER JOIN oxobject2article AS O2A1 on
+                            ( O2A1.oxobjectid = $sArticleTable.oxid AND O2A1.oxarticlenid = $sArticleId )
+                    WHERE 1
                     AND " . $oBaseObject->getSqlActiveSnippet() . "
-                    AND ($sArticleTable.oxid != $sArticleId) order by rand()";
+                    AND ($sArticleTable.oxid != $sArticleId)
+                )
+                UNION
+                (
+                    SELECT $sArticleTable.* FROM $sArticleTable
+                        INNER JOIN oxobject2article AS O2A2 ON
+                            ( O2A2.oxarticlenid = $sArticleTable.oxid AND O2A2.oxobjectid = $sArticleId )
+                    WHERE 1
+                    AND " . $oBaseObject->getSqlActiveSnippet() . "
+                    AND ($sArticleTable.oxid != $sArticleId)
+                )";
         }
 
         $this->setSqlLimit( 0, $myConfig->getConfigParam( 'iNrofCrossellArticles' ));
@@ -385,7 +395,7 @@ class oxArticleList extends oxList
     }
 
     /**
-     * Loads article accessoires
+     * Loads article accessories
      *
      * @param string $sArticleId Article id
      *

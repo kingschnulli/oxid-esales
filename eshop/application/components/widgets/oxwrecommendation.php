@@ -18,7 +18,7 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   views
- * @copyright (C) OXID eSales AG 2003-2012
+ * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
  * @version   SVN: $Id: oxwrecommendation.php 47791 2012-07-25 15:09:04Z saulius.stasiukaitis $
  */

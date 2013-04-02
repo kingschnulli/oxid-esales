@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   core
- * @copyright (C) OXID eSales AG 2003-2012
+ * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
- * @version   SVN: $Id: oxshop.php 52092 2012-11-21 11:47:26Z linas.kukulskis $
+ * @version   SVN: $Id: oxshop.php 54668 2013-01-31 13:29:52Z linas.kukulskis $
  */
 
 /**
@@ -52,6 +52,11 @@ class oxShop extends oxI18n
     {
         parent::__construct();
         $this->init( 'oxshops' );
+
+        if ( $iMax = $this->getConfig()->getConfigParam('iMaxShopId') ) {
+            $this->setMaxShopId( $iMax );
+        }
+
     }
 
     /**

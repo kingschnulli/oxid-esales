@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   core
- * @copyright (C) OXID eSales AG 2003-2012
+ * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
- * @version   SVN: $Id: oxdiscountlist.php 51654 2012-11-12 08:30:25Z linas.kukulskis $
+ * @version   SVN: $Id: oxdiscountlist.php 55152 2013-02-14 08:50:58Z aurimas.gladutis $
  */
 
 /**
@@ -83,6 +83,8 @@ class oxDiscountList extends oxList
 
     /**
      * Initializes current state discount list
+     * For iterating through the list, use getArray() on the list,
+     * as iterating on object itself can cause concurrency problems.
      *
      * @param object $oUser user object (optional)
      *
@@ -206,7 +208,8 @@ class oxDiscountList extends oxList
     public function getArticleDiscounts( $oArticle, $oUser = null )
     {
         $aList = array();
-        foreach ( $this->_getList( $oUser ) as $oDiscount ) {
+        $aDiscList = $this->_getList( $oUser )->getArray();
+        foreach ( $aDiscList as $oDiscount ) {
             if ( $oDiscount->isForArticle( $oArticle ) ) {
                 $aList[$oDiscount->getId()] = $oDiscount;
             }
@@ -248,8 +251,8 @@ class oxDiscountList extends oxList
     public function getBasketDiscounts( $oBasket, $oUser = null )
     {
         $aList = array();
-        $oList = $this->_getList( $oUser );
-        foreach ( $oList->getArray() as $oDiscount ) {
+        $aDiscList = $this->_getList( $oUser )->getArray();
+        foreach ( $aDiscList as $oDiscount ) {
             if ( $oDiscount->isForBasket( $oBasket ) ) {
                 $aList[$oDiscount->getId()] = $oDiscount;
             }
@@ -270,7 +273,8 @@ class oxDiscountList extends oxList
     public function getBasketItemBundleDiscounts( $oArticle, $oBasket, $oUser = null )
     {
         $aList = array();
-        foreach ( $this->_getList( $oUser ) as $oDiscount ) {
+        $aDiscList = $this->_getList( $oUser )->getArray();
+        foreach ( $aDiscList as $oDiscount ) {
             if ( $oDiscount->isForBundleItem( $oArticle, $oBasket ) && $oDiscount->isForBasketAmount($oBasket) ) {
                 $aList[$oDiscount->getId()] = $oDiscount;
             }

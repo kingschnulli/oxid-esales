@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   core
- * @copyright (C) OXID eSales AG 2003-2012
+ * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
- * @version   SVN: $Id: oxsession.php 52011 2012-11-19 15:14:56Z linas.kukulskis $
+ * @version   SVN: $Id: oxsession.php 55484 2013-02-19 13:22:03Z linas.kukulskis $
  */
 
 DEFINE('_DB_SESSION_HANDLER', getShopBasePath() . 'core/adodblite/session/adodb-session.php');
@@ -53,7 +53,7 @@ class oxSession extends oxSuperCfg
     protected  $_sId     = null;
 
     /**
-     * A flag indicating that sesion was just created, useful for tracking cookie support
+     * A flag indicating that session was just created, useful for tracking cookie support
      *
      * @var bool
      */
@@ -115,8 +115,8 @@ class oxSession extends oxSuperCfg
 
     /**
      * Force session start by defined parameter rules.
-     * First level array keys are parameters to check wich point to
-     * array of values wich need session.
+     * First level array keys are parameters to check which point to
+     * array of values which need session.
      *
      * @var array
      * @see _getRequireSessionWithParams()

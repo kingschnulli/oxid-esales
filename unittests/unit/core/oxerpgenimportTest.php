@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   tests
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
- * @version   SVN: $Id: oxerpgenimportTest.php 45542 2012-05-22 10:09:57Z linas.kukulskis $
+ * @version   SVN: $Id: oxerpgenimportTest.php 55724 2013-02-22 09:13:33Z tadas.rimkus $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -279,11 +279,12 @@ class Unit_Core_oxErpGenImportTest extends OxidTestCase
      */
     public function testGetTotalImportedRowsNumber()
     {
-        $aStat = array( array( 'r' => true), array( 'r' => true), array( 'r' => false) );
-        $oImport = $this->getMock( 'oxErpGenImport', array( 'getStatistics') );
-        $oImport->expects( $this->once() )->method( 'getStatistics' )->will( $this->returnValue( $aStat ) );
+        $oCsv = new oxErpGenImport();
+        $oCsv->setImportedIds( 12 );
+        $oCsv->setImportedIds( 12 );
+        $oCsv->setImportedIds( 120 );
 
-        $this->assertEquals( 2, $oImport->getTotalImportedRowsNumber() );
+        $this->assertEquals( 2, $oCsv->getTotalImportedRowsNumber() );
     }
 
     /*

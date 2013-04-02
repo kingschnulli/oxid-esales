@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   admin
- * @copyright (C) OXID eSales AG 2003-2012
+ * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
- * @version   SVN: $Id: oxadminlist.php 52113 2012-11-21 15:46:41Z aurimas.gladutis $
+ * @version   SVN: $Id: oxadminlist.php 54924 2013-02-07 10:51:31Z aurimas.gladutis $
  */
 
 /**
@@ -387,7 +387,7 @@ class oxAdminList extends oxAdminView
     {
         if ( $blIsSearchValue ) {
             //is search string, using LIKE
-            $sQ = " like '%{$sVal}%' ";
+            $sQ = " like ".oxDb::getDb()->quote( '%'.$sVal.'%' )." ";
         } else {
             //not search string, values must be equal
             $sQ = " = ".oxDb::getDb()->quote( $sVal )." ";

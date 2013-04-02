@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   tests
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
- * @version   SVN: $Id: oxbaseTest.php 51958 2012-11-19 08:47:22Z linas.kukulskis $
+ * @version   SVN: $Id: oxbaseTest.php 56496 2013-03-11 16:00:59Z alfonsas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -1517,10 +1517,10 @@ class Unit_Core_oxbaseTest extends OxidTestCase
         $oBase->expects($this->any())
                      ->method('update')
                      ->will($this->returnValue(true));
-        $oBase->init( "oxactions");
-        $oBase->setId( "oxstart");
+        $oBase->init('oxactions');
+        $oBase->setId('oxstart');
         $sResult = $oBase->save();
-        $this->assertEquals( true, $sResult );
+        $this->assertEquals( 'oxstart', $sResult );
     }
 
     /**

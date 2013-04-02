@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   tests
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcategoryTest.php 49281 2012-09-04 14:20:14Z vilma $
+ * @version   SVN: $Id: oxcategoryTest.php 55138 2013-02-13 12:37:31Z tadas.rimkus $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -1043,5 +1043,40 @@ class Unit_Core_oxCategoryTest extends OxidTestCase
         $oCat = new oxCategory();
         $oCat->oxcategories__oxtitle = new oxField( "testtitle" );
         $this->assertEquals( $sTitle, $oCat->getTitle() );
+    }
+
+    /**
+     * Category::testGetDefaultSort() test case
+     *
+     * @return null
+     */
+    public function testGetDefaultSort()
+    {
+        $oCategory = new oxCategory();
+        $this->assertNull( $oCategory->getDefaultSorting() );
+
+        $oCategory->load("30e44ab85808a1f05.26160932");
+        $this->assertEquals( '', $oCategory->getDefaultSorting() );
+
+        $oCategory->oxcategories__oxdefsort = new oxField("testtitle");
+        $this->assertEquals( "testtitle", $oCategory->getDefaultSorting() );
+    }
+
+    /**
+     * Category::testGetDefaultSortMode() test case
+     *
+     * @return null
+     */
+    public function testGetDefaultSortMode()
+    {
+        $oCategory = new oxCategory();
+        $this->assertNull( $oCategory->getDefaultSortingMode() );
+
+        $oCategoryId  = '8a142c3e60a535f16.78077188';
+        $oCategory->load($oCategoryId);
+        $this->assertEquals( 0, $oCategory->getDefaultSortingMode() );
+
+        $oCategory->oxcategories__oxdefsortmode = new oxField( 'desc' );
+        $this->assertEquals( 'desc', $oCategory->getDefaultSortingMode() );
     }
 }

@@ -19,7 +19,7 @@
  * @package   views
  * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
- * @version   SVN: $Id: oxubase.php 54111 2013-01-22 08:24:08Z linas.kukulskis $
+ * @version   SVN: $Id: oxubase.php 57012 2013-03-26 13:51:23Z aurimas.gladutis $
  */
 
 /**
@@ -444,7 +444,7 @@ class oxUBase extends oxView
      * Sign if to load and show top5articles action
      * @var bool
      */
-    protected $_blTop5Action = true;
+    protected $_blTop5Action = false;
 
     /**
      * Sign if to load and show bargain action
@@ -724,7 +724,7 @@ class oxUBase extends oxView
     /**
      * Active category setter
      *
-     * @param oxcategory $oCategory active category
+     * @param oxCategory $oCategory active category
      *
      * @return null
      */
@@ -944,12 +944,11 @@ class oxUBase extends oxView
     /**
      * Returns default category sorting for selected category
      *
-     * @return array
+     * @return null
      */
     public function getDefaultSorting()
     {
-        $aSorting = array ( 'sortby' => 'oxtitle', 'sortdir' => 'asc' );
-        return $aSorting;
+        return null;
     }
 
     /**
@@ -995,13 +994,13 @@ class oxUBase extends oxView
     /**
      * Set sorting column name
      *
-     * @param string $sCulumn - column name
+     * @param string $sColumn - column name
      *
      * @return string
      */
-    public function setListOrderBy( $sCulumn )
+    public function setListOrderBy( $sColumn )
     {
-        $this->_sListOrderBy = $sCulumn;
+        $this->_sListOrderBy = $sColumn;
     }
 
     /**
@@ -1070,10 +1069,10 @@ class oxUBase extends oxView
     public function getListOrderBy()
     {
         //if column is with table name split it
-        $aColums = explode('.', $this->_sListOrderBy);
+        $aColumns = explode('.', $this->_sListOrderBy);
 
-        if ( is_array($aColums) && count($aColums) > 1 ) {
-           return $aColums[1];
+        if ( is_array($aColumns) && count($aColumns) > 1 ) {
+           return $aColumns[1];
         }
 
         return $this->_sListOrderBy;
@@ -1365,7 +1364,7 @@ class oxUBase extends oxView
      *
      * @param string $sMeta                   category path
      * @param int    $iLength                 max length of result, -1 for no truncation
-     * @param bool   $blRemoveDuplicatedWords if true - performs additional dublicate cleaning
+     * @param bool   $blRemoveDuplicatedWords if true - performs additional duplicate cleaning
      *
      * @return  string  $sString    converted string
      */
@@ -1376,9 +1375,9 @@ class oxUBase extends oxView
             $oStr = getStr();
             if ( $iLength != -1 ) {
                 /* *
-                 * performance - we dont need a huge amount of initial text.
+                 * performance - we do not need a huge amount of initial text.
                  * assume that effective text may be double longer than $iLength
-                 * and simple turncate it
+                 * and simple truncate it
                  */
                 $iELength = ( $iLength * 2 );
                 $sMeta = $oStr->substr( $sMeta, 0, $iELength );
@@ -1409,12 +1408,12 @@ class oxUBase extends oxView
     }
 
     /**
-     * Returns current view keywords seperated by comma
+     * Returns current view keywords separated by comma
      *
      * @param string $sKeywords               data to use as keywords
-     * @param bool   $blRemoveDuplicatedWords if true - performs additional dublicate cleaning
+     * @param bool   $blRemoveDuplicatedWords if true - performs additional duplicate cleaning
      *
-     * @return string of keywords seperated by comma
+     * @return string of keywords separated by comma
      */
     protected function _prepareMetaKeyword( $sKeywords, $blRemoveDuplicatedWords = true )
     {
@@ -1425,19 +1424,7 @@ class oxUBase extends oxView
             $sString = $this->_removeDuplicatedWords( $sString, $this->getConfig()->getConfigParam( 'aSkipTags' ) );
         }
 
-        // removing in admin defined strings
-
-        /*if ( is_array( $aSkipTags ) && $sString ) {
-            $oStr = getStr();
-            foreach ( $aSkipTags as $sSkip ) {
-                //$aPattern = array( '/\W'.$sSkip.'\W/iu', '/^'.$sSkip.'\W/iu', '/\"'.$sSkip.'$/iu' );
-                //$aPattern = array( '/\s+'.$sSkip.'\,/iu', '/^'.$sSkip.'\s+/iu', '/\"\s+'.$sSkip.'$/iu' );
-                $aPattern = array( '/\s+'.$sSkip.'\,/i', '/^'.$sSkip.',\s+/i', '/\",\s+'.$sSkip.'$/i' );
-                $sString  = $oStr->preg_replace( $aPattern, '', $sString );
-            }
-        }*/
-
-        return trim( $sString );
+       return trim( $sString );
     }
 
     /**
@@ -1446,7 +1433,7 @@ class oxUBase extends oxView
      * @param mixed $aInput    array of string or string
      * @param array $aSkipTags in admin defined strings
      *
-     * @return string of words seperated by comma
+     * @return string of words separated by comma
      */
     protected function _removeDuplicatedWords( $aInput, $aSkipTags = array() )
     {
@@ -1482,7 +1469,7 @@ class oxUBase extends oxView
     /**
      * Returns array of params => values which are used in hidden forms and as additional url params.
      * NOTICE: this method SHOULD return raw (non encoded into entities) parameters, because values
-     * are processed by htmlentities() to avoid security and brokent templates problems
+     * are processed by htmlentities() to avoid security and broken templates problems
      *
      * @return array
      */
@@ -2375,7 +2362,7 @@ class oxUBase extends oxView
     /**
      * Active vendor setter
      *
-     * @param oxvendor $oVendor active vendor
+     * @param oxVendor $oVendor active vendor
      *
      * @return null
      */
@@ -2387,7 +2374,7 @@ class oxUBase extends oxView
     /**
      * Active Manufacturer setter
      *
-     * @param oxmanufacturer $oManufacturer active Manufacturer
+     * @param oxManufacturer $oManufacturer active Manufacturer
      *
      * @return null
      */
@@ -2414,7 +2401,7 @@ class oxUBase extends oxView
     /**
      * Returns category tree (if it is loaded)
      *
-     * @return oxcategorylist
+     * @return oxCategoryList
      */
     public function getCategoryTree()
     {
@@ -2424,7 +2411,7 @@ class oxUBase extends oxView
     /**
      * Category list setter
      *
-     * @param oxcategorylist $oCatTree category tree
+     * @param oxCategoryList $oCatTree category tree
      *
      * @return null
      */
@@ -2468,9 +2455,11 @@ class oxUBase extends oxView
      * Template variable getter. Returns Top 5 article list.
      * Parameter oxubase::$_blTop5Action must be set to true.
      *
+     * @param integer $iCount - product count in list
+     *
      * @return array
      */
-    public function getTop5ArticleList()
+    public function getTop5ArticleList( $iCount = null )
     {
         if ( $this->_blTop5Action ) {
             if ( $this->_aTop5ArticleList === null ) {
@@ -2479,7 +2468,7 @@ class oxUBase extends oxView
                 if ( $myConfig->getConfigParam( 'bl_perfLoadAktion' ) ) {
                     // top 5 articles
                     $oArtList = oxNew( 'oxarticlelist' );
-                    $oArtList->loadTop5Articles();
+                    $oArtList->loadTop5Articles( $iCount );
                     if ( $oArtList->count() ) {
                         $this->_aTop5ArticleList = $oArtList;
                     }

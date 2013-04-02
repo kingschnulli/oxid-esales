@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   tests
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
- * @version   SVN: $Id: oxcmpUserTest.php 53118 2012-12-19 09:13:47Z aurimas.gladutis $
+ * @version   SVN: $Id: oxcmpUserTest.php 55116 2013-02-12 12:09:42Z linas.kukulskis $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -361,11 +361,10 @@ class Unit_Views_oxcmpUserTest extends OxidTestCase
         $oParent = $this->getMock( 'oxubase', array( "isEnabledPrivateSales" ) );
         $oParent->expects( $this->once() )->method( 'isEnabledPrivateSales' )->will( $this->returnValue( false ) );
 
-        $oCmp = $this->getMock( "oxcmp_user", array( "_afterLogin", "login", 'getParent' ) );
-        $oCmp->expects( $this->never() )->method( '_afterLogin' );
-        $oCmp->expects( $this->once() )->method( 'login' )->will( $this->returnValue( 'user' ) );
+        $oCmp = $this->getMock( "oxcmp_user", array( "_afterLogin", 'getParent' ) );
+        $oCmp->expects( $this->once() )->method( '_afterLogin' );
         $oCmp->expects( $this->any() )->method( 'getParent' )->will( $this->returnValue( $oParent ) );
-        $this->assertFalse( $oCmp->createUser() );
+        $this->assertEquals( 'payment' , $oCmp->createUser() );
 
         $oDb = oxDb::getDb();
 
@@ -743,6 +742,18 @@ class Unit_Views_oxcmpUserTest extends OxidTestCase
     }
 
     /**
+     * Test changeUser() on error.
+     *
+     * @return null
+     */
+    public function testChangeUserTestValuesOnError()
+    {
+        $oUserView = $this->getMock( 'oxcmp_user', array( '_changeUser_noRedirect' ) );
+        $oUserView->expects( $this->once() )->method( '_changeUser_noRedirect' )->will( $this->returnValue( null ) );
+        $this->assertEquals( null, $oUserView->changeuser_testvalues() );
+    }
+
+    /**
      * Test createUser().
      *
      * @return null
@@ -770,8 +781,7 @@ class Unit_Views_oxcmpUserTest extends OxidTestCase
         $oParent->expects( $this->once() )->method( 'isEnabledPrivateSales' )->will( $this->returnValue( false ) );
 
         $this->getProxyClass("oxcmp_user");
-        $oUserView = $this->getMock( 'oxcmp_userPROXY', array( 'login', 'getParent' ) );
-        $oUserView->expects( $this->once() )->method( 'login' )->will( $this->returnValue( 'payment' ) );
+        $oUserView = $this->getMock( 'oxcmp_userPROXY', array( 'getParent' ) );
         $oUserView->expects( $this->any() )->method( 'getParent' )->will( $this->returnValue( $oParent ) );
         $this->assertEquals( 'payment', $oUserView->createUser() );
         $this->assertEquals( 'TestRemark', oxSession::getVar( 'ordrem' ) );

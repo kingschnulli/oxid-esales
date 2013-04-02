@@ -9,8 +9,7 @@
  *
  * @link http://www.oxid-esales.com
  * @package ModuleCertification
- * @copyright (C) OXID eSales AG 2003-2011
- * @version OXID eShop CE
+ * @copyright (C) OXID eSales AG 2003-2013
  */
 
 

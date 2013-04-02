@@ -287,7 +287,7 @@ class oxTag extends oxSuperCfg
     }
 
     /**
-     * Adds dashes to too short tag words, so that they would be equal to mintaglength
+     * Adds dashes to too short tag words, so that they would be equal to minTagLength
      *
      * @return void
      */

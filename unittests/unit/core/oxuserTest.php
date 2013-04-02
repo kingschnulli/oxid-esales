@@ -17,7 +17,7 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   tests
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
  * @version   SVN: $Id: oxuserTest.php 31889 2010-12-16 13:26:53Z rimvydas.paskevicius $
  */
@@ -2288,7 +2288,7 @@ class Unit_Core_oxuserTest extends OxidTestCase
         $oUser = $this->getProxyClass("oxUser");
         $oUser->load( 'oxdefaultadmin' );
 
-        $this->assertEquals( $sUserID, $oUser->checkIfEmailExists( $sUsername) );
+        $this->assertTrue( $oUser->checkIfEmailExists( $sUsername) );
     }
     // 6. testing if method detects dublicate records
     public function testCheckForAvailableEmailIfNewEmail()
@@ -2800,7 +2800,8 @@ class Unit_Core_oxuserTest extends OxidTestCase
         $testUser = $this->getMock( 'oxuser', array( 'isAdmin' ) );
         $testUser->expects( $this->any() )->method( 'isAdmin')->will( $this->returnValue( false ) );
 
-        $sVal = oxADMIN_LOGIN . '@@@' . crypt( $oActUser->encodePassword( oxADMIN_PASSWD, oxDb::getDb()->getOne('select OXPASSSALT from oxuser where OXID="oxdefaultadmin"') ), '61646D696E' );
+        $sPassSalt = oxDb::getDb()->getOne('select OXPASSSALT from oxuser where OXID="oxdefaultadmin"');
+        $sVal = oxADMIN_LOGIN . '@@@' . crypt( $oActUser->encodePassword( oxADMIN_PASSWD, $sPassSalt ), $sPassSalt );
         oxUtilsServer::getInstance()->setOxCookie( 'oxid_'.$sShopId, $sVal );
 
         $oActUser->loadActiveUser();
@@ -3094,7 +3095,7 @@ class Unit_Core_oxuserTest extends OxidTestCase
         $aDelAddress['oxaddress__oxlname'] = 'xxx';
         $aDelAddress['oxaddress__oxcountryid'] = 'a7c40f631fc920687.20179984';
 
-        modConfig::setParameter( 'oxaddressid', 'xxx' );
+        $this->getConfig()->setParameter( 'oxaddressid', 'xxx' );
 
         $oUser->UNITassignAddress( $aDelAddress );
         $myDB = oxDb::getDB();

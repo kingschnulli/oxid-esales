@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   admin
- * @copyright (C) OXID eSales AG 2003-2012
+ * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
- * @version   SVN: $Id: user_article.php 48458 2012-08-10 06:59:10Z linas.kukulskis $
+ * @version   SVN: $Id: user_article.php 55357 2013-02-15 14:39:14Z tadas.rimkus $
  */
 
 /**
@@ -45,11 +45,6 @@ class User_Article extends oxAdminDetails
             // load object
             $oArticlelist = oxNew( 'oxorderarticlelist' );
             $oArticlelist->loadOrderArticlesForUser($soxId);
-
-            // setting needed data ..
-            foreach ( $oArticlelist as $oItem ) {
-                $oItem->oxarticles__oxid = new oxField($oItem->oxorderarticles__oxartid->value);
-            }
 
             $this->_aViewData['oArticlelist'] =  $oArticlelist;
         }

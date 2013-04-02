@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   lang
- * @copyright (C) OXID eSales AG 2003-2012
+ * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
- * @version   SVN: $Id: help_lang.php 52929 2012-12-14 10:37:20Z juergen.busch $
+ * @version   SVN: $Id: help_lang.php 56636 2013-03-18 08:56:04Z juergen.busch $
  */
 
 /**
@@ -53,6 +53,8 @@ $aLang =  array(
                                                  'The default value is 75.',
 
 'HELP_SHOP_SYSTEM_DENIEDDYNGROUPS'            => 'Enable this option to filtering user groups, which are handled over "dgr" param in the URL.',
+
+'HELP_SHOP_SYSTEM_LDAP'                       => 'Please edit file core/oxldap.php.',
 
 'HELP_SHOP_SYSTEM_SHOWVARIANTREVIEWS'         => 'This setting affects how reviews for variants are handled: If the setting is checked, remarks from variants are also shown at the parent product.',
 

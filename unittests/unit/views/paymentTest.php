@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   tests
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
- * @version   SVN: $Id: paymentTest.php 51960 2012-11-19 09:11:15Z vilma $
+ * @version   SVN: $Id: paymentTest.php 56496 2013-03-11 16:00:59Z alfonsas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -691,9 +691,9 @@ class Unit_Views_paymentTest extends OxidTestCase
     public function testRenderNoUserWithBasket()
     {
         $sRedirUrl = oxConfig::getInstance()->getShopHomeURL().'cl=basket';
-        $this->setExpectedException('Exception', $sRedirUrl);
+        $this->setExpectedException('oxException', $sRedirUrl);
 
-        oxTestModules::addFunction('oxUtils', 'redirect($url, $blAddRedirectParam = true, $iHeaderCode = 301)', '{throw new Exception($url);}');
+        oxTestModules::addFunction('oxUtils', 'redirect($url, $blAddRedirectParam = true, $iHeaderCode = 301)', '{throw new oxException($url);}');
         $this->setConfigParam('blPsBasketReservationEnabled', false);
         // skip redirect to SSL
         $this->setRequestParam( 'sslredirect', 'forced' );
@@ -713,9 +713,9 @@ class Unit_Views_paymentTest extends OxidTestCase
     public function testRenderNoUserEmptyBasket()
     {
         $sRedirUrl = oxConfig::getInstance()->getShopHomeURL().'cl=start';
-        $this->setExpectedException('Exception', $sRedirUrl);
+        $this->setExpectedException('oxException', $sRedirUrl);
 
-        oxTestModules::addFunction('oxUtils', 'redirect($url, $blAddRedirectParam = true, $iHeaderCode = 301)', '{throw new Exception($url);}');
+        oxTestModules::addFunction('oxUtils', 'redirect($url, $blAddRedirectParam = true, $iHeaderCode = 301)', '{throw new oxException($url);}');
         $this->setConfigParam('blPsBasketReservationEnabled', false);
         // skip redirect to SSL
         $this->setRequestParam( 'sslredirect', 'forced' );

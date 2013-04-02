@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   tests
- * @copyright (C) OXID eSales AG 2003-2011
+ * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
- * @version   SVN: $Id: oxnewsletterTest.php 49209 2012-08-31 14:37:26Z linas.kukulskis $
+ * @version   SVN: $Id: oxnewsletterTest.php 56496 2013-03-11 16:00:59Z alfonsas $
  */
 
 require_once realpath( "." ).'/unit/OxidTestCase.php';
@@ -397,9 +397,9 @@ class Unit_Core_oxnewsletterTest extends OxidTestCase
         if ( !$oTestNews->load( 'oxidnewsletter' ) )
              $this->fail( 'can not load news' );
 
-        $oTestNews->oxnewsletter__oxsubject->value = "TestSubject";
+		$oTestNews->oxnewsletter__oxsubject->value = "TestSubject";
 
-        $this->setExpectedException('oxexception', "TestSubject");
+		$this->setExpectedException('oxException', "TestSubject");
 
         $oTestNews->UNITsetUser( 'oxdefaultadmin' );
         $blMailWasSent = $oTestNews->send();

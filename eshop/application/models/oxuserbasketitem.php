@@ -17,9 +17,9 @@
  *
  * @link      http://www.oxid-esales.com
  * @package   core
- * @copyright (C) OXID eSales AG 2003-2012
+ * @copyright (C) OXID eSales AG 2003-2013
  * @version OXID eShop CE
- * @version   SVN: $Id: oxuserbasketitem.php 50686 2012-10-18 10:19:54Z aurimas.gladutis $
+ * @version   SVN: $Id: oxuserbasketitem.php 55836 2013-02-25 13:08:45Z linas.kukulskis $
  */
 
 /**
@@ -99,7 +99,7 @@ class oxUserBasketItem extends oxBase
     public function getArticle( $sItemKey )
     {
         if ( !$this->oxuserbasketitems__oxartid->value ) {
-            //this excpetion may not be caught, anyhow this is a critical exception
+            //this exception may not be caught, anyhow this is a critical exception
             $oEx = oxNew( 'oxArticleException' );
             $oEx->setMessage( 'EXCEPTION_ARTICLE_NOPRODUCTID' );
             throw $oEx;
